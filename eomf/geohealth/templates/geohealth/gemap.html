@@ -1,0 +1,29 @@
+{% extends "geohealth/earth-tree.html" %}
+{% load i18n  %}
+{% block title %}EOMF: {% trans "GeoHealth" %}{% endblock %}
+
+{% block map_footer %}
+        <br/>
+        {% trans "This 3D global view shows three diffrent datasets:" %}
+        <ul>
+            <li>{% trans "Ecohealth Paper Data" %}</li>
+            <li>{% trans "Avian Influenza H5N1 is represented using Geese, Chicken, Human icons respectively for Wild birds, Domesticated birds and Human cases." %}</li>
+        </ul>
+{% endblock %}
+
+{% block credit %}
+    <h3>{% trans "Data Disclaimer" %}</h3>
+    <ol>
+        <li>{% trans "Wild bird migration data are provided by FAO and USGS" %}, <a href='http://www.werc.usgs.gov/ResearchTopicPage.aspx?id=12'>http://www.werc.usgs.gov/ResearchTopicPage.aspx?id=12</a></li>
+        <li>{% trans "HPAI H5N1 disease outbreak data are provided by the FAO" %}, <a href='http://www.fao.org/ag/againfo/programmes/en/empres/home.asp'> http://www.fao.org/ag/againfo/programmes/en/empres/home.asp</a></li>
+    </ol>
+    <div style="text-align:center">
+		<img class='logo-small' src="/static/images/280px-Nasa-logo.gif"/>&nbsp;&nbsp;
+		<img class='logo-small' src="/static/images/NIH_Logo.gif"/>&nbsp;&nbsp;
+		<img class='logo-small' src="/static/images/nsf1.gif"/>&nbsp;&nbsp;
+        <img class='logo-small' src="/static/images/usgs_logo.jpg"/>&nbsp;&nbsp;
+        <img class='logo-small' src="/static/images/fao_logo.gif"/>&nbsp;&nbsp;
+        <img class='logo-small' src="/static/images/empres_logo.jpg"/>&nbsp;&nbsp;
+        <img class='logo-small' src="/static/images/ou_logo2.jpeg"/>
+    </div>
+{% endblock %}

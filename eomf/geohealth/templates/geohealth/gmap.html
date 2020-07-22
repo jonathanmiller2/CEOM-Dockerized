@@ -1,0 +1,179 @@
+{% extends "geohealth/base.html" %}
+
+{% block title %} Data Visualization {% endblock %}
+
+{% block head_extra %}
+<script src="/media/js/modis.js" type="text/javascript"></script>
+<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAmuvLtH3m9h8LpbkjVzUDhBQyRLBZZgMo3VuWp3Pab5JM-oPN4hRjhrpJr4lifELK29a1ma50wKiWHg" type="text/javascript"></script>
+<script type="text/javascript">
+    //<![CDATA[
+
+    var map = null;
+    var geocoder = null;
+    var geoXml = null;
+
+    function load() {
+      if (GBrowserIsCompatible()) {
+        var geoXml = new GGeoXml("http://{{request.META.HTTP_HOST}}/photos/data.php");
+        //var geoXml = new GGeoXml("http://code.google.com/apis/kml/documentation/KML_Samples.kml");
+        map = new GMap2(document.getElementById("map"));
+        map.addControl(new GLargeMapControl());
+        map.addControl(new GMapTypeControl());
+        map.addOverlay(geoXml);
+        map.setCenter(new GLatLng(37.4419, -122.1419), 2);
+        geocoder = new GClientGeocoder();
+        
+        GEvent.addListener(map, "click", function(marker, point) {
+         if (marker) {
+           map.removeOverlay(marker);
+         } else {
+           map.addOverlay(new GMarker(point));
+           var temp_point = point.toString();
+           temp_point = temp_point.substring(1, temp_point.length-2);
+           var point_a = new Array();
+           point_a = temp_point.split(",");
+           document.latlong.LAT.value = point_a[0];
+           document.latlong.LONG.value = point_a[1];
+        }});
+        
+      }
+    }
+    
+    function toggleMyKml() {
+      if (toggleState == 1) {
+        map.removeOverlay(geoXml);
+        toggleState = 0;
+      } else {
+        map.addOverlay(geoXml);
+        toggleState = 1;
+      }
+    }
+    
+    function showAddress(address) {
+      if (geocoder) {
+      geocoder.getLocations(address, addAddressToMap);
+      }
+    }
+    
+    function addAddressToMap(response) {
+      map.clearOverlays();
+      if (!response || response.Status.code != 200) {
+        alert("Sorry, we were unable to geocode that address");
+      } else {
+        place = response.Placemark[0];
+        point = new GLatLng(place.Point.coordinates[1],
+                            place.Point.coordinates[0]);
+        map.setCenter(point, 12);
+        marker = new GMarker(point);
+        map.addOverlay(marker);
+        marker.openInfoWindowHtml(place.address + '<br>' +
+          '<b>Country code:</b> ' + place.AddressDetails.Country.CountryNameCode);
+        document.latlong.latitude.value = place.Point.coordinates[1];
+        document.latlong.longitude.value = place.Point.coordinates[0];
+      }
+    }
+
+    function query(lat, lon){
+        //alert('Viewing: '+form_id);
+        //$("#ge_output").append(form_id);
+        var out = "test";
+        $.get("/visualization/ascii", {lat: latV, lon: lonV}, 
+            function(data) {
+                $("#output").html(data);
+            }, "html" );
+        return out;
+    }
+
+
+    $(document).ready(function(){
+        $(":reset").click(function(){
+            $("#output p").remove();
+        });
+    });
+
+    //]]>
+    </script>
+{% endblock %}
+
+{% block body_tag %}<body bgcolor="#FFFFFF" onload="load()" onunload="GUnload()">{% endblock %}
+{% block content %}
+
+
+<form action="#" onsubmit="showAddress(this.address.value); return false">
+
+<center>
+<h2>Select Latitude and Longitude from Google Map</h2>
+</center>
+<p>
+
+There are two different approaches to get the latitude and longitude for a site:
+<p>
+
+<ul>
+<li>Please enter address and click go. The latitude and longitude will be
+calculated and displayed underneath the map. Then click submit to proceed.<br>
+<p>
+
+<li>You can click on the map and the latitude and longitude will be calculated
+and displayed underneath the map. Then click submit to proceed.<br>
+</ul>
+
+<p>&nbsp;<p>
+<center>
+Please input an address: 
+<input type = "text" size = 60 name = "address"> <input type = "submit" value = "Go">
+<p>
+
+<div id="map" style="width: 600px; height: 400px"></div>
+<!--<input type="button" value="Toggle Photos" onClick="toggleMyKml();"/>-->
+</form>
+<p>
+
+<form action = "#" onsubmit="showData(this.LAT.value,this.LONG.value,l2s(this.years),this.dataset.value); return false" name = "latlong">
+    <table cellpadding="3">
+        <tr align="left"><td>
+        Latitude:</td><td> <input name = "LAT" type = "text" size = "20">
+        </td><td>
+        Longitude:</td><td> <input name = "LONG" type = "text" size = "20">
+        </td></tr>
+        <tr textalign="top"><td>Dataset:</td><td>
+        <select name="dataset" multiple="multiple">
+          <option value ="mod09a1" selected>MOD09A1</option>
+          <option value ="mcd43a4">MCD43A4</option>
+          <option value ="mod09q1">MOD09Q1</option>
+          <option value ="mod11a2">MOD11A2</option>
+          <option value ="mod11c3">MOD11C3</option>
+          <option value ="mod12q1">MOD12Q1</option>
+          <option value ="mod13c2">MOD13C2</option>
+          <option value ="mod14a2">MOD14A2</option>
+          <option value ="mod17a2">MOD17A2</option>
+          <option value ="myd11a2">MYD11A2</option>
+          <option value ="myd11c3">MYD11C3</option>
+          <option value ="myd14a2">MYD14A2</option>
+        </select>
+        </td><td>
+        Year:</td><td>
+        <select name="years" multiple="multiple">
+            <option value="2000">2000</option>
+            <option value="2001">2001</option>
+            <option value="2002">2002</option>
+            <option value="2003">2003</option>
+            <option value="2004">2004</option>
+            <option value="2005">2005</option>
+            <option value="2006">2006</option>
+            <option value="2007">2007</option>
+            <option value="2008">2008</option>
+            <option value="2009">2009</option>
+            <option value="2010">2010</option>
+            <option value="2011" selected>2011</option>
+        </select>
+ </td></tr>
+    </table>
+                <input type = "submit" value = "Submit">
+                <input type = "reset">
+</form>
+</center>
+
+<div id="output"><div id="output_title"><h3>Data:</h3></div></div>
+
+{% endblock %}

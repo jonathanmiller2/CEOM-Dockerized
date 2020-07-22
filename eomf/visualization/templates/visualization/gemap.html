@@ -1,0 +1,24 @@
+{% extends "visualization/earth-tree.html" %}
+
+{% block map_footer %}
+        <br/>
+        This 3D global view shows three diffrent datasets:
+        <ul>
+            <li>Global Geo-referenced photo database is represented by a camera icon</li>
+            <li>Duck tracking data is represented with a yellow push pin.</li>
+            <li>Avian Influenza H5N1 is represented using Geese, Chicken, Human icons respectively for Wild birds, Domesticated birds and Human cases.</li>
+        </ul>
+{% endblock %}
+
+{% block credit %}
+    <h3>Data Disclaimer</h3>
+    <ol>
+        <li>Wild bird migration data are provided by the USGS, <a href='http://www.werc.usgs.gov/ResearchTopicPage.aspx?id=12'>http://www.werc.usgs.gov/ResearchTopicPage.aspx?id=12</a></li>
+        <li>HPAI H5N1 disease outbreak data are provided by the FAO, <a href='http://www.fao.org/ag/againfo/programmes/en/empres/home.asp'> http://www.fao.org/ag/againfo/programmes/en/empres/home.asp</a></li>
+    </ol>
+    <div style="text-align:center">
+        <img class='logo-small' src="/static/images/usgs_logo.jpg"/>&nbsp;&nbsp;
+        <img class='logo-small' src="/static/images/fao_logo.gif"/>&nbsp;&nbsp;
+        <img class='logo-small' src="/static/images/ou_logo2.jpeg"/>
+    </div>
+{% endblock %}

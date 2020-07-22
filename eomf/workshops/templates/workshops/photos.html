@@ -1,0 +1,119 @@
+{% extends "workshops/base.html" %}
+
+{% load thumbnail %}
+{% load extra_template_tags %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<!-- <div class="well span12">
+    <h1 class="text-center">Photo Gallery <small>{{workshop.name}}</small></h1>
+
+    <div class="hr"></div>
+    <br> -->
+<!--     {% if photos %}
+        <div id="myCarousel" class="carousel slide">
+          <ol class="carousel-indicators">
+            {% for photo in photos %}
+            <li data-target="#myCarousel" data-slide-to="{{forloop.counter}}" {% ifequal forloop.counter 1 %}class="active"{% endifequal %}></li>
+            {% endfor %}
+          </ol>
+          
+          <div class="carousel-inner">
+            {% for photo in photos %}
+            <div class="{% ifequal forloop.counter 1 %}active {% endifequal %}item">
+                <img src="{{photo.image.url}}" alt="Photo from Workshop: {{workshop.title}}" style="width:80%;margin-right:10%;margin-left:10%">
+            {% endfor %}
+            </div>
+          </div>
+          
+          <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+          <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+        </div>
+
+    {% endif %} -->
+
+
+<!--     <div id="myCarousel" class="carousel slide" style="width:100%; margin:auto;">
+
+            <div class="carousel-inner" style="width:90%; margin:auto;">
+                {% for photo in photos %}
+                   {% thumbnail photo "600x600" crop="center" as photo.image %}
+                      {% if forloop.counter == 1 %}
+                      <div class="active item"><div class="pagination-centered"> <a href="/media/{{photo}}"><img src="{{photo.image.url}}"></a></div></div>
+                      {% else %}
+                      <div class="item"><div class="pagination-centered"><a href="/media/{{photo}}"><img src="{{photo.image.url}}"></a></div></div>
+                      {% endif %}
+                  {% endthumbnail %}
+                {%endfor%}
+            </ol>
+            </div>
+
+            <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
+            <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+        </div> -->
+
+<!--     <div class="row-fluid">
+              
+                  {% for photo in photos %}
+                   {% thumbnail photo "600x600" crop="center" as photo.image %}
+                      <a href="/media/{{photo}}"><img src="{{photo.image.url}}" class="img-thumb"></a>
+                    {% endthumbnail %}
+                    
+                  {%endfor%}
+
+          </div>   -->  
+
+<!-- </div> -->
+
+
+
+<style>
+.img-thumb{
+padding: 4px;
+border: 1px solid #ddd;
+border-radius: 5px;
+margin: 10px;
+width: 200px;
+max-width: 200px;
+height: 150px;
+}
+</style>
+
+<div class="well">
+  <div class="grid" >
+    <h1 class="text-center">Photo Gallery <small>{{workshop.name}}</small></h1>
+    
+    <div class="hr"></div>
+    <br>
+    <div id="myCarousel" class="carousel slide" style="width:100%; margin:auto;">
+
+            <div class="carousel-inner" style="width:90%; margin:auto;">
+                {% for photo in photos %}
+                   {% thumbnail photo "600x600" crop="center" as photo.image %}
+                      {% if forloop.counter == 1 %}
+                      <div class="active item"><div class="pagination-centered"> <a href="/media/{{photo}}"><img src="{{photo.image.url}}"></a></div></div>
+                      {% else %}
+                      <div class="item"><div class="pagination-centered"><a href="/media/{{photo}}"><img src="{{photo.image.url}}"></a></div></div>
+                      {% endif %}
+                  {% endthumbnail %}
+                {%endfor%}
+            </ol>
+            </div>
+
+            <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
+            <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+        </div> -->
+
+      <div class="row-fluid">
+          
+              {% for photo in photos %}
+               {% thumbnail photo "600x600" crop="center" as photo.image %}
+                  <a href="/media/{{photo}}"><img src="{{photo.image.url}}" class="img-thumb"></a>
+                {% endthumbnail %}
+                
+              {%endfor%}
+
+      </div>
+    </div>
+</div>
+{% endblock %}

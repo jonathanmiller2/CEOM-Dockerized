@@ -1,0 +1,11 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h2>Users</h2>
+<br/>
+<table cellpadding='3' cellspacing='3'>
+<tr><td><b>Username</b></td> <td><b>Name<b></td> <td><b>Last login<b></td> </tr>
+{% for o in object_list %}
+<tr><td><b><a href="{% url user_detail o.username %}">{{o.username}}</a></b></td> <td>{{o.first_name}} {{o.last_name}}</td> <td>{{o.last_login|date:"jS F Y H:i"}}</td></tr>
+{% endfor %}
+</table>
+{% endblock %}

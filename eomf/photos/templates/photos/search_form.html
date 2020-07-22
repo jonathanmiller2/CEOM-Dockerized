@@ -1,0 +1,264 @@
+{% load i18n %}
+<!--<script src="http://maps.google.com/maps/api/js?v=3.6&amp;sensor=false"></script>-->
+<script>
+var geocoder1 = null;
+var gotAddress = null;
+geocoder1 = new google.maps.Geocoder();
+
+function getBoundarieslong(){
+    gotAddress = String(document.getElementById("address_get").value)
+    var LatD = document.getElementById("LAT_DEG").value;
+    var LatM = document.getElementById("LAT_MIN").value;
+    var LatS = document.getElementById("LAT_SEC").value;
+    var LonD = document.getElementById("LON_DEG").value;
+    var LonM = document.getElementById("LON_MIN").value;
+    var LonS = document.getElementById("LON_SEC").value;
+    var LatD1 = document.getElementById("LAT_DEG1").value;
+    var LonD1 = document.getElementById("LON_DEG1").value;
+    console.log(gotAddress);
+    if(gotAddress.length!=0){
+        console.log("ifPArt");
+    if(geocoder1){
+        geocoder1.geocode({'address':gotAddress}, addSearchAttrib);
+    }
+}
+    
+    else if((LatD.length!=0&&LatM.length!=0&&LatS.length!=0&&LonD.length!=0&&LonM.length!=0&&LonS.length!=0)||(LonD1.length!=0&&LatD1.length!=0)){
+        console.log("elsePArt");
+        var Latnew,Lonnew;
+        if(LatD.length!=0&&LatM.length!=0&&LatS.length!=0&&LonD.length!=0&&LonM.length!=0&&LonS.length!=0){
+        Latnew = DMStoDD(LatD,LatM,LatS);
+        Lonnew = DMStoDD(LonD,LonM,LonS);
+    }
+        else{
+            Latnew = LatD1;
+            Lonnew = LonD1;
+        }
+        console.log(Latnew,Lonnew);
+        var variance = document.getElementById("precise").value;
+         $('#lat_min').val(parseFloat(Latnew-(variance/2)).toFixed(6));
+         $('#lat_max').val(parseFloat(Latnew+(variance/2)).toFixed(6));
+         $('#lon_min').val(parseFloat(Lonnew-(variance/2)).toFixed(6));
+         $('#lon_max').val(parseFloat(Lonnew+(variance/2)).toFixed(6));
+         $('#search').submit();
+         //console.log("elsePArt");
+         //console.log(Latnew,Lonnew);
+        // alert("elsepart");
+    }
+    else{
+        console.log("Iam Here in all null/no geo locate");
+        $('#search').submit();
+    }
+}
+
+var DMStoDD =  function(deg,min,sec) {
+    if (deg < 0) {
+       var azi= -1.0 * deg + 1.0 * min/60.0 + 1.0 * sec/3600.0;
+       return -1.0 * azi;
+    }
+    else{
+       var azi=1.0 * deg + 1.0 * min/60.0 + 1.0 * sec/3600.0;
+       return azi;
+    }
+}
+
+function addSearchAttrib(results, status) {
+    if (status == google.maps.GeocoderStatus.OK){
+            console.log(results[0]);
+            var lon = results[0].geometry.location.lng();
+            var lat = results[0].geometry.location.lat();
+            var vplat1 = results[0].geometry.viewport.Ba.j;
+            var vplat2 = results[0].geometry.viewport.Ba.k;
+            var vplng1 = results[0].geometry.viewport.ua.j;
+            var vplng2 = results[0].geometry.viewport.ua.k;
+            console.log(vplat1,vplat2,vplng1,vplng2);
+            if(vplat1>vplat2){
+                $('#lat_min').val(parseFloat(vplat2).toFixed(6));
+                $('#lat_max').val(parseFloat(vplat1).toFixed(6));
+            }else{  
+                $('#lat_min').val(parseFloat(vplat1).toFixed(6));
+                $('#lat_max').val(parseFloat(vplat2).toFixed(6));
+            }
+            if(vplng2>vplng1){
+                $('#lon_min').val(parseFloat(vplng1).toFixed(6));
+                $('#lon_max').val(parseFloat(vplng2).toFixed(6));
+            }else{
+                $('#lon_min').val(parseFloat(vplng2).toFixed(6));
+                $('#lon_max').val(parseFloat(vplng1).toFixed(6));
+            }
+    }
+     $('#address_get').val(gotAddress);
+    //console.log($('#search'));
+    $('#search').submit();
+    console.log("ifPArt");
+}
+
+function allReset(){
+     $('#lat_min').val(null);
+     $('#lat_max').val(null);
+     $('#lon_min').val(null);
+     $('#lon_max').val(null);
+     $('#id_date_min').val(null);
+     $('#id_date_max').val(null);
+     $('#id_category').val(null);
+     $('#id_user').val(null);
+     $('#id_country').val(null);
+     $('#id_continent').val(null);
+     $('#keywords').val(null);
+     $('#address_get').val(null);
+    $('#LAT_DEG').val(null);
+    $('#LAT_MIN').val(null);
+    $('#LAT_SEC').val(null);
+    $('#LON_DEG').val(null);
+    $('#LON_MIN').val(null);
+    $('#LON_SEC').val(null);
+    $('#precise').val(null);
+    $('#LAT_DEG1').val(null);
+    $('#LON_DEG1').val(null);
+    $('#search').submit();
+}
+function runScript(e){
+    if(e.keyCode == 13) {
+        getBoundarieslong();
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+</script>
+<form id='search' class='form span10 offset1' action="." method="post" name="searchform" onkeypress="return runScript(event)" style="margin-left:15px">{% csrf_token %}
+    <fieldset>
+        {{ search.non_field_errors }}
+        <legend class="text-center" style="margin-bottom: 0px">{% trans "Search By:" %}</legend>
+        <div class='row-fluid'>
+        <div class='span12 '>
+                <div class="controls controls-row">
+                    <!--<label><b>{%trans "1. What Land Cover to Search"%}</b></label> -->
+                    <label data-toggle="collapse" data-target="#LandCover"><h6 style="margin-top: 0px;margin-bottom: 0px;">{% trans "1. Land Cover Type" %}</h6></label>
+                    <div id="LandCover" class="collapse">
+                    {{search.category.errors}}
+                    {{search.category}}
+                </div>
+                </div>
+            <div class='controls controls-row'>
+                <div class="control-group" style="margin-bottom: 5px;"> 
+                    {{search.keywords.errors}}
+                    <label class="control-label" for="keywords" data-toggle="collapse" data-target="#metadata" style="margin-bottom: 0px;"><h6 style="margin-top: 0px;margin-bottom: 0px;">{% trans "2. Keywords In Metadata" %}</h6></label>
+                    <div id="metadata" class="controls collapse">
+                    <input class='span12' type="text" placeholder="EX: cocorahs" id="keywords" name="keywords" value="{%if search.keywords.value%}{{search.keywords.value}}{% endif %}">
+                    </div>    
+                </div>
+            </div>
+            <div class="controls controls-row">                      
+                {{ search.date_min.errors }}
+                <label data-toggle="collapse" data-target="#date"><h6 style="margin-top: 0px;margin-bottom: 0px;">{% trans "3. Time Period" %}</h6></label>
+                <div id="date" class="collapse">
+                <label><b>{% trans "Date from" %}</b></label>
+                {{ search.date_min }}
+                {{ search.lat_max.errors }}
+                <label><b>{% trans "Date to" %}</b></label>
+                {{ search.date_max }}
+            </div>
+            </div>
+            <label data-toggle="collapse" data-target="#geoLocation" font-size:.9em;><h6 style="margin-top: 0px;margin-bottom: 0px;">{%trans "4. Geographic Location"%}</h6></label>
+            <div class="controls controls-row">
+                <div id="geoLocation" class="collapse">
+                <!-- <label class="control-label" for="address"><b>Enter Address</b></label> -->
+                <div class="controls controls-row">
+                    <input class="span10" placeholder="Street, City, State" type="text" id="address_get" name="address_get" value="{% if search.address_get.value %}{{search.address_get.value}}{%endif%}"></input>
+                    <span class="span2"><small>{%trans "(OR)"%}</small></span>
+                </div>
+                <!--<p style="text-align:center"> <b><small>{%trans "(OR)"%}</small></b></p> -->
+                <div>
+                    <label class="control-label"><b>{% trans  "Enter Latitude" %}</b></label>
+                    <div class="span12">
+                    <input class="span4" placeholder='DEG' type="text" id="LAT_DEG" name="LAT_DEG" value="{% if search.LAT_DEG.value %}{{search.LAT_DEG.value}}{%endif%}"></input>
+                    <input class="span4" placeholder='MIN' type="text" id="LAT_MIN" name="LAT_MIN" value="{% if search.LAT_MIN.value %}{{search.LAT_MIN.value}}{%endif%}"></input>
+                    <input class="span4" placeholder='SEC' type="text" id="LAT_SEC" name="LAT_SEC" value="{% if search.LAT_SEC.value %}{{search.LAT_SEC.value}}{%endif%}"></input>
+                    </div>
+                <div class="span12">
+                    <span class="span2"><small>{%trans "(OR)"%}</small></span>
+                    <input class="span8" placeholder='DECIMAL_DEG' type="text" id="LAT_DEG1" name="LAT_DEG1" value="{% if search.LAT_DEG1.value %}{{search.LAT_DEG1.value}}{%endif%}"></input>
+                    <span class="span2"><small>{%trans "(OR)"%}</small></span>
+                </div>
+                </div>
+                <br/>
+                <div>
+                    <label class="control-label"><b>{% trans  "Enter Longitude" %}</b></label>
+                    <input class="span4" placeholder='DEG' type="text" id="LON_DEG" name="LON_DEG" value="{% if search.LON_DEG.value %}{{search.LON_DEG.value}}{%endif%}"></input>
+                    <input class="span4" placeholder='MIN' type="text" id="LON_MIN" name="LON_MIN" value="{% if search.LON_MIN.value %}{{search.LON_MIN.value}}{%endif%}"></input>
+                    <input class="span4" placeholder='SEC' type="text" id="LON_SEC" name="LON_SEC" value="{% if search.LON_SEC.value %}{{search.LON_SEC.value}}{%endif%}"></input>
+                
+                <div class="span12">
+                    <span class="span2"><small>{%trans "(OR)"%}</small></span>
+                    <input class="span10" placeholder='DECIMAL_DEG' type="text" id="LON_DEG1" name="LON_DEG1" value="{% if search.LON_DEG1.value %}{{search.LON_DEG1.value}}{%endif%}"></input>
+                </div>
+                <div class="span12">
+                    <label class="control-label"><b>{% trans  "Enter Nearness" %}</b></label>
+                    <input class="span10 offset6" placeholder="EX: 1.305 degree" type="text" id="precise" name="precise" value="{% if search.precise.value %}{{search.precise.value}}{%endif%}"></input>
+                    <span class="span2"><small>{%trans "(OR)"%}</small></span>
+                </div>
+                <!--<div class="text-center">
+                </div>-->
+            <!-- <label class="text-center"><b><small>{%trans "(OR)"%}</small></b></label> -->
+            </div>
+        </div>
+                <div class="controls controls-row">
+                    <label class="text-left" data-toggle="collapse" data-target="#region"><h6 style="margin-top: 0px;margin-bottom: 0px;">{%trans "5. Region"%}</h6></label>
+                    <div id = "region" class="collapse"> 
+                    <div class="span12">
+                    {{ search.lon_min.errors }}
+                    <!--<label>{% trans "Longitude" %}</label> -->
+                    <input id="lon_min" placeholder='{% trans "Min-Lon" %}' class='span6' type="text" name="lon_min" value="{% if search.lon_min.value %}{{search.lon_min.value}}{%endif%}"/>
+
+                    {{ search.lon_max.errors }}
+                    <input id="lon_max" placeholder='{% trans "Max-Lon" %}' class='span5' type="text" name="lon_max" value="{% if search.lon_max.value %}{{search.lon_max.value}}{%endif%}"/>
+                    </div>
+                     <div class="span12">
+                    {{ search.lat_min.errors }}
+                    <!-- <label>{% trans "Latitude" %}</label> -->
+                    <input id="lat_min" placeholder='{% trans "Min-Lat" %}' class='span6' type="text" name="lat_min" value="{% if search.lat_min.value %}{{search.lat_min.value}}{%endif%}"/>
+
+                    {{ search.lat_max.errors }}
+                    <input id="lat_max" placeholder='{% trans "Max-Lat" %}' class='span5' type="text" name="lat_max" value="{% if search.lat_max.value %}{{search.lat_max.value}}{%endif%}"/>
+                    </div>
+                </div>
+            </div>
+                <div class="controls controls-row">                      
+                    <label data-toggle="collapse" data-target="#country"><h6 style="margin-top: 0px;margin-bottom: 0px;">{% trans "6. Country" %}</h6></label>
+                    <div id="country" class="collapse">
+                    {{search.country.errors}}
+                    {{search.country}}
+                </div>
+                    <label data-toggle="collapse" data-target="#continent"><h6 style="margin-top: 0px;margin-bottom: 0px;">{% trans "7. Continent" %}</h6></label>
+                    <div id="continent" class="collapse">
+                    {{search.contient.errors}}
+                    {{search.continent}}
+                </div>
+                </div>
+                <!-- <label><b>{%trans "5. Whom to Search"%}</b></label> -->
+                <div class="controls controls-row">                      
+                    <label data-toggle="collapse" data-target="#username"><h6 style="margin-top: 0px;margin-bottom: 0px;">{% trans "8. Username" %}</h6></label>
+                    <div id="username" class="collapse">
+                    {{search.user.errors}}
+                    {{search.user}}
+                </div>
+                </div>
+            
+           
+        </div>       
+        </div>   
+        </div>
+        
+        <div class="text-center">
+            <input id="other-submit" class="btn btn-primary" type="button" onclick="getBoundarieslong()" value="Submit"></input>
+
+            <input id="other-reset" class="btn btn-danger" type="button" onclick="allReset()" value="Reset"></input>
+            <input id="submit2" name="submit1" type="submit" class='btn btn-primary' value="Submit"/>
+            <script>
+            $("#submit2").hide();
+            </script>
+        </div>
+    </fieldset>
+</form>

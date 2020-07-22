@@ -1,0 +1,25 @@
+{% load i18n %}
+<li class='nav-header'>{%trans "<SPAN>SURFACE WATER BODY DATA PRODUCT </SPAN>"%}</li>
+<ul class='nav nav-list'>
+<li><a href="/water/overview/">{% trans "Overview" %}</a></li>
+</ul>
+<li class='nav-header'>{%trans "Inventory(Data Products)"%}</li>
+    <ul class='nav nav-list'>
+        <li><a href="/water/CONUS-Water/">{%trans "CONUS-Water"%}</a></li>
+        <li><a href="/water/GLOBAL-Water/">{%trans "GLOBAL-Water"%}</a></li>
+    </ul>
+<li class='nav-header'>{%trans "Visualization"%}</li>
+    <ul class='nav nav-list'>
+        <li><a href="/water/33-year-wbfm/">{%trans "33-year Water Body Frequency Map"%}</a></li>
+        <li><a href="/modis/visualization/olmap/">{%trans "Annual Water Body Frequency Map"%}</a></li>
+        <li><a href="/modis/visualization/olmap/">{%trans "33-year Good Observation Map"%}</a></li>
+    </ul>
+<li class='nav-header'>{%trans "Delivery"%}</li>
+    <ul class='nav nav-list'>
+        <li><a href="/modis/visualization/gmap/">{%trans "Single Site Time-Series"%}</a></li>
+        <li><a href="/modis/visualization/multiple/">{%trans "Multiple Site Time-Series"%}</a></li>
+    </ul>
+<li class='nav-header'>{%trans "Request history"%}</li>
+    <ul class='nav nav-list'>
+        <li><a href="/modis/visualization/timeseries/single/">{% trans "Single Site history" %}</a></li>
+    </ul>

@@ -1,0 +1,10 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<h2>{{user.username}}</h2>
+<br/>
+<table cellpadding='3' cellspacing='3'>
+<tr><td>{{user.username.verbose_name}}</td><td>{{user.username}}</td></tr>
+<tr><td></td><td>{{user.first_name}} {{user.last_name}}</td></tr> 
+<tr><td></td><td>{{user.last_login|date:"jS F Y H:i"}}</td></tr>
+</table>
+{% endblock %}

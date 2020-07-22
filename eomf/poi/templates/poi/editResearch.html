@@ -1,0 +1,24 @@
+{% extends "poi/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Land wiki: POI management {% endblock %}
+
+{% block head_extra %}
+
+{% endblock%}
+
+
+{% block content %}
+<div id="pixelDialog" class="well" >
+    <h1> Create new research </h1>
+    {% if success %}
+    Research updated
+    {% endif %}
+    <form method="post" class="uniForm">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-primary text-center" type="submit">Update research</button>
+</form>
+</div>
+
+{% endblock %}

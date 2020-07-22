@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  {% if points %}
+  <Document>
+  {% for point in points %}
+  <placemark>
+    <name>{{ point.animal }}</name>
+    {% if point.datetime %}
+    <TimeSpan> <begin>{{point.datetime}}</begin><end>{{point.datetime}}</end> </TimeSpan>
+    {% endif %}
+    <description><![CDATA[ Animal: {{point.animal}}
+        <br/>Days deployed: {{point.days_dply}}
+        <br/>Datetime: {{point.datetime}}
+        <br/>Latitude: {{point.latitude}}
+        <br/>Longitude: {{point.longitude}}
+    ]]</description>
+    {{ point.kml|safe }}
+  </placemark>
+  {% endfor %}
+  </Document>
+  {% endif %}
+</kml>

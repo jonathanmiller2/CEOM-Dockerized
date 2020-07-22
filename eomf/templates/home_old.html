@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block container %}
+<div class="span10 offset1">
+	<h2 class="wow bounceInRight text-center">{% blocktrans %} Welcome to the Earth Observation and Modeling Facility {% endblocktrans %}(EOMF)</h2>
+	<p class="wow fadeIn">
+		{% blocktrans %}The EOMF is a member of both (1)
+		<a href='http://mpbio.ou.edu/'> Department of Microbiology and Plant Biology, College of Arts and Sciences</a>, and (2)
+		<a href='http://www.csa.ou.edu/'> Center for Spatial Analysis, College of Atmospheric and Geographic Sciences</a> at the 
+		<a href='http://www.ou.edu/web.html'> University of Oklahoma</a>.
+		It is located at the Stephenson Research and Technology Center, Norman, Oklahoma. 
+		The EOMF focuses on geospatial science, technologies and applications in bio-, geo- and health- sciences, specifically in the areas of agriculture, forestry, ecology, biodiversity, land use and land cover changes, 
+		water quality, climate, infectious diseases and public health. It promotes community remote sensing and citizen science to address the grand challenges in our dynamic and rapidly changing planet Earth and the society.
+        {% endblocktrans %}
+	</p>
+    <div style='height: 500px;' id="myCarousel" class="carousel slide wow fadeIn">
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+            <li data-target="#myCarousel" data-slide-to="3"></li>
+            <li data-target="#myCarousel" data-slide-to="4"></li>
+            <li data-target="#myCarousel" data-slide-to="5"></li>
+        </ol>
+        <!-- Carousel items -->
+        <div class="carousel-inner ">
+            <div class="active item"><div class='pagination-centered'><img src="/static/img/slides/1.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img src="/static/img/slides/2.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img src="/static/img/slides/3.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img src="/static/img/slides/4.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img src="/static/img/slides/5.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img src="/static/img/slides/6.png" /></div></div>
+        </div>
+{% csrf_token %}
+        <!-- Carousel nav -->
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div>
+        <div class="wow fadeInUp">
+        {% trans "Research, education and outreach activities at the EOMF have been generously supported by a number of funding agencies." %}
+        	<a href='http://www.nasa.gov/'>NASA</a>,
+        	<a href='http://www.nih.gov/'> NIH </a>,
+        	<a href='http://www.nsf.gov/'> NSF </a>, 
+        	<a href='http://www.usgs.gov/'>USGS</a>, 
+        	<a href='http://www.usda.gov/'> USDA</a>,
+        	<a href='http://www.usaid.gov/'>USAID</a>, 
+        	<a href='http://www.fao.gov/'>FAO</a>, 
+        	<a href='http://www.ou.edu/'>OU</a>,
+        	<a href='http://www.owrb.ok.gov/'>OWRB</a>,
+        	<a href='http://www.okepscor.org/'>OK EPSCOR</a>,
+            <a href='https://americaview.org/'>AMERICA VIEW</a>.
+        	<br><br>
+        	<div style="text-align:center">
+        	 <img class='logo-small' src="/static/images/280px-Nasa-logo.gif"/>&nbsp;&nbsp;
+        	 <img class='logo-small' src="/static/images/NIH_Logo.gif"/>&nbsp;&nbsp;
+        	 <img class='logo-small' src="/static/images/nsf1.gif"/>&nbsp;&nbsp;
+                <img class='logo-small' src="/static/images/usgs_logo.jpg"/>&nbsp;&nbsp;
+                <img class='logo-small' src="/static/images/usda_logo.jpg"/>&nbsp;&nbsp;
+        	 <img class='logo-small' src="/static/images/usaid_logo.jpg"/>&nbsp;&nbsp;
+        	 <img class='logo-small' src="/static/images/fao_logo.gif"/>&nbsp;&nbsp;
+        	 <img class='logo-small' src="/static/images/ou_logo2.jpeg"/>
+         	 <img class='logo-small' src="/static/images/owrb_logo.jpg"/>&nbsp;&nbsp;
+        	 <img class='logo-small' src="/static/images/epscor_logo.jpg"/>&nbsp;&nbsp;
+             <img class='logo-small' src="/static/images/AV_logo.png"/>&nbsp;&nbsp;
+        </div>
+	</div>
+
+</div>
+<!--<div id="dialog" title="EOMF's new facebook page!" class="ui-dialog-titlebar" >
+  <p style="text-align:center;"><a href="https://www.facebook.com/xiangmingxiao1/?fref=ts"><strong>Hello!, Join our new "FACEBOOK PAGE"<br/><img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" /></strong></a></p>
+</div>
+<script>
+ $(function() {
+    $( "#dialog" ).dialog({
+        minWidth: 400});
+  });  
+</script> -->
+<!-- Author : bhargav -->
+<!-- Any important news can be displayed by changing main content -->
+<style>
+
+.ui-dialog-titlebar {
+    color:aliceblue;
+    background-image: none;
+    /*background-color: #24E5D1;*/
+}
+/*For the background of the main content*/
+div#dialog.ui-dialog-content.ui-widget-content {
+    background-color: azure;
+}
+/*for the title bar*/
+div.ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix {
+    background-color:olivedrab;
+}
+/*span#ui-id-1.ui-dialog-title {
+    background-color:#0F42D4;
+}*/
+/*.ui-widget-header {
+    color:red;
+}
+.ui-corner-all {
+    color: grey;
+}
+.ui-helper-clearfix {
+    color: orange;
+    background-color: green;
+}*/
+</style>
+{% endblock %}

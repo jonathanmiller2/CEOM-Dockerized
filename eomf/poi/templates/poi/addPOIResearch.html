@@ -1,0 +1,23 @@
+{% extends "poi/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Land wiki: POI management {% endblock %}
+
+{% block head_extra %}
+
+{% endblock%}
+
+
+{% block content %}
+<div id="pixelDialog" class="well" >
+    <h1> Create new research </h1>
+    {% if success %}
+    <div class="alert fade in">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>Congratulations!</strong> Your research was created successfully, please go to <a href="/poi/manage/{{saved_research_id}}"> .
+    </div>
+    {% endif %}
+    {% crispy form %}
+</div>
+
+{% endblock %}

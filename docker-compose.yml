@@ -2,11 +2,12 @@ version: '3'
     
 services:
   db:
-    image: postgres
+    image: postgis/postgis
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000

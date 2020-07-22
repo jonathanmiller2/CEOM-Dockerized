@@ -1,0 +1,41 @@
+{% extends "visualization/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} {{title}} {% endblock %}
+{% block content %}
+<div class="span12 well">
+ <h2 style="color: #dc143c;">Retrieve time series MODIS data for multiple sites</h2>
+ <div class="alert alert-block">
+    <strong>Limitations </strong>
+    <ul>
+        <li> You can only have <strong>two jobs</strong> on the queue (waiting and/or processing).</li>
+        <li> The maximum number of <strong>100 sites</strong> per file due to performance concerns.</li>
+        <li> The maximum processing time is set to <strong>2 hours</strong> per task. Results may be saved up to that maximum execution time.</li>
+    </ul>
+  </div>
+  
+   <FORM ACTION="." METHOD="post" ENCTYPE="multipart/form-data" class='form-horizontal'>
+      {% csrf_token %}
+            <p><span class="lead text-info">Step 1: </span> Prepare a text file with your site information and upload it to our server. Use Comma Separated Value file format with these values, using decimal degrees only:</p>
+            <p>Unique ID value, Latitude, Longitude</p>
+            <pre>
+            1, 20.2343, -100.26432
+            2, 30.212321, 27.1111
+            ...
+            </pre>
+            <p><span class="lead text-info">Step 2: </span> The file will be send to your usernae email address, if you wish to receive the results in other adress please enter it in the following box</p>
+            <p><span class="lead text-info">Step 3: </span> Please select a product and year(s) to process.</p>
+            <p>*Note that mod09a1 will also return a list of gap filled products derived from the surface reflectance data</p>
+            <p><span class="lead text-info">Step 4: </span> We will send you an email with te results once they have finished processing. Thank you for your patience! If you have any questions pleae contact the <a href="mailto:mamenarguez@ou.edu">web administrator </a></p>
+            <div class="well " style="background:white;">
+            {{ form|crispy }}
+            <INPUT TYPE="submit"  NAME="Submit" VALUE="Submit Form" class='btn btn-primary'>
+            </div>
+
+      
+   </FORM>
+   
+</div>
+
+{% if d %} Debug:{{d}} {%endif%}
+
+{% endblock %}

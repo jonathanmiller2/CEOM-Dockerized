@@ -1,0 +1,7 @@
+s.no	lat 	lon	place
+1	24.6221	76.2698	"jhalawar,rajasthan"
+2	14.68	77.6	"ananatpura,andhrapardesh"
+3	14.2221	76.4004	"chitradurga,karnatka"
+4	21.2428	81.6387	"Raipur, Chattisgarh"
+5	20.2667	86.1667	"Jagatsingpur, Orissa"
+6	21.195	72.8194	"surat,gujrat"

@@ -1,0 +1,18 @@
+{% extends "aboutus/base.html" %}
+{% load i18n %}
+{% block title%}{% trans "EOMF Facilities: Data Visualization Laboratory" %}{% endblock%}
+
+{% block content %}
+<div class="well span12">
+	<div class="grid" >
+		<h2 style="color: #dc143c;">{% trans "The Data Visualization Laboratory" %}</h2>
+		<div class="hr"></div>&nbsp;
+		<p>{% blocktrans %}This lab has a video wall display system for visualization of large-scale datasets. The Multi-Monitor Displays system is composed of one computer server and eight 30&rsquo; monitors, and is produced by the CineMassive Company {% endblocktrans%} (<a href="http://www.cinemassive.com/">http://www.cinemassivedisplays.com/</a>)</p>
+		<p>&nbsp;</p>
+		<div class="span12" style="display: block; margin-left: auto; margin-right: auto;">
+			<p><img class="span4 offset1" src="/static/images/vlab.jpg" alt="vlab.jpg" /></p>
+			<p><img class="span4 offset1" src="/static/images/vlab_2.png" alt="vlab_2.jpg" /></p>
+		</div>
+	</div>
+</div>
+{% endblock %}

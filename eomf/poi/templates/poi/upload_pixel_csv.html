@@ -1,0 +1,40 @@
+{% extends "poi/base.html" %}
+
+{% block title %} POI pixel validation: Add pixels {% endblock %}
+{% block content %}
+
+<div class="well">
+      <h2 style="color: #dc143c;">Add POI pixels to research</h2>
+         <form ACTION="." METHOD="post" ENCTYPE="multipart/form-data" class='form-horizontal'>
+            {% csrf_token %}
+            <p>
+                  <b>Step 1</b>
+                  <br>
+                  Select Research {{form.research}} or <a href="#">create a new one </a>
+                  <br>
+                  {{form.research.errors}}
+                  <b>Step 2</b>
+                  <br>
+                  Prepare a text file with your site information and upload it to our server<br>
+                  Use Comma Separated Value file format with these values, using decimal degrees only:<br>
+                  id tag (can be blank), Latitude, Longitude<br>
+
+                  Example:<br>
+                  <pre>
+                  Harvard Forest 1, 42.5378, -72.1715
+                  El Reno 1, 35.5465, 98.0401
+                  ...
+                  </pre>
+                  {{ form.points.errors }}
+                  
+                  Upload Text File:<br>{{ form.points }}
+            </p>
+            <p>
+                  <p>
+                        <input TYPE="submit" NAME="Submit" VALUE="Submit Form" class='btn btn-primary'>
+                  </p>
+            </p>
+         </form>
+</div>
+
+{% endblock %}

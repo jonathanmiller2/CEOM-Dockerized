@@ -1,0 +1,1441 @@
+{% extends "maps/base.html" %}
+
+<!-- This is for the ROI's map -->
+
+<!-- Hi i am working -->
+
+{% load i18n %} {% block title %} {% trans "EOMF MAP Module" %} {% endblock %} {% block head_extra %}
+
+<script src="/static/js/proj4js-combined.js" type="text/javascript"></script>
+
+<script src="/static/js/tile_coords.js" type="text/javascript"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ" type="text/javascript"></script>
+<!-- <script src="http://maps.google.com/maps/api/js?v=3.6&amp;sensor=false"></script> -->
+
+<script src="http://www.openlayers.org/api/OpenLayers.js" type="text/javascript"></script>
+
+<!-- <script src="http://maps.google.com/maps/api/js?v=3.6&amp;sensor=false"></script> -->
+
+<!--<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAmuvLtH3m9h8LpbkjVzUDhBQyRLBZZgMo3VuWp3Pab5JM-oPN4hRjhrpJr4lifELK29a1ma50wKiWHg" type="text/javascript"></script>-->
+
+<!--[if lte IE 9]>
+
+    <script type="text/javascript">
+
+    strng1 = "This page is best viewed in Internet Explorer 10 or greater. Try updating the browser. "
+
+    strng2 = "Alternatively you can try on Google Chrome, Apple Safari or Mozilla Firefox browsers."
+
+    alert(strng1+strng2);
+
+    </script>
+
+    <![endif]-->
+
+<script type="text/javascript">
+
+var map = null;
+
+var vectors, markers;
+
+var proj;
+
+var sinproj;
+
+var mercproj;
+
+var geocoder = null;
+
+var geoXml = null;
+
+var dataq = null;
+
+var pixel_height = null;
+
+var pixel_width = null;
+
+Proj4js.defs["SR-ORG:6974"] = "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";
+
+Proj4js.defs["SR-ORG:6842"] = "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs";
+
+Proj4js.defs["SR-ORG:6965"] = "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";
+
+
+
+function init() {
+
+    proj = new OpenLayers.Projection("EPSG:4326");
+
+    sinproj = new OpenLayers.Projection("SR-ORG:6965");
+
+    mercproj = new OpenLayers.Projection("EPSG:900913");
+
+    var geo_extent = new OpenLayers.Bounds(-180, 0, 180, 0);
+
+    var sin_extent = geo_extent.transform(proj, sinproj);
+
+    //console.log(sin_extent);
+
+    //pixel_width = (sin_extent.left - sin_extent.right) / 36 / 2400;
+
+    pixel_width = 463.312716527778;
+
+    pixel_height = pixel_width;
+
+
+
+    //console.log(pixel_width);
+
+    sin_extent.transform(sinproj, proj)
+
+        //console.log(sin_extent);
+
+        //pixel_height = pixel_width = 500;
+
+    var options = {
+
+        projection: mercproj,
+
+        displayProjection: proj,
+
+        units: "m",
+
+        maxResolution: 156543.0339,
+
+        maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
+
+            20037508.34, 20037508.34)
+
+    };
+
+    map = new OpenLayers.Map('map', options);
+
+    map.addControl(new OpenLayers.Control.LayerSwitcher());
+
+    map.addControl(new OpenLayers.Control.MousePosition({
+
+        displayProjection: proj
+
+    }));
+
+    var gphy = new OpenLayers.Layer.Google(
+
+        "Google Physical", {
+
+            type: google.maps.MapTypeId.TERRAIN
+
+        }
+
+    );
+
+    var gmap = new OpenLayers.Layer.Google(
+
+        "Google Streets", // the default
+
+        {
+
+            numZoomLevels: 20
+
+        }
+
+    );
+
+    var ghyb = new OpenLayers.Layer.Google(
+
+        "Google Hybrid", {
+
+            type: google.maps.MapTypeId.HYBRID,
+
+            numZoomLevels: 20
+
+        }
+
+    );
+
+    var gsat = new OpenLayers.Layer.Google(
+
+        "Google Satellite", {
+
+            type: google.maps.MapTypeId.SATELLITE,
+
+            numZoomLevels: 22
+
+        }
+
+    );
+
+    var style = new OpenLayers.Style({
+
+        pointRadius: 6,
+
+        fillColor: "#ee0000",
+
+        fillOpacity: 0.7,
+
+        strokeColor: "#666666",
+
+        strokeWidth: 1,
+
+        strokeOpacity: 1,
+
+        graphicZIndex: 1
+
+    });
+
+
+
+    var styleMap = new OpenLayers.StyleMap({
+
+        'default': style
+
+    });
+
+    vectors = new OpenLayers.Layer.Vector("Overlay", {
+
+        styleMap: styleMap
+
+    });
+
+    var modis = new OpenLayers.Layer.WMS("MODIS WMS",
+
+        "http://remotesensing.ou.edu/wms/modis.php?prod=evi&day=361&year=2000&", {
+
+            layers: "TOP,BOT,ocean_mask",
+
+            isBaseLayer: true
+
+        }, {
+
+            'buffer': 0
+
+        });
+
+    map.addLayers([ghyb, gphy, gmap, gsat, modis, vectors]);
+
+    var draw = new OpenLayers.Control.DrawFeature(vectors,
+
+        OpenLayers.Handler.Point, {
+
+            'featureAdded': addPoint
+
+        });
+
+    map.addControl(draw);
+
+    draw.activate();
+
+    // Google.v3 uses EPSG:900913 as projection, so we have to
+
+    // transform our coordinates
+
+    map.setCenter(new OpenLayers.LonLat(-100, 40.0).transform(
+
+        proj,
+
+        map.getProjectionObject()
+
+    ), 3);
+
+
+
+    geocoder = new google.maps.Geocoder();
+
+
+
+    for (var i = map.layers.length - 1; i >= 0; --i) {
+
+        map.layers[i].animationEnabled = true;
+
+    }
+
+    $(function() {
+
+        $("#accordion").accordion({
+
+            heightStyle: "content",
+
+            collapsible: true
+
+        }).find("h3:first").click().blur();
+
+    });
+
+}
+
+var polygonFeature, polygonFeature1, polygonFeature2, pointFeature;
+
+
+
+function putPointInMap(lon, lat) {
+
+    console.log("putPointInMap");
+
+    var projto = map.getProjectionObject();
+
+    updateDMS(lat, lon);
+
+    updateDD(lat, lon);
+
+    vectors.removeAllFeatures();
+
+    var poly = getTile(lon, lat);
+
+    var poly1 = get1200tile(lon, lat);
+
+    var poly2 = get4800tile(lon, lat);
+
+    polygonFeature = new OpenLayers.Feature.Vector(
+
+        poly, null, {
+
+            strokeColor: "#ff3300",
+
+            strokeOpacity: 1,
+
+            strokeWidth: 2,
+
+            fillColor: "#FF9966",
+
+            fillOpacity: 0.1
+
+        }
+
+    );
+
+    polygonFeature1 = new OpenLayers.Feature.Vector(
+
+        poly1, null, {
+
+            strokeColor: "#75FF30",
+
+            strokeOpacity: 1,
+
+            strokeWidth: 2,
+
+            fillColor: "#FF9966",
+
+            fillOpacity: 0.1
+
+        }
+
+    );
+
+    polygonFeature2 = new OpenLayers.Feature.Vector(
+
+        poly2, null, {
+
+            strokeColor: "#12246B",
+
+            strokeOpacity: 1,
+
+            strokeWidth: 2,
+
+            fillColor: "#FF9966",
+
+            fillOpacity: 0.1
+
+        }
+
+    );
+
+    var selectedPoint = new OpenLayers.Geometry.Point(lon, lat);
+
+    pointFeature = new OpenLayers.Feature.Vector(selectedPoint, null, null);
+
+    selectedPoint.transform(proj, projto);
+
+    // vectors.addFeatures([polygonFeature]);
+
+    // vectors.addFeatures([polygonFeature1]);
+
+    // vectors.addFeatures([polygonFeature2]);
+
+    vectors.addFeatures([pointFeature]);
+
+    if ($("#auto_zoom").is(":checked")) {
+
+        //map.zoomToExtent(polygonFeature.geometry.getBounds());
+
+        map.zoomToExtent(polygonFeature1.geometry.getBounds());
+
+        //map.zoomToExtent(polygonFeature2.geometry.getBounds());
+
+    } else {
+
+        map.panTo(pointFeature.geometry.getBounds().getCenterLonLat());
+
+    }
+
+    $("#datasetPane").prop('disabled', false);
+
+    $("#datasetPane").val([]);
+
+    $("#yearsPane").prop('disabled', false);
+
+    $("#yearsPane").val([]);
+
+}
+
+
+
+function handlefeatures(newpixel) {
+
+    vectors.removeAllFeatures();
+
+    vectors.addFeatures([pointFeature]);
+
+    //console.log("nepixel value: "+newpixel);
+
+    if ($("#auto_zoom").is(":checked")) {
+
+        if (newpixel == 1200.0) {
+
+            // console.log("1200 is good");
+
+            map.zoomOut();
+
+
+
+            // if($("#auto_zoom").is(":checked")){
+
+            map.zoomToExtent(polygonFeature1.geometry.getBounds());
+
+            vectors.addFeatures(polygonFeature1);
+
+
+
+            /*      }else{
+
+            map.panTo(pointFeature.geometry.getBounds().getCenterLonLat());
+
+            }*/
+
+        } else if (newpixel == 2400.0) {
+
+
+
+            //if($("#auto_zoom").is(":checked")){
+
+            // console.log("2400 is good");
+
+            map.zoomOut();
+
+
+
+            map.zoomToExtent(polygonFeature.geometry.getBounds());
+
+            vectors.addFeatures(polygonFeature);
+
+            /*}else{
+
+            map.panTo(pointFeature.geometry.getBounds().getCenterLonLat());
+
+            }*/
+
+        } else if (newpixel == 4800.0) {
+
+            // console.log("4800 is good");
+
+            map.zoomOut();
+
+
+
+            // if($("#auto_zoom").is(":checked")){
+
+
+
+            map.zoomToExtent(polygonFeature2.geometry.getBounds());
+
+            vectors.addFeatures(polygonFeature2);
+
+            /*    }else{
+
+            map.panTo(pointFeature.geometry.getBounds().getCenterLonLat());
+
+            }*/
+
+        } else {
+
+            window.alert("there is an error of npix value");
+
+        }
+
+    }
+
+
+
+
+
+}
+
+
+
+function addPoint(feature) {
+
+    var point = getFeatureLoc(feature);
+
+    putPointInMap(point.lon, point.lat);
+
+}
+
+
+
+function toggleMyKml() {
+
+    if (toggleState == 1) {
+
+        map.removeOverlay(geoXml);
+
+        toggleState = 0;
+
+    } else {
+
+        map.addOverlay(geoXml);
+
+        toggleState = 1;
+
+    }
+
+}
+
+
+
+function showAddress() {
+
+    var sAddress = String(document.getElementById("Taddress").value)
+
+    resetValues();
+
+    if (geocoder) {
+
+        geocoder.geocode({
+
+            'address': sAddress
+
+        }, addAddressToMap);
+
+    }
+
+}
+
+
+
+function addAddressToMap(results, status) {
+
+    if (status == google.maps.GeocoderStatus.OK) {
+
+        var projto = map.getProjectionObject();
+
+        var lon = results[0].geometry.location.lng();
+
+        var lat = results[0].geometry.location.lat();
+
+        var point = new OpenLayers.LonLat(lon, lat).transform(proj, projto);
+
+        putPointInMap(lon, lat);
+
+        updateDMS(lat, lon);
+
+        updateDD(lat, lon);
+
+    } else {
+
+        alert("Could not fin the specified address. Reason: " + status);
+
+    }
+
+}
+
+
+
+function getFeatureLoc(feature) {
+
+    var ll = feature.geometry.getBounds().getCenterLonLat();
+
+    ll.transform(new OpenLayers.Projection("EPSG:900913"), proj);
+
+    var geo = {
+
+        "lat": ll.lat,
+
+        "lon": ll.lon
+
+    };
+
+    ll.transform(proj, new OpenLayers.Projection("EPSG:900913"))
+
+    return geo;
+
+}
+
+
+
+function getTile(lon, lat) {
+
+    var bbox = latlon2pixel(lat, lon);
+
+    var projto = map.getProjectionObject();
+
+    var points = [];
+
+    for (var i = 0; i < bbox.length; i++) {
+
+        points.push(new OpenLayers.Geometry.Point(bbox[i][0], bbox[i][1]));
+
+    }
+
+    var geom = new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(points));
+
+    return geom.transform(proj, projto);
+
+}
+
+var radians = function(x) {
+
+    return x * Math.PI / 180.0;
+
+};
+
+var degrees = function(x) {
+
+    return x * 180.0 / Math.PI;
+
+};
+
+var npix = 4800.0 / 2;
+
+var get1200tile = function(lat, lon) {
+
+    npix = 1200.0;
+
+    var x = getTile(lat, lon);
+
+    npix = 2400.0;
+
+    return x;
+
+}
+
+var get4800tile = function(lat, lon) {
+
+    npix = 4800.0;
+
+    var x = getTile(lat, lon);
+
+    npix = 2400.0;
+
+    return x;
+
+}
+
+var latlon2sin = function(lat, lon, npix) {
+
+    var cons = (36.0 * npix) / (2.0 * Math.PI);
+
+    var yg = 9.0 * npix - radians(cons * lat);
+
+    var xg = radians(cons * lon * Math.cos(radians(lat))) + 18.0 * npix;
+
+    var ih = Math.floor(xg / npix);
+
+    var iv = Math.floor(yg / npix);
+
+    var x = xg - ih * npix;
+
+    var y = yg - iv * npix;
+
+    var xi = Math.floor(x);
+
+    var yi = Math.floor(y);
+
+    return {
+
+        h: ih,
+
+        v: iv,
+
+        x: xi,
+
+        y: yi
+
+    };
+
+};
+
+var sin2latlon = function(ih, iv, xi, yi) {
+
+    var cons = (36.0 * npix) / (2.0 * Math.PI);
+
+    var yg = iv * npix + yi;
+
+    var xg = ih * npix + xi;
+
+    var lat = degrees((9.0 * npix) - yg) / cons;
+
+    var lon = degrees(xg - 18.0 * npix) / (cons * Math.cos(radians(lat)));
+
+    var x = xg - ih * npix;
+
+    var y = yg - iv * npix;
+
+    var xi = Math.floor(x);
+
+    var yi = Math.floor(y);
+
+    return {
+
+        lat: lat,
+
+        lon: lon,
+
+        x: xi,
+
+        y: yi
+
+    };
+
+};
+
+//This returns the box || the shape of that final obtained pixel.
+
+var latlon2pixel = function(lat, lon) {
+
+    var sin = latlon2sin(lat, lon, npix);
+
+    var ih = sin.h,
+
+        iv = sin.v,
+
+        xi = sin.x,
+
+        yi = sin.y;
+
+    var bbox = [];
+
+    //for xo, yo in ((0,0), (0,1), (1,1), (1,0),):
+
+    var p;
+
+    p = sin2latlon(ih, iv, xi + 0, yi + 0);
+
+    bbox.push([p.lon, p.lat]);
+
+    p = sin2latlon(ih, iv, xi + 0, yi + 1);
+
+    bbox.push([p.lon, p.lat]);
+
+    p = sin2latlon(ih, iv, xi + 1, yi + 1);
+
+    bbox.push([p.lon, p.lat]);
+
+    p = sin2latlon(ih, iv, xi + 1, yi + 0);
+
+    bbox.push([p.lon, p.lat]);
+
+    return bbox;
+
+};
+
+var DDtoDMS = function(number) {
+
+    // The whole units of degrees will remain the same (i.e. in 121.135° longitude, start with 121°).
+
+    // The whole number becomes the minutes (8').
+
+    // Take the remaining decimal and multiply by 60. (i.e. .1 * 60 = 6).
+
+    // The resulting number becomes the seconds (6"). Seconds can remain as a decimal.
+
+    if (number >= 0) {
+
+        var degrees = Math.floor(number);
+
+        var minutes = Math.floor((number % 1) * 60);
+
+        var seconds = parseFloat((((number % 1) * 60) % 1) * 60).toFixed(5);
+
+    } else {
+
+        var degrees = Math.ceil(number);
+
+        var minutes = Math.abs(Math.ceil((number % 1) * 60));
+
+        var seconds = Math.abs(parseFloat((((number % 1) * 60) % 1) * 60).toFixed(5));
+
+    }
+
+    return {
+
+        deg: degrees,
+
+        min: minutes,
+
+        sec: seconds
+
+    };
+
+
+
+    // Multiply the decimal by 60 (i.e. .135 * 60 = 8.1).
+
+}
+
+var DMStoDD = function(deg, min, sec) {
+
+    if (deg < 0) {
+
+        var azi = -1.0 * deg + 1.0 * min / 60.0 + 1.0 * sec / 3600.0;
+
+        return -1.0 * azi;
+
+    } else {
+
+        var azi = 1.0 * deg + 1.0 * min / 60.0 + 1.0 * sec / 3600.0;
+
+        return azi;
+
+    }
+
+}
+
+var updateDMS = function(latituedeD, longitudeD) {
+
+    var lat = DDtoDMS(latituedeD);
+
+    var lon = DDtoDMS(longitudeD);
+
+    $('#LAT_DEG').val(lat.deg);
+
+    $('#LAT_MIN').val(lat.min);
+
+    $('#LAT_SEC').val(lat.sec);
+
+    $('#LON_DEG').val(lon.deg);
+
+    $('#LON_MIN').val(lon.min);
+
+    $('#LON_SEC').val(lon.sec);
+
+}
+
+var updateDD = function(latituedeD, longitudeD) {
+
+    $('#LAT_DEC').val(parseFloat(latituedeD).toFixed(6));
+
+    $('#LON_DEC').val(parseFloat(longitudeD).toFixed(6));
+
+    // updating these input submit values along with the original updates
+
+    $("#longitude_submit").val($("#LON_DEC").val());
+
+    $("#latitude_submit").val($("#LAT_DEC").val());
+
+    $("#id_lon").val($("#LON_DEC").val());
+
+    $("#id_lat").val($("#LAT_DEC").val());
+
+}
+
+var enterCoordsDMS = function() {
+
+    var LatD = document.getElementById("LAT_DEG").value;
+
+    var LatM = document.getElementById("LAT_MIN").value;
+
+    var LatS = document.getElementById("LAT_SEC").value;
+
+    var LonD = document.getElementById("LON_DEG").value;
+
+    var LonM = document.getElementById("LON_MIN").value;
+
+    var LonS = document.getElementById("LON_SEC").value;
+
+    var Lat = DMStoDD(LatD, LatM, LatS);
+
+    var Lon = DMStoDD(LonD, LonM, LonS);
+
+    putPointInMap(Lon, Lat);
+
+}
+
+var enterCoordsLatLon = function() {
+
+    var Lon = document.getElementById("LON_DEC").value;
+
+    var Lat = document.getElementById("LAT_DEC").value;
+
+    putPointInMap(Lon, Lat);
+
+}
+
+var resetValues = function() {
+
+    vectors.removeAllFeatures();
+
+    // No more datasets pane!
+
+    // $("#datasetPane").prop('disabled', true);
+
+    // $("#datasetPane").val([]);
+
+    // $("#yearsPane").prop('disabled', true);
+
+    // $("#yearsPane").val([]);
+
+    $('#LAT_DEG').val("");
+
+    $('#LAT_MIN').val("");
+
+    $('#LAT_SEC').val("");
+
+    $('#LON_DEG').val("");
+
+    $('#LON_MIN').val("");
+
+    $('#LON_SEC').val("");
+
+    $('#LAT_DEC').val("");
+
+    $('#LON_DEC').val("");
+
+}
+
+var autoRedirectWork = function() {
+
+    console.log("I came to autoRedirectWork");
+
+    var LonreLocal = document.getElementById("lonRedirect").value;
+
+    var latreLocal = document.getElementById("latRedirect").value;
+
+    console.log(LonreLocal, latreLocal);
+
+    $('#LAT_DEC').val(parseFloat(latreLocal).toFixed(6));
+
+    $('#LON_DEC').val(parseFloat(LonreLocal).toFixed(6));
+
+    //$('#conditionReload').val("false");
+
+    console.log($("#LON_DEC").value);
+
+    putPointInMap(LonreLocal, latreLocal);
+
+}
+
+var bhrgv_test = function() {
+
+        console.log("test block:debug");
+
+        $("#roi_form").submit();
+
+    }
+
+    //Update's Tile information
+
+    // def latlon2sin(lat,lon,modis='mod09a1',npix=2400.0):
+
+    //     const =(36.*npix)/(2.*math.pi)
+
+    //     folder = ''
+
+    //     yg = 9.*npix - math.radians(const*lat)
+
+    //     xg = math.radians(const*lon*math.cos(math.radians(lat))) + 18.*npix
+
+    //     ih = int(xg/npix)
+
+    //     iv = int(yg/npix)
+
+    //     x = xg-ih*npix
+
+    //     y = yg-iv*npix
+
+
+
+//     xi = int(x)
+
+//     yi = int(y)
+
+//     folder = u'h%02dv%02d' % (ih,iv)
+
+//     return ih,iv,xi,yi,folder
+
+var convradians = function(degrees) {
+
+    var radians = degrees * (22 / (7 * 180));
+
+    return radians;
+
+}
+
+var updateTile = function(newpix) {
+
+    console.log("Updating_Tile info: " + newpix);
+
+    newpix = parseFloat(newpix);
+
+    var lat = parseFloat($("#LAT_DEG").val());
+
+    var lon = parseFloat($("#LON_DEG").val());
+
+    console.log("Updating the Tile information");
+
+    var const1 = parseFloat((36.0 * newpix) / (2.0 * parseFloat(22 / 7)));
+
+    var yg = parseFloat(9.0 * newpix - convradians(const1 * lat));
+
+    var xg = parseFloat(convradians(const1 * lon * Math.cos(convradians(lat))) + 18.0 * newpix);
+
+    console.log(const1, yg, xg);
+
+    var ih = parseInt(parseFloat(xg) / newpix);
+
+    var iv = parseInt(parseFloat(yg) / newpix);
+
+    var x = xg - ih * newpix;
+
+    var y = yg - iv * newpix;
+
+    var xi = parseInt(x);
+
+    var yi = parseInt(y);
+
+    console.log("this is tile h" + ih + "v" + iv);
+
+    return "h" + ih + "v" + iv;
+
+}
+
+var showData = function(lon, lat, year, prod) {
+
+    if (lat.length == 0 || lon.length == 0) {
+
+        alert('Please pick a point');
+
+    } else {
+
+        var str = "<hr><div >";
+
+        str += "<dl class='dl-horizontal'>"
+
+        var filename = prod + "_" + year + "_" + jQuery.trim(lat) + "_" + jQuery.trim(lon);
+
+        str += "<dt>Latitude:</dt><dd>" + lat + "</dd>";
+
+        str += "<dt>Longitude:</dt><dd>" + lon + "</dd>";
+
+        str += "<dt>Product:</dt><dd>" + prod + "</dd>";
+
+        str += "<dt>Years:</dt><dd>" + year + "</dd>";
+
+
+
+        str += "<dt>Start task</dt><dd><a class=\"btn btn-primary\" href=\"/visualization/timeseries/single/start/" + filename + "/\">Click Here </a></dd>";
+
+        str += "</dl></div>";
+
+        $('#data-output').append(str);
+
+        $('#data-output a').click(function() {
+
+            window.open(this.href);
+
+            return false;
+
+        });
+
+    }
+
+};
+
+var showResults = function() {
+
+    var selectedYears = $('#yearsPane').val();
+
+    var selectedDataset = $('#datasetPane').val();
+
+    var lat = parseFloat($('#LAT_DEC').val());
+
+    var lon = parseFloat($('#LON_DEC').val());
+
+    if (lat.length == 0 || lon.length == 0) {
+
+        alert('Please follow steps 1 and 2 to pick a point');
+
+        return;
+
+    } else if (selectedDataset == null) {
+
+        alert('Please select a dataset');
+
+        return;
+
+    } else if (selectedYears == null) {
+
+        alert('Please select the desired years for the dataset');
+
+        return;
+
+    }
+
+    //All data is correct, generating links
+
+    showData(lon, lat, selectedYears, selectedDataset);
+
+}
+
+</script>
+
+{% endblock %} {% block body_tag %}
+
+
+
+<body bgcolor="#FFFFFF">{% endblock %} {% block content %} {% if success_poi %}
+
+    <h5 style="color:maroon;">Successfully submitted. Thank you!</h5> {% endif %}
+
+    <div class="span12 well">
+
+        <div id="accordion">
+
+            <!-- Here goes the instruction part -->
+
+            <h3 style="color:#999900;"><strong>{% trans "Instructions" %}</strong></h3>
+
+            <!--<div>
+
+                        <p>{% trans "Here you can retrieve time series MODIS data for a single study site, in other words, the time series MODIS data from one MODIS pixel that contains your study site. The data you get are in ASCII text file and Microsoft Excel *.csv file." %} </p>
+
+                        <ol>
+
+                                <li><p>{% trans "<strong>Define the location </strong> of your study site" %}</p>
+
+                                    <ul>
+
+                                            <li><p>{% trans "Enter an address (e.g., street address, or city, or state)" %}</p> </li>
+
+                                            <li><p>{% trans "Enter latitude and longitude of your study using Degree, Minute and Second Units" %}</p></li>
+
+                                            <li><p>{% trans "Enter latitude and longitude of your study using Decimal degree Unit" %}</p></li>
+
+                                    </ul>
+
+                                <p><b>(OR)</b></p>
+
+                                    <p><strong>{% trans "Zoom-in the Google map</strong> and then <strong>click on a point</strong> of interest to adjust the location if required." %}<br \>
+
+                                        <small>{% trans "Note: The rectangle in Google Map is the boundary of one MODIS pixel, and the red dot is the location of your study site within the MODIS pixel." %}</small>
+
+                                    </p>
+
+                            </li>
+
+                            <li>
+
+                                    <p><strong>{% trans "Select product and year(s)" %}</strong><br \>
+
+                                    <small>{% trans "You may choose one MODIS product over one year or several years." %}</small> </p>
+
+                            </li>
+
+                            <li>
+
+                                    <p>{% trans "<strong> Submit</strong> your request. <small> Note: Upon submitting make sure you have done all previous steps or an error message will appear </small>" %} </p>
+
+                            </li>
+
+                </ol> -->
+
+        </div>
+
+    </div>
+
+    <h2 style="color: #dc143c;">{% trans "Points of interest" %}</h2>
+
+    <legend><strong>{% trans "1a.Select an address or a Point on the Map / 1b.Enter the latitude & longitude information" %}</strong> </legend>
+
+    <div id="div_address" class="span4">
+
+        <p>{% trans "Enter the address" %}:</p>
+
+        <input id="Taddress" type="text" name="address" class="span10">
+
+        <button id="addresGo" onclick="showAddress();" class="span3 offset4">{% trans "Go" %}</button>
+
+        <script type="text/javascript">
+
+        $("#Taddress").keyup(function(event) {
+
+            if (event.keyCode == 13) {
+
+                $("#addresGo").click();
+
+            }
+
+        });
+
+        </script>
+
+    </div>
+
+    <div class="span7">
+
+        <div class="span2">
+
+            <p>{% trans "Latitude" %}:</p>
+
+            <br \>
+
+            <p>{% trans "Longitude" %}:</p>
+
+        </div>
+
+        <div class="span9">
+
+            <input id="LAT_DEG" class="span4" type="number" step="1" placeholder="Degrees">
+
+            <input id="LAT_MIN" class="span4" type="number" step="1" placeholder="Minutes">
+
+            <input id="LAT_SEC" class="span4" type="number" step="any" placeholder="Seconds">
+
+            <input id="LON_DEG" class="span4" type="number" step="1" placeholder="Degrees">
+
+            <input id="LON_MIN" class="span4" type="number" step="1" placeholder="Minutes">
+
+            <input id="LON_SEC" class="span4" type="number" step="any" placeholder="Seconds">
+
+        </div>
+
+        <div class="span1">
+
+            <br \>
+
+            <button onclick="enterCoordsDMS();">{% trans "Go" %}</button>
+
+        </div>
+
+        <div class="span12">
+
+            <p class="text-left span12"> {% trans "or enter <strong>Decimal degrees</strong> below:" %}</p>
+
+            <input id="LAT_DEC" class="span4 offset1" type="number" step="any" placeholder="Latitude">
+
+            <input id="LON_DEC" class="span4 offset1" type="number" step="any" placeholder="Longitude">
+
+            <button id="RedirectControl" onclick="enterCoordsLatLon();" name="RedirectControl">{% trans "Go" %}</button>
+
+        </div>
+
+    </div>
+
+    <div class="span12 offset3" style="padding-top:10px;">
+
+        <p><b>(OR)</b></p>
+
+    </div>
+
+    <legend class="text-left"><strong>{% trans "1c. Zoom-in the map and then click on a point of interest" %} </strong></legend>
+
+    <div id="div_gmap" class="span12">
+
+        <div id="map" style="margin-left:auto;margin-right:auto;width: 90%; height: 450px"></div>
+
+    </div>
+
+    <span class="span3" type="hidden"><input type="checkbox" id="auto_zoom" name="auto_zoom" checked/> Zoom to point </span>
+
+    <!-- <div id="div_gmap" class="span12">
+
+        <span class="span3"><input type="checkbox" id="auto_zoom" name="auto_zoom" checked/> Zoom to Modis Pixel   </span>
+
+        <div class="span3" id="resolution_disp" style="color:navy;"><span style="background-color:white;">Current Resolution:</span></div>
+
+        <div class="span6">
+
+            <small><span style="color:blue;">Blue pixel : 250 M</span> |
+
+                <span style="color:red;">Red pixel : 500 M</span> |
+
+                <span style="color:green;">Green pixel : 1000 M/1 KM</span></small>
+
+        </div>
+
+    </div> -->
+
+    <!-- Using the same to leverage the existing code. -->
+
+    <legend class="text-left"><strong>{% trans "2. Provide information about the point (EX:' factory 'etc..)" %} </strong></legend>
+
+    <!-- post request -->
+
+    <form id="roi_form" action="." method="POST">
+
+        {% csrf_token %}
+
+        <div class="span12">
+
+            <div class="span3">
+
+                {{ form.category.errors }}<span style="font-size:20px;"> {{ form.category.label_tag }}</span> {{ form.category }}
+
+            </div>
+
+            <div class="span3">
+
+                {{ form.Attribute.errors }}<span style="font-size:20px;"> {{ form.Attribute.label_tag }}</span> {{ form.Attribute }}
+
+            </div>
+
+            <div class="span3">
+
+                {{ form.lon.errors }}<span style="font-size:20px;"> {{ form.lon.label_tag }}</span> {{ form.lon }}
+
+            </div>
+
+            <div class="span3">
+
+                {{ form.lat.errors }}<span style="font-size:20px;"> {{ form.lat.label_tag }}</span> {{ form.lat }}
+
+            </div>
+
+        </div>
+
+        <br/>
+
+        <div class="span11">
+
+            <hr/>
+
+        </div>
+
+        <div class="span2 offset4">
+
+        <input type="submit" class="btn btn-primary" value="Click here to submit" /></div>
+
+    </form>
+
+    </div>
+
+    <!-- Div to hold the map -->
+
+    <div id="data-output"></div>
+
+    <script>
+
+    init();
+
+    </script>
+
+    {% if photoRedirect %}
+
+    <input id="lonRedirect" type=hidden value={{lonRedirect}}></input>
+
+    <input id="latRedirect" type=hidden value={{latRedirect}}></input>
+
+    <script type="text/javascript">
+
+    autoRedirectWork();
+
+    </script>
+
+    <!-- <input id="conditionReload" type=hidden value="true"></input> -->
+
+    {%endif%}
+
+    <script>
+
+    $(document).ready(function() {
+
+        if ($("#LON_DEC").value != null) {
+
+            enterCoordsLatLon();
+
+        }
+
+        $("#datasetPane").change(function() {
+
+            self = this;
+
+            var newpix = $(this).find("option:selected").attr("npix");
+
+            // var newname = $(this).find("option:selected").attr("value");
+
+            // var longname = $(this).find("option:selected").attr("title");
+
+            console.log(newpix);
+
+            if (newpix == 1200.00) {
+
+                $("#resolution_disp").html("<span style=\"background-color:white;\">Current Resolution: 1 KM</span>")
+
+            } else if (newpix == 2400.00) {
+
+                $("#resolution_disp").html("<span style=\"background-color:white;\">Current Resolution: 500 M</span>")
+
+            } else if (newpix == 4800.00) {
+
+                $("#resolution_disp").html("<span style=\"background-color:white;\">Current Resolution: 250 M</span>")
+
+            }
+
+            // $("#Modis_long").html("<b>About:</b><br/>"+longname+"<br/>For more infomation click on this link<br/><a href=https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/"+newname+">"+newname+"<a/>");
+
+            handlefeatures(newpix);
+
+            var tile = updateTile(newpix);
+
+            $("#tile_info").val(tile);
+
+        })
+
+        $("#LON_DEC").change(function() {
+
+            console.log("longitude_submit value chaged")
+
+            $("#longitude_submit").val($("#LON_DEC").val());
+
+            $("#latitude_submit").val($("#LAT_DEC").val());
+
+            $("#id_lon").val($("#LON_DEC").val());
+
+            $("#id_lat").val($("#LAT_DEC").val());
+
+            // $("#longitude_submit").val($("#LON_DEC").val());
+
+        })
+
+        $("#LAT_DEC").change(function() {
+
+            console.log("latitude_submit value chaged")
+
+            $("#longitude_submit").val($("#LON_DEC").val());
+
+            $("#latitude_submit").val($("#LAT_DEC").val());
+
+            $("#id_lon").val($("#LON_DEC").val());
+
+            $("#id_lat").val($("#LAT_DEC").val());
+
+        })
+
+    })
+
+    </script>
+
+    <style>
+
+    #roi_form {
+
+        font-size: x-large;
+
+        font-family: serif;
+
+        font-style: normal;
+
+    }
+
+    </style>
+
+    {% endblock %} {% block test_block %} {% endblock %}
+

@@ -1,0 +1,28 @@
+{% load i18n %}
+
+        <li class='nav-header text-center'><big>{% trans "Website Usage Statistics" %}</big></li>
+        <hr/>
+        <li>User Statistics</li>
+        <ul class='nav nav-list'>
+        <li {% if request.path == '/stats/' %}class='active' {%endif%}> 
+            <a href='/stats/'>{% trans "New User Registrations" %}</a>
+        <!--<li {% if request.path == '/limit/' %}class='active' {%endif%}> 
+            <a href='/stats/limit/2007/2015/'>{% trans "New User Registrations in an Year Range" %}</a>-->
+        <li {% if request.path == '/stats/cumm/' %}class='active' {%endif%}> 
+            <a href='/stats/cumm/'>{% trans "Cummulative Users" %}</a>
+            <li {% if request.path == '/stats/mont/2007/2016/' %}class='active' {%endif%}> 
+            <a href='/stats/mont/2007/2016/'>{% trans "Users By Month" %}</a>
+        </ul>
+        <li>Photos Statistics</li>
+        <ul class='nav nav-list'>
+       <li {% if request.path == '/stats/phot/2007/2016/' %}class='active' {%endif%}> 
+            <a href='/stats/phot/2007/2016/'>{% trans "Photos By Month" %}</a>
+            <li {% if request.path == '/stats/phot/cumm/' %}class='active' {%endif%}> 
+            <a href='/stats/phot/cumm/'>{% trans "Photos Total" %}</a>
+        </ul>
+        <hr>
+        <li>Define your Criteria</li>
+        <ul class='nav nav-list'>
+       <li {% if request.path == '/stats/search_form/' %}class='active' {%endif%}> 
+            <a href='/stats/search_form/'>{% trans "Search Form" %}</a>
+        </ul>

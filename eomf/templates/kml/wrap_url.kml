@@ -1,0 +1,10 @@
+<kml>
+    <Document>
+        <NetworkLink>
+        <name>{{name}}</name>
+        <Link>
+            <href>{{url}}</href>
+        </Link>
+        </NetworkLink>
+    </Document>
+</kml>

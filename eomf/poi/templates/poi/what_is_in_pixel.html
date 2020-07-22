@@ -1,0 +1,1172 @@
+{% extends "poi/base.html" %} 
+
+{% block title %} Data Visualization {% endblock %}
+
+{% block head_extra %}
+<script src="/media/js/proj4js-combined.js" type="text/javascript" ></script>
+<script src="/media/js/tile_coords.js" type="text/javascript"></script>
+<script src="http://openlayers.org/dev/OpenLayers.js" type="text/javascript"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ" type="text/javascript"></script>
+<!-- <script src="http://maps.google.com/maps/api/js?v=3.6&amp;sensor=false"></script> -->
+<!--<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAmuvLtH3m9h8LpbkjVzUDhBQyRLBZZgMo3VuWp3Pab5JM-oPN4hRjhrpJr4lifELK29a1ma50wKiWHg" type="text/javascript"></script>-->
+
+<!--[if lte IE 9]>
+  <script type="text/javascript">
+    strng1 = "This page is best viewed in Internet Explorer 10 or greater. Try updating the browser. "
+    strng2 = "Alternatively you can try on Google Chrome, Apple Safari or Mozilla Firefox browsers."
+    alert(strng1+strng2);
+  </script>
+<![endif]-->
+<style>
+.spacer5 { height: 5px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer10 { height: 10px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer15 { height: 15px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer20 { height: 20px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer25 { height: 25px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer30 { height: 30px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer35 { height: 35px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer40 { height: 40px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer45 { height: 45px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer50 { height: 50px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer100 { height: 100px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer200 { height: 200px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+
+
+
+.change_background {
+  transition: background-color 0.5s ease;
+  background-color: white;
+}
+.change_background:hover {
+  cursor: pointer; 
+  cursor: hand;
+  background-color: #5fc0ce;
+}
+    a.active{
+        font-weight: bold;
+    }
+    .no-space [class*="span"] {
+        margin-left: 0;
+    }
+    .photo-tile {
+        height: 200px; 
+        width: 179px; 
+        display: block; 
+        float: left;
+        margin: auto;
+        margin-right:4px;
+    }
+    .photo-checkbox {
+        margin: 0px 5px 0px 0px;
+    }
+
+    .landcover_type {
+        padding: 20px;
+        width: 250px;
+        float: left;
+    }
+    .side-gallery {
+        height:450px;
+        overflow: scroll;
+        overflow-x:hidden;
+    }
+</style>
+<script type="text/javascript">
+var map = null;
+var vectors, markers;
+var proj;
+var sinproj;
+var mercproj;
+var geocoder = null;
+var geoXml = null;
+var dataq = null;
+var pixel_height = null;
+var pixel_width = null;
+var gal_num = 12;
+var selectedFeature = null;
+var modis1000 =null;
+var modis500 =null;
+var modis250 =null;
+var extent = null;
+var control1,control2,control3,control4,control5,control6,control7,draw, select;
+
+var selectedPixel = null;
+var selectedPhoto = null;
+
+Proj4js.defs["SR-ORG:6974"] = "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";
+Proj4js.defs["SR-ORG:6842"] = "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +a=6371007.181 +b=6371007.181 +units=m +no_defs";
+Proj4js.defs["SR-ORG:6965"] = "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";
+
+function init() {
+    if (map!=null){
+        extent = map.getExtent();
+        map.destroy();
+        selectedPixel = null;
+        selectedPhoto = null;
+    }
+    proj = new OpenLayers.Projection("EPSG:4326");
+    sinproj = new OpenLayers.Projection("SR-ORG:6965");
+    mercproj = new OpenLayers.Projection("EPSG:900913");
+
+    var geo_extent = new OpenLayers.Bounds(-180, 0, 180, 0);
+    var sin_extent = geo_extent.transform(proj, sinproj);
+
+
+
+    //pixel_width = (sin_extent.left - sin_extent.right) / 36 / 2400;
+    pixel_width = 463.312716527778;
+    pixel_height = pixel_width;
+    
+
+    sin_extent.transform(sinproj, proj)
+
+    control1 = new OpenLayers.Control.Navigation();
+    control2 = new OpenLayers.Control.ArgParser();
+    control3 = new OpenLayers.Control.Attribution();
+    control4 = new OpenLayers.Control.LayerSwitcher()
+    control5 = new OpenLayers.Control.MousePosition({displayProjection: proj});
+    control6 = new OpenLayers.Control.PanZoomBar();
+
+    var options = {
+        projection: mercproj,
+        displayProjection: proj,
+        units: "m",
+        maxResolution: 156543.0339,
+        maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
+                                            20037508.34, 20037508.34),
+        controls:[]
+    };
+    map = new OpenLayers.Map('map', options);
+    map.addControl(control1);
+    map.addControl(control2);
+    map.addControl(control3);
+    map.addControl(control4);
+    map.addControl(control5);
+    map.addControl(control6);
+
+
+
+
+    var gphy = new OpenLayers.Layer.Google(
+        "Google Physical",
+        {type: google.maps.MapTypeId.TERRAIN}
+    );
+    var gmap = new OpenLayers.Layer.Google(
+        "Google Streets", // the default
+        {numZoomLevels: 20}
+    );
+    var ghyb = new OpenLayers.Layer.Google(
+        "Google Hybrid",
+        {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20}
+    );
+    var gsat = new OpenLayers.Layer.Google(
+        "Google Satellite",
+        {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
+    );
+
+    var style = new OpenLayers.Style({
+        pointRadius: 6,
+        fillColor: "#ee0000",
+        fillOpacity: 0.7,
+        strokeColor: "#666666",
+        strokeWidth: 1,
+        strokeOpacity: 1,
+        graphicZIndex: 1
+    });
+    
+    var styleMap = new OpenLayers.StyleMap({'default':style});
+
+    vectors = new OpenLayers.Layer.Vector("Overlay",{
+        styleMap: styleMap
+    });
+
+    var modis = new OpenLayers.Layer.WMS( "MODIS WMS",
+            "http://remotesensing.ou.edu/wms/modis.php?prod=evi&day=361&year=2000&", {layers: "TOP,BOT,ocean_mask", isBaseLayer: true}, {'buffer':0});
+
+    map.addLayers([ghyb, gphy, gmap, gsat, modis, vectors]);
+
+    draw = new OpenLayers.Control.DrawFeature(vectors,
+                    OpenLayers.Handler.Point,
+                    {'featureAdded': addPoint});
+
+    map.addControl(draw);
+    draw.activate();
+
+    // Google.v3 uses EPSG:900913 as projection, so we have to
+    // transform our coordinates
+    map.setCenter(new OpenLayers.LonLat(-100, 40.0).transform(
+        proj,
+        map.getProjectionObject()
+    ), 3);
+    
+    geocoder = new google.maps.Geocoder();
+    
+    for (var i=map.layers.length-1; i>=0; --i) {
+        map.layers[i].animationEnabled = true;
+    }
+    $(function() {
+       $( "#accordion" ).accordion({
+          heightStyle: "content",
+          collapsible: true
+        }).find("h3:first").click().blur();
+      });
+    var style = new OpenLayers.Style({
+        //label: "${name}",
+        pointRadius: "${radius}",
+        fillColor: "${color}",
+        fillOpacity: 0.8,
+        strokeColor: "${stroke}",
+        strokeWidth: "${width}",
+        strokeOpacity: 1
+        }, {
+        context: {
+            color: function(feature) {
+                var count = parseInt(feature.attributes.count.value, 10);
+                if (count > gal_num)
+                    return "#ffcc66";
+                else if (count > 1)
+                    return "#cc6633";
+                else
+                    return "#ff7777";
+
+            },
+            stroke: function(feature) {
+                var count = parseInt(feature.attributes.count.value, 10);
+                if (count > gal_num)
+                    return "#cc6633";
+                else if (count > 1)
+                    return "#ff6622";
+                else
+                    return "#ff0000";
+            },
+            width: function(feature) {
+                var count = parseInt(feature.attributes.count.value, 10);
+                return (count > 1) ? 2 : 1;
+            },
+            radius: function(feature) {
+                var count = parseInt(feature.attributes.count.value, 10);
+
+                var pix = 4;
+                    //pix = Math.min(feature.attributes.count, 6) + 2;
+                    //pix = Math.max(Math.pow(feature.attributes.count,0.4), 3);
+                pix = Math.max(Math.pow(count/3,0.4), 4);
+                return pix;
+            }
+        }
+    });
+
+    var strategy = new OpenLayers.Strategy.Cluster({distance: 17, threshold: 3});
+
+    var clusters = new OpenLayers.Layer.Vector("Clusters", {
+        projection: new OpenLayers.Projection("EPSG:4326"),
+        strategies: [
+            new OpenLayers.Strategy.BBOX({resFactor: 1.1})
+            //new OpenLayers.Strategy.Fixed(),
+            //strategy
+        ],
+        protocol: new OpenLayers.Protocol.HTTP({
+            url: "/photos/clusters.kml",
+            format: new OpenLayers.Format.KML({
+                //extractStyles: true,
+                extractAttributes: true
+            })
+        }),
+        styleMap: new OpenLayers.StyleMap({
+            "default": style,
+            "select": {
+                fillColor: "#8aeeef",
+                strokeColor: "#32a8a9"
+            }
+        })
+    });
+
+    clusters.events.on({
+        "featureselected": onFeatureSelect,
+        "featureunselected": onFeatureUnselect,
+    });
+    clusters.events.register("loadstart",clusters,function(){   
+       
+    });
+    clusters.events.register("loadend",clusters,function(){
+        
+    });
+
+    select = new OpenLayers.Control.SelectFeature(clusters);
+    map.addControl(select);
+    select.activate();
+
+    map.addLayers([clusters]);
+
+    if (extent!=null){
+        map.zoomToExtent(extent);
+        extent = null;
+    }
+
+    // Required for ajax
+$(document).ajaxSend(function(event, xhr, settings) {
+  function getCookie(name) {
+    var cookieValue = null;
+
+    if (document.cookie && document.cookie != '') {
+      var cookies = document.cookie.split(';');
+
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+
+    return cookieValue;
+  }
+
+  function sameOrigin(url) {
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host;
+    // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+           (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+           // or any other URL that isn't scheme relative or absolute i.e relative.
+           !(/^(\/\/|http:|https:).*/.test(url));
+  }
+
+  function safeMethod(method) {
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+  }
+
+  if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+  }
+}); 
+}
+
+function onFeatureSelect(event) {
+    var feature = event.feature;
+    selectedFeature = feature;
+    displayGallery(feature,1,24);
+}
+
+function onFeatureUnselect(event) {
+    $("#gallery").empty();
+    $("#thumb_photo").attr("src","/media/visualization/POI/camera.png");
+    selectedFeature=null;
+}
+
+function displayGallery(feature,desired_page,desired_ppp){
+    $("#gallery").html("<div class=\"span12 text-center\"><img src=\"/static/images/loading-big.gif\"></div>").fadeIn();
+    $.get("/photos/photos2.html", {ids:feature.attributes.ids.value,x_size:feature.attributes.x_size.value,y_size:feature.attributes.y_size.value,page:desired_page,ppp:desired_ppp}, function(html){
+        $("#gallery").html(html).fadeIn();
+    });
+}
+function getCurrentResolutionInPixels(){
+    if (modis1000!=null && modis500!=null && modis250!=null){
+        if ($("#but_mod_1000").hasClass("btn-success")){
+            return 1200.0;
+        }else if ($("#but_mod_500").hasClass("btn-success")){
+            return 2400.0/2;
+        }else if ($("#but_mod_250").hasClass("btn-success")){
+            return 4800.0/4;
+        }else{
+           return 1200.0;
+        }
+    }
+}
+
+function getCurrentResolutionInMeters(){
+    if (modis1000!=null && modis500!=null && modis250!=null){
+        if ($("#but_mod_1000").hasClass("btn-success")){
+            return 1000.0;
+        }else if ($("#but_mod_500").hasClass("btn-success")){
+            return 500;
+        }else if ($("#but_mod_250").hasClass("btn-success")){
+            return 250;
+        }else{
+           return 0;
+        }
+    }
+}
+function putPointInMap(lon, lat){
+
+    $("thumb_photo").attr("src","/media/visualization/POI/camera.png");
+    modis250=null;
+    modis500=null;
+    modis1000=null;
+    selectedPhoto = null;
+    selectedPixel= {
+        lat: lat,
+        lon: lon
+    }
+
+    var projto = map.getProjectionObject();
+    updateDMS(lat,lon);
+    updateDD(lat,lon);
+    vectors.removeAllFeatures();
+    var npixMod250=4800.0;
+    var npixMod500=4800.0/2;
+    var npixMod1000=4800.0/4;
+    var poly250 = getTile(lon, lat,npixMod250);
+	var poly500 = getTile(lon, lat,npixMod500);
+    var poly1000 = getTile(lon, lat,npixMod1000);
+    
+    var polygonFeature250 = new OpenLayers.Feature.Vector(
+            poly250, null, {
+            strokeColor: "#000000",
+            strokeOpacity: 1,
+            strokeWidth: 2,
+            fillColor: "#FF9966",
+            fillOpacity: 0.1}
+        );
+     var polygonFeature500 = new OpenLayers.Feature.Vector(
+            poly500, null, {
+            strokeColor: "#ff3300",
+            strokeOpacity: 1,
+            strokeWidth: 2,
+            fillColor: "#FF9966",
+            fillOpacity: 0.1}
+        );
+     var polygonFeature1000 = new OpenLayers.Feature.Vector(
+            poly1000, null, {
+            strokeColor: "#00FFFF",
+            strokeOpacity: 1,
+            strokeWidth: 2,
+            fillColor: "#FF9966",
+            fillOpacity: 0.1}
+        );
+    modis250=polygonFeature250;
+    modis500=polygonFeature500;
+    modis1000=polygonFeature1000;
+    var selectedPoint = new OpenLayers.Geometry.Point(lon, lat);
+    var pointFeature = new OpenLayers.Feature.Vector(selectedPoint,null,null);
+    selectedPoint.transform(proj, projto);
+    vectors.addFeatures([polygonFeature250]);
+    vectors.addFeatures([polygonFeature500]);
+    vectors.addFeatures([polygonFeature1000]);
+    vectors.addFeatures([pointFeature]);
+
+    // map.zoomToExtent(polygonFeature1000.geometry.getBounds());
+    //Check default resolution to 1km pixel if no resolution is selected
+    zoomToCurrentModisPixel();
+    
+}
+
+function zoomToCurrentModisPixel(){
+    if (modis1000!=null && modis500!=null && modis250!=null){
+        if ($("#but_mod_1000").hasClass("btn-success")){
+            map.zoomToExtent(modis1000.geometry.getBounds());
+        }else if ($("#but_mod_500").hasClass("btn-success")){
+            map.zoomToExtent(modis500.geometry.getBounds());
+        }else if ($("#but_mod_250").hasClass("btn-success")){
+            map.zoomToExtent(modis250.geometry.getBounds());
+        }else{
+            $("#but_mod_1000").addClass("btn-success");
+             map.zoomToExtent(modis1000.geometry.getBounds());
+        }
+    }
+}
+function addPoint(feature){
+    var point = getFeatureLoc(feature);
+    putPointInMap(point.lon, point.lat);
+}
+
+function toggleMyKml() {
+    if (toggleState == 1) {
+        map.removeOverlay(geoXml);
+        toggleState = 0;
+    } else {
+        map.addOverlay(geoXml);
+        toggleState = 1;
+    }
+}
+
+function showAddress() {
+  var sAddress = String(document.getElementById("Taddress").value);
+  resetValues();
+  if (geocoder) {
+    geocoder.geocode({'address':sAddress}, addAddressToMap);
+  }
+}
+
+function addAddressToMap(results, status) {
+  if (status == google.maps.GeocoderStatus.OK) {
+    var projto = map.getProjectionObject();
+	var lon = results[0].geometry.location.lng();
+	var lat = results[0].geometry.location.lat();
+    var point = new OpenLayers.LonLat(lon, lat).transform(proj,projto);
+    putPointInMap(lon,lat);
+	updateDMS(lat,lon);
+	updateDD(lat,lon);
+  } else {
+    alert("Could not find the specified address. Reason: " + status);
+  }
+
+}
+
+function getFeatureLoc(feature){
+    var ll = feature.geometry.getBounds().getCenterLonLat();
+    ll.transform(new OpenLayers.Projection("EPSG:900913"), proj);
+    var geo = {"lat": ll.lat, "lon": ll.lon};
+    ll.transform(proj, new OpenLayers.Projection("EPSG:900913"))
+    return geo;
+}
+
+function getTile(lon, lat, npix){
+    var bbox = latlon2pixel(lat, lon,npix);
+    var projto = map.getProjectionObject();
+
+    var points = [];
+    for (var i = 0; i < bbox.length; i++){
+        points.push(new OpenLayers.Geometry.Point(bbox[i][0],bbox[i][1]));
+    }
+
+    var geom = new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(points));
+    return geom.transform(proj, projto);
+}
+
+
+var radians = function(x){
+  return x * Math.PI / 180.0; 
+};
+
+var degrees = function(x){
+  return x * 180.0 / Math.PI;
+};
+
+
+
+var latlon2sin = function(lat, lon, npix){
+  var cons =(36.0 * npix)/(2.0 * Math.PI);
+  var yg = 9.0 * npix - radians(cons*lat);
+  var xg = radians(cons*lon*Math.cos(radians(lat))) + 18.0 * npix;
+
+  var ih = Math.floor(xg/npix);
+  var iv = Math.floor(yg/npix);
+
+  var x = xg-ih*npix;
+  var y = yg-iv*npix;
+
+  var xi = Math.floor(x);
+  var yi = Math.floor(y);
+
+  return {h: ih, v: iv, x: xi, y: yi};
+};
+
+
+var sin2latlon = function(ih,iv,xi,yi,npix){
+  var cons =(36.0 * npix)/(2.0 * Math.PI);
+  var yg = iv * npix + yi;
+  var xg = ih * npix + xi;
+
+  var lat = degrees((9.0 * npix) - yg) / cons;
+  var lon = degrees(xg - 18.0 * npix) / (cons * Math.cos(radians(lat)));
+  
+  return {lat:lat, lon:lon};
+};
+
+var latlon2pixel = function(lat, lon, npix){
+    var sin = latlon2sin(lat, lon, npix);
+    var ih = sin.h, iv = sin.v, xi = sin.x, yi = sin.y;
+    var bbox = [];
+    //for xo, yo in ((0,0), (0,1), (1,1), (1,0),):
+    var p;
+    p = sin2latlon(ih, iv, xi + 0, yi + 0,npix);
+    bbox.push([p.lon,p.lat]);
+    p = sin2latlon(ih, iv, xi + 0, yi + 1,npix);
+    bbox.push([p.lon,p.lat]);
+    p = sin2latlon(ih, iv, xi + 1, yi + 1,npix);
+    bbox.push([p.lon,p.lat]);
+    p = sin2latlon(ih, iv, xi + 1, yi + 0,npix);
+    bbox.push([p.lon,p.lat]);
+    return bbox;
+};
+
+var DDtoDMS = function(number){
+    // The whole units of degrees will remain the same (i.e. in 121.135° longitude, start with 121°).
+    // The whole number becomes the minutes (8').
+    // Take the remaining decimal and multiply by 60. (i.e. .1 * 60 = 6).
+    // The resulting number becomes the seconds (6"). Seconds can remain as a decimal.
+    if (number>=0){
+        var degrees = Math.floor(number);
+        var minutes = Math.floor((number % 1) * 60) ;
+        var seconds = parseFloat((((number % 1) * 60) % 1)*60).toFixed(5);
+    }else{
+        var degrees = Math.ceil(number);
+        var minutes = Math.abs(Math.ceil((number % 1) * 60)) ;
+        var seconds = Math.abs(parseFloat((((number % 1) * 60) % 1)*60).toFixed(5));
+    }   return{deg:degrees, min:minutes, sec:seconds};
+    
+    // Multiply the decimal by 60 (i.e. .135 * 60 = 8.1).
+
+}
+
+var DMStoDD =  function(deg,min,sec) {
+    if (deg < 0) {
+       var azi= -1.0 * deg + 1.0 * min/60.0 + 1.0 * sec/3600.0;
+       return -1.0 * azi;
+    }
+    else{
+       var azi=1.0 * deg + 1.0 * min/60.0 + 1.0 * sec/3600.0;
+       return azi;
+    }
+}
+
+var updateDMS = function(latituedeD, longitudeD){
+    var lat = DDtoDMS(latituedeD);
+    var lon = DDtoDMS(longitudeD);
+    $('#LAT_DEG').val(lat.deg);
+    $('#LAT_MIN').val(lat.min);
+    $('#LAT_SEC').val(lat.sec);
+    $('#LON_DEG').val(lon.deg);
+    $('#LON_MIN').val(lon.min);
+    $('#LON_SEC').val(lon.sec);
+
+}
+var updateDD = function(latituedeD, longitudeD){
+    $('#LAT_DEC').val(parseFloat(latituedeD).toFixed(6));
+    $('#LON_DEC').val(parseFloat(longitudeD).toFixed(6));
+}
+
+var enterCoordsDMS = function(){
+    var LatD = document.getElementById("LAT_DEG").value;
+    var LatM = document.getElementById("LAT_MIN").value;
+    var LatS = document.getElementById("LAT_SEC").value;
+    var LonD = document.getElementById("LON_DEG").value;
+    var LonM = document.getElementById("LON_MIN").value;
+    var LonS = document.getElementById("LON_SEC").value;
+    var Lat = DMStoDD(LatD,LatM,LatS);
+    var Lon = DMStoDD(LonD,LonM,LonS);
+    putPointInMap(Lon,Lat);
+}
+var enterCoordsLatLon = function(){
+    var Lon = document.getElementById("LON_DEC").value;
+    var Lat = document.getElementById("LAT_DEC").value;
+    putPointInMap(Lon,Lat);
+}
+var resetValues = function(){
+    vectors.removeAllFeatures();
+    $("#datasetPane").prop('disabled', true);
+    $("#datasetPane").val([]);
+    $("#yearsPane").prop('disabled', true);
+    $("#yearsPane").val([]);
+    $('#LAT_DEG').val("");
+    $('#LAT_MIN').val("");
+    $('#LAT_SEC').val("");
+    $('#LON_DEG').val("");
+    $('#LON_MIN').val("");
+    $('#LON_SEC').val("");
+    $('#LAT_DEC').val("");
+    $('#LON_DEC').val("");
+}
+
+var showData = function(lon, lat, year, prod){
+    if(lat.length == 0 || lon.length == 0){
+        alert('Please pick a point');
+    }else{
+        var str = "<p>";
+        str += "<br /> Latitude: " + lat;
+        str += "<br /> Longitude: " + lon;
+        //query(lat, lon);
+
+        var filename = prod+"_"+year+"_"+jQuery.trim(lat)+"_"+jQuery.trim(lon);
+
+        str += "<br /> Download raw data as an ASCII Table: <a href=\"/visualization/ascii_"+filename+".txt\">ascii_"+filename+".txt</a>";
+        str += "<br /> Download raw data as an CSV Table: <a href=\"/visualization/csv_"+filename+".csv\">csv_"+filename+".csv</a>";
+        if (prod == 'mod09a1' || prod == 'mod09q1'){
+            str += "<br /> Download products as CSV Table: <a href=\"/visualization/csv_products_"+filename+".csv\">csv_products_"+filename+".csv</a>";
+        }
+        str += "<br /> View data as a series of graphs: <a href=\"/visualization/graph-"+filename+"\">Graph Data</a>";
+        str += "<br /> View products in graphs <a href=\"/visualization/graphjs2-"+filename+"\">Graph Data</a>"
+        str += "<p>";
+
+        // if($('#data-output').length <= 0){
+        //     self.selector.after(self.formoutput);
+        // }
+
+        $('#data-output').append(str);
+
+        $('#data-output a').click(function(){
+            window.open(this.href);
+            return false;
+        });
+    }
+};
+var showResults = function(){
+    var selectedYears = $('#yearsPane').val();
+    var selectedDataset = $('#datasetPane').val();
+    var lat = parseFloat($('#LAT_DEC').val());
+    var lon = parseFloat($('#LON_DEC').val());
+    if(lat.length == 0 || lon.length == 0){
+        alert('Please follow steps 1 and 2 to pick a point');
+        return ;
+    }else if (selectedDataset==null){
+        alert('Please select a dataset');
+        return ;
+    }else if (selectedYears==null){
+        alert('Please select the desired years for the dataset');
+        return ;
+    }
+    //All data is correct, generating links
+    showData(lon, lat, selectedYears,selectedDataset);
+}
+
+function randomPixelSelection(){
+   $("#pixel_type_selection").hide("hide");
+   // /addLandcoverType();
+   $("#landcover_select").show("slow",function(){
+        map.updateSize();
+    });
+    
+}
+function researchPixelSelection(){
+   $("#pixel_type_selection").hide("hide");
+   //addLandcoverType();
+    $('#input_address_div').hide('hide');
+}
+function privatePixelSelection(){
+    $("#pixel_type_selection").hide("hide");
+   //addLandcoverType();
+    $('#input_address_div').show("slow",function(){
+        map.updateSize();
+    });
+    $('#landcover_select').show("slow",function(){
+        map.updateSize();
+    });
+}
+
+function backToPixelTypeSelection(){
+    enableMapNavigation();
+    $("#landcover_select").hide("hide");
+    $("#pixel_type_selection").show("slow");
+    $("#thumb_photo").attr("src","/media/visualization/POI/camera.png");
+    $("#gallery").html("").fadeOut();
+    removeAllLandcoverTypeSelections();
+}
+
+var num_landCoverCat = 0;
+
+function removeAllLandcoverTypeSelections(){
+    num_landCoverCat = 0;
+    $("#landcover_type").html("").fadeOut();
+}
+
+function selectPicture(thumbnail_address,basename,lon,lat,id){
+    putPointInMap(lon,lat);
+    selectedPhoto = id;
+    var htmlContent = "<img id='thumb_photo' class='img-polaroid' src='"+thumbnail_address+"' alt='{{ "+basename+"}}'/>";
+    $("#selected_photo").html(htmlContent);
+    // $('html, body').animate({
+    //     scrollTop: $("#map").offset().top
+    // }, 500);
+}
+
+function zoomToPixel(resolution){
+    if (modis1000!= null && modis500!=null && modis250!=null){
+        $("#but_mod_1000").removeClass("btn-success");
+        $("#but_mod_500").removeClass("btn-success");
+        $("#but_mod_250").removeClass("btn-success");
+        switch(resolution) {
+            case 1000:
+                map.zoomToExtent(modis1000.geometry.getBounds());
+                $("#but_mod_1000").addClass("btn-success");
+                break;
+            case 500:
+                map.zoomToExtent(modis500.geometry.getBounds());
+                $("#but_mod_500").addClass("btn-success");
+                break;
+            case 250: 
+                map.zoomToExtent(modis250.geometry.getBounds());   
+                $("#but_mod_250").addClass("btn-success");
+            default:
+        }
+    }
+}
+
+function selectLandcoverType(){
+    if (selectedPixel!= null){
+        disableMapNavigation();
+        resetLandcoverTypeFormulary();
+        $("#div_gallery").hide("hide");
+        $("#div_landcover_type").show("slow");
+        $("#btnSelectLC").hide("hide");
+        $("#selected_photo").show("slow");
+        zoomToCurrentModisPixel();
+    }else{
+        showMapWarning();
+    }
+}
+function resetLandcoverTypeFormulary(){
+    $('#slider-range-min1').slider('value',100);
+    $('#slider-range-min2').slider('value',0);
+    $('#slider-range-min3').slider('value',0);
+    $('#datasetPane1').val(17);
+    $('#datasetPane2').val(17);
+    $('#datasetPane3').val(17);
+    $( "#lc_amount1" ).html(  100 +" %" );
+    $( "#lc_amount2" ).html(  0 +" %" );
+    $( "#lc_amount3" ).html(  0 +" %" );
+    $("#mapAlert").hide("hide");
+    $("#landCoverAlert").hide("hide");
+}
+function savePixel(){
+    if (checkIfLandcoverSelectionIsOK()){
+        $("#landCoverAlert").hide("hide");
+        $("#div_landcover_type").hide("hide");
+        $("#div_gallery").show("slow");
+        $("#btnSelectLC").show("slow");
+        $("#selected_photo").hide("hide");
+        npixels = getCurrentResolutionInPixels();
+        pixeldata = latlon2sin(selectedPixel.lat,selectedPixel.lon,npixels);
+        if (saveLandCoverData(getCurrentResolutionInMeters(),pixeldata)){
+
+        }
+        enableMapNavigation();
+    }else{
+        showLandcoverWarning();
+    }
+}
+
+function saveLandCoverData(resol,pixeldata){
+    var lc1 = $('#slider-range-min1').slider("option", "value");
+    var lc2 = $('#slider-range-min2').slider("option", "value");
+    var lc3 = $('#slider-range-min3').slider("option", "value");
+    var lct1 = $("#datasetPane1").val();
+    var lct2 = $("#datasetPane2").val();
+    var lct3 = $("#datasetPane3").val();
+
+    var rawData = {
+        resolution: resol,
+        h: pixeldata.h,
+        v: pixeldata.v,
+        col: pixeldata.x,
+        row: pixeldata.y,
+        photo_id: selectedPhoto,
+        notes: $("#notes").val(),
+        lc1_id: lct1,
+        lc1_p: lc1,
+        lc2_id: lct2,
+        lc2_p: lc2,
+        lc3_id: lct3,
+        lc3_p: lc3
+    }
+    console.log(rawData)
+    var content = JSON.stringify(rawData)
+
+    $.ajax({
+        url: '/poi/pixel/add',
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        data: content,
+        dataType: 'json',
+        success: function(result) {
+            console.log(result)
+            alert("Landcover validation saved succesfully");
+        }
+});
+}
+
+
+function cancelLandcoverSelection(){
+    $("#landCoverAlert").hide("hide");
+    $("#div_landcover_type").hide("hide");
+    $("#div_gallery").show("slow");
+    $("#btnSelectLC").show("slow");
+    $("#selected_photo").hide("hide");
+    enableMapNavigation();
+}
+function checkIfLandcoverSelectionIsOK(){
+    var lc1 = $('#slider-range-min1').slider("option", "value");
+    var lc2 = $('#slider-range-min2').slider("option", "value");
+    var lc3 = $('#slider-range-min3').slider("option", "value");
+    if (lc1+lc2+lc3!=100) {
+        return false;
+    }
+
+    var lct1 = $("#datasetPane1").val();
+    var lct2 = $("#datasetPane2").val();
+    var lct3 = $("#datasetPane3").val();
+
+    if (lc1!=0 && lc2!=0 && lc3!=0){
+        if (lct1==lct2 || lct1==lct3 || lct2==lct3){
+            return false;
+        }
+    }else if (lc1!=0 && lc2!=0){
+        if (lct1==lct2){
+            return false;
+        }
+    }else if (lc1!=0 && lc3!=0){
+        if (lct1==lct3){
+            return false;
+        }
+    }else if (lc2!=0 && lc3!=0){
+        if (lct2==lct3){
+            return false;
+        }
+    }
+    return true;
+
+}
+function showLandcoverWarning(){
+    html_warning = "<div class='alert hide' id='landCoverAlert'>"
+           +"       <button type='button' class='close' data-dismiss='alert'>&times;</button>"
+           +"       <strong>Warning!</strong> Check if all landcover types sum a 100% and all of them are different."
+           +" </div>"
+    $("#landCoverAlert").remove();
+    $("#div_landcover_type").prepend(html_warning);
+    $("#landCoverAlert").show("slow");
+}
+
+function showMapWarning(){
+    html_warning = "<div class='alert hide' id='mapAlert'>"
+           +"       <button type='button' class='close' data-dismiss='alert'>&times;</button>"
+           +"       <strong>Warning!</strong>  Select a pixel or a picture in the map first."
+           +" </div>"
+    $("#mapAlert").remove();
+    $("#div_gmap").prepend(html_warning);
+    $("#mapAlert").show("slow");
+}
+function disableMapNavigation(){
+    var extent = map.getExtent();
+    var opts = { extent : extent, restrictedExtent : extent};
+    map.setOptions(opts);
+    var controls = map.getControlsByClass('OpenLayers.Control.Navigation');
+    for(var i = 0; i < controls.length; ++i){
+         controls[i].disableZoomWheel();
+    }
+    map.removeControl(control1);
+    map.removeControl(control2);
+    map.removeControl(control3);
+    map.removeControl(control4);
+    map.removeControl(control5);
+    map.removeControl(control6);
+    draw.deactivate();
+    select.deactivate();
+}
+function enableMapNavigation(){ 
+    init();
+}
+
+
+</script>
+
+{% endblock %}
+
+{% block body_tag %}<body bgcolor="#FFFFFF" onload="init()" >{% endblock %}
+{% block content %}
+
+<div class="row-fluid well change">
+  <h2 style="color: #dc143c;">What landcover types are in this pixel?</h2>
+    
+    <div class="row-fluid" id="pixel_type_selection">
+    
+    	<legend><strong>1. Select the pixel to categorize:</strong> </legend>
+        <div class="well span5 change_background" onclick="randomPixelSelection()">
+            <a class="span5" href="#">
+                <img class="media-object" src="/media/visualization/POI/research-icon.png">
+            </a>
+            <div class="span5">
+                <h4 >Research / Automatic pixel</h4>
+                <p>Help the scientific community by validating a pixel that will be used for research purposes! You won't need to select it, it will be given to you.</p>
+            </div>
+        </div>
+
+        
+            
+       <div class="well span5 change_background" onclick="privatePixelSelection()">
+        <a class="span5" href="#">
+            <img class="media-object" src="/media/visualization/POI/System-Map-icon.png">
+          </a>
+          <div class="span5">
+            <h4 >Select pixel</h4>
+           <p>Manually select a pixel using its coordinates, address, or by navigating through the map. </p>
+           </div>
+        </div>            
+                
+        
+    </div>
+
+
+    <div id="landcover_select" class="hide row-fluid">
+        <div id="input_address_div" class="hide row-fluid">
+
+            <div id="div_address" class="span4"> 
+                 <p>Enter the address:</p>
+                <input id="Taddress" type = "text" name = "address" class="span10">
+                <button id="addresGo" onclick="showAddress();" class="span3 offset4">Go</button>
+                
+            </div>
+            <div class="span7">
+                <div class="span2">
+                    <p>Latitude:</p>
+                    <br \>
+                    <p>Longitude:</p>
+                </div>
+                <div class="span9"> 
+                    <input id="LAT_DEG" class="span4" type="number" step="1" placeholder="Degrees">
+                    <input id="LAT_MIN" class="span4" type="number" step="1" placeholder="Minutes">
+                    <input id="LAT_SEC" class="span4" type="number" step="any" placeholder="Seconds">
+                    <input id="LON_DEG" class="span4" type="number" step="1" placeholder="Degrees">
+                    <input id="LON_MIN" class="span4" type="number" step="1" placeholder="Minutes">
+                    <input id="LON_SEC" class="span4" type="number" step="any" placeholder="Seconds">
+                </div>
+                <div class="span1">
+                    <br \>
+                    <button onclick="enterCoordsDMS();">Go</button>
+                </div>
+                <div class="span12">
+                    <p class="text-left span12"> or enter <strong>Decimal degrees</strong> below:</p>
+                    <input id="LAT_DEC" class="span4 offset1" type="number" step="any" placeholder="Latitude">
+                    <input id="LON_DEC" class="span4 offset1" type="number" step="any" placeholder="Longitude">
+                    <button onclick="enterCoordsLatLon();">Go</button>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div id="div_gmap" class="span8 ">
+                <div id="map" style="margin-left:auto;margin-right:auto;width: 90%; height: 450px"></div>
+                <div class="btn-group">
+                        <button id="but_mod_1000" class = "btn" onclick="zoomToPixel(1000)">MODIS 1000m</button>
+                        <button id="but_mod_500" class = "btn" onclick="zoomToPixel(500)">MODIS  500m</button>
+                        <button id="but_mod_250" class = "btn" onclick="zoomToPixel(250)">MODIS  250m</button>
+                </div>
+            </div>
+            <div class="span4 text-center">
+                <button id="btnSelectLC" class="btn btn-primary" onclick="selectLandcoverType()" style="clear:both; width:200px;height:50px;"><i class="icon-edit-sign icon-2x" ></i> Select Landcover type</button>
+                <div class="spacer20"></div>
+                <div id="selected_photo" class="span12 text-center hide">
+                    <img class="img-polaroid" src="/media/visualization/POI/camera.png" alt="image thumbnail unselected" >
+                    <div class="spacer25"></div>
+                    <button class="btn btn-primary"onclick="savePixel();" style="clear:both; width:150px;height:75px;"><i class="icon-save icon-2x"></i> Save</button>
+                    <button class="btn btn-danger"onclick="cancelLandcoverSelection();" style="clear:both; width:150px;height:75px;"><i class="icon-chevron-left icon-2x"></i></i> Cancel</button>
+                </div>
+                
+                <div id="div_gallery"class='row-fluid  side-gallery'>
+                <h4>Photos in selected cluster:</h4>
+                <div name="gallery" id="gallery"></div>
+            </div>
+                
+            </div>           
+        </div>
+        
+        <div class="spacer20"></div>
+        <div id = "div_landcover_type" class="hide row-fluid span12" class="img-polaroid">
+            
+            {% for i in "123" %}
+            <div class="well landcover_type">
+                <h3>Landcover {{i}}</h3>
+                {% ifequal i "1" %}
+                <p id="lc_amount{{i}}" class="text-center">100 %</p>
+                <div id="slider-range-min{{i}}"></div>
+                <script>
+                  var totalPercentSelected = 100;
+                  $(function() {
+                    $( "#slider-range-min{{i}}" ).slider({
+                      range: "min",
+                      value: 100,
+                      min: 0,
+                      max: 100,
+                      step: 5,
+                      slide: function( event, ui ) {
+                        
+                        var lc1 = ui.value;
+                        var lc2 = $('#slider-range-min2').slider("option", "value");
+                        var lc3 = $('#slider-range-min3').slider("option", "value");
+
+                        if (lc1+lc2+lc3>100){
+                            lc1 = Math.max(100-lc2-lc3);
+                             ui.value = lc1;
+                             event.preventDefault();
+                            $("#slider-range-min1").slider('value',lc1);
+                            console.log(ui.value);
+                        }
+                        $( "#lc_amount1" ).html(  lc1 +" %" );
+                      }
+                    });
+                  });
+                 
+                </script>
+                {% else %}
+                <p id="lc_amount{{i}}" class="text-center">0 %</p>
+                <div id="slider-range-min{{i}}"></div>
+                <script>
+                  $(function() {
+                    $( "#slider-range-min{{i}}" ).slider({
+                      range: "min",
+                      value: 0,
+                      min: 0,
+                      max: 100,
+                      step: 5,
+                      slide: function( event, ui ) {
+                        
+                        var lc1 = $('#slider-range-min1').slider("option", "value");
+                        var lc2 = $('#slider-range-min2').slider("option", "value");
+                        var lc3 = $('#slider-range-min3').slider("option", "value");
+                       
+                        {% ifequal i "2" %}
+                        lc2 = ui.value;
+                        if (lc1+lc2+lc3>100){
+                            lc2 = Math.max(100-lc1-lc3,0);
+                            ui.value = lc2;
+                            event.preventDefault();
+                            $("#slider-range-min2").slider('value',lc2);
+                        }
+                        $( "#lc_amount{{i}}" ).html(  lc2 +" %" );
+                        {% else %}
+                        lc3 = ui.value;
+                        if (lc1+lc2+lc3>100){
+                            lc3 = Math.max(100-lc1-lc2,0);
+                             ui.value = lc3;
+                             event.preventDefault();
+                            $("#slider-range-min3").slider('value',lc3);
+                        }
+                        $( "#lc_amount{{i}}" ).html(  lc3 +" %" );
+                        {% endifequal %}
+                       
+                        
+                        }
+                        
+                    });
+                  });
+                </script>
+                {% endifequal %}
+                
+                
+                <div class="spacer20"></div>
+                <select id="datasetPane{{i}}" >
+                    {% for category in categories %}
+                       {% if  forloop.first %} 
+                        <option value= "{{category.id}}" selected>{{category.name}}</option>
+                       {% else %}
+                        <option value= "{{category.id}}">{{category.name}}</option>
+                       {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            {% endfor %}
+            <input type="text" id="notes"></input>
+           
+        </div>
+        
+    </div>
+    
+</div>
+<br/>
+
+</div>
+
+
+<script type="text/javascript">
+                    $("#Taddress").keyup(function(event){
+                        if(event.keyCode == 13){
+                            $("#addresGo").click();
+                        }
+                    });
+                </script>
+{% endblock %}

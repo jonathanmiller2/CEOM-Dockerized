@@ -1,0 +1,12 @@
+{% load i18n %}
+ <div class='well sidebar-nav span12 text-center'>
+                <h3>{% trans "Agenda" %}:</h3>
+                <div class="hr"></div>
+                <br>
+       {% if workshop.agenda %}
+            <a class="btn btn-info" href="{{workshop.agenda.url}}"> {% trans "View agenda" %} </a>
+        {% else %}
+            <a class="btn disabled">{% trans "Not yet available" %}</a>
+       {% endif %}
+}
+</div>

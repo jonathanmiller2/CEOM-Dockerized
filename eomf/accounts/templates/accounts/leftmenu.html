@@ -1,0 +1,34 @@
+{% load i18n %}
+ <li class='nav-header'>EOMF {% trans "Account" %}</li>
+    {% if user.is_authenticated %}
+    <!-- <li {% if request.user.username in request.path %}class='active'{%endif%}>
+        <a href='/accounts/users/'>Users</a>
+    </li> -->
+    <li {% if request.user.username in request.path %}class='active'{%endif%}>
+        <a href="/accounts/profile/{{request.user.username}}/">{% trans "View Profile" %}</a>
+    </li>
+    <li {% if "profile/edit" in request.path %}class='active'{%endif%}>
+        <a href='/accounts/profile/edit'>{% trans "Edit Profile" %}</a>
+    </li>
+    <li {% if "change" in request.path %}class='active'{%endif%}>
+        <a href='/accounts/password/change/'>{% trans "Change Password" %}</a>
+    </li>
+    <li {% if "logout" in request.path %}class='active'{%endif%}>
+        <a href="/accounts/logout/">{% trans "Log out" %}</a>
+    </li>
+    {% else %}
+	<li {% if "login" in request.path %}class='active'{%endif%}>
+        <a href='/accounts/login/'>{% trans "Log in" %}</a>
+    </li>
+    <li {% if "register" in request.path %}class='active'{%endif%}>
+        <a href='/accounts/register/'>{% trans "Register" %}</a>
+    </li>
+    <li {% if "reset" in request.path %}class='active'{%endif%}>
+        <a href='/accounts/reset/'>{% trans "Reset Password" %}</a>
+    </li>
+    {% endif %}
+    {% if user.is_staff %}
+	<li >
+        <a href="/admin/">{% trans "Admin Site" %}</a>
+    </li>
+	{% endif %}

@@ -1,0 +1,65 @@
+<b>Enter the Year Range </b>
+
+<input id="text1js" type="text"  name="year_min" value={{year1}}>
+<input id="text2js" type="text"  name="year_max" value={{year2}}>
+
+<div id="reset_1">
+{%if mont%}
+<a id="changethis1" href="/stats/mont/"+{{year1}}+"/"+{{year2}}><input type="button" value="Click Here"></input></a>
+{%else%}
+<a id="changethis" href="/stats/limit/"+{{year1}}+"/"+{{year2}}><input type="button" value="Click Here"></input></a>
+{%endif%}
+</div>
+  <link href="/static/css/datepicker.css" rel="stylesheet">
+    <script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
+
+<script>
+
+$(document).ready(function(){
+	//$("#reset_1").hide();
+	//console.log($("#text1js").value(),$("#text2js").value())
+	$("#text1js").change(function() {
+			$("#text2js").change(function() {
+				var val1 = $("#text1js").val();
+				var val2 = $("#text2js").val();
+				$("#changethis").attr('href', '/stats/limit/'+val1+'/'+val2+'/');
+				$("#changethis1").attr('href', '/stats/mont/'+val1+'/'+val2+'/');
+				//$("#reset_1").show();
+				});
+	});
+	$("#text2js").change(function() {
+			$("#text1js").change(function() {
+				var val1 = $("#text1js").val();
+				var val2 = $("#text2js").val();
+				$("#changethis").attr('href', '/stats/limit/'+val1+'/'+val2+'/');
+				$("#changethis1").attr('href', '/stats/mont/'+val1+'/'+val2+'/');
+				//$("#reset_1").show();
+				});
+	});
+	$("#text2js").change(function() {
+			
+				var val1 = $("#text1js").val();
+				var val2 = $("#text2js").val();
+				$("#changethis").attr('href', '/stats/limit/'+val1+'/'+val2+'/');
+				$("#changethis1").attr('href', '/stats/mont/'+val1+'/'+val2+'/');
+				//$("#reset_1").show();
+				
+	});
+	$("#text1js").change(function() {
+			
+				var val1 = $("#text1js").val();
+				var val2 = $("#text2js").val();
+				$("#changethis").attr('href', '/stats/limit/'+val1+'/'+val2+'/');
+				$("#changethis1").attr('href', '/stats/mont/'+val1+'/'+val2+'/');
+				//$("#reset_1").show();
+				
+	});
+	$('#text1js').datepicker().on('changeDate',function(ev){
+                $('#text1js').change();
+            });
+            $('#text2js').datepicker().on('changeDate',function(ev){
+                $('#text2js').change();
+            });
+})
+</script>
+

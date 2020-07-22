@@ -1,0 +1,26 @@
+{% extends "aboutus/base.html" %}
+{% load i18n %}
+{% block title %} {% trans "EOMF Publications" %}{% endblock %}
+
+{% block content %}
+<div class="well">
+	<div class="grid" >
+		<h2 style="color: #dc143c;"> {% trans "Publications" %} </h2>
+		{% if object_list %}
+			<ul>
+			{% for pub in object_list %}
+				<li> {{ pub.authorship }}, 
+					 {{ pub.year }}, 
+					 {{ pub.title }}, 
+					 {{ pub.journa l}}, 
+					 {{ pub.volume }},
+					 [<a href='{{ pub.link }}'>get</a>]
+					</li>
+			{% endfor %}
+			</ul>
+		{% else %}
+			<p>{% trans "No publications are available." %}</p>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

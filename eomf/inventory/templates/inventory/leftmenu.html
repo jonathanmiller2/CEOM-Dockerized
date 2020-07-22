@@ -1,0 +1,24 @@
+{% load i18n %}
+<li class='nav-header'>{%trans "MODIS data"%}</li>
+<ul class='nav nav-list'>
+<li><a href="/modis/visualization/">{% trans "Overview" %}</a></li>
+</ul>
+<li class='nav-header'>{%trans "Inventory"%}</li>
+    <ul class='nav nav-list'>
+        <li><a href="/modis/data/">{%trans "NASA data"%}</a></li>
+        <li><a href="/modis/data/#modisdata">{%trans "EOMF data"%}</a></li>
+    </ul>
+<li class='nav-header'>{%trans "Visualization"%}</li>
+    <ul class='nav nav-list'>
+        <li><a href="/modis/visualization/composite">{%trans "Composite Image"%}</a></li>
+        <li><a href="/modis/visualization/olmap/">{%trans "Vegetation Index Map"%}</a></li>
+    </ul>
+<li class='nav-header'>{%trans "Delivery"%}</li>
+    <ul class='nav nav-list'>
+        <li><a href="/modis/visualization/gmap/">{%trans "Single Site Time-Series"%}</a></li>
+        <li><a href="/modis/visualization/multiple/">{%trans "Multiple Site Time-Series"%}</a></li>
+    </ul>
+<li class='nav-header'>{%trans "Request history"%}</li>
+    <ul class='nav nav-list'>
+        <li><a href="/modis/visualization/timeseries/single/">{% trans "Single Site history" %}</a></li>
+    </ul>

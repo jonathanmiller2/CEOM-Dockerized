@@ -1,0 +1,19 @@
+{% extends "aboutus/base.html" %}
+{% load i18n %}
+{% block title%}{% trans "EOMF Facilities" %}{% endblock%}
+{% block content %}
+<div class="well span12">
+	<div class="grid" >
+		<h2 style="color: #dc143c;">{% trans "Facilities" %}</h2>
+		<div class="hr"></div>&nbsp;
+			<p style="text-align: justify;">{% blocktrans %}The EOMF is located at the Stephenson Research and Technology Center (SRTC) in the Research Campus of the University of Oklahoma (<a href="http://srtc.ou.edu/">http://srtc.ou.edu</a>). The EOMF has approximately 2500 square feet office space and 2000 square feet laboratory space at the SRTC. It currently has three core laboratories and one field observation platform.{% endblocktrans %}</p>
+			<p style="text-align: justify;">&nbsp;</p>
+			<p style="text-align: left;">{% blocktrans %}The SRTC hosts several research laboratories, including the <a href="http://www.genome.ou.edu/">Advanced Center for Genome Technology</a>, <a href="http://ieg.ou.edu/">Institute for Environmental Genomics</a>, Molecular Anthropology Laboratory, Health and Human Biology Laboratory, <a href="http://bmelab.ou.edu/">Biomedical Engineering Laboratory</a>, Ecology Laboratory and the <a href="http://www.oscer.ou.edu"> OU Supercomputing Center for Education and Research (OSCER)</a>. It has a meeting room with Tele-Conference facility and an advanced teaching and meeting room (CORE). The open-space design and diverse research groups at the SRTC provide a productive environment to pursue integration of bio-, eco- and geo- informatics.{% endblocktrans %} &nbsp;</p>
+			<p style="text-align: left;">&nbsp;</p>
+			<div class="span3" style="margin-left: -1px;"><img src="/static/images/SRTC_Indoor.jpg" alt="SRTC_Indoor.jpg" /></div>
+			<div class="span3"><img src="/static/images/SRTC_Outdoor_1.jpg" alt="SRTC_Outdoor_1.jpg" /></div>
+			<div class="span3"><img src="/static/images/SRTC_Outdoor_2.jpg" alt="SRTC_Outdoor_2.jpg" /></div>
+			<div class="span3"><img src="/static/images/SRTC_Outdoor_3.jpg" alt="SRTC_Outdoor_3.jpg" /></div>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,260 @@
+{% extends "photos/base.html" %}
+
+{% load i18n %}
+{% block title %}{% trans "EOMF Field Photo overview" %} {% endblock %}
+{% block content1 %}
+{% block sidebar_extra %}
+<div class="well sidebar-nav span12" style="margin-left: 0px; margin-bottom: 0px">
+    <div class='row-fluid'>
+    {% include "photos/leftmenu_crowdsourcing.html" %}
+    </div>
+
+    </div>
+
+
+{% endblock %}
+{% endblock %}
+{% block content %}
+<style>
+.hr {
+content: "";
+height: 1px;
+width: 100%;
+background: #272727;
+background: -webkit-gradient(linear,left top,right top,color-stop(0%,transparent),color-stop(50%,#272727),color-stop(100%,#dfecaf));
+background: -webkit-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%);
+background: -moz-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%);
+background: -ms-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%);
+background: -o-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%);
+background: linear-gradient(left,transparent 0%,#272727 50%,transparent 100%);
+}
+
+.mask {
+display: block;
+position: absolute;
+top: 0;
+left: 0;
+z-index: 1;
+width: 177px;
+height: 177px;
+background: url(web-storefront/images/mask175.png) 0 0 no-repeat;
+background-size: 175px 175px;
+}
+</style>
+<div class="well">
+    <h2 style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
+    <div class="hr"></div>
+    &nbsp;            
+    <p> {% blocktrans %}A picture is worth a thousand words, and a geo-referenced (geo-tagged) field photo is even better. Everyday, researchers, students and citizens use GPS cameras and smartphones to take photos in the fields, as part of their efforts to document their observations of landscapes, agriculture, forests, natural disasters, and wildlife. This Geo-Referenced Field Photo Library is a community- and citizen- science data portal for people to share, visualize and archive geo-referenced photos from the fields in the world. Users can upload, edit, query and download geo-referenced field photos in the library, and use the photo-based thematic geospatial datasets for the studies of land use and land cover change, the impacts of extreme weather events, and wildlife conservation, etc. Users who provide photos can decide whether individual photos are to be shared or not. A registered user can upload photos into the library and has access to more field photos in the library than a guest user. {% endblocktrans %} </p>
+	<pre>
+	{% trans "Share your field photos" %},
+		 {% trans "Show your footprint of travel, and" %} 
+			{% trans "Support monitoring of our Planet Earth!" %}
+       </pre>
+
+	<p>{% trans "Please read this article 'A Library of Georeferenced Photos From the Field'" %}, AGU, EOS, 12/6/2011 [<a href='/media/docs/2011EO49_tabloid_FieldPhotoLibrary.pdf'>pdf</a>]</p>
+	<p>{% trans "Please invite other people to participate in this community and citizen science effort and distribute this one-page flyer" %} [<a href='/media/docs/FieldPhotoLibrary_1slide-v2.pdf'>pdf</a>]</p>
+	<p>
+        <h3>{% trans "Field Photo Demo" %}</h3>
+        <div  style='margin-right: auto; margin-left: auto;text-align: center'>
+            <video width="640" height="360" controls>
+            <source src="/static/Field Photo Animation Draft 03.mp4" type="video/mp4">
+            </video>
+        </div>
+		<h3>{% trans "User's Guide" %}</h3>
+		<ul>
+			<li>{% trans "About your GPS camera and smartphone" %} [<a href='/static/UserGuide-CameraPhone.pdf'>pdf</a>]</li>
+			<li>{% trans "How to use Field Photo Library (upload, edit, query, download)" %} [<a href='/static/UserGuide-PhotoLibrary.pdf'>pdf</a>]</li>
+            <li>{% trans "IGBP classification system" %} [<a href='/static/IGBP.pdf'>pdf</a>]</li>
+			<li>{% trans "How to take field photos for monitoring land use and land cover changes" %} [<a href='/static/UserGuide-HowToTakePhoto_LULCC.pdf'>pdf</a>]</li>
+			<li>{% trans "How to take field photos for monitoring water quality and harmful algae blooms" %} [<a href='/static/UserGuide-HowToTakePhoto_WQ_HAB.pdf'>pdf</a>]</li>
+		</ul>
+	</p>
+	<p>
+		<h3>{% trans "Smartphone Apps" %}</h3> 
+        <ul style="list-style-type: none;">
+        <blockquote>
+            <li>
+                <h4 style="color: #dc143c;">{% trans "IOS" %}:</h4>
+                <!--<img src="/static/images/Field_Photo_app_image.jpg" style="width:30px; height:30px;"><img src="/static/images/alert_new.png">-->
+            </li>
+                <p>
+                <img src="/static/images/new.gif" style='width:64px;height:64px' >"<a href="https://itunes.apple.com/us/app/field-photo/id717945301">Field Photo</a>"
+                {% blocktrans %}Iphone app is now available in Apple Store, please <a href="https://itunes.apple.com/us/app/field-photo/id717945301">download</a> and install it. It is FREE!!{% endblocktrans %}
+                
+                </p>
+        </blockquote>
+        <blockquote>
+            <li><h4 style="color: #dc143c;">{% trans "Android:" %}</h4></li>
+                <p><img src="/static/images/new.gif" style='width:64px;height:64px'  >"<a href="https://play.google.com/store/apps/details?id=com.eomf"">Field Photo</a>"
+                {% blocktrans %}Android app is now available in Google Play Store, please <a href="https://play.google.com/store/apps/details?id=com.eomf">download</a> and install it. It is FREE!!{% endblocktrans %}
+                </p>
+        </blockquote>
+        </ul>
+
+		
+	</p>
+		<p>
+		<h3>{% trans "Field Photos Projects" %}</h3>
+		  <ol>
+            <b>
+            <!-- Sept field photo event -->
+            <!--<li id="new_Sept_event"> {% trans "Field Photo Weekends" %}</li> --> 
+            <li id="new_Sept_event"> {% trans "Latest Field Photo Weekend" %}</li>          
+</b>
+<h3>"Field Photo Weekend" September 1-3 </h3>
+<a href="http://www.southernclimate.org/fieldphotos/" ><img src="/static/images/FieldPhotoSept1.png" width=500 px height=300 px border="0"/></a>
+<p>Here’s your chance to join hundreds of other CoCoRaHS observers to see what our landscapes look like on Labor Day Weekend. If you have participated before, this is a great chance to go back to your favorite spots and see what has changed.  All you have to do is:</p>  
+
+<ul><li>Take your camera or smartphone </li>
+<li>Find a landscape in your community (streams, lakes, rivers, reservoirs, a forest, a crop field, a pasture, etc.) 
+</li>
+<li>Take a single photo or a panorama in four different directions (N, E, S, W) from where you are standing. And then take one looking down.
+  </li></ul>
+
+<p>There are four ways to post your photos</p> 
+
+<ul><li>Use the “Field Photo” App on your phone, which can be downloaded from the “Apple Store” and “Google Play Store”. Enter metadata to describe the landscape and add #CoCoRaHSMay18” as a keyword. </li>
+<li>Email your photos with your location to: fieldphotos@southernclimate.org.  When uploading your photos please include the words #CoCoRaHSMay18 in the notes field. Remember you don't have to email your photos this weekend, just take them, but we do encourage you to email them soon afterward. </li>
+<li>Upload photos directly to the (EOMF) Earth Observation and Modeling Facility's photo archive website: <a href="http://www.eomf.ou.edu/photos"target="_blank"> &ldquo;http://www.eomf.ou.edu/photos&rdquo;</a>.</li>
+<li>Or post your photos on your phone or online to our new partners at iSeeChange.org, a climate and weather journal that collects stories about change.</li></ul>
+
+<p>Field Photo Weekend is a partnership between CoCoRaHS, the Southern Climate Impacts Planning Program (SCIPP) and the Earth Observation and Modeling Facility (EOMF) to help ground truth through photos, what is going on with our landscapes throughout the country. It's not just drought we are looking for either, it could be flooding, fire, or whatever state the landscape is now in.  For detailed instructions, click here: <a href="http://www.southernclimate.org/documents/Field_Photos_Reference_Sheet_sep_2017.pdf"target="_blank">INSTRUCTIONS</a>. </p> 
+
+<p>As you have seen in past campaigns, Field Photo Weekend added a new partnership last year with ISeeChange, to help tell stories about the photos you’re taking. If you have an interesting observation about the landscape you are photographing ISeeChange would like to hear from you. They take observations and questions from citizens about the changes citizens are seeing in the environment and then write stories about the underlying science. Plus you can send photos and stories anytime. Check it out at <a href="https://www.iseechange.org/"target="_blank">ISEECHANGE.ORG</a> </p> 
+
+
+<p>In a few weeks this weekend's photos will be posted and you'll be able to see your photos and those taken by other volunteers. Reference the <a href="http://www.southernclimate.org/documents/Field_Photos_Reference_Sheet_Sep_2017.pdf"target="_blank">VIEWING PHOTOS</a>. </p> 
+
+<p>Remember you don't have to email your photos this weekend, just take them, but we do encourage you to email them soon afterward. That address again is:  <a href="mailto:fieldphotos@southernclimate.org">fieldphotos@southernclimate.org</a>. When uploading your photos please include the words #CoCoRaHSMay18 in the notes field.</p>  
+
+<p>Finally, please view the <a href="https://youtu.be/xHUl0eF5WZU"target="_blank">SHORT ANIMATION</a> about our Field Photo Weekends.  It captures all you’ll need to know and we think you will find it very helpful.</p>  
+
+<p>Thanks in advance for participating during our final event of the year . . . Thank you very much for your photos!</p> 
+            </li>
+
+            <!-- Commented after adding the field photo extra page 
+
+
+
+             JUNE field photo event
+            <li id="new_JULY_event"> {% trans "Field Photo Weekends" %}</li></b>
+            <a href="http://www.southernclimate.org/fieldphotos/" ><img src="/static/images/FieldPhotoJULY2.png" width=500 px height=300 px border="0"/></a>
+            <h3>"Field Photo Weekend" July 2nd-4th . . . Celebrate the Fourth of July Weekend by taking a photo or two!"</h3>
+           <p>Here’s your chance to join hundreds of other CoCoRaHS observers to see what our landscapes look like during early summer. If you have participated before, this is a great chance to go back to your favorite spots and see what has changed. All you have to do is:</p>
+           <ul>
+               <li>Take your camera or smartphone</li> 
+               <li>Find a landscape in your community (streams, lakes, rivers, reservoirs, a forest, a crop field, a pasture, etc.)</li>
+               <li>Take a single photo or a panorama in four different directions (N, E, S, W) from where you are standing. And then take one looking down.</li> 
+            </ul>
+            <br>
+           <p>There are four ways to post your photos</p>
+           <ul>
+                <li>Use the “Field Photo” App on your phone, which can be downloaded from the “Apple Store” and “Google Play Store”. Enter metadata to describe the landscape and add #CoCoRaHSJuly16” as a keyword.</li>
+                <li>Email your photos with your location to: <a href="mailto:fieldphotos@southernclimate.org">fieldphotos@southernclimate.org</a>. When uploading your photos please include the words #CoCoRaHSJuly16 in the notes field. Remember you don't have to email your photos this weekend, just take them, but we do encourage you to email them soon afterward.</li>
+                <li>Upload photos directly to the (EOMF) Earth Observation and Modeling Facility's photo archive website: <a href="http://www.eomf.ou.edu/photos" target="_blank">“http://www.eomf.ou.edu/photos”</a>.</li>
+                <li>Or post your photos on your phone or online to our new partners at <a href="http://iSeeChange.org" target="blank">iSeeChange.org</a>, a climate and weather journal that collects stories about change.</li>
+            </ul>
+            <br>
+            <p>Field Photo Weekend is a partnership between CoCoRaHS, the Southern Climate Impacts Planning Program (SCIPP) and the Earth Observation and Modeling Facility (EOMF) to help ground truth through photos, what is going on with our landscapes throughout the country. It's not just drought we are looking for either, it could be flooding, fire, or whatever state the landscape is now in. For detailed instructions, click here: <a href="http://cocorahs.org/Media/docs/FieldPhotosReferenceSheetJuly16.pdf" target="blank">“FIELD PHOTO WEEKENDS”</a></p>
+            
+            <p>This year - Field Photo Weekend has a new partnership with ISeeChange, to help tell stories about the photos you’re taking. If you have an interesting observation about the landscape you are photographing ISeeChange would like to hear from you. They take observations and questions from citizens about the changes citizens are seeing in the environment and then write stories about the underlying science. Plus you can send photos and stories anytime. Check it out at <a href="http://iSeeChange.org" target="blank">“ISEECHANGE.ORG”</a></p>
+            
+            <p>In a few weeks this weekend's photos will be posted and you'll be able to see your photos and those taken by other volunteers. Reference the <a href="http://cocorahs.org/Media/docs/FieldPhotosReferenceSheetJuly16.pdf" target="blank">“FIELD PHOTO WEEKENDS”</a> page to see how to view the photos. Remember you don't have to email your photos this weekend, just take them, but we do encourage you to email them soon afterward. That address again is: <a href="mailto:fieldphotos@southernclimate.org">fieldphotos@southernclimate.org</a>. When uploading your photos please include the words #CoCoRaHSJuly16 in the notes field.</p>
+            
+            <p>Thanks in advance for participating during the long July 4th weekend-Have fun snapping! </p>
+            <br/>
+            <br/>
+            </li>
+        -->
+
+            <!--May Field photo event -->
+            <!--
+            <li id="new_May_event"> {% trans "Field Photo Weekends" %}</li></b>
+            <a href="http://www.southernclimate.org/fieldphotos/" ><img src="/static/images/FieldPhotoMay16.png" width=500 px height=300 px border="0"/></a>
+            <h3>"Field Photo Weekend" May 28-30th . . . Celebrate Memorial Day Weekend by taking a photo or two!</h3>
+
+            <p>What does your landscape look like in mid-spring? Have you participated in the CoCoRaHS Field Photos Weekends before?  If not, here's your chance to join hundreds of other CoCoRaHS observers to see what our landscapes looks like. If you have participated before, this is a great chance to go back to your favorite spots and see what has changed. This weekend, May 28-30th, you can help by participating in our twelveth "Field Photo Weekend".</p>  
+
+            <p>All you have to do is take your camera or smartphone, find a landscape in your community (streams, lakes, rivers, reservoirs, a forest, a crop field, a pasture, etc.) and take a single photo or a panorama in four different directions (N, E, S, W) from where you are standing. After that you can either email your photos with your location to: <a href="mailto:fieldphotos@southernclimate.org">fieldphotos@southernclimate.org</a>, or upload them directly to the Earth Observation and Modeling Facility's photo archive website: <a href="http://www.eomf.ou.edu/photos"target="_blank"> &ldquo;http://www.eomf.ou.edu/photos&rdquo;</a>.   For detailed instructions, click here: <a href="http://www.southernclimate.org/documents/Field_Photos_Reference_Sheet_Correct.pdf"target="_blank"> &ldquo;FIELD PHOTO WEEKENDS&rdquo;</a> </p> 
+
+            <p>If you have a GPS smartphone, you can use the “Field  Photo” app, which is now freely available in the  <a href="https://itunes.apple.com/us/app/field-photo/id717945301"target="_blank"> &ldquo;Apple Store&rdquo;</a> and <a href="https://play.google.com/store/apps/details?id=com.eomf"target="_blank"> &ldquo;Google Play Store&rdquo;</a>.  You can use your smartphone to take a photo in the field, enter metadata to describe the landscape, and then upload the photo and metadata into the EOMF photo archive website directly from your phone when you have access to WI-FI.  When your enter metadata, you may also add “#CoCoRaHSMay16” keyword. </p>  
+
+            <p>If you want to see what others have submitted before, go to <a href="http://www.eomf.ou.edu/photos/map/" target="_blank">Global Geo-Referenced Field Photo Library</a>, do a search by a keyword “CoCoRaHS” and/or date, and click on any of the dots (these photos were from Labor Day weekend last September).</p> 
+
+            <p>Field Photo Weekend is a partnership between CoCoRaHS, the Southern Climate Impacts Planning Program (SCIPP) and the Earth Observation and Modeling Facility (EOMF) to help ground truth through photos, what is going on with our landscapes throughout the country. It's not just drought we are looking for either, it could be flooding, fire, or whatever state the landscape is now in. There is the possibility that we may hold additional "Field Photo Weekends" during the year to show how conditions to your landscape may have changed over time. This should be fun!</p>  
+
+            <p>In a few weeks this weekend's photos will be posted and you'll be able to see your photos and those taken by other volunteers. Reference the <a href="http://www.southernclimate.org/documents/Field_Photos_Reference_Sheet_Correct.pdf"target="_blank"> &ldquo;FIELD PHOTO WEEKENDS&rdquo;</a>  page to see how to view the photos.</p>
+
+
+            <p>Remember you don't have to email your photos this weekend, just take them, but we do encourage you to email them soon afterward. That address again is:  <a href="mailto:fieldphotos@southernclimate.org">fieldphotos@southernclimate.org</a>. When uploading your photos please include the words #CoCoRaHSMay16 in the notes field.</p>  
+
+            <p>Thanks in advance for participating during the long Memorial Day weekend!</p> 
+            <br/>
+            <br/>
+            </li>
+        -->
+            <!--FEBRUARY EVENT  --> 
+        <!--
+            <h2>Past Field Photo Events.</h2>
+            <b><li id="new_Feb_event"> {% trans "Field Photo Weekends" %}</li></b>
+            <a href="http://www.southernclimate.org/fieldphotos/" ><img src="/static/images/FieldPhotoFeb16.png" width=500 px height=300 px border="0"/></a>
+            <h3>"Field Photo Weekend" February 13-15th . . . Celebrate President’s Day Weekend by taking a photo or two!</h3>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><big>What does your landscape look like in mid-winter or early spring?</big></strong> Have you participated in the CoCoRaHS Field Photos Weekends before?  If not, here's your chance to join hundreds of other CoCoRaHS observers to see what our landscapes looks like. If you have participated before, this is a great chance to go back to your favorite spots and see what has changed. This weekend, February 13-15th, you can help by participating in our eleventh "Field Photo Weekend".</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All you have to do is take your camera or smartphone, find a landscape in your community (streams, lakes, rivers, reservoirs, a forest, a crop field, a pasture, etc.) and take a single photo or a panorama in four different directions (N, E, S, W) from where you are standing. After that you can either email your photos with your location to: <a href="mailto:fieldphotos@southernclimate.org">fieldphotos@southernclimate.org</a>, or upload them directly to the Earth Observation and Modeling Facility's photo archive website: <a href="http://www.eomf.ou.edu/photos" target="_blank"> “http://www.eomf.ou.edu/photos”</a>.   For detailed instructions, click here: <a href="http://www.southernclimate.org/documents/Field_Photos_Reference_Sheet_Correct.pdf" target="_blank"> “FIELD PHOTO WEEKENDS”</a> </p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you have a GPS smartphone, you can use the “Field  Photo” app, which is now freely available in the  <a href="https://itunes.apple.com/us/app/field-photo/id717945301" target="_blank"> “Apple Store”</a> and <a href="https://play.google.com/store/apps/details?id=com.eomf" target="_blank"> “Google Play Store”</a>.  You can use your smartphone to take a photo in the field, enter metadata to describe the landscape, and then upload the photo and metadata into the EOMF photo archive website directly from your phone when you have access to WI-FI.  When your enter metadata, you may also add “#CoCoRaHSFeb16” keyword. </p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you want to see what others have submitted before, go to <a href="http://www.eomf.ou.edu/photos/map/" target="_blank">Global Geo-Referenced Field Photo Library</a>, do a search by a keyword “CoCoRaHS” and/or date, and click on any of the dots (these photos were from Labor Day weekend last September).</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Field Photo Weekend is a partnership between CoCoRaHS, the Southern Climate Impacts Planning Program (SCIPP) and the Earth Observation and Modeling Facility (EOMF) to help ground truth through photos, what is going on with our landscapes throughout the country. It's not just drought we are looking for either, it could be flooding, fire, or whatever state the landscape is now in. There is the possibility that we may hold additional "Field Photo Weekends" during the year to show how conditions to your landscape may have changed over time. This should be fun!</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In a few weeks this weekend's photos will be posted and you'll be able to see your photos and those taken by other volunteers. Reference the <a href="http://www.southernclimate.org/documents/Field_Photos_Reference_Sheet_Correct.pdf" target="_blank"> “FIELD PHOTO WEEKENDS”</a>  page to see how to view the photos.</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remember you don't have to email your photos this weekend, just take them, but we do encourage you to email them soon afterward. That address again is:  <a href="mailto:fieldphotos@southernclimate.org">fieldphotos@southernclimate.org</a>. When uploading your photos please include the words #CoCoRaHSFeb16 in the notes field.</p>
+            <p>Thanks in advance for participating during the long President’s Day weekend!</p>
+            <br/>
+            <br/>
+        -->
+            <!--SEPTEMBER EVENT  -->
+            <!--
+		    <b><li id="new_sept_event"> {% trans "Field Photo Weekends" %} </li></b>
+			<p>{% blocktrans %}This is a citizen science effort through collaboration among the <a href="http://www.cocorahs.org/Content.aspx?page=mod&mod=1">CoCoRaHS</a>, <a href='http://www.southernclimate.org/fieldphotos/'>SCIPP</a> and <a href='eomf.ou.edu'>EOMF</a>.  For additional information, please visit <a href="http://www.cocorahs.org/Content.aspx?page=mod&mod=1">CoCoRaHS</a> and <a href='http://www.southernclimate.org/fieldphotos/'>SCIPP</a> websites.It was first launched for the Labor Day Weekend in 2012.{% endblocktrans %} </p>    
+            <a href="http://www.southernclimate.org/fieldphotos/" ><img src="/static/images/fieldphoto_sep.png" width=500 px height=300 px border="0"/></a>
+            <br/>
+            <h3>"Field Photo Weekend" September 5-7th . . . Celebrate the end of summer and Labor Day Weekend by taking a photo or two!</h3>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><big>What does your landscape look like in late summer?</big></strong> Have you participated in the CoCoRaHS Field Photos Weekends before? If not, here's your chance to join hundreds of other CoCoRaHS users to see what our landscapes looks like. If you have participated before, this is a great chance to go back to your favorite spots and see what has changed. During September 5-7th, you can help by participating in our tenth "Field Photo Weekend".</p>  
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All you have to do is take your camera or smartphone, find a landscape in your community (streams, lakes, rivers, reservoirs, a forest, a crop field, a pasture, etc.) and take a single photo or a panorama in four different directions (N, E, S, W) from where you are standing. After that you can either email your photos with your location to: <a href="mailto:fieldphotos@southernclimate.org">fieldphotos@southernclimate.org</a>, or upload them directly to the Earth Observation and Modeling Facility's photo archive website: <a href="http://www.eomf.ou.edu/photos" target="_blank"> &ldquo;http://www.eomf.ou.edu/photos&rdquo;</a>.   For detailed instructions, click here: <a href="http://www.southernclimate.org/documents/Field_Photos_Reference_Sheet.pdf" target="_blank"> &ldquo;FIELD PHOTO WEEKENDS&rdquo;</a> </p> 
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you have a smartphone, you can use the “Field  Photo” app, which is now freely available in the  <a href="https://itunes.apple.com/us/app/field-photo/id717945301" target="_blank"> &ldquo;Apple Store&rdquo;</a> and <a href="https://play.google.com/store/apps/details?id=com.eomf" target="_blank"> &ldquo;Google Play Store&rdquo;</a>.  You can use your smartphone to take a photo in the field, enter metadata to describe the landscape, and then upload the photo and metadata into the EOMF photo archive website directly from your iPhone when you have access to WI-FI.  When your enter metadata, you may add “#CoCoRaHSSep15” keyword. </p>  
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you want to see what others have submitted before, go to <a href="http://www.eomf.ou.edu/photos/cocorahsmay15/" target="_blank"> &ldquo;http://www.eomf.ou.edu/photos/cocorahsmay15/&rdquo;</a> and click on any of the dots (these photos were from Memorial Day weekend last May). We are working on going back to the earlier events and tagging all those photos so you will be able to easily find all the ones from our past weekends. If you upload photos directly to the EOMF website, you can help us by adding a tag #CoCoRaHSASep15 in the Field Notes section.</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Field Photo Weekend is a partnership between CoCoRaHS, the Southern Climate Impacts Planning Program (SCIPP) and the Earth Observation and Modeling Facility (EOMF) to help ground truth through photos, what is going on with our landscapes throughout the country. It's not just drought we are looking for either, it could be flooding, or whatever state the landscape is now in. There is the possibility that we may hold additional "Field Photo Weekends" during the year to show how conditions to your landscape may have changed over time. This should be fun!</p>  
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In a few weeks this weekend's photos will be posted and you'll be able to see your photos and those taken by other volunteers. Reference the <a href="http://www.southernclimate.org/documents/Field_Photos_Updated_Reference_Sheet_.pdf" target="_blank"> &ldquo;FIELD PHOTO WEEKENDS&rdquo;</a>  page to see how to view the photos.</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remember you don't have to email your photos this weekend, just take them, but we do encourage you to email them soon afterward. That address again is:  <a href="mailto:fieldphotos@southernclimate.org">fieldphotos@southernclimate.org</a>. When uploading your photos please include the words #CoCoRaHSSep15 in the notes field.</p>  
+            <p>Just think if all 20,000+ CoCoRaHS volunteers take photos! <big><b>Wow!</b></big></p>  
+            <p>Thanks in advance for participating and have a great Labor Day weekend!</p> 
+        -->
+</li>
+		  </ol>
+
+		</p>
+</div>
+<div class="well">	
+        <p style="text-align:center" class="text-info">
+        <small>
+            <b>{% trans "Acknowledgements" %}:</b>
+                <br/>
+                {% trans "The Geo-Referenced Field photos in this Field Photo library come from many people and projects. Their contributions make this library possible and grow over time. Thanks." %}
+        </small>
+        </p>
+        
+</div>  
+<!--<div id="dialog" title="NEW FIELD PHOTO WEEKEND">
+  <p><a href="#new_Sept_event"><strong>Click here to learn about the "SEPTEMBER Field Photo Weekend"</strong><img src="/static/images/FieldPhotoSept2500.png" width=500 px height=300 px border="0"/></a></p>
+</div>
+{% if request.path == '/photos/' %}     
+<script> 
+/*$(document).ready(function() {
+    window.alert("<a href=\"#new_sept_event\">Click here to check out the new Field Photo Weekend event</a>");
+})*/
+ $(function() {
+    $( "#dialog" ).dialog({
+        minWidth: 400});
+  });
+</script>   -->
+{%endif%}   
+{% endblock %}

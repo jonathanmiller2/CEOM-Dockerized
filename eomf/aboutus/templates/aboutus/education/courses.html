@@ -1,0 +1,19 @@
+{% extends "aboutus/base.html" %}
+{% load i18n %}
+{% block content %}
+<div class="well">
+	<div class="grid" >
+		<h2 style="color: #dc143c;">{% trans "Courses" %}:</h2>
+		<div class="hr"></div>&nbsp;
+		<p><span style="text-decoration: underline;"><br /></span></p>
+		<p>&nbsp;<strong style="font-size: large;">{% trans "Environmental Remote Sensing" %}</strong></p>
+		<p><strong>PBIO 4733/5733-001 and GIS 4733/5733-001 ({% trans "Fall Semester" %})</strong></p>
+		<p style="padding-left: 60px;">{% blocktrans%}This 3-credit course aims to help students to develop comprehensive knowledge and advanced skills of remote sensing, and to apply it for studying the composition, structure, and function of plants, ecosystems, landscapes and the biosphere. The course will teach (1) laboratory- and field- based hyperspectral data acquisition and analysis, (2) field survey methods, (3) multi-spectral remote sensing of land use and land cover, vegetation, and water quality, (4) thermal remote sensing, and (5) microwave remote sensing. The course is composed of lecture, computer laboratory, field data collection, student&rsquo;s project, presentation and reports as well as literature reviews. Students will learn image processing software (ENVI) and algorithms. This course is designed for advanced undergraduate and graduate students who are interested in remote sensing and its applications, e.g., ecology, natural resources, agriculture, forestry, wildlife, water, climate, and urban. Perspective students could come from various departments, including biology, geography, geology, hydrology, atmospheric science, computer science, mathematics and statistics.{% endblocktrans %} &nbsp;&nbsp;</p>
+		<p style="padding-left: 60px;">&nbsp;</p>
+		<p><strong style="font-size: large;">{% trans "Computational Remote Sensing" %}</strong></p>
+		<p><strong>PBIO 4810/5810-003 ({% trans "Fall Semester" %})</strong></p>
+		<p style="padding-left: 60px;">{% blocktrans%}This 3-credit course focuses on data analysis and modeling with large volumes of satellite images. It is organized in four modules: (1) computer programming in computer servers with Linux/Unix environment, (2) in-depth literature review of remote sensing in the areas of land use and land cover change, biophysical and biochemical parameters of vegetation and water, (3) individual or group (2-3 students per group) projects that analyze large amounts of satellite images, and (4) student presentations and manuscript writing for peer-reviewed SCI journals. Students will learn how to use the Interactive Data Language (IDL), ENVI image processing software, Python, R, and GRASS to analyze large volumes of remote sensing data from optical sensors (Landsat, MODIS) and synthetic aperture radar (PALSAR). Student projects may cover diverse topics, including urban, water, vegetation, soils, minerals, and disturbance (fire, drought, flood, insect infestation). This course is designed for graduate students and advanced undergraduate students who are interested in satellite remote sensing. Perspective students could come from various departments, including biology, geography, hydrology, atmospheric science, computer science, mathematics and statistics. Pre-requisites are a course in remote sensing (PBIO 4733/5733 and GIS 4733/5733 Environmental Remote Sensing, or equivalent), statistical data analysis, computer programming, or permission of instructor and advisor.{% endblocktrans %}</p>
+		<p>&nbsp;</p>
+	</div>
+</div>
+{% endblock %}

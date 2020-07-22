@@ -1,0 +1,88 @@
+{% extends "accounts/base.html" %}
+{% load crispy_forms_tags %}
+
+{% load i18n %}
+{% block title %}EOMF: {% trans "Create an account" %}{% endblock %}
+
+{% block head_extra %}
+{{ block.super }}
+{{ profile_form.media }}
+<style type="text/css">
+label{
+    float: right;
+    font-weight: normal;
+}
+th{
+    width: 150px;
+}
+
+.required {
+
+}
+</style>
+{% endblock%}
+
+{% block content %}
+    <h3>{% trans "Create an account" %}</h3>
+    <form action="." method="post" class="form-horizontal">
+    {% csrf_token %}
+    <fieldset>
+    <legend>{% trans "Required User Information" %}</legend>
+        <div class="control-group{% if user_form.username.errors %} error{%endif%}">
+            <label class="control-label" for="id_username">{% trans "Username" %}</label>
+            <div class="controls">
+                {{user_form.username}}
+                <span class="help-inline"><strong>
+                    {{user_form.username.errors.as_text}}
+                </strong></span>
+            </div>
+        </div>
+        <div class="control-group{% if user_form.email.errors %} error{%endif%}">
+            <label class="control-label" for="id_email">{% trans "Email address" %}</label>
+            <div class="controls">
+                {{user_form.email}}
+                <span class="help-inline"><strong>
+                    {{user_form.email.errors.as_text}}
+                </strong></span>
+            </div>
+        </div>
+        <div class="control-group{% if user_form.password1.errors %} error{%endif%}">
+            <label class="control-label" for="id_password1">{% trans "Password" %}</label>
+            <div class="controls">
+                {{user_form.password1}}
+                <span class="help-inline"><strong>
+                    {{user_form.password1.errors.as_text}}
+                </strong></span>
+            </div>
+        </div>
+        <div class="control-group{% if user_form.password2.errors %} error{%endif%}">
+            <label class="control-label" for="id_password2">{% trans "Password (again)" %}</label>
+            <div class="controls">
+                {{user_form.password2}}
+                <span class="help-inline"><strong>
+                    {{user_form.password2.errors.as_text}}
+                </strong></span>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>{% trans "Extended Profile" %}</legend>
+        <div class="control-group">
+            <label class="control-label" for="id_first_name">{% trans "First name" %}</label>
+            <div class="controls">
+                {{user_form.first_name.errors}}{{user_form.first_name.as_text}}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="id_last_name">{% trans "Last name" %}</label>
+            <div class="controls">
+                {{user_form.last_name.errors}}{{user_form.last_name.as_text}}
+            </div>
+        </div>
+    {% crispy profile_form %}
+    </fieldset>
+    <div class="form-actions">
+        <input class='btn btn-primary' type="submit" value="{% trans 'Create Account' %}" />
+    </div>
+</form>
+{% endblock %}

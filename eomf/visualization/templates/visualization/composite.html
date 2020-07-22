@@ -1,0 +1,216 @@
+{% extends "visualization/base.html" %}
+
+{% load i18n %}
+{% block title %} {% trans "EOMF MODIS Composite Image Visualization" %} {% endblock %}
+
+{% block head_extra %}
+<script src="http://www.openlayers.org/api/OpenLayers.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var map;
+    var graphic;
+    function init(){
+        map = new OpenLayers.Map('map2');
+
+        graphic = new OpenLayers.Layer.Image(
+            'City Lights',
+            'http://landweb.nascom.nasa.gov/browse/images/{{version}}/{{sat_name}}/{{prod}}/{{year}}/A{{year}}{{julian_day}}/MOD09.A{{year}}{{julian_day}}.{{version}}.png',
+            //'http://landweb.nascom.nasa.gov/browse/images/{{prod}}/{{sat_ver}}/{{year}}/A{{year}}{{julian_day}}/HAM/HAM.A{{year}}{{julian_day}}.{{prod}}.{{version}}.900x450.jpg',
+            //http://landweb.nascom.nasa.gov/browse/images/006/Terra/MOD09/2015/A2015273/MOD09.A2015273.006.png
+            //'http://landweb.nascom.nasa.gov/browse/images/055/MOD17A2-GPP/2000/A2000001/MOD17A2-GPP.A2000001.055.m.png',
+            new OpenLayers.Bounds(-180, -90, 180, 90),
+            new OpenLayers.Size(1350, 675),
+            {numZoomLevels: 3}
+        );
+        //900x450.jpg
+        //7208x3604.jpg
+        //.jpg
+        graphic.events.on({
+            loadstart: function() {
+                OpenLayers.Console.log("loadstart");
+            },
+            loadend: function() {
+                OpenLayers.Console.log("loadend");
+            }
+        });
+
+
+        map.addLayers([graphic]);
+        //map.addControl(new OpenLayers.Control.LayerSwitcher());
+        map.zoomToMaxExtent();
+    }
+</script>
+
+
+{% endblock %}
+
+{% block body_tag %}<body bgcolor="#FFFFFF" onload="init()" >{% endblock %}
+{% block content %}
+<script type="text/javascript">
+	function image_error(){
+		var src = "/media/visualization/composite/not_available.png";
+		$( "#map" ).attr("src", src);
+	}
+	$(function() {
+       $( "#accordion" ).accordion({
+          heightStyle: "content",
+          collapsible: true,
+          active: false
+        });
+      });
+	$(function() {
+	    $( "#CAL_DATE" ).datepicker({
+	      changeMonth: true,
+	      changeYear: true
+	    });
+	  });
+  function calendarSubmit(){
+    var value = document.getElementById("CAL_DATE").value
+    console.log(value)
+    if (value != ""){
+      var day =parseInt($.datepicker.formatDate("o", new Date(value)))
+      var year =parseInt($.datepicker.formatDate("yy", new Date(value)))
+
+     }else{
+      alert("Please select a date by clicking on the calendar input and picking the desired date.")
+     }
+     console.log(year.toString())
+	 console.log(day.toString())
+     window.location.replace("/visualization/composite/"+ year.toString() +"/"+ day.toString() +"/");
+  }
+	function julianSubmit(){
+		var year = parseInt(document.getElementById("JUL_YEAR").value);
+		var day = parseInt(document.getElementById("JUL_DAY").value);
+		var text = /^[0-9]+$/;
+	    if ((year != "") && (!text.test(year))) {
+	        alert("Please Enter Numeric Values Only for the year");
+	        return false;
+	    }
+	    if (year.toString().length != 4) {
+	        alert("Year is not proper. Please check format (YYYY)");
+	        return false;
+	    }
+	    var current_year=new Date().getFullYear();
+	    if((year < 2000))
+	        {
+	        alert("Year should be in range 2000");
+	        return false;
+	        }
+	    if ((day != "") && (!text.test(day))){
+	    	alert("Please Enter Numeric Values Only for the day");
+	    }
+	    else{
+	    	if ((day != "") && (text.test(day)) && (day>366 || day<1)){
+	    		alert("Please Enter a day from 1 to 366");
+	    	}
+	    }
+	   	
+      window.location.replace("/visualization/composite/"+ year.toString() +"/"+ day.toString() +"/");
+	    
+
+	}
+	function set50km(){
+		map.removeLayer(graphic,false);
+		 graphic = new OpenLayers.Layer.Image(
+            'Mymap',
+            'http://landweb.nascom.nasa.gov/browse/images/{{version}}/{{sat_name}}/{{prod}}/{{year}}/A{{year}}{{julian_day}}/MOD09.A{{year}}{{julian_day}}.{{version}}.png',
+            //'http://landweb.nascom.nasa.gov/browse/images/{{prod}}/{{sat_ver}}/{{year}}/A{{year}}{{julian_day}}/HAM/HAM.A{{year}}{{julian_day}}.{{prod}}.{{version}}.900x450.jpg',
+            new OpenLayers.Bounds(-180, -90, 180, 90),
+            new OpenLayers.Size(1350, 675),
+            {numZoomLevels: 4}
+        );        //900x450.jpg
+        //7208x3604.jpg
+		 map.addLayers([graphic]);
+        map.zoomToMaxExtent();
+	}
+	function set20km(){
+		map.removeLayer(graphic,false);
+		 graphic = new OpenLayers.Layer.Image(
+            'Mymap',
+            'http://landweb.nascom.nasa.gov/browse/images/{{version}}/{{sat_name}}/{{prod}}/{{year}}/A{{year}}{{julian_day}}/MOD09.A{{year}}{{julian_day}}.{{version}}.png',
+            //'http://landweb.nascom.nasa.gov/browse/images/{{prod}}/{{sat_ver}}/{{year}}/A{{year}}{{julian_day}}/HAM/HAM.A{{year}}{{julian_day}}.{{prod}}.{{version}}.jpg',
+            new OpenLayers.Bounds(-180, -90, 180, 90),
+            new OpenLayers.Size(1350, 675),
+            {numZoomLevels: 6}
+        );
+		 map.addLayers([graphic]);
+        map.zoomToMaxExtent();
+	}
+	function set5km(){
+		map.removeLayer(graphic,false);
+		 graphic = new OpenLayers.Layer.Image(
+            'Mymap',
+            'http://landweb.nascom.nasa.gov/browse/images/{{version}}/{{sat_name}}/{{prod}}/{{year}}/A{{year}}{{julian_day}}/MOD09.A{{year}}{{julian_day}}.{{version}}.full.png',
+            //'http://landweb.nascom.nasa.gov/browse/images/{{prod}}/{{sat_ver}}/{{year}}/A{{year}}{{julian_day}}/HAM/HAM.A{{year}}{{julian_day}}.{{prod}}.{{version}}.7208x3604.jpg',
+            new OpenLayers.Bounds(-180, -90, 180, 90),
+            new OpenLayers.Size(1350, 675),
+            {numZoomLevels: 7}
+        );
+		 map.addLayers([graphic]);
+        map.zoomToMaxExtent();
+	}
+
+</script>
+<div class="span12 well">
+<h2 style="color:rgb(61,147,56); float:left"> {% trans "MODIS TERRA composite map" %}</h2><br /><br /><br />
+<h4 style="color:rgb(17,34,215); float:left;">{{prod}}/{{sat_name}}_{{sat_ver}}({{version}}):<b>{{year}}-{{julian_day}}</b></h4>
+	
+<div class="span12">
+<div id="map2" style="margin-left:auto;margin-right:auto;width: 90%; height: 675px"></div>
+		<br>
+		<a href="/visualization/composite/{{previous8_year}}/{{previous8_day}}/" >
+      <button type="button" class="btn btn-primary span2"> <i class="icon-chevron-left"></i><i class="icon-chevron-left"></i> 8</button>
+    </a>
+    <a href="/visualization/composite/{{next8_year}}/{{next8_day}}/" >
+    <button type="button" class="btn btn-primary span2">8 <i class="icon-chevron-right"></i><i class="icon-chevron-right"></i></button>
+    </a>
+    <button type="button" class="btn btn-primary span2" onclick="set50km()"> {% trans "50 km" %} <i class="icon-globe"></i></button> 
+    <button type="button" class="btn btn-primary span2" onclick="set20km()">  {% trans "20 km" %} <i class="icon-zoom-in"></i></button>
+    <button type="button" class="btn btn-primary span2" onclick="set5km()">  {% trans "5 km" %} <i class="icon-zoom-in"></i><i class="icon-zoom-in"></i></button>
+  
+	</div>
+
+	<div class="span6 well">
+		<div class="span6 text-left">
+		<p class="span3">{% trans "Year" %}:</p>
+		<p class="span1"></p>
+		<input class="span8" id="JUL_YEAR" type="number" min="2000" max="{%now "Y"%}" step="1" placeholder="Year" value="{{year}}">
+		</div>
+		<div class="span6 text-left">
+		<p class="span3">{% trans "Date" %}:</p>
+		<p class="span1"></p>
+		<input class="span8 " id="JUL_DAY"type="number" min="1" max="365" step="1" placeholder="Julian day" value="{{julian_day}}">
+		</div>
+		<div class="clearfix"></div>
+		<button class="btn btn-primary offset4 span4" onclick="julianSubmit()">{% trans "Submit" %}</button>
+	</div>
+
+	<div class="span5 well">
+		<div class="span12">
+			<p class="span3">{% trans "Calendar" %}:</p>
+			<p class="span1"></p>
+			<input class="span8 " id="CAL_DATE" type="text" style="position: relative; z-index: 100000;"  placeholder="click to choose the date" readonly="readonly">
+		</div>
+		<div class="span12">
+			<button class=" btn btn-primary offset4 span4" onclick="calendarSubmit()">{% trans "Submit" %}</button>
+		</div>
+		<div></div>
+	</div>
+	<div class="clearfix"></div> 
+
+	<div class="clearfix"></div>
+	<div id="accordion" class="span12">
+		<h3> {% trans "Julian calendar Leap years" %} </h3>
+		<div>
+			{% include "visualization/julianCalendarLeap.html" %}
+		</div>
+		<h3> {% trans "Julian calendar Regular years" %} </h3>
+		<div>
+			{% include "visualization/julianCalendarRegular.html" %}
+		</div>
+	</div>
+	<img src='http://landweb.nascom.nasa.gov/browse/images/{{prod}}/{{sat_ver}}/{{next8_year}}/A{{next8_year}}{{next8_day}}/HAM/HAM.A{{next8_year}}{{next8_day}}.{{prod}}.{{version}}.900x450.jpg' style="display:none">
+	<img src='http://landweb.nascom.nasa.gov/browse/images/{{prod}}/{{sat_ver}}/{{previous8_year}}/A{{previous8_year}}{{previous8_day}}/HAM/HAM.A{{previous8_year}}{{previous8_day}}.{{prod}}.{{version}}.900x450.jpg' style="display:none">
+</div>
+
+
+{% endblock %}

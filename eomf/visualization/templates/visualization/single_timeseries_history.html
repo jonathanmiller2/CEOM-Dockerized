@@ -1,0 +1,80 @@
+{% extends "visualization/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} {{title}} {% endblock %}
+{% block content %}
+<div class="span12 well">
+ <h2 style="color: #dc143c;">MODIS time series request history for single site</h2>
+ {% if message %}
+   <div class="alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Warning! </strong>{{message}}
+  </div>
+   {% endif %}
+  <a class="btn btn-success icon-2x" href="/visualization/timeseries/single/add/"><i class="icon-plus-sign "></i> Add request</a>
+  <div class="span12 text-center"> 
+  {% if jobs.has_previous %}
+    <a class="btn btn-primary" href="?page=1"><i class="icon-chevron-left"></i><i class="icon-chevron-left"></i></a>
+  {% endif %}
+  {% if jobs.has_previous %}
+    <a class="btn btn-primary" href="?page={{ jobs.previous_page_number }}"><i class="icon-chevron-left"></i></a>
+  {% endif %}
+  
+   Page {{jobs.number}}  of {{jobs.paginator.num_pages}}
+  {% if jobs.has_next %}
+    <a class="btn btn-primary"href="?page={{ jobs.next_page_number }}"><i class="icon-chevron-right"></i></a>
+  {% endif %}
+ {% if jobs.has_next %}
+    <a class="btn btn-primary"href="?page={{jobs.paginator.num_pages}}"><i class="icon-chevron-right"></i><i class="icon-chevron-right"></i></a>
+  {% endif %}
+    </div>
+    <hr>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>
+            Created
+          </th>
+          <th>
+            Updated
+          </th>
+          <th>
+            Product
+          </th>
+          <th>
+            Output file
+          </th>
+         <th>
+            State
+          </th>
+          <th>
+            Delete
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+ {% for row in jobs %}
+   <tr>
+      <td>{{row.created}}</td>
+      <td>{{row.modified}}</td>
+      <td>{{row.product}}</td>
+      <!-- <td>{{row.years}}</td> -->
+      <td> {% if row.result %} <a href="{{row.result.url}}"> result </a>{%endif%}</td>
+      <td> {% if row.sender %}{{row.sender}}{% endif %}</td>
+      <td>   
+      {% if row.completed %}
+         <span class="text-success">Complete</span>
+      {% endif %}
+      </td>
+      <td>
+        <a href="/visualization/timeseries/single/del={{row.id}}"><div class="btn btn-danger"><i class="icon-trash"></i></div></a>
+      </td>
+  </tr>
+ {% endfor %}
+    </tbody>
+ </table>
+ </div>
+   
+</div>
+
+{% endblock %}

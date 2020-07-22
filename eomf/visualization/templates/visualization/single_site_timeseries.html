@@ -1,0 +1,160 @@
+{% extends "visualization/base.html" %}
+{% load dajaxice_templatetags %}
+
+{% block content %}
+<div class="span12">
+  	<h2 style="color: #dc143c;">Single Site Timeseries Request</h2>
+
+      <div id="errorPanel" class="well {% if found %}hide{% endif %}">
+      <p class="text-danger"> Timeseries task not found or expired. If you just created the task, wait some time until that task gets into the queue or <a class="btn btn-primary" onclick="location.reload();">reload</a></p>
+      <p id="numRetries">Checking if task exists (0/10)...</p>
+      </div>
+
+      <div id="dataPanel"  class="well span10 offset1 {%if not found %}hide{% endif %}">
+        <dl class="dl-horizontal">
+          <dt>Latitude:</dt><dd>{{ lat }}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>Longitude:</dt><dd>{{ lon }}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>Dataset</dt><dd>{{dataset}}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>Tile:</dt><dd>{{ tile }}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>Cell (row, column):</dt><dd>({{row}}, {{col}})</dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>Years:</dt><dd>{{years}}</dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>Scaling factor of the spectral bands</dt><dd>10,000</dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>Task_id</dt><dd>{{task_id}}</dd>
+        </dl>
+        
+        <hr>
+        {% if completed %}
+        <div id="resultsDiv" class="text-center">
+          <a id="downloadButton" class="btn btn-primary" href="{{file}}"><i class="icon-download-alt"></i> Download</a>
+          <a class="btn btn-primary" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
+          <a href="/visualization/timeseries/single/del={{job_id}}" class="btn btn-danger"><i class="icon-trash"></i> Delete</a>
+        </div>
+        {% else %}
+        <p id='infoMessage' class="text-center text-info">Contacting server...</p>
+        <div class="span-12 text-center"><a href="/visualization/timeseries/single/del={{job_id}}" class="btn btn-danger"><i class="icon-trash"></i> Cancel</a></div>
+        <div id ='progressDiv' class="span12 text-center">          
+            <div id="progress_bars"class="progress progress-striped active">
+                <div id="completed-bar" class="bar bar-success" style="width: 0%;"></div>
+                <div id="remaining-bar" class="bar bar-warning" style="width: 0%;"></div>
+                <div id="error-bar" class="bar bar-danger" style="width: 100%;"></div>
+            </div>
+        </div>
+        <div id="resultsDiv" class="hide text-center">
+          <a id="downloadButton" class="btn btn-primary" href=""><i class="icon-download-alt"></i> Download</a>
+          <a class="btn btn-primary" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
+        </div>
+        {% endif %}
+        
+      </div>
+</div>
+{% endblock %}
+
+{% block js_code %}
+
+  {% dajaxice_js_import %}
+  <script type="text/javascript">
+   // Variables
+    var taskFound = {% if found %} true {% else %} false {% endif %};
+    var intervalID;
+    var MAX_RETRIES = 10;
+    var notFoundCounter=0;
+    var task_id = "{{task_id}}";
+
+    // Functions
+    var showPanel = function(error){
+      var visible= "#dataPanel";
+      var hidden = "#errorPanel";
+      if (error){
+        hidden = visible;
+        visible = "#errorPanel"
+      }
+      if ($(hidden).css("display")=="none"){
+        $(visible).removeClass('hide',500)
+        $(hidden).addClass('hide',500)
+      }
+    }
+    var updateProgressBar = function(completed,remaining,error, active,message){
+      showPanel(false);
+      
+      $("#completed-bar").css("width",completed+"%");
+      $("#error-bar").css("width",error+"%");
+      $("#remaining-bar").css("width",remaining+"%");
+      var progress = error + completed;
+      progress = progress.toFixed(2);
+      $( "#infoMessage" ).text(message+" ("+progress+" %)");
+
+      if (active && $("#progress_bars").hasClass("active") ){
+        $("#progress_bars").removeClass("active")
+      }else if (!$("#progress_bars").hasClass("active")){
+        $("#progress_bars").addClass('active')
+      }
+    }
+    
+    var updateErrorCounter = function(counter){
+      $("#numRetries").text("Checking if task exists ("+counter+"/"+MAX_RETRIES+")...")
+    }
+
+    var showResults = function(fileUrl){
+      $("#downloadButton").attr("href",fileUrl)
+      $("#progressDiv").addClass('hide',500)
+      $("#errorPanel").addClass('hide',500)
+      $("#resultsDiv").removeClass('hide',500)
+    }
+
+    var checkState = function(data){
+      console.log(data);
+      if (data.success){
+        clearInterval(intervalID);
+        file_url = data['url']
+        $( "#infoMessage" ).text("Data ready to download")
+        console.log(file_url)
+        showResults(file_url)
+      }else if (data.not_found){
+        if (notFoundCounter<MAX_RETRIES){
+          notFoundCounter+=1;
+          updateErrorCounter(notFoundCounter);
+        }else{
+          $( "#numRetries" ).text("Task not found, make sure that it is not expired or reload this page.")
+          clearInterval(intervalID);  
+        }
+      }else if (data.failure){
+        clearInterval(intervalID);
+        showPanel(true);
+        var message = "There was an error processing the task. Contact the administrator for more details." ;
+        $( "#infoMessage" ).text(message);
+        $( "#numRetries" ).text(message);
+      }else if (data.progress){
+        var remaining = 100.0*(data.total-data.completed-data.errors)/data.total;
+        var completed = 100.0*data.completed/data.total;
+        var error = 10.0*data.errors/data.total;
+        updateProgressBar(completed,remaining,error,false,"Working...");
+      }
+    }
+    
+    var checkProgress = function(){
+      Dajaxice.visualization.get_task_progress(checkState,{'task_id':task_id});
+      
+    }
+
+
+    // Main
+    {% if not completed and found %}
+    var delay = 1000
+    intervalID = window.setInterval(checkProgress, delay);
+    {% endif %}
+  </script>
+{% endblock %}

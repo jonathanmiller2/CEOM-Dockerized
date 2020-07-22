@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load dajaxice_templatetags %}
+
+{% block head_extra %}
+{% dajaxice_js_import %}
+{% endblock %}
+
+{% block left_menu %}
+{% endblock %}
+{% block sidebar_extra %}
+
+{% endblock %}
+{% block container %}
+
+<div class="span12" id="show_1"></div>
+<div class="span12" style="text-align:center; color: #E40561; font-size:35px">Feedback Management</div>
+<div class="span12"><hr/> </div>
+<strong><span style="color:navy">Hints :<br/>Click on the ID to enter the comments section.</span></strong>
+<br/>
+<strong><span style="color:navy">Click on the Email ID to start an email. </span></strong>
+<br/>
+<div class="span12" style="width:auto; height:600px; overflow: scroll;">
+	<table class="table table-bordered" style="width:auto;height: auto;overflow: scroll;">
+		 <col width="5%">
+  		 <col width="10%">
+  		 <col width="10%">
+  		 <col width="30%">
+  		 <col width="10%">
+  		 <col width="5%">
+  		 <col width="10%">
+  		 <col width="10%">
+  		 <col width="10%">
+		<tr style="height:40px;width:auto;">
+			<th>
+				ID
+			</th>
+			<th>
+				Email
+			</th>
+			<th>
+				Subject
+			</th >
+			<th>
+				Feedback_Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</th >
+			<th>
+				Priority
+			</th>
+			<th>
+				Date_submitted
+			</th>
+			<th>
+				Images
+			</th>
+			<th>
+				Assigned_to
+			</th>
+			<th>
+				Status
+			</th>
+		</tr>
+	{% for x in feedback %}
+	<script>console.log("{{x.stats.assigned_to}}, {{x.stats.task_status}}")</script>
+	<tr><td><a href="/feedback/comment/{{x.id}}">
+		{{x.id}}
+	</a>
+	</td>
+	<td>
+		<a href="mailto:{{x.email}}?cc=xiangming.xiao@ou.edu&bcc=bibas.sitoula@ou.edu&Subject=RE:%20{{x.subject}}&body=---------------------%20Thanks%20for%20your%20feedback!%20{{x.text}}" >
+		{{x.email}}</a>
+	</td>
+	<td>
+		{{x.subject}}
+		</td>
+	<td style="width:auto">
+		{{x.text}}
+		</td>
+	<td>
+		{{x.Priority}}
+		</td>
+	<td>
+		{{x.feedback_date}}
+		</td>
+	<td>
+		<a href=/media/{{x.Photo}}><img src=/media/{{x.Photo}} style="height:50px;width:50px"></a>
+		</td>
+	
+	<td style="width:130px">
+		<select  feedbackval={{x.id}} class="retrive_id" onchange="handler_update(this,this.value,1)">
+			<option value="BR" {% if x.stats.assigned_to == 'BR' %} selected {% endif %}>Bhargav Bolla</option>
+			<option value="XJ" {% if x.stats.assigned_to == 'XJ' %} selected {% endif %}>Xibei Jia</option>
+		</select> 
+	</td>
+	<td style="width:130px">
+		<select  feedbackval={{x.id}}  class="retrive_id" onchange="handler_update(this,this.value,2)">
+			<option value="NW" {% if x.stats.task_status == 'NW' %} selected {% endif %}>New</option>
+			<option value="NM" {% if x.stats.task_status == 'NM' %} selected {% endif %}>Need more information</option>
+			<option value="WR" {% if x.stats.task_status == 'WR' %} selected {% endif %}>Working</option>
+			<option value="CO" {% if x.stats.task_status == 'CO' %} selected {% endif %}>Done</option>
+		</select> 
+	</td>
+	</tr>
+	{% endfor %}
+	</table>
+</div>
+<div class="span6">BU - Bug | UX - User Experience | FT - New Feature | BNU - New Content addition</div>
+
+<script>
+function handler_update(x,y,z){
+ // 1 is to update the assigned_to and 2 is to update the current status.
+//ajax call with the below attributes
+//dajax ice call
+Dajaxice.eomf.feedback.updateDB(success_or_not, {'feed_id':x.getAttribute("feedbackval"),'new_val':y, 'aors':z})
+console.log(x.getAttribute("feedbackval"), y, z);
+
+
+};
+function success_or_not(data){
+	if(data.message == "Success"){
+		//do something interactive to user
+		$("#show_1").html("<p style='color:green'>Successfully Updated</p>");
+		$( "#show_1" ).slideUp( 500 ).delay( 500 ).fadeIn( 100 );
+		// $("#show_1").hide();
+	}
+	else if(data.message == "Failure") {
+		//Tell the user the data is not updated.
+		$("#show_1").html("<p style='color:red'>Update Failed</p>");
+		$( "#show_1" ).slideUp( 300 ).delay( 1000 ).fadeIn(100);
+		// $("#show_1").hide();
+	}
+};
+$( ".retrive_id" ).change(function() {
+	// ajax call's go here
+	//get all attributes
+  console.log("Updated Task_status");
+});
+</script>
+{% endblock %}
+
+
+
+

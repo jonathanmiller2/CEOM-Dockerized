@@ -1,0 +1,5 @@
+Options All -Indexes
+<Files config.inc>
+ order allow,deny
+ deny from all
+</Files>

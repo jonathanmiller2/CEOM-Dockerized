@@ -1,0 +1,10 @@
+Latitude: 	{{ lat }}
+Longitude: 	{{ lon }}
+Modis: 	{{ modis }}
+Tile: 	{{ tile }}
+Cell (row, column): 	{{row}}, {{ col }}
+The scaling factor of the seven spectral bands: 10,000
+ 
+{{table}}
+
+{% if d %} Debug:{{d}} {%endif%}

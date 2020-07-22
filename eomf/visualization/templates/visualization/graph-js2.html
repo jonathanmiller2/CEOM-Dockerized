@@ -1,0 +1,61 @@
+{% extends "visualization/base.html" %}
+
+{% block head_extra %}
+    <!--[if IE]>
+    <script type="text/javascript" src="http://dygraphs.com//excanvas.js"></script>
+    <![endif]-->
+	<script type="text/javascript" src="http://dygraphs.com/dygraph-combined.js"></script>
+	<script type="text/javascript">
+   
+    $(document).ready(function(){
+        
+		var g = new Dygraph(
+		    document.getElementById("div_g"),
+		    "/visualization/csv_products_graphs_{{modis}}_{{years}}_{{lat}}_{{lon}}.csv", {
+                stackedGraph: false,
+
+                highlightCircleSize: 2,
+                strokeWidth: 1,
+                strokeBorderWidth: null,
+
+                highlightSeriesOpts: {
+                  strokeWidth: 3,
+                  strokeBorderWidth: 1,
+                  highlightCircleSize: 5,
+                }
+                //,
+		        //visibility: {{visibility|lower}}
+		    }
+		);
+	  
+		//setStatus();
+
+		function setStatus() {
+			document.getElementById("visibility").innerHTML =
+			  g.visibility().toString();
+		}
+
+		function change(el) {
+			g.setVisibility(parseInt(el.id), el.checked);
+			setStatus();
+		}
+	});
+</script>
+{% endblock %}
+
+{% block title %} Data Visualization {% endblock %}
+{% block content %}
+
+<br />Latitude: 	{{ lat }}
+<br />Longitude: 	{{ lon }}
+<br />Modis: 	{{ modis }}
+<br />Tile: 	{{ tile }}
+<br />Year:     {{ years }}
+<br />Cell (row, column): 	{{row}}, {{ col }}
+<br />
+<br />
+<div id="div_g" class="span12" style="height:500px"></div>
+
+{% if d %} Debug:{{d}} {%endif%}
+
+{% endblock %}

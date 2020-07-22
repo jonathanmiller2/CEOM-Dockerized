@@ -1,0 +1,266 @@
+{% extends "gisday/base.html" %}
+{% load crispy_forms_tags %}
+{% load extra_template_tags %}
+{% block head_extra %}
+<style type="text/css">
+.grid {
+	padding: 20px 20px 10px 20px;
+	max-width: 100%;
+	margin: 0 auto;
+	list-style: none;
+	text-align: center;
+	overflow: hidden;
+}
+
+.grid li {
+	display: inline-block;
+	width: 250px;
+	height: 250px;
+	margin: 0;
+	padding: 20px;
+	text-align: left;
+	position: relative;
+}
+.grid figure h5 {
+	margin-left: 15%;
+	margin-top: 15%;
+	margin-right: 15%;
+	padding: 0;
+	vertical-align:middle;
+	color: #ae2341;
+	font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.grid figure {
+	margin: 0;
+	position: relative;
+	
+	width: 250px;
+	height: 250px;
+	display:table;
+}
+
+.grid>div {
+	max-width: 100%;
+	display: block;
+	position: relative;
+	background-color: #fff;
+		width: 250px;
+	height: 250px;
+}
+.grid figure img {
+	position: absolute;
+	margin: 0;
+	padding: 0;
+	z-index:-1;
+}
+.grid figcaption {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 20px;
+
+	background: #2c3f52;
+	color: #ed4e6e;
+	z-index:1;
+}
+.grid figcaption h5 {
+	padding: 0;
+	color: #f4867b;
+	margin-top:0px;
+}
+.grid figcaption p {
+
+	padding: 0;
+	color: #000;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height: 80%;
+	width: 100%;
+	color: #fff;
+
+}
+
+.author span:before {
+	content: 'by ';
+	color: gray;
+	font-size: 0.75em;
+}
+.author span{
+	font-size: 0.95em;
+}
+.institution {
+	font-size: 0.95em;
+	color:#226b36 ;
+	text-align: center;
+	font-weight: bold;
+}
+.department {
+	text-align: center;
+	font-size: 0.95em;
+	color:#226b36 !important;
+}
+
+/* Individual Caption Styles */
+
+/* Caption Style 1 */
+/*.cs-style-1 figcaption {
+	height: 100%;
+	width: 100%;
+	opacity: 0;
+	text-align: center;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
+	-moz-transition: -moz-transform 0.3s, opacity 0.3s;
+	transition: transform 0.3s, opacity 0.3s;
+}*/
+
+/*.no-touch .cs-style-1 figure:hover figcaption,
+.cs-style-1 figure.cs-hover figcaption {
+	opacity: 1;
+	-webkit-transform: translate(15px, 15px);
+	-moz-transform: translate(15px, 15px);
+	-ms-transform: translate(15px, 15px);
+	transform: translate(15px, 15px);
+}
+*/
+
+/*.cs-style-1 figure:hover figcaption{
+	opacity: 1;
+	-webkit-transform: translate(15px, 15px);
+	-moz-transform: translate(15px, 15px);
+	-ms-transform: translate(15px, 15px);
+	transform: translate(15px, 15px);
+}
+*/
+
+.cs-style-1 span {
+		display: inline-block;
+		color: #00a89c;
+}
+
+
+@media screen and (max-width: 31.5em) {
+	.grid {
+		padding: 10px 10px 10px 10px;
+	}
+	.grid li {
+		width: 100%;
+		min-width: 300px;
+	}
+}
+</style>
+
+<!-- <link rel="stylesheet" type="text/css" href="http://tympanus.net/Tutorials/CaptionHoverEffects/js/toucheffects.js"> -->
+{% endblock %}
+{% block content %}
+<h3 align="left">GIS Day {{gisdate.date|date:"Y"}} at the University of Oklahoma, {{gisdate.date|date:"M d"}}<sup>th</sup> {{gisdate.date|date:"Y"}}
+<a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
+<a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a>
+
+	    </h3>
+<div class="well">
+		{{content|render}}
+		
+	 	{% if form %}
+			<form action="." method='post'>
+				{% csrf_token %}
+				{% crispy form %}
+				<!-- <div class="span12 text-center">
+					<input type="submit" value="Submit" class="btn btn-primary">
+				</div> -->
+			</form>
+		{% else %}
+            {% if registration_successful %}
+            <h3  style="color: #007f00;">Congratulations, you have successfully registered for  the poster contest. </br >
+                </h3>
+            {% else %}
+			<h3 class="text-warning"><strong>Registration period ended or not open yet</strong></h3>
+            {% endif %}
+		{% endif %}
+</div>
+<div class="hr"></div>
+<br>
+<h2 class="text-center" style="color:#000099">Registered Posters</h4>
+<ul class="grid cs-style-1">
+    {% for v in posters %}
+		{% if forloop.counter <= 30 %}
+		{% ifchanged v.category %}
+		</ul>
+		<h2 class="text-center">{{v.category}}</h4>
+		<ul class="grid cs-style-1">
+		
+		{% endifchanged %}
+			<li>
+				<figure>
+					<!-- media/gisday/gallery/postit.png -->
+					<img src="/media/gisday/gallery/postit.png">
+					<h5 class="author">{{v.title}} <span>{{v.last_name}}, {{v.first_name}}</span></h5>
+					<p class="institution">{{v.institution}}</p>
+					<div class="text-center">
+						<button type="button" class="btn btn-info" data-toggle="modal" data-target="#posterModal{{v.id}}"><i class="icon-fullscreen"></i> Details</button>
+						<!-- Update button goes here -->
+						<button onclick="set_email({{pyear}},{{v.id}})">Update</button>
+						<!-- <a href="#posterModal{{v.id}}" role="button" class="btn btn-info" toggle="modal">View details</a> -->
+					</div>
+					
+					
+				</figure>
+			</li>
+		{% endif %}
+		
+    {% endfor %}
+ </ul>
+ <!-- Modal -->
+					
+					<!-- <figcaption>
+						<h5>Abstract:</h5>
+						{% if v.preview %}<a href="{{v.preview.url}}" style="color:yellow;"><h4>Click to view poster</h4></a> {% endif %}
+						<p>{{v.abstract}}</p>
+					</figcaption> -->
+
+	{% for v in posters %}
+		<div id="posterModal{{v.id}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    <h3 id="myModalLabel">{{v.title}}</h3>
+		  </div>
+		  <div class="modal-body">
+		  	<h5>Author</h5>
+		  	<p>{{v.last_name}}, {{v.first_name}}</p>
+		  	<h5>Institution (department)</h5>
+		  	<p>{{v.institution}} <small>({{v.department}})</small></p>
+		  	<h5>Preview:</h5>
+		  	{% if v.preview %}
+		  		<a href="{{v.preview.url}}" target="_blank"><h4>Click to view poster</h4></a> 
+			{% else %}
+				<p class="text-info">Preview not available</p>
+		  	{% endif %}
+		    <h5>Abstract:</h5>
+		    <p>{{v.abstract}}</p>
+		  </div>
+		  <div class="modal-footer">
+		    <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</button>
+		  </div>
+		</div>
+	{% endfor %}
+<!-- Same function usage as in booth update -->
+<script>
+function set_email(year,id,email){
+    //take the email and redirect them.
+    var email = prompt("Please enter your email (This should be the same email as your initial registration with us)");
+    console.log(email,year,id);
+    if(email!=null){
+        var build_web = "/gisday/"+String(year)+"/poster-contest/update_"+String(id)+"/email_"+email+"/";
+        console.log("redirect url:",build_web);
+        window.location.href = build_web;//similar to clicking on a link
+
+    }
+
+}
+</script>
+{% endblock %}
+
+

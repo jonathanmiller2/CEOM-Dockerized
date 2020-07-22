@@ -1,0 +1,13 @@
+{% extends 'accounts/base.html' %}
+{% load i18n %}
+{% block title %}{% trans "EOMF: Log in" %}{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<legend><h4>{% trans "Log in" %}</h4></legend>
+
+{% crispy form %}
+<!-- <p hidden>login</p> -->
+<!-- <title>Log in</title> -->
+
+{% endblock %}

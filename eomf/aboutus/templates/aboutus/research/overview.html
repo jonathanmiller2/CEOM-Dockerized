@@ -1,0 +1,25 @@
+{% extends "aboutus/base.html" %}
+{% load i18n %}
+{% block title %} {% trans "EOMF Research" %}{% endblock %}
+{% block content %}
+
+<div class="well">
+	<div class="grid" >
+		<h2 style="color: #dc143c;">{% trans "Research" %}</h2>
+		<div class="hr"></div>&nbsp;
+		<p>{% blocktrans %}The <abbr class="initialism" title="Earth Observation and Modelling Facility">EOMF</abbr> has worked in a number of research topics and here we briefly highlight land use and land cover changes, biogeochemical cycles, ecology and epidemiology of infectious diseases.{% endblocktrans %}</p>
+		<p>&nbsp;</p>
+		<p><span style="font-size: large;"><strong>{% trans "Land use and land cover changes" %}</strong></span></p>
+		<p>{% blocktrans %}We use satellite images from optical sensors (e.g., Landsat, MODIS, and SPOT-VEGETASTION) and synthetic aperture radar (e.g., PALSAR) to map croplands, forests, wetlands, and urban in the world.{% endblocktrans %}</p>
+		<p><img style="display: block; margin-left: auto; margin-right: auto; width: 500px; height: 300px;" src="/static/img/slides/1.png" alt="" /></p>
+		<p><span style="font-size: large;"><strong>{% trans "Biogeochemical cycles" %}</strong></span></p>
+		<p>{% trans "We combined integrated in-situ observation systems (e.g., eddy co-variance technique for CO2, water and CH4 fluxes), satellite-based diagnostic models (e.g., Vegetation Photosynthesis Model), and process-based prognostic models to quantify and predict changes in biogeochemical cycles of terrestrial ecosystems." %}</p>
+		<p><strong><br /></strong></p>
+		<p><img style="display: block; margin-left: auto; margin-right: auto; width: 500px; height: 300px;" src="/static/img/slides/4.png" alt="" /></p>
+		<p><span style="font-size: large;"><strong>{% blocktrans %}Ecology and epidemiology of infectious diseases{% endblocktrans %}</strong></span></p>
+		<p>{% blocktrans %}We applied geospatial technologies to track the dynamics of landscapes (e.g., wetlands, paddy rice fields) and the local movement and seasonal migration of wild birds, and then incorporate the resultant geospatial datasets with spatial epidemiological models to predict hot-spots and hot-times of highly pathogenic avian influenza (e.g., H5N1 subtype) &nbsp;&nbsp;{% endblocktrans %}</p>
+		<p><img style="display: block; margin-left: auto; margin-right: auto; width: 500px; height: 300px;" src="/static/img/slides/2.png" alt="" /></p>
+	</div>
+</div>
+
+{% endblock %}

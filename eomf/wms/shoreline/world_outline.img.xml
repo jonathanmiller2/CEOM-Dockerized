@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<!--<!DOCTYPE metadata SYSTEM "http://www.esri.com/metadata/esriprof80.dtd">-->
+<metadata xml:lang="en"><Esri><MetaID>{E9BD4D9B-BEDA-4A17-AD98-BD36EE4773ED}</MetaID><CreaDate>20100205</CreaDate><CreaTime>14540000</CreaTime><SyncOnce>TRUE</SyncOnce><DataProperties><lineage><Process ToolSource="C:\Program Files\ArcGIS\ArcToolbox\Toolboxes\Conversion Tools.tbx\PolygonToRaster" Date="20100205" Time="145400">PolygonToRaster world_outline world D:\data\Vectors\world\world_outlin.img CELL_CENTER NONE 0.005</Process></lineage></DataProperties></Esri></metadata>

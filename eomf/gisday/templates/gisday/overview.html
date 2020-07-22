@@ -1,0 +1,36 @@
+{% extends "gisday/base.html" %}
+{% load extra_template_tags %}
+{% block content %}
+
+
+<div class="well">
+    <div class="grid" >
+        <h1><a href="/gisday/"><img src="/static/images/GISDay_logo.png" style="height: 50px;"></a>
+			at the <span style="color: #dc143c;">University of Oklahoma</span>
+        </h1>
+        {{content|render}}
+    </div>
+</div>
+
+{% if images %}
+<div id="myCarousel" class="carousel slide">
+    <!-- Carousel items -->
+    <div class="carousel-inner" style="width:524px;height:393px; margin:auto;">
+        {% for image in images %}
+        <div class="{% ifequal image.order 0 %}active{% endifequal %} item"><div class="pagination-centered"><img src="{{image.image.url}}" alt="{{image.description}}"></div></div>
+        {% endfor %}
+    <!-- Carousel indicators -->
+        <ol class="carousel-indicators" >
+        {% for image in images %}
+        <li data-target="#myCarousel" data-slide-to="{{image.order}}" {% ifequal image.order 0  %}class="active"{% endifequal %}></li>
+        {% endfor %}
+    </ol>
+    </div>
+    <!-- Carousel nav -->
+    <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
+    <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+
+</div>
+{% endif %}
+
+{% endblock %}

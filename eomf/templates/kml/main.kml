@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+
+  <name><![CDATA[{%if doc_name%}{{doc_name}}{%else%}NHGeoServer{%endif%}]]></name>
+  <open>1</open>
+  <snippet maxLines="2"></snippet>
+  <description><![CDATA[Exported from {%if doc_name%}{{doc_name}}{%else%}NHGeoServer{%endif%}]]></description>
+
+  {% block styles %}
+  {% if styles %}
+  {% for style in styles %}
+    <Style id="{{style.name}}">
+        <LineStyle>
+          <color>{{style.color}}</color>
+          <width>0.4</width>
+        </LineStyle>
+        <PolyStyle>
+          <outline>1</outline>
+          <fill>{% if style.fill %}{{style.fill}}{%else%}1{%endif%}</fill>
+          <color>{{style.color}}</color>
+        </PolyStyle>
+        <IconStyle>
+          <color>BFFFFFFF</color>
+          <scale>1</scale>
+          <Icon>
+            <href>{% if style.icon %}{{style.icon}}{% else %}http://maps.google.com/mapfiles/kml/shapes/info.png{% endif %}</href>
+          </Icon>
+          <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+        </IconStyle>
+        <LabelStyle>
+          <color>00000000</color>
+        </LabelStyle>
+    </Style>
+  {% endfor %}
+  {% else %}
+      <Style id="default">
+        <LineStyle>
+          <color>8800ff00</color>
+          <width>0.4</width>
+        </LineStyle>
+        <PolyStyle>
+          <outline>1</outline>
+          <fill>1</fill>
+          <color>8800ff00</color>
+        </PolyStyle>
+        <IconStyle>
+          <color>BFFFFFFF</color>
+          <scale>1</scale>
+          <Icon>
+            <href>{% if style.icon %}{{style.icon}}{% else %}http://maps.google.com/mapfiles/kml/shapes/info.png{% endif %}</href>
+          </Icon>
+          <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+        </IconStyle>
+        <LabelStyle>
+          <color>00000000</color>
+        </LabelStyle>
+    </Style>
+  {% endif %}
+  {% endblock %}
+
+  {% block features %}
+    <Folder>
+    <name>Features</name>
+    {% for geometry in geometries %}
+        <Placemark id="{{geometry.pk}}">
+             <name><![CDATA[{{geometry.name}}]]></name>
+             <description><![CDATA[{{geometry.description|safe}}]]></description>
+             <Snippet maxLines="2"></Snippet>
+             {% if geometry.style %}
+             <styleUrl>#{{geometry.style}}</styleUrl>
+             {% else %}
+             <styleUrl>#default</styleUrl>
+             {% endif %}
+             {% if geometry.timespan %}
+             <TimeSpan>
+				<begin>{{geometry.timespan.begin}}</begin>
+				<end>{{geometry.timespan.end}}</end>
+			 </TimeSpan>
+			 {% else %}
+			 {% endif %}
+             {{geometry.kml|safe}}
+        </Placemark>
+    {% endfor %}
+    </Folder>
+  {% endblock %}
+ 
+  <Folder>
+    <name>Information Points</name>
+    <open>0</open>
+     {% block placemarks %}{{placemarks}}{% endblock %}
+  </Folder>
+</Document>
+</kml>
+

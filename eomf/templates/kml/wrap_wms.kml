@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<GroundOverlay>
+    <name>anything</name>
+    <Icon>
+        <href>http://{{request.META.HTTP_HOST}}/service/wms?LAYERS={{layer}}&amp;SERVICE=WMS&amp;TRANSPARENT=true&amp;WIDTH=1000&amp;HEIGHT=1000&amp;FORMAT=image%2Fpng&amp;REQUEST=GetMap&amp;SRS=EPSG%3A4326&amp;VERSION=1.1.1&amp;STYLES</href>
+        <viewRefreshMode>onStop</viewRefreshMode>
+        <viewFormat>BBOX=[bboxWest],[bboxSouth],[bboxEast],[bboxNorth]</viewFormat>
+        <viewBoundScale>1</viewBoundScale>
+    </Icon>
+    <altitudeMode>clampToGround</altitudeMode>
+</GroundOverlay>
+</kml>
+
+

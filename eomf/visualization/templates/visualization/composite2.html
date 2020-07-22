@@ -1,0 +1,9 @@
+{% extends "visualization/base.html" %}
+
+{% block title %} Composite Image Visualization {% endblock %}
+
+
+{% block content %}
+
+<iframe id="myFrame" src="http://remotesensing.ou.edu/modis_v5/single.cgi?prod=MOD09A1&amp;date={% now "Ymz"%}" width=100% height=800></iframe>
+{% endblock %}

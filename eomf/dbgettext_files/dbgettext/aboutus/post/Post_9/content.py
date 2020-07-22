@@ -1,0 +1,2 @@
+# -*- coding: utf-8 -*-
+gettext("""The EOMF is part of a multi-institution team that received $20 millions from National Science Foundation for an interdisciplinary project “Adapting socio-ecological systems to increased climate variability” (6/1/2013 – 5/31/2018). Major institutional partners of the project are Oklahoma State University, the University of Oklahoma, the Samuel R. Noble Foundation, and the University of Tulsa.""")

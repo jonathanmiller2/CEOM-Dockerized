@@ -1,0 +1,31 @@
+{% extends "photos/base.html" %}
+{% load photos_tags %}
+{% load thumbnail %}
+{% load i18n %}
+{% block title %}{% trans "EOMF EXIF photo" %} {% endblock %}
+{% block content %}
+
+<h2>{% trans "View EXIF" %}</h2>
+<div id="photo-thumb">
+    {% if photo.file|photoexists %}
+	<a href='{{photo.file.url}}'>
+        {% thumbnail photo.file "300x300" as im %}
+		  <img class='thumb' src='{{ im.url }}'>
+        {% endthumbnail %}
+	</a>
+    {% else %}
+    <a href='{{photo.file.url}}'>
+        <img class='thumb' src='' alt="Image not available">
+    </a>
+    {% endif %}
+</div>
+<br/>
+<table cellpadding="0">
+	<tbody>
+	{% for tag, value in photo.exifStringed.items %}
+		<tr><td>{{tag}}: </td><td>{{value|safe}}</td></tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "visualization/base.html" %}
+
+{% block content %}
+{% load chartit %}
+{{ chart|load_charts:"container" }}
+<div class="span12">
+    <h2 style="color: #dc143c;">Single Site Timeseries Chart</h2>
+    <div id='container'> Chart will be rendered here </div>
+</div>
+{% endblock %}
+
+{% block js_code %}
+
+{% endblock %}

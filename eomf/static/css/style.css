@@ -1,0 +1,472 @@
+a{
+    color: #082;
+}
+
+html,body {
+	padding: 0px;
+	/*height: 100%;*/
+    background: black;
+}
+#container
+{
+	font-family: Arial,sans-serif;
+	line-height: 22px;
+	text-align: center;
+    font-size: 13px;
+	
+	border: 0px;
+    position: relative;
+    background: white;
+    width: 802px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+#banner
+{
+    position: relative;
+    padding: 1px;
+    width: 800px;
+	height: 139px;
+}
+
+#content
+{
+	border: 0px;
+    /*width: 760px;*/
+    /*height: 100%;*/
+	min-height: 840px;
+    left: 0px;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+}
+
+#map{
+    border: 1px solid #333;
+}
+
+#menu{
+    position: relative;
+    top: 1px;
+    padding: 1px;
+}
+
+#navlist{
+	padding: 0;
+	margin: 0;
+}
+
+#navlist li{
+	display: inline;
+	list-style-type: none;
+	margin: 0;
+	text-align: center;
+	padding-right: 5px;
+}
+
+#navlist li + li {
+	padding-left: 10px;
+	border-left: 1px solid black;
+}
+
+#navactive{
+	color: darkgreen;
+}
+
+.slideshow { top: 50px; height: 482px; width: 692px; margin: auto }
+.slideshow_off img { padding: 15px; border: 1px solid #ccc; background-color: #ffff; }
+
+#people h3{
+    text-align: center;
+}
+
+#people pre{
+    margin-left: 5%;
+    font-size: 13px;
+}
+
+h4.people{
+    clear: both;
+    padding-bottom: 1em;
+    margin-bottom: 0;
+}
+div.people{ 
+    float: left;
+    padding: 15px; 
+    padding-top: 0;
+    padding-right: 20px;
+    width: 45%;
+}
+
+div.people img.profile{
+    margin-right: 5px;
+    margin-left: 5px;
+    border: 1px solid #BBB;
+    float: left;
+    padding: 5px;
+}
+
+div.picture {
+    border: 1px solid #ccc;
+    padding: 6px;
+	float:right;
+}
+
+div.name {
+	padding-left: 10px;
+	padding-right: 20px;
+	position:relative;
+	top: 16px;
+	height: 258px;
+	text-align:left;
+}
+
+
+div.cv {
+    padding-top:20px;
+    position:relative;
+	text-align:left;
+}
+.namefont {
+	font-size: 24px;
+	font-weight: bold;
+}
+.style4 {font-size: 14px}
+.style16 {font-family: "Times New Roman", Times, serif; font-size: 13px; }
+
+
+/* MENU */
+.dropdown {
+    position: relative;
+    top: 0px;
+    margin: 0; 
+    padding: 0;
+    background: #ccc;
+    font-size: 14px;
+    height: 24px;
+	line-height:24px;
+}
+.dropdown a	{
+    text-decoration: none;
+}
+
+.dropdown ul { 
+    list-style: none; 
+}
+
+.dropdown * { 
+    list-style: none;
+    text-align: left;
+    margin: 0; 
+    padding: 0;
+}
+
+/* 
+	LEVEL ONE
+*/
+
+
+ul.dropdown li                      { font-weight: bold; float: left; zoom: 1; z-index: 500;}
+ul.dropdown a:hover		            { color: #000; }
+ul.dropdown a:active                { color: #ffa500; }
+ul.dropdown li a                    { display: block; color: #222;}
+ul.dropdown > li > a                { text-align: center;}
+ul.dropdown li.hover,
+ul.dropdown li:hover                { background: #A7CC95; color: black; position: relative; }
+ul.dropdown li.hover a              { color: black; }
+
+
+/* 
+	LEVEL TWO
+*/
+ul.dropdown ul 						{ width: 220px; visibility: hidden; position: absolute; top: 100%; left: 0; }
+ul.dropdown ul li 					{ font-weight: normal; background: #f6f6f6; color: #000; 
+									  border-bottom: 1px solid #ccc; border-left: 1px solid #ccc; float: none; padding: 0px 4px; }
+									  
+                                    /* IE 6 & 7 Needs Inline Block */
+ul.dropdown ul li a					{ border-right: none; width: 100%; display: inline-block; } 
+
+/* 
+	LEVEL THREE
+*/
+ul.dropdown ul ul 					{ left: 100%; top: 0; }
+ul.dropdown li:hover > ul 			{ visibility: visible; }
+
+#map-container {
+	float: right;
+    position: relative;
+    display: inline;
+    width: 600px;
+}
+
+#map3d {
+    border: 1px solid silver; 
+    height: 500px; 
+    width: 600px;
+}
+
+#opacitypanel {
+    height:33px;
+    width:140px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: grey;
+}
+
+.slider_label { 
+    margin-top: 0;
+    width: 120px; 
+    height: 10px; 
+    text-align: justify; 
+    border-style: solid; 
+    border-color: red;
+}
+
+#opacityleft {
+    float: left;
+    width: 95px;
+    height: 15px;
+}
+
+
+#opacitycenter {
+    float: left;
+    width: 95px;
+    height: 15px;
+}
+
+#opacityright {
+    float: right;
+    width: 95px;
+    height: 15px;
+}
+
+/* Sidebar */
+
+.errorlist {
+    color: red;
+}
+
+ul.errorlist {
+    margin: 0;
+    padding: 0;
+}
+.errorlist li {
+    display: block;
+    margin: 0 0 3px;
+	padding-bottom: 0px;
+}
+
+#sidebar {
+	float: left;
+	width: 150px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+#sidebar h2 {
+	height: 30px;
+	margin: 0 0 10px 0px;
+	padding: 6px 0 2px 14px;
+	background: url(../images/img05.gif) repeat-x left top;
+	text-transform: capitalize;
+	font-size: 18px;
+	font-weight: normal;
+}
+
+#browser-container{
+    margin: 0px -5px 0px 0px;
+    border-style: solid;
+    border-width: 0px;
+    border-color: green;
+    max-height: 500px;
+    overflow: auto;
+}
+
+#browser-containerOFF *{
+	line-height: normal;
+	text-align: left;
+}
+
+#browser-container input{
+    margin: 0;
+    padding: 0;
+}
+
+#browser-container a:hover {
+	color: #77B003;
+}
+
+table, caption {
+  font-size: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  font-variant: inherit;
+}
+/* PHOTO-BROWSER */
+#bigthumb{
+    width: 800px;
+    position:relative;
+    left:-20px;
+}
+
+#bigthumb img {
+    padding: 5px;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #c0c0c0;
+    border-right: 1px solid #c0c0c0;
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    max-width: 770px;
+} 
+
+.thumb {
+	padding: 6px;
+	border-top: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+} 
+
+.photo-tile .thumb{
+	float: left;
+}
+
+.gallery-thumb {
+	background: #f4f4f4;
+	border: 1px solid #bbbbbb;
+	padding: 6px;
+	position: relative;
+}
+
+.photo-description {
+	padding: 0px;
+	clear: both;
+	float: left;
+	padding-bottom: 5px;
+}
+
+#photo-edit{
+    height: 900px;
+}
+
+#search table{
+    border: 0px solid red;
+	width: 100%;
+}
+
+.padless table{
+    margin: -3px;
+    padding: 0px;
+    line-height: 1em;
+}
+
+#search .small{
+    width: 170px;
+}
+
+table.gallery {
+	width: 100%;
+    table-layout:fixed;
+}
+
+.gallery td{
+	vertical-align: top; 
+}
+
+.gallery tr{
+	vertical-align: top;
+}
+
+.paginate {
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: .7em;
+}
+a.paginate {
+    border: 1px solid green;
+    padding: 2px 6px 2px 6px;
+    text-decoration: none;
+}
+
+a.paginate:hover {
+    background-color: green;
+    color: #FFF;
+    text-decoration: underline;
+}
+
+a.current {
+    border: 1px solid green;
+    font: bold .7em Arial,Helvetica,sans-serif;
+    padding: 2px 6px 2px 6px;
+    cursor: default;
+    background:green;
+    color: #FFF;
+    text-decoration: none;
+}
+span.inactive {
+    border: 1px solid green;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: .7em;
+    padding: 2px 6px 2px 6px;
+    color: #999;
+    cursor: default;
+}
+
+#search input{
+	font-size: 12px;
+}
+
+.pagination {
+	margin-left: auto;   
+	margin-right: auto;
+	width: 10em;
+	text-align: center;
+}
+
+#photo-count{
+	float: left;
+}
+
+div.block{
+	display: block;
+	width: 25%;
+	height: 160px;
+	float: left;
+}
+
+/* Date Picker */
+a.dp-choose-date {
+	float: left;
+	width: 24px;
+	padding: 0;
+	margin-top: 1px;
+	margin-left: 5px;
+	margin-right: 3px;
+	display: block;
+	text-indent: -2000px;
+	overflow: hidden;
+	background: url(/static/images/icon_calendar.gif) no-repeat; 
+	vertical-align:text-middle;
+}
+a.dp-choose-date.dp-disabled {
+	background-position: 0 -20px;
+	cursor: default;
+}
+/* makes the input field shorter once the date picker code
+ * has run (to allow space for the calendar icon
+ */
+input.dp-applied {
+	width: 140px;
+	float: left;
+}
+
+/*.map { width:600px; height:400px;}*/
+.map img { max-width:none; }

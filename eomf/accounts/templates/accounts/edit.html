@@ -1,0 +1,21 @@
+{% extends "accounts/base.html" %}
+
+{% load i18n%}
+{% block title %}{% trans "EOMF: Edit account" %}{% endblock %}
+{% block head_extra %}
+{{ block.super }}
+{{ profile_form.media }}
+{% endblock%}
+
+{% block content %}
+      <h2>{% trans "Edit Account" %}</h2>
+      <br/>
+      <form action="." method="post">
+      {% csrf_token %}
+      <table>  
+        {{user_form.as_table}}
+        {{profile_form.as_table}}
+      <td></td><td><input class='btn btn-primary' type="submit" value="Save" /></td>
+       </table>
+
+{% endblock %}

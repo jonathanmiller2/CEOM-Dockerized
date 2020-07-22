@@ -1,0 +1,104 @@
+{% extends "visualization/base.html" %}
+
+{% block title %} Data Visualization {% endblock %}
+
+{% block head_extra %}
+<script src="/media/js/modis.js" type="text/javascript"></script>
+<script type="text/javascript">
+    //<![CDATA[
+
+    function query(lat, lon){
+        //alert('Viewing: '+form_id);
+        //$("#ge_output").append(form_id);
+        var out = "test";
+        $.get("/visualization/ascii", {lat: latV, lon: lonV}, 
+            function(data) {
+                $("#output").html(data);
+            }, "html" );
+        return out;
+    }
+    /*
+    function showData(lat, lon, year, prod){
+        var str = "<p>";
+        str += "<br /> Latitude: " + lat;
+        str += "<br /> Longitude: " + lon;
+        //query(lat, lon);
+        var filename = "_"+prod+"_"+year+"_"+jQuery.trim(lat)+"_"+jQuery.trim(lon);
+        str += "<br /> Download data as an ASCII Table: <a href=\"/visualization/ascii"+filename+".txt\">ascii"+filename+".txt</a>";
+        str += "<br /> Download data as an CSV Table: <a href=\"/visualization/csv"+filename+".csv\">csv"+filename+".csv</a>";
+        str += "<br /> View data as a series of graphs: <a href=\"/visualization/graph"+"-"+prod+"-"+year+"-"+jQuery.trim(lat)+"_"+jQuery.trim(lon)+"\">Graph Data</a>";
+        str += "<p>";
+        
+        $("#output").append(str);
+        
+        $("#output a").click(function(){
+        	window.open(this.href);
+        	return false;
+        });
+    }
+    */
+    var dataq = null;
+
+    $(document).ready(function(){
+        dataq = DataQuery("#datapane");
+
+        $(":reset").click(function(){
+            $("#output p").remove();
+        });
+         
+        $("#dms input[type='text']").change( function (){
+            $("[name=LAT]").val(dms2dd( 
+                parseFloat($('[name=LAT_DEC]').val()), 
+                parseFloat($('[name=LAT_MIN]').val()),
+                parseFloat($('[name=LAT_SEC]').val()))
+            );
+            $("[name=LONG]").val(dms2dd(
+                parseFloat($('[name=LONG_DEC]').val()),
+                parseFloat($('[name=LONG_MIN]').val()),
+                parseFloat($('[name=LONG_SEC]').val()))
+            );
+        });
+    });
+
+    //]]>
+    </script>
+{% endblock %}
+
+{% block content %}
+<h3>Manually enter point</h3>
+<center>
+
+<br/>
+<input type="hidden" name="FORMAT" value="DMS"  /><b>Degrees, Minutes, And Seconds</b><br>
+Examples:<br>
+43&#176;08'6.41", -70&#176;56'11.43"<br>
+
+43&#176;08'6.41"N, 70&#176;56'11.43"W
+<p>
+
+<table id="dms">
+
+<tr>
+    <td>Latitude</td>
+    <td>
+        <input class='span3' type="text" name="LAT_DEC" maxlength="5" />&#176; 
+        <input class='span3' type="text" name="LAT_MIN" maxlength="5" />' 
+        <input class='span3' type="text" name="LAT_SEC" maxlength="15" />"
+    </td>
+</tr>
+
+<tr>
+    <td>Longitude</td>
+    <td>
+        <input class='span3' type="text" name="LONG_DEC" maxlength="5" />&#176; 
+        <input class='span3' type="text" name="LONG_MIN" maxlength="5" />' 
+        <input class='span3' type="text" name="LONG_SEC" maxlength="15" />"
+    </td>
+</tr>
+
+</table>
+
+</center>
+<div id="datapane">
+</div>
+{% endblock %}

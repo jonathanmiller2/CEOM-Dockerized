@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block container %}
+<div class="span10 offset1">
+	<h2 class="wow bounceInRight text-center">{% blocktrans %} Welcome to the Earth Observation and Modeling Facility {% endblocktrans %}(EOMF)</h2>
+	
+    <p class="wow fadeIn">
+		{% blocktrans %}The EOMF is a member of both (1)
+		<a href='http://mpbio.ou.edu/'> Department of Microbiology and Plant Biology, College of Arts and Sciences</a>, and (2)
+		<a href='http://www.csa.ou.edu/'> Center for Spatial Analysis, College of Atmospheric and Geographic Sciences</a> at the 
+		<a href='http://www.ou.edu/web.html'> University of Oklahoma</a>.
+		It is located at the Stephenson Research and Technology Center, Norman, Oklahoma. 
+		The EOMF focuses on geospatial science, technologies and applications in bio-, geo- and health- sciences, specifically in the areas of agriculture, forestry, ecology, biodiversity, land use and land cover changes, 
+		water quality, climate, infectious diseases and public health. It promotes community remote sensing and citizen science to address the grand challenges in our dynamic and rapidly changing planet Earth and the society.
+        {% endblocktrans %}
+	</p>
+    
+    <!-- added by bibas for the box design in the home page -->
+    <style type="text/css">
+    body {
+        text-align: left;
+        }
+
+    .card {
+        background: #fff;
+        border-radius: 4px;
+        display: inline-block;
+        height: relative;
+        margin: 1rem;
+        position: relative;
+        top:10px;
+        width: 440px;
+}
+     .card-1 {
+            box-shadow: 0 0px 0px rgba(0,0,0,0.12), 0 0px 0px rgba(0,0,0,0.24);
+            transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+            }
+
+    
+    </style>
+    <!--
+    .card-1:hover {
+             box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            }
+-->
+    <!--<div class="row">
+        <div class="col-md-6"> -->
+        <div class="wow fadeIn">
+        <div id ="box1" class="card card-1">
+            <p class="wow fadeIn lead">
+            <div  id="myCarousel" class="carousel slide wow fadeIn">
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+            <li data-target="#myCarousel" data-slide-to="3"></li>
+            <li data-target="#myCarousel" data-slide-to="4"></li>
+            <li data-target="#myCarousel" data-slide-to="5"></li>
+        </ol>
+        <!-- Carousel items -->
+
+        <div class="carousel-inner ">
+            <div class="active item"><div class='pagination-centered'><img style='height: 300px;' src="/static/img/slides/1.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img style='height: 300px;' src="/static/img/slides/2.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img style='height: 300px;' src="/static/img/slides/3.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img style='height: 300px;' src="/static/img/slides/4.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img style='height: 300px;' src="/static/img/slides/5.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img style='height: 300px;' src="/static/img/slides/6.png" /></div></div>
+        </div>
+{% csrf_token %}
+        <!-- Carousel nav -->
+
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div> 
+            </p>
+        </div>
+       <!-- </div>
+        <div class="col-md-6"> -->
+            <div id ="box2" class="card card-1" align="justify"> 
+                In effort to participate in crowdsourcing and citizen science, we have developed the 
+                <a href='http://www.eomf.ou.edu/photos'>Global Geo-Referenced Field Photo Library,</a> for participants to <br>
+                <li>share, visualize, and analyze geo-referenced photos from various locations around the world, <br></li> 
+                <li>download, visualize and analyze time series satellite observations since 2000 for specific landscapes of interest. <br></li>
+                <h6>You can download the field photo app from</h6>
+               <div align="center">
+                <a href='https://itunes.apple.com/us/app/field-photo/id717945301?mt=8'><img style='height: 50px;width: 150px;' src="/static/img/AppDwnldImage/AppStoreButton.jpg" /> </a>
+                <a href='https://play.google.com/store/apps/details?id=com.eomf&hl=en'><img style='height: 50px;width: 150px;' src="/static/img/AppDwnldImage/PlayStoreButton.gif" /></a><br>
+                </div><br>
+                Follow this <a href="http://www.eomf.ou.edu/static/Field%20Photo%20Animation%20Draft%2003.mp4">video</a> on how to use the app.<br>
+                Please join thousands of people to share your field photos, show your footprint of travel, 
+                and support monitoring of our Planet Earth.
+            </div>
+            <div id ="box3" class="card card-1"> 
+                <div><img  src="/static/img/Animation/GPP_2010.gif" /></div>   
+                <h5>Featured Activity – Gross Primary Productivity of global terrestrial ecosystems</h5> 
+            </div>
+        <div id ="box4" class="card card-1">
+            <p class="wow fadeIn lead">
+                <div align="center">
+                <a href='http://http://www.eomf.ou.edu/photos/'><img src="/static/img/thumbnail_card4.jpg" /> </a>
+                </div>
+            </p>
+        </div>
+        <div id ="box5" class="card card-1">
+            <p class="wow fadeIn lead">
+                
+            </p>
+        </div>
+        <div id ="box6" class="card card-1">
+            <p class="wow fadeIn lead">
+                <div align="center">
+                <a href='http://www.eomf.ou.edu/photos/'><img  src="/static/img/thumbnail_card6.jpg" /> </a>
+                </div>
+            </p>
+        </div>
+        </div>
+       <!-- </div>
+    </div> -->
+   
+   <!-- Commented by bibas
+Box #1. Welcome to the Earth Observation and Modeling Facility (EOMF)
+             
+
+
+ Box #2. Featured Activity – Global Geo-Referenced Field Photo Library and “Field Photo” app
+                
+
+Box #3. Featured Activity – Gross Primary Productivity of global terrestrial ecosystems
+
+                
+
+    <div style='height: 500px;' id="myCarousel" class="carousel slide wow fadeIn">
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+            <li data-target="#myCarousel" data-slide-to="3"></li>
+            <li data-target="#myCarousel" data-slide-to="4"></li>
+            <li data-target="#myCarousel" data-slide-to="5"></li>
+        </ol>
+        <!-- Carousel items -->
+
+       <!-- commented by bibas
+
+
+        <div class="carousel-inner ">
+            <div class="active item"><div class='pagination-centered'><img src="/static/img/slides/1.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img src="/static/img/slides/2.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img src="/static/img/slides/3.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img src="/static/img/slides/4.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img src="/static/img/slides/5.png" /></div></div>
+            <div class="item"><div class='pagination-centered'><img src="/static/img/slides/6.png" /></div></div>
+        </div>
+{% csrf_token %}
+        <!-- Carousel nav -->
+
+        <!-- commented by bibas
+
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div> 
+-->
+        <div class="wow fadeInUp">
+        {% trans "Research, education and outreach activities at the EOMF have been generously supported by a number of funding agencies." %}
+        	<a href='http://www.nasa.gov/'>NASA</a>,
+        	<a href='http://www.nih.gov/'> NIH </a>,
+        	<a href='http://www.nsf.gov/'> NSF </a>, 
+        	<a href='http://www.usgs.gov/'>USGS</a>, 
+        	<a href='http://www.usda.gov/'> USDA</a>,
+            <a href='http://www.noaa.gov/'> NOAA</a>,
+        	<a href='http://www.usaid.gov/'>USAID</a>, 
+        	<a href='http://www.fao.gov/'>FAO</a>, 
+        	<a href='http://www.owrb.ok.gov/'>OWRB</a>,
+        	<a href='http://www.okepscor.org/'>OK EPSCOR</a>,
+            <a href='https://americaview.org/'>AMERICA VIEW</a>,
+            <a href='http://www.ou.edu/'>OU</a>.
+        	<br><br>
+        	<div style="text-align:center">
+        	 <img class='logo-small' src="/static/images/280px-Nasa-logo.gif"/>&nbsp;&nbsp;
+        	 <img class='logo-small' src="/static/images/NIH_Logo.gif"/>&nbsp;&nbsp;
+        	 <img class='logo-small' src="/static/images/nsf1.gif"/>&nbsp;&nbsp;
+             <img class='logo-small' src="/static/images/usgs_logo.jpg"/>&nbsp;&nbsp;
+             <img class='logo-small' src="/static/images/usda_logo.jpg"/>&nbsp;&nbsp;
+             <img class='logo-small' src="/static/images/NOAA_logo.png"/>&nbsp;&nbsp;
+        	 <img class='logo-small' src="/static/images/usaid_logo.jpg"/>&nbsp;&nbsp;
+        	 <img class='logo-small' src="/static/images/fao_logo.gif"/>&nbsp;&nbsp; 	 
+         	 <img class='logo-small' src="/static/images/owrb_logo.jpg"/>&nbsp;&nbsp;
+        	 <img class='logo-small' src="/static/images/epscor_logo.jpg"/>&nbsp;&nbsp;
+             <img class='logo-small' src="/static/images/AV_logo.png"/>&nbsp;&nbsp;
+             <img class='logo-small' src="/static/images/ou_logo2.jpeg"/>
+        </div>
+	</div>
+
+</div>
+<!--<div id="dialog" title="EOMF's new facebook page!" class="ui-dialog-titlebar" >
+  <p style="text-align:center;"><a href="https://www.facebook.com/xiangmingxiao1/?fref=ts"><strong>Hello!, Join our new "FACEBOOK PAGE"<br/><img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" /></strong></a></p>
+</div>
+<script>
+ $(function() {
+    $( "#dialog" ).dialog({
+        minWidth: 400});
+  });  
+</script> -->
+<!-- Author : bhargav -->
+<!-- Any important news can be displayed by changing main content -->
+<style>
+
+.ui-dialog-titlebar {
+    color:aliceblue;
+    background-image: none;
+    /*background-color: #24E5D1;*/
+}
+/*For the background of the main content*/
+div#dialog.ui-dialog-content.ui-widget-content {
+    background-color: azure;
+}
+/*for the title bar*/
+div.ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix {
+    background-color:olivedrab;
+}
+/*span#ui-id-1.ui-dialog-title {
+    background-color:#0F42D4;
+}*/
+/*.ui-widget-header {
+    color:red;
+}
+.ui-corner-all {
+    color: grey;
+}
+.ui-helper-clearfix {
+    color: orange;
+    background-color: green;
+}*/
+</style>
+{% endblock %}

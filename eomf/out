@@ -1,0 +1,473 @@
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#     * Rearrange models' order
+#     * Make sure each model has one field with primary_key=True
+# Feel free to rename the models, but don't rename db_table values or field names.
+#
+# Also note: You'll have to insert the output of 'django-admin.py sqlcustom [appname]'
+# into your database.
+
+from django.contrib.gis.db import models
+
+class GeographyColumns(models.Model):
+    f_table_catalog = models.TextField() # This field type is a guess.
+    f_table_schema = models.TextField() # This field type is a guess.
+    f_table_name = models.TextField() # This field type is a guess.
+    f_geography_column = models.TextField() # This field type is a guess.
+    coord_dimension = models.IntegerField()
+    srid = models.IntegerField()
+    type = models.TextField()
+    class Meta:
+        db_table = u'geography_columns'
+
+class GeometryColumns(models.Model):
+    f_table_catalog = models.CharField(max_length=256)
+    f_table_schema = models.CharField(max_length=256)
+    f_table_name = models.CharField(max_length=256)
+    f_geometry_column = models.CharField(max_length=256)
+    coord_dimension = models.IntegerField()
+    srid = models.IntegerField()
+    type = models.CharField(max_length=30)
+    class Meta:
+        db_table = u'geometry_columns'
+
+class AuthGroupPermissions(models.Model):
+    id = models.IntegerField(primary_key=True)
+    group = models.ForeignKey(AuthGroup)
+    permission = models.ForeignKey(AuthPermission)
+    class Meta:
+        db_table = u'auth_group_permissions'
+
+class AuthMessage(models.Model):
+    id = models.IntegerField(primary_key=True)
+    user = models.ForeignKey(AuthUser)
+    message = models.TextField()
+    class Meta:
+        db_table = u'auth_message'
+
+class AuthGroup(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(unique=True, max_length=80)
+    class Meta:
+        db_table = u'auth_group'
+
+class SpatialRefSys(models.Model):
+    srid = models.IntegerField(primary_key=True)
+    auth_name = models.CharField(max_length=256)
+    auth_srid = models.IntegerField()
+    srtext = models.CharField(max_length=2048)
+    proj4text = models.CharField(max_length=2048)
+    class Meta:
+        db_table = u'spatial_ref_sys'
+
+class DjangoContentpage(models.Model):
+    id = models.IntegerField(primary_key=True)
+    url = models.CharField(max_length=100)
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    enable_comments = models.BooleanField()
+    template_name = models.CharField(max_length=70)
+    registration_required = models.BooleanField()
+    class Meta:
+        db_table = u'django_contentpage'
+
+class DjangoAdminLog(models.Model):
+    id = models.IntegerField(primary_key=True)
+    action_time = models.DateTimeField()
+    user = models.ForeignKey(AuthUser)
+    content_type = models.ForeignKey(DjangoContentType)
+    object_id = models.TextField()
+    object_repr = models.CharField(max_length=200)
+    action_flag = models.SmallIntegerField()
+    change_message = models.TextField()
+    class Meta:
+        db_table = u'django_admin_log'
+
+class AuthUserGroups(models.Model):
+    id = models.IntegerField(primary_key=True)
+    user = models.ForeignKey(AuthUser)
+    group = models.ForeignKey(AuthGroup)
+    class Meta:
+        db_table = u'auth_user_groups'
+
+class AuthUserUserPermissions(models.Model):
+    id = models.IntegerField(primary_key=True)
+    user = models.ForeignKey(AuthUser)
+    permission = models.ForeignKey(AuthPermission)
+    class Meta:
+        db_table = u'auth_user_user_permissions'
+
+class CeleryTaskmeta(models.Model):
+    id = models.IntegerField(primary_key=True)
+    task_id = models.CharField(unique=True, max_length=255)
+    status = models.CharField(max_length=50)
+    result = models.TextField()
+    date_done = models.DateTimeField()
+    traceback = models.TextField()
+    class Meta:
+        db_table = u'celery_taskmeta'
+
+class CeleryTasksetmeta(models.Model):
+    id = models.IntegerField(primary_key=True)
+    taskset_id = models.CharField(unique=True, max_length=255)
+    result = models.TextField()
+    date_done = models.DateTimeField()
+    class Meta:
+        db_table = u'celery_tasksetmeta'
+
+class DjangoContentpageSites(models.Model):
+    id = models.IntegerField(primary_key=True)
+    contentpage = models.ForeignKey(DjangoContentpage)
+    site = models.ForeignKey(DjangoSite)
+    class Meta:
+        db_table = u'django_contentpage_sites'
+
+class DjceleryPeriodictask(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(unique=True, max_length=200)
+    task = models.CharField(max_length=200)
+    interval = models.ForeignKey(DjceleryIntervalschedule)
+    crontab = models.ForeignKey(DjceleryCrontabschedule)
+    args = models.TextField()
+    kwargs = models.TextField()
+    queue = models.CharField(max_length=200)
+    exchange = models.CharField(max_length=200)
+    routing_key = models.CharField(max_length=200)
+    expires = models.DateTimeField()
+    enabled = models.BooleanField()
+    last_run_at = models.DateTimeField()
+    total_run_count = models.IntegerField()
+    date_changed = models.DateTimeField()
+    class Meta:
+        db_table = u'djcelery_periodictask'
+
+class DjangoSite(models.Model):
+    id = models.IntegerField(primary_key=True)
+    domain = models.CharField(max_length=100)
+    name = models.CharField(max_length=50)
+    class Meta:
+        db_table = u'django_site'
+
+class DjangoContentpageSites2(models.Model):
+    class Meta:
+        db_table = u'django_contentpage_sites2'
+
+class DjangoSession(models.Model):
+    session_key = models.CharField(max_length=40, primary_key=True)
+    session_data = models.TextField()
+    expire_date = models.DateTimeField()
+    class Meta:
+        db_table = u'django_session'
+
+class DjceleryCrontabschedule(models.Model):
+    id = models.IntegerField(primary_key=True)
+    minute = models.CharField(max_length=64)
+    hour = models.CharField(max_length=64)
+    day_of_week = models.CharField(max_length=64)
+    class Meta:
+        db_table = u'djcelery_crontabschedule'
+
+class DjceleryIntervalschedule(models.Model):
+    id = models.IntegerField(primary_key=True)
+    every = models.IntegerField()
+    period = models.CharField(max_length=24)
+    class Meta:
+        db_table = u'djcelery_intervalschedule'
+
+class DjceleryPeriodictasks(models.Model):
+    ident = models.SmallIntegerField(primary_key=True)
+    last_update = models.DateTimeField()
+    class Meta:
+        db_table = u'djcelery_periodictasks'
+
+class DjangoContentType(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=100)
+    app_label = models.CharField(max_length=100)
+    model = models.CharField(max_length=100)
+    class Meta:
+        db_table = u'django_content_type'
+
+class PublicationsPublication(models.Model):
+    id = models.IntegerField(primary_key=True)
+    category = models.ForeignKey(PublicationsCategory)
+    authorship = models.CharField(max_length=250)
+    title = models.CharField(max_length=250)
+    link = models.CharField(max_length=250)
+    date = models.DateField()
+    journal = models.CharField(max_length=125)
+    content = models.TextField()
+    year = models.IntegerField()
+    volume = models.CharField(max_length=56)
+    issue = models.CharField(max_length=56)
+    pages = models.IntegerField()
+    issn = models.CharField(max_length=56)
+    doi = models.CharField(max_length=56)
+    keywords = models.TextField()
+    abstract = models.TextField()
+    class Meta:
+        db_table = u'publications_publication'
+
+class GeohealthDatainfo(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=100)
+    fullname = models.CharField(max_length=100)
+    abstract = models.TextField()
+    label = models.CharField(max_length=100)
+    legend = models.BooleanField()
+    vector = models.BooleanField()
+    datatype = models.ForeignKey(GeohealthDatatype)
+    source = models.CharField(max_length=100)
+    class Meta:
+        db_table = u'geohealth_datainfo'
+
+class DuckTrackLine(models.Model):
+    gid = models.IntegerField(primary_key=True)
+    animal = models.CharField(max_length=20)
+    location = models.LineStringField()
+    objects = models.GeoManager()
+    class Meta:
+        db_table = u'duck_track_line'
+
+class DuckTracks(models.Model):
+    gid = models.IntegerField(primary_key=True)
+    animal = models.CharField(max_length=20)
+    ptt = models.CharField(max_length=15)
+    record_id = models.CharField(max_length=30)
+    datetime = models.DateTimeField()
+    days_ago = models.IntegerField()
+    latitude = models.DecimalField(max_digits=10, decimal_places=3)
+    longitude = models.DecimalField(max_digits=10, decimal_places=3)
+    lc94 = models.CharField(max_length=6)
+    nmess = models.IntegerField()
+    days_dply = models.IntegerField()
+    sen1 = models.IntegerField()
+    sen2 = models.IntegerField()
+    sen3 = models.IntegerField()
+    sen4 = models.IntegerField()
+    location = models.PointField()
+    objects = models.GeoManager()
+    class Meta:
+        db_table = u'duck_tracks'
+
+class InventoryFile(models.Model):
+    id = models.IntegerField(primary_key=True)
+    tile = models.ForeignKey(InventoryTile)
+    name = models.CharField(max_length=50)
+    year = models.IntegerField()
+    day = models.IntegerField()
+    timestamp = models.BigIntegerField()
+    dataset_id = models.CharField(max_length=7)
+    class Meta:
+        db_table = u'inventory_file'
+
+class InventoryProcess(models.Model):
+    id = models.IntegerField(primary_key=True)
+    file_id = models.IntegerField()
+    product = models.ForeignKey(InventoryProduct)
+    timestamp = models.DateTimeField()
+    class Meta:
+        db_table = u'inventory_process'
+
+class PollsChoice(models.Model):
+    id = models.IntegerField(primary_key=True)
+    poll = models.ForeignKey(PollsPoll)
+    choice = models.CharField(max_length=200)
+    votes = models.IntegerField()
+    class Meta:
+        db_table = u'polls_choice'
+
+class PollsPoll(models.Model):
+    id = models.IntegerField(primary_key=True)
+    question = models.CharField(max_length=200)
+    pub_date = models.DateTimeField()
+    class Meta:
+        db_table = u'polls_poll'
+
+class InventoryProduct(models.Model):
+    name = models.CharField(max_length=10, primary_key=True)
+    long_name = models.CharField(max_length=50)
+    class Meta:
+        db_table = u'inventory_product'
+
+class InventoryDataset(models.Model):
+    name = models.CharField(max_length=7, primary_key=True)
+    xdim = models.FloatField()
+    ydim = models.FloatField()
+    grid_size = models.FloatField()
+    projcode = models.IntegerField()
+    zonecode = models.IntegerField()
+    spherecode = models.IntegerField()
+    projparm = models.CharField(max_length=1000)
+    grid_name = models.CharField(max_length=100)
+    ordering = models.FloatField()
+    long_name = models.CharField(max_length=100)
+    short_name = models.CharField(max_length=5)
+    location = models.CharField(max_length=100)
+    day_res = models.IntegerField()
+    class Meta:
+        db_table = u'inventory_dataset'
+
+class PublicationsCategory(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=125)
+    class Meta:
+        db_table = u'publications_category'
+
+class GeohealthH5N1(models.Model):
+    id = models.IntegerField(primary_key=True)
+    region = models.CharField(max_length=25)
+    country = models.CharField(max_length=64)
+    admin1 = models.CharField(max_length=64)
+    admin2 = models.CharField(max_length=64)
+    quality = models.CharField(max_length=64)
+    locality = models.CharField(max_length=86)
+    latitude = models.DecimalField(max_digits=10, decimal_places=5)
+    longitude = models.DecimalField(max_digits=10, decimal_places=5)
+    observation_date = models.DateField()
+    surveillance_type = models.CharField(max_length=20)
+    reporting_date = models.DateField()
+    diagnosis_status = models.CharField(max_length=20)
+    disease = models.CharField(max_length=40)
+    disease_type = models.CharField(max_length=4)
+    species = models.CharField(max_length=256)
+    at_risk = models.IntegerField()
+    cases = models.IntegerField()
+    deaths = models.IntegerField()
+    destroyed = models.IntegerField()
+    slaughtered = models.IntegerField()
+    vaccinated = models.IntegerField()
+    location = models.PointField()
+    objects = models.GeoManager()
+    class Meta:
+        db_table = u'geohealth_h5n1'
+
+class InventoryTile(models.Model):
+    name = models.CharField(max_length=6, primary_key=True)
+    upleftx = models.FloatField()
+    uplefty = models.FloatField()
+    lowrightx = models.FloatField()
+    lowrighty = models.FloatField()
+    iv = models.IntegerField()
+    ih = models.IntegerField()
+    lon_min = models.FloatField()
+    lon_max = models.FloatField()
+    lat_min = models.FloatField()
+    lat_max = models.FloatField()
+    continent = models.CharField(max_length=30)
+    class Meta:
+        db_table = u'inventory_tile'
+
+class DjceleryTaskstate(models.Model):
+    id = models.IntegerField(primary_key=True)
+    state = models.CharField(max_length=64)
+    task_id = models.CharField(unique=True, max_length=36)
+    name = models.CharField(max_length=200)
+    tstamp = models.DateTimeField()
+    args = models.TextField()
+    kwargs = models.TextField()
+    eta = models.DateTimeField()
+    expires = models.DateTimeField()
+    result = models.TextField()
+    traceback = models.TextField()
+    runtime = models.FloatField()
+    worker = models.ForeignKey(DjceleryWorkerstate)
+    hidden = models.BooleanField()
+    class Meta:
+        db_table = u'djcelery_taskstate'
+
+class GeohealthDatatype(models.Model):
+    name = models.CharField(max_length=10, primary_key=True)
+    description = models.CharField(max_length=100)
+    class Meta:
+        db_table = u'geohealth_datatype'
+
+class VisualizationTimeseriesjob(models.Model):
+    id = models.IntegerField(primary_key=True)
+    sender = models.CharField(max_length=75)
+    points = models.CharField(max_length=255)
+    result = models.CharField(max_length=255)
+    years = models.CharField(max_length=75)
+    product = models.ForeignKey(InventoryDataset)
+    completed = models.BooleanField()
+    timestamp = models.DateTimeField()
+    class Meta:
+        db_table = u'visualization_timeseriesjob'
+
+class DjceleryWorkerstate(models.Model):
+    id = models.IntegerField(primary_key=True)
+    hostname = models.CharField(unique=True, max_length=255)
+    last_heartbeat = models.DateTimeField()
+    class Meta:
+        db_table = u'djcelery_workerstate'
+
+class VisualizationDatainfo(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=100)
+    fullname = models.CharField(max_length=100)
+    abstract = models.TextField()
+    label = models.CharField(max_length=100)
+    legend = models.BooleanField()
+    vector = models.BooleanField()
+    datatype = models.ForeignKey(VisualizationDatatype)
+    source = models.CharField(max_length=100)
+    class Meta:
+        db_table = u'visualization_datainfo'
+
+class AuthPermission(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=50)
+    content_type = models.ForeignKey(DjangoContentType)
+    codename = models.CharField(max_length=100)
+    class Meta:
+        db_table = u'auth_permission'
+
+class AuthUser(models.Model):
+    id = models.IntegerField(primary_key=True)
+    username = models.CharField(unique=True, max_length=30)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    email = models.CharField(max_length=75)
+    password = models.CharField(max_length=128)
+    is_staff = models.BooleanField()
+    is_active = models.BooleanField()
+    is_superuser = models.BooleanField()
+    last_login = models.DateTimeField()
+    date_joined = models.DateTimeField()
+    class Meta:
+        db_table = u'auth_user'
+
+class VisualizationDatatype(models.Model):
+    name = models.CharField(max_length=10, primary_key=True)
+    description = models.CharField(max_length=100)
+    class Meta:
+        db_table = u'visualization_datatype'
+
+class H5N1Case(models.Model):
+    id = models.IntegerField(primary_key=True)
+    region = models.CharField(max_length=25)
+    country = models.CharField(max_length=64)
+    admin1 = models.CharField(max_length=64)
+    admin2 = models.CharField(max_length=64)
+    locality = models.CharField(max_length=86)
+    latitude = models.DecimalField(max_digits=10, decimal_places=5)
+    longitude = models.DecimalField(max_digits=10, decimal_places=5)
+    observation_date = models.DateField()
+    surveillance_type = models.CharField(max_length=20)
+    reporting_date = models.DateField()
+    diagnosis_status = models.CharField(max_length=20)
+    disease = models.CharField(max_length=40)
+    virus = models.CharField(max_length=5)
+    animal_type = models.CharField(max_length=25)
+    animal_class = models.CharField(max_length=25)
+    species = models.CharField(max_length=86)
+    at_risk = models.IntegerField()
+    cases = models.IntegerField()
+    deaths = models.IntegerField()
+    destroyed = models.IntegerField()
+    slaughtered = models.IntegerField()
+    location = models.PointField()
+    objects = models.GeoManager()
+    class Meta:
+        db_table = u'h5n1_case'
+

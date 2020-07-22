@@ -1,0 +1,49 @@
+{% extends "aboutus/base.html" %}
+{% load thumbnail %}
+{% load i18n %}
+{% block title %}EOMF Group Photos{% endblock %}
+
+{% block content %}
+<div class="well">
+	<div class="grid" >
+		<h2  style="color: #dc143c;">{% trans "Group photos" %}</h2>
+		<div class="hr"></div>&nbsp;		 
+		{% if photos %}
+			<ul class="nav nav-pills">
+				{% for year in available_years %}
+					{% ifchanged year %}
+						{% if "20" in request.path%}
+							<li  {% if "/aboutus/group_photos/"|add:year in request.path %}class='active'{% endif %}>
+						{% else%}
+							<li {% ifequal forloop.counter 1 %}class='active'{% endifequal %}>
+						{% endif %}
+					<a href="{{SITE_URL}}/aboutus/group_photos/{{year}}">{{year}}</a></li>
+					{% endifchanged %}
+				{% endfor %}
+			</ul>
+			<div class="hr"></div>&nbsp;	
+				<div id="myCarousel" class="carousel slide">
+				  <!-- Carousel items -->
+				  <div class="carousel-inner">
+				  		{% for photo in photos %}			
+
+				  		<div class="{% if forloop.first %}active{% endif %} item text-center">
+				  		{% thumbnail photo.picture "800x600" as im %}
+				  		<img src="{{im.url}}" style=" width:auto; max-height:600px;height:60%; margin-left:auto;margin-right:auto">
+				  		{% empty %}
+				  		<p class="text-error">Iamge missing</p>
+				  		{% endthumbnail %}
+					    </div>
+					    {% endfor %}
+					</div>
+			    		
+				  <!-- Carousel nav -->
+				  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+				  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+				</div>
+			</li>
+			
+		{% endif %}
+	</div>
+</div>
+		{% endblock %}

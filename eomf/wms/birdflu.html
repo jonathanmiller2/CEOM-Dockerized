@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script src="http://maps.google.com/maps?file=api&v=2.59&key=ABQIAAAAmuvLtH3m9h8LpbkjVzUDhBTOWyLkKnbUouShAflQSoB2cXs5QRR0VHPyi_88h2EHzBF6_bg8Kkwp-g" type="text/javascript"></script>
+<!--
+<script src="http://www.openlayers.org/api/OpenLayers.js" type="text/javascript"></script>
+-->
+<script src="http://dev.openlayers.org/sandbox/tschaub/feature/lib/OpenLayers.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+//var lat=19.9;
+//var lon=99.9;
+//var zoom=4;
+var lat=9;
+var lon=73;
+var zoom=2;
+
+function init(){
+
+    var options = {controls: []};
+    map = new OpenLayers.Map(document.getElementById("map"), options);
+
+	var wms = new OpenLayers.Layer.WMS( "OpenLayers WMS",
+		"http://labs.metacarta.com/wms/vmap0", 
+		{layers: 'basic', isBaseLayer: "true"});
+
+    var bluemarble_wms = new OpenLayers.Layer.WMS( "Blue Marble", 
+        "http://labs.metacarta.com/wms-c/Basic.py?", {layers: 'satellite' } );
+
+	var modis = new OpenLayers.Layer.WMS( "MODIS WMS", 
+		"http://remotesensing.ou.edu/wms/modis.php?prod=evi&day=361&year=2000&", 
+		{layers: 'TOP,BOT,WORLD-Ocean-Mask', isBaseLayer: "true"});
+
+	var satellite = new OpenLayers.Layer.Google( "Google Satellite" , 
+		{type: G_HYBRID_MAP, 'maxZoomLevel':18} );
+
+    var human_wms = new OpenLayers.Layer.WMS( "Human Footprint", 
+        "http://labs.metacarta.com/wms-c/Basic.py?", {layers: 'hfoot' } );
+
+	var wms_birdflu = new OpenLayers.Layer.WMS("Bird Flu", "http://remotesensing.ou.edu/cgi-bin/mapserver/birdflu",
+			{layers: "outbreaks", transparent: "true", format: "image/GIF", 
+			tileSize: new OpenLayers.Size(256,256), buffer: 1 },{gutter: 15}); 
+
+	var wms_birdflu_pds = new OpenLayers.Layer.WMS("Bird Flu old", "http://remotesensing.ou.edu/cgi-bin/mapserver/birdflu",
+			{layers: "outbreaks_old", transparent: "true", format: "image/GIF", 
+			tileSize: new OpenLayers.Size(256,256), buffer: 1 },{gutter: 15}); 
+
+	map.addLayers([wms, modis, satellite, human_wms, bluemarble_wms, wms_birdflu]);
+
+//					map.addLayer(wms);
+//				map.addLayer(modis);
+//			map.addLayers([satellite]);
+//	map.addLayer(wms_birdflu)
+
+	map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
+
+	map.addControl(new OpenLayers.Control.PanZoom());
+	map.addControl(new OpenLayers.Control.MouseToolbar());
+	map.addControl( new OpenLayers.Control.LayerSwitcher() );
+	map.addControl( new OpenLayers.Control.MousePosition() );
+	map.addControl(new OpenLayers.Control.Permalink());
+	//map.addControl(new OpenLayers.Control.OverviewMap());
+	
+
+	var listDiv = $('info');
+	listDiv.innerHTML = "Click point for information. Shift key enables rubber band zoom.";
+
+	var markersLayer = new OpenLayers.Layer.Markers("Pointer");
+	map.addLayer(markersLayer);
+
+	var icon = new OpenLayers.Icon("http://waage.sr.unh.edu/goo/images/x.png",new OpenLayers.Size(20,20));
+	var point = new OpenLayers.LonLat(0,-90);
+	var marker = new OpenLayers.Marker(point, icon);
+	markersLayer.addMarker(marker);
+
+	// Get the legend graphic
+	var lURL = "http://remotesensing.ou.edu/cgi-bin/mapserver/birdflu?version=1.1.1&request=getlegendgraphic&format=image/PNG&layer=outbreaks";
+	var lhtml = '<b>Year</b><br/><img src="'+lURL+'"/><br/>';
+	var legDiv = $('legend');
+	legDiv.innerHTML = lhtml;
+
+	// This block handles clicking points on the map
+	map.events.register('click', map, function (e) {
+
+		var lonlat = map.getLonLatFromPixel(e.xy);  
+
+		markersLayer.removeMarker(marker);
+		point = new OpenLayers.LonLat(lonlat.lon,lonlat.lat);
+
+		marker = new OpenLayers.Marker(point, icon);
+		markersLayer.addMarker(marker);
+
+		$('info').innerHTML = "Loading...";
+		var tolerance = new OpenLayers.Pixel(7, 7);
+		var min_px = new OpenLayers.Pixel(e.xy.x - tolerance.x, e.xy.y + tolerance.y);
+		var max_px = new OpenLayers.Pixel(e.xy.x + tolerance.x, e.xy.y - tolerance.y);
+		var min_ll = map.getLonLatFromPixel(min_px);
+		var max_ll = map.getLonLatFromPixel(max_px);
+
+		url = 'http://remotesensing.ou.edu/cgi-bin/mapserver/birdflu?MAXFEATURES=20&SERVICE=WFS&VERSION=1.0.0&REQUEST=GetFeature&TYPENAME=outbreaks&SRS=EPSG:4326&BBOX='+min_ll.lon+','+min_ll.lat+','+max_ll.lon+','+max_ll.lat;
+	
+		//OpenLayers.ProxyHost = 'proxy.php?proxy_url=';
+		OpenLayers.ProxyHost = '';
+		OpenLayers.loadURL(url, '', map, function(response) {
+
+			var doc = response.responseXML;
+			var nodes =  OpenLayers.Util.getNodes(doc, "gml:featureMember");
+			var npoints = nodes.length;
+			var content; 
+					
+			if (npoints > 0) {
+				if (npoints>1) {content = "<smaller>Point Info ("+npoints+" items selected)<br/></smaller>";}
+				else {content = "<smaller>Point Info<br/></smaller>";}
+								
+				for (var k=0; k<npoints; k++) {
+					var nd = OpenLayers.Util.getNodes(nodes[k], "ms:outbreaks")[0];
+					var list = "<hr/><span style='font-size:10pt;'>";
+					count=0;
+					for (var i=0; i < nd.childNodes.length; i++) { 
+						if (nd.childNodes[i].childNodes.length == 1 && nd.childNodes[i].nodeName  ) {
+							if (count>0) {list += ', ';}
+							++count;
+							list += '<b>'+nd.childNodes[i].nodeName.substr(3, nd.childNodes[i].nodeName.length)+'</b>:&nbsp;'+nd.childNodes[i].firstChild.nodeValue;
+						}
+					}
+					list += "</span><br/>";
+					content += list;
+				}
+			} else {
+				content = "No point found. Click a point for information.";
+			}
+
+			listDiv.innerHTML = content;
+
+		});
+	});
+	// All done with handling clicking points on the map
+
+}
+</script>
+</head>
+
+<style>
+body {font-family: 'HelveticaNeue', 'Helvetica Neue', 'Arial', 'sans-serif';}
+body smaller {font-size: 9pt;}
+#wrapper {position: relative; margin: 0 auto; text-align:center; width:550px;}
+#top {position: absolute; width: 550px; height: 40px; top:0px; left: 0px; text-align: left; background-color: #FFFFFF;}
+#map {position: absolute; width: 550px; height: 450px; top: 40px; left: 0px; border: solid #999999 1px;}
+#legend {position: absolute; top: 250px; right: 2px; text-align: left; z-index: 999999;}
+#legendback {position: absolute; top: 250px; right: 2px; width: 75px; height: 130px; text-align: left; z-index: 999998;background-color: #BBB; opacity: 0.6;}
+#info {position: absolute; width: 540px; height: 110px; top: 495px; left: 0px; padding: 5px; background-color: #EEE; border: solid 1px #999999; text-align: left; overflow: auto;}
+#tail {position: absolute; width: 550px; height: 100px; top: 620px; right: 0px; text-align: right; overflow: auto; color: #777777; font-size: 9pt;}
+</style>
+
+<body onload="init()">
+<div id="wrapper">
+<div id="top">
+Avian Influenza Outbreak Locations<br/>
+<smaller>Data provided by the FAO <a href="http://www.fao.org/ag/againfo/subjects/en/health/diseases-cards/special_avian.html">Animal Production and Health Division</a></smaller>
+</div>
+<div id="map"></div>
+<div id="legendback"></div>
+<div id="legend"></div>
+<div id="info"></div>
+<div id="tail"><em>Powered by <a href="http://www.openlayers.org">OpenLayers</a></em>
+<p>
+<!--
+      <a href="http://validator.w3.org/check/referer"><img
+          src="http://www.w3.org/Icons/valid-xhtml10"
+          alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+-->
+</div></div>
+
+</body>
+</html>

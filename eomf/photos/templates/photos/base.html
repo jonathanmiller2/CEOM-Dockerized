@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block head_extra %}
+{{block.super}}
+{{ head_extra|safe }}
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ" type="text/javascript"></script> -->
+<!-- <script src="http://maps.google.com/maps/api/js"></script> -->
+<style type="text/css">
+    a.active{
+        font-weight: bold;
+    }
+    .no-space [class*="span"] {
+        margin-left: 0;
+    }
+    .photo-tile {
+        height: 260px; 
+        width: 179px; 
+        display: block; 
+        float: left;
+        margin: auto;
+        margin-right:4px;
+    }
+    .photo-checkbox {
+        margin: 0px 5px 0px 0px;
+    }
+    </style>
+<script type="text/javascript">
+var formblock;
+var forminputs;
+var total = 0;
+
+function prepare() {
+    formblock = document.getElementById('form_id');
+    forminputs = formblock.getElementsByTagName('input');
+}
+
+function select_all(name, value) {
+    total = 0;
+    if (value == 1){
+        for (i = 0; (i < {% if lim %} {{lim}} {% else %} forminputs.length {% endif %}) && ( i < forminputs.length ); i++) {
+            // regex here to check name attribute
+            var regex = new RegExp(name, "i");
+            if (regex.test(forminputs[i].getAttribute('name'))) {
+                forminputs[i].checked = true;
+                total++;
+            }
+        }
+    }
+    else{
+        for (i = 0; i < forminputs.length ; i++) {
+            // regex here to check name attribute
+            var regex = new RegExp(name, "i");
+            if (regex.test(forminputs[i].getAttribute('name'))) {
+                forminputs[i].checked = false;
+            }
+        }
+    }
+}
+
+function selectAll(e){
+	if ($(e.target).is(':checked')){
+		$("input[name=ids]").attr('checked', true);
+	}else{
+		$("input[name=ids]").attr('checked', false);
+	}
+}
+
+function check(e){
+    var targ;
+    if (!e) var e = window.event;
+    if (e.target) targ = e.target;
+    else if (e.srcElement) targ = e.srcElement;
+    if (targ.nodeType == 3) // defeat Safari bug
+        targ = targ.parentNode;
+
+    if(targ.checked){
+        total++;
+        if ({% if lim%} total > {{lim}}{%else%} false {%endif%}){
+            warning();
+            targ.checked = false;
+            total--;
+        }
+    }else{
+        total--;
+    }
+
+}
+
+function warning(){
+    alert("{{warning}}");
+}
+/*
+if (window.addEventListener) {
+    window.addEventListener("load", prepare, false);
+} else if (window.attachEvent) {
+    window.attachEvent("onload", prepare)
+} else if (document.getElementById) {
+    window.onload = prepare;
+}
+*/
+</script>
+
+{% endblock %}
+
+{% block left_menu %} {% include "photos/leftmenu.html" %}{% endblock %}
+{% block left_menu_crowdsourcing %} {% include "photos/leftmenu_crowdsourcing.html" %}{% endblock %}
+
+

@@ -1,0 +1,26 @@
+{% extends "visualization/base.html" %}
+
+{% block head_extra %}
+    <!--[if IE]>
+    <script type="text/javascript" src="http://dygraphs.com//excanvas.js"></script>
+    <![endif]-->
+	<script type="text/javascript" src="http://dygraphs.com/dygraph-combined.js"></script>
+{% endblock %}
+
+{% block title %} Data Visualization {% endblock %}
+{% block content %}
+
+<br />Latitude: 	{{ lat }}
+<br />Longitude: 	{{ lon }}
+<br />Modis: 	{{ modis }}
+<br />Tile: 	{{ tile }}
+<br />Year:     {{ years }}
+<br />Cell (row, column): 	{{row}}, {{ col }}
+<br />
+<br /><a style='float: right;' href='/visualization/graphjs-{{modis}}_{{years}}_{{lat}}_{{lon}}'>Beta JS graps</a>
+{% for bandname in keys %} 
+<p> <img src="/visualization/graph_{{modis}}_{{years}}_{{lat}}_{{lon}}_{{bandname}}.png" /> </p>
+{% endfor %}
+{% if d %} Debug:{{d}} {%endif%}
+
+{% endblock %}

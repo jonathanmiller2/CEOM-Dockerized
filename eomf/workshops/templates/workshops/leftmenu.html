@@ -1,0 +1,18 @@
+{% load i18n %}
+<li class='nav-header'>{% trans "Workshop" %}</li>
+    <li {% if request.path == '/workshops/' %}class='active' {%endif%}> 
+        <a href='/workshops/'><i class="icon-home"></i> {% trans "Overview" %}</a>
+    </li>
+    <li {% if request.path == '/workshops/current' %}class='active' {%endif%}> 
+        <a href='/workshops/current/'><i class="icon-share-alt"></i> {% trans "Current Workshops" %}</a>
+    </li>
+    <li {% if request.path == '/workshops/past' %}class='active' {%endif%}> 
+        <a href='/workshops/past'><i class="icon-reply"></i> {% trans "Past Workshops" %}</a>
+    </li>
+
+
+
+
+ 
+
+

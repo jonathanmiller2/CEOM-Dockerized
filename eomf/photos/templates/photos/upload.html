@@ -1,0 +1,340 @@
+{% extends "photos/base.html" %}
+
+{% load i18n %}
+{% block title %}{% trans "EOMF photo upload" %} {% endblock %}
+
+{% block head_extra %}
+
+<link rel="stylesheet" href="/static/css/bootstrap-image-gallery.min.css">
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<link rel="stylesheet" href="/static/css/jquery.fileupload-ui.css">
+<!--<style type="text/css">
+input[type=checkbox].css-checkbox {
+                            position:absolute; z-index:-1000; left:-1000px; overflow: hidden; clip: rect(0 0 0 0); height:1px; width:1px; margin:-1px; padding:0; border:0;
+                        }
+
+                        input[type=checkbox].css-checkbox + label.css-label {
+                            padding-left:49px;
+                            height:42px; 
+                            display:inline-block;
+                            line-height:42px;
+                            background-repeat:no-repeat;
+                            background-position: 0 0;
+                            font-size:42px;
+                            vertical-align:middle;
+                            cursor:pointer;
+
+                        }
+
+                        input[type=checkbox].css-checkbox:checked + label.css-label {
+                            background-position: 0 -42px;
+                        }
+                        label.css-label {
+                background-image:url(http://csscheckbox.com/checkboxes/u/csscheckbox_a5b9f9a141b4262c54ac60265fac980f.png);
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+</style>-->
+<!--<style type="text/css">
+.slideThree {
+    width: 80px;
+    height: 26px;
+    background: #333;
+    margin: 20px auto;
+
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    position: relative;
+
+    -webkit-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
+    -moz-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
+    box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
+}
+
+.slideThree:after {
+    content: 'OFF';
+    font: 12px/26px Arial, sans-serif;
+    color: #000;
+    position: absolute;
+    right: 10px;
+    z-index: 0;
+    font-weight: bold;
+    text-shadow: 1px 1px 0px rgba(255,255,255,.15);
+}
+
+.slideThree:before {
+    content: 'ON';
+    font: 12px/26px Arial, sans-serif;
+    color: #00bf00;
+    position: absolute;
+    left: 10px;
+    z-index: 0;
+    font-weight: bold;
+}
+
+.slideThree label {
+    display: block;
+    width: 34px;
+    height: 20px;
+
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+
+    -webkit-transition: all .4s ease;
+    -moz-transition: all .4s ease;
+    -o-transition: all .4s ease;
+    -ms-transition: all .4s ease;
+    transition: all .4s ease;
+    cursor: pointer;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    z-index: 1;
+
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+    background: #fcfff4;
+
+    background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+    background: -moz-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+    background: -o-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+    background: -ms-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+    background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfff4', endColorstr='#b3bead',GradientType=0 );
+}
+
+.slideThree input[type=checkbox]:checked + label {
+    left: 43px;
+}
+
+</style>-->
+
+<!--[if lt IE 7]>
+<style type="text/css">
+.span16 {
+    display: inline;
+    float: left;
+    margin-left: 20px;
+}
+input {
+    display: inline;
+    width: auto;
+}
+/* The following is required for Modals to work on IE6 */
+.modal {
+    position: absolute;
+    top: 50%;
+    filter: none;
+}q
+#gallery-modal.fullscreen {
+    overflow: hidden;
+}
+</style>
+<![endif]-->
+
+{% endblock %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+	<h4>{% trans "Upload" %}</h4>
+
+    <div class="upload-container">
+		<ul>
+        <li>{% trans "You can select multiple files, drag&amp;drop files into the window with Firefox, Safari, Chrome" %}</li>
+		<li><span style="color:red"><big>{% trans "Don't forget to click"%}<b> {%trans "'Save Uploaded Images'"%} </b> {%trans "after uploading all the images" %}</big></span></li>
+        <li>{% trans "The default setting for photos is public, if you want to change it to private, then check the 'private box'"%}&nbsp;<!--<div class="slideThree">  
+    <input id="checkbox2" type="checkbox" value="None" id="slideThree" name="check"/>
+    <label for="slideThree"></label>
+</div>--><input id="checkbox2" type="checkbox" class="toggle"></li>
+        
+		</ul>
+        <script>
+        function othersubmit1(){
+            $("#submithide").click();
+        };
+        function selectall_replace(){
+            $("")
+        }
+        </script>
+       
+        <form id="fileupload" action="./preload/" method="POST" enctype="multipart/form-data">
+        <div class="fileupload-buttonbar">
+            <div class="span12">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                <span class="btn btn-success fileinput-button">
+                    <i class="icon-plus icon-white"></i>
+                    <span>{% trans "Add files..." %}</span>
+                    <input type="file" name="files[]" multiple>
+                </span>
+                <button type="submit" class="btn btn-primary start">
+                    <i class="icon-upload icon-white"></i>
+                    <span>{% trans "Start upload" %}</span>
+                </button>
+                <button type="reset" class="btn btn-warning cancel">
+                    <i class="icon-ban-circle icon-white"></i>
+                    <span>{% trans "Cancel upload" %}</span>
+                </button>
+                <button type="button" class="btn btn-danger delete">
+                    <i class="icon-trash icon-white"></i>
+                    <span>{% trans "Delete" %}</span>
+                </button>
+                
+                <button id="selectall1" type="button" class="btn btn-default">
+                    <i class="icon-ok icon-white"></i>
+                    <span>{% trans "Select All/None" %}</span>
+                </button>
+           
+                    <div id="hidden2">
+
+               select all:
+                <input id="needcheck" type="checkbox" class="toggle">
+            </div>
+            <script>
+            $("#hidden2").hide();
+            </script>
+
+                 
+           <!-- </div>
+            <div class="span4">-->
+                <button type="button" class="btn btn-primary" onclick="othersubmit1()" >Save Uploaded Images</button>
+                
+            </div>
+            
+            <div class="span6 offset5">
+                <!-- The global progress bar -->
+                <div class="progress progress-success progress-striped active">
+                    <div class="bar" style="width:0%;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- The loading indicator is shown during image processing -->
+        <div class="fileupload-loading"></div>
+
+
+        <br>
+        <!-- The table listing the files available for upload/download -->
+        <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+        </form>
+         <div class="span12">
+            <form id="submit12" enctype="multipart/form-data" action="." method="POST" onsubmit="uploadFile();">
+            {% csrf_token %}
+            {% trans "The default setting for photos is public, do you want to change it to private?" %}
+            <input id="checkbox1" type='checkbox' class="toggle" name='private' value='Yes'>
+            <input type="hidden" name="subupload" value="1">
+            <input id="submithide" type="submit" class="btn btn-primary" value="Save Uploaded Images">
+            </form>
+          
+        </div>
+        <hr/>
+        <hr>
+
+        <div class="well">
+            <h3>{% trans "Notes" %}</h3>
+            <ul>
+                <li>{% trans "Please upload individual images (<strong>JPEG, PNG, GIF</strong>)" %}</li>
+                <li>{% trans "Total upload limit is set at 650MB, but it is recommended you do not upload files bigger than <strong>25MB</strong>." %}</li>
+                <li>{% trans "If you are having trouble uploading big files (over 25M) select multiple smaller files in the file browse window." %}</li>
+                <li>{% trans "You can <strong>drag &amp; drop</strong> files from your desktop on this webpage with Google Chrome, Mozilla Firefox and Apple Safari." %}</li>
+            </ul>
+        </div>
+
+        <!-- gallery-loader is the loading animation container -->
+        <div id="gallery-loader"></div>
+        <!-- gallery-modal is the modal dialog used for the image gallery -->
+        <div id="gallery-modal" class="modal hide fade">
+            <div class="modal-header">
+                <a href="#" class="close">&times;</a>
+                <h3 class="title"></h3>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <a class="btn primary next">{% trans "Next" %}</a>
+                <a class="btn info prev">{% trans "Previous" %}</a>
+                <a class="btn success download" target="_blank">{% trans "Download" %}</a>
+            </div>
+        </div>
+        <script>
+        var fileUploadErrors = {
+            maxFileSize: '{% trans "File is too big" %}',
+            minFileSize: '{% trans "File is too small" %}',
+            acceptFileTypes: '{% trans "Filetype not allowed" %}',
+            maxNumberOfFiles: '{% trans "Max number of files exceeded" %}',
+            uploadedBytes: '{% trans "Uploaded bytes exceed file size" %}',
+            emptyResult: '{% trans "Empty file upload result" %}'
+        };
+        </script>
+              <!-- The template to display files available for upload -->
+	{{js_template|safe}}
+        <script src="/static/js/vendor/jquery.ui.widget.js"></script>
+        <script src="/static/js/tmpl.min.js"></script>
+        <script src="/static/js/load-image.min.js"></script>
+        <script src="/static/js/canvas-to-blob.min.js"></script>
+        <!-- Bootstrap Modal and Image Gallery are not required, but included for the demo -->
+        <script src="/static/js/bootstrap-image-gallery.min.js"></script>
+        <script src="/static/js/jquery.iframe-transport.js"></script>
+        <script src="/static/js/jquery.fileupload.js"></script>
+        <script src="/static/js/jquery.fileupload-fp.js"></script>
+        <script src="/static/js/jquery.fileupload-ui.js"></script>
+        <script src="/static/js/locale.js"></script>
+        <script src="/static/js/photos_upload.js"></script>
+        <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE >= 8 -->
+        <script src="/static/js/jquery.xdr-transport.js"></script>
+        <!-- postMessage Transport support can be added with the following plugin -->
+        <!--script src="/media/js/jquery.postmessage-transport.js"></script-->
+    </div>
+    
+{% else %}
+	<br>{% trans "Please Log in to upload photos." %}<br>
+{% endif %}
+
+<br/>
+<br/>
+<br/>
+<br/>
+<script>
+$(document).ready(function(){
+    $(":checkbox").wrap("<span style='background-color:navy'>");
+    });
+$("#checkbox2").change(function() {
+    //$('#' + id).is(":checked")
+    //console.log("1");
+    if($("#checkbox1").is(":checked")){
+      $("#checkbox1").attr('checked', false);  
+    }
+    else{
+   $("#checkbox1").attr('checked', true);
+}
+});
+$("#checkbox1").change(function() {
+    //$('#' + id).is(":checked")
+    //console.log("2");
+    if($("#checkbox2").is(":checked")){
+      $("#checkbox2").attr('checked', false);  
+    }
+    else{
+   $("#checkbox2").attr('checked', true);
+}
+});
+$("#selectall1").click(function(){
+    console.log("iam in select all click event");
+    console.log($("#needcheck").is(":checked"));
+    if($("#needcheck").is(":checked")){
+        $("#needcheck").click();
+      //$("#needcheck").prop('checked', false);  
+    }
+    else{
+        $("#needcheck").click();
+   //$("#needcheck").prop('checked', true);
+}
+});
+</script>
+{% endblock %}

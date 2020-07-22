@@ -1,0 +1,163 @@
+{% extends "visualization/base.html" %}
+{% load crispy_forms_tags %}
+{% load dajaxice_templatetags %}
+
+{% load i18n %}
+{% block title %} {% trans "EOMF MODIS timeseries Multiple Site" %} {% endblock %}
+
+{% block content %}
+<div class="span12 well">
+ <h2 style="color: #dc143c;">{% trans "MODIS time series request history for multiple sites" %}</h2>
+ {% if message %}
+   <div class="alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>{% trans "Warning!" %} </strong>{{message}}
+  </div>
+   {% endif %}
+  <a class="btn btn-success icon-2x" href="/visualization/multiple_add/"><i class="icon-plus-sign "></i>{% trans "Add request" %}</a>
+    <div class="span12 text-center"> 
+  {% if jobs.has_previous %}
+    <a class="btn btn-primary" href="?page=1"><i class="icon-chevron-left"></i><i class="icon-chevron-left"></i></a>
+  {% endif %}
+  {% if jobs.has_previous %}
+    <a class="btn btn-primary" href="?page={{ jobs.previous_page_number }}"><i class="icon-chevron-left"></i></a>
+  {% endif %}
+  
+   Page {{jobs.number}}  of {{jobs.paginator.num_pages}}
+  {% if jobs.has_next %}
+    <a class="btn btn-primary"href="?page={{ jobs.next_page_number }}"><i class="icon-chevron-right"></i></a>
+  {% endif %}
+ {% if jobs.has_next %}
+    <a class="btn btn-primary"href="?page={{jobs.paginator.num_pages}}"><i class="icon-chevron-right"></i><i class="icon-chevron-right"></i></a>
+  {% endif %}
+    </div>
+    <hr>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>
+            {% trans "Timestamp" %}
+          </th>
+          <th>
+            {% trans "Product" %}
+          </th>
+          <!-- <th>
+            Years
+          </th> -->
+          <th>
+            {% trans "Input file" %}
+          </th>
+          <th>
+            {% trans "Output file" %}
+          </th>
+         <th>
+            {% trans "State" %}
+          </th>
+          <th>
+            {% trans "Delete" %}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+ {% for row in jobs %}
+   <tr>
+      <td>{{row.timestamp}}</td>
+      <td>{{row.product}}</td>
+      <!-- <td>{{row.years}}</td> -->
+      <td><a href="{{row.points.url}}"> input </a></td>
+      <td><div id="result_{{row.id}}">{% if row.result %}{% if row.completed or row.error %} <a href="{{row.result.url}}"> result </a>{%endif%}{%endif%}</div></td>
+      <td>   
+      <div id="statusContainer_{{row.id}}">
+      {% if row.completed %}
+         <i id="iconC{{row.id}}" class="icon-check  icon-2x text-success"></i>
+      {% elif row.working %}
+      
+        <div class="span-2 text-left">
+          <i class="icon-cog  icon-2x icon-spin text-left"></i>
+          <span id="progressVerbose_{{row.id}}">{{row.progress}}</span> / {{row.total_sites}}
+        </div>
+         <div class="progress progress-striped active span-8 ">
+            <div id="progressBar_{{row.id}}"class="bar" style="width: {{row.calculate_progress_percentage}}%;"></div>
+          </div>
+
+      {% elif row.error %}
+         <i class="icon-2x icon-exclamation-sign text-error"></i>
+      {% else %}
+         <i class="icon-2x icon-list-alt text-warning"></i> Queued
+      {% endif %}
+      </div>
+   </td>
+   <td>  <a href="/visualization/multiple/del={{row.id}}"><div class="btn btn-danger"><i class="icon-trash"></i></div></a>
+   </td>
+</tr>
+ {% endfor %}
+    </tbody>
+ </table>
+   
+</div>
+
+{% endblock %}
+
+
+
+{% block js_code %}
+{% dajaxice_js_import %}
+<script type="text/javascript">
+  var tasksInProgressList=[{% for t in jobs %}{% if t.working %}{{t.id}},{% endif %}{% endfor %}]
+  var intervalID;
+  console.log(tasksInProgressList)
+
+  var updateInterfaceProgress = function(taskId,progress,total){
+    $("#progressVerbose_"+taskId).html(progress.toString())
+    var percent = (parseInt(progress)/parseInt(total))*100
+    console.log("#progressBar_"+taskId)
+    $("#progressBar_"+taskId).animate({width: percent+"%"},750);
+  }
+  var updateInterfaceCompleted = function(taskId,result){
+    $("#statusContainer_"+taskId).html('<i class="icon-check  icon-2x text-success"></i>')
+    $("#result_"+taskId).html('<a href="'+result+'"> result </a>')
+  }
+  var updateInterfaceError = function(taskId,result,message){
+    $("#statusContainer_"+taskId).html('<i class="icon-2x icon-exclamation-sign text-error" data-toggle="tooltip" data-placement="top" title="'+message+'"></i>')
+    $('#example').tooltip(options)
+    $("#result_"+taskId).html('<a href="'+result+'"> Partial result </a>')
+  }
+
+  var updateProgress = function(data){
+    var tasks = data.tasks;
+    for(var i=0; i< tasks.length;i++){
+      var task = JSON.parse(tasks[i])
+      if (task.completed=='True'){
+        // console.log('Updating completed')
+        // console.log(task)
+        // console.log('--------')
+        updateInterfaceCompleted(task.id,task.result)
+        var ind = tasksInProgressList.indexOf(parseInt(task['id']))
+        if ( ~ind ) tasksInProgressList.splice(ind,1)
+      } else if (task.error=='True'){
+        // console.log('Updating error')
+        // console.log(task)
+        // console.log('--------')
+        updateInterfaceError(task.id,task.result,task.message)
+      } else {
+        // console.log('Updating progress')
+        // console.log(task)
+        // console.log('--------')
+        updateInterfaceProgress(task.id,task.progress,task.total_sites)
+      }
+    }
+    if (tasksInProgressList.length==0)
+      clearInterval(intervalID); 
+  }
+
+  var checkProgress = function(){
+      Dajaxice.visualization.get_multiple_task_progress(updateProgress,{'tasks_ids':tasksInProgressList});
+
+    }
+    // Main
+    {% if task_in_progress %}
+    var delay = 1000
+    intervalID = window.setInterval(checkProgress, delay);
+    {% endif %}
+</script>
+{% endblock %}

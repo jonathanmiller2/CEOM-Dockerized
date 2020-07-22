@@ -1,0 +1,22 @@
+{% extends "visualization/base.html" %}
+
+{% load i18n %}
+{% block title %} {% trans "EOMF Visualization overview" %}{% endblock %}
+
+{% block content %}
+<div class="well">
+	<h2 style="color: #dc143c;">{% trans "Overview" %}</h2>
+
+	<legend> {% trans "MODIS data" %} </legend>
+	<p>{% trans "The EOMF Data Center hosts several hundreds of terabytes of MODIS data and products for the globe over the period of 2/2000 to present. Here you can visualize and download those MODIS data in several ways. Our web service is complementary to the web service provided by the USGS EDC (http://www.usgs.gov/), where you can download large volume of MODIS data by tile and year." %}</p>
+
+
+	<!-- <legend>{% trans "Wild bird data" %} </legend>
+	<p>{% trans "Satellite telemetry of wild birds provides useful information on local movement and seasonal migration of migratory wild birds. Here you can visualize wild bird movement data from satellite telemetry." %} </p>
+
+
+	<legend>{% trans "Avian influenza data" %}</legend>
+	<p>{% trans "Transmission and spillover of avian influenza, specifically highly pathogenic avian influenza (e.g., influenza A subtype H5N1, H7N9) is a major concern of public health. Here you can visualize spatial patterns and temporal dynamics of HPAI H5N1outbreaks in the world." %}</p>
+ -->
+</div>
+{% endblock %}

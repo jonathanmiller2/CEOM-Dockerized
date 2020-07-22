@@ -1,0 +1,15 @@
+select (array_agg(poi_researchpixel.id))[1],count(a1.id),(array_agg(poi_researchpixel.pixel))[1],(array_agg(poi_researchpixel.id))[1]
+
+from (
+    select 
+        pixelval.id as id, researchpixel.id as aggregated_pixel_id, researchpixel.name as rname
+    from 
+        poi_researchpixel as researchpixel, poi_research as research, poi_pixel as pixel, poi_pixelvalidation as pixelval 
+    where pixel.id = pixelval.pixel_id
+        and pixel.id = researchpixel.id
+        and researchpixel.research_id = research.id
+        and research.id = 1
+) as a1 right join poi_researchpixel on a1.aggregated_pixel_id = poi_researchpixel.id
+group by a1.id,poi_research
+
+

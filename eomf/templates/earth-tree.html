@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %} Data Visualization - Google Earth View {% endblock %}
+
+{% block head_extra %}
+{{ block.super }}
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script> 
+    <script src="http://www.google.com/jsapi?key=ABQIAAAAmuvLtH3m9h8LpbkjVzUDhBQyRLBZZgMo3VuWp3Pab5JM-oPN4hRjhrpJr4lifELK29a1ma50wKiWHg"></script>
+    <script type="text/javascript" src="http://earth-api-utility-library.googlecode.com/svn/trunk/extensions/dist/extensions.js"></script> 
+    <script type="text/javascript" src="/media/js/earth.js"></script>
+    <script type="text/javascript" src="/media/js/jquery.cookie.js"></script> 
+    <script type="text/javascript" src="/media/js/jquery.treeview.js"></script> 
+    <link rel="stylesheet" href="/media/css/jquery.treeview.css" /> 
+    <link rel="stylesheet" href="/media/css/sliders.css" />     <script>
+        var host_url = "http://{{ request.META.HTTP_HOST }}";
+        var kml_path = {% if kml_path %}'{{kml_path}}'{% else %}'/visualization/kml/'{% endif %};
+        var kmlobjects = [{% for ds in datasets %}'{{ds.name}}'{%if not forloop.last%},{%endif%} {% endfor %}];
+        {% if kml_ext %}kml_extension = "{{kml_ext}}";{% endif %}
+        $(document).ready(function(){
+		$("#browser").treeview({
+			toggle: function() {
+				//console.log("%s was toggled.", $(this).find(">span").text());
+			}
+		});
+	});
+    </script>
+{% endblock %}
+
+{% block body_tag %}<body onload='init()' id='body'>{% endblock %}
+
+{% block sidebar %}
+    <div id="sidebar"> 
+        <div id='browser-container' allowtransparency="true">
+            <ul id="browser" class="treeview-gray" style="line-height:1em;">
+            <b>Data Tree</b>
+            {% for d in datasets %}
+                {% ifchanged d.label %}
+                    {% if not forloop.first %}
+                    </ul>
+                    </li>
+                    {% endif %}
+                    <li class='closed'><span class='folder'>{{d.label}}</span>
+                    <ul>
+                {% endifchanged %}
+                    <li class="closed">
+                        <span class="folder">
+                            <input type="checkbox" name="{{d.name}}" id="kml-{{d.name}}" value="{{d.name}}" onClick="toggleKml('{{d.name}}'); event.stopPropagation();" />&nbsp;{{d.fullname}}
+                        </span>    
+                        <ul>
+                            {% if d.abstract %}
+                            <li class="closed"><span class="folder">Description</span>
+                                <ul>
+                                    <li><span class="file">{{d.abstract}}</span></li>
+                                </ul>
+                            </li>
+                            {% endif %}
+                            {% if d.legend %}
+                            <li class="closed"><span class="folder">Legend</span>
+                                <ul>
+                                    <li><span class="file">
+                                            <img src="/cgi-bin/legend_wms/global?LAYER={{d.name}}&VERSION=1.1.1&REQUEST=GetLegendGraphic&Format=image/png" alt="Legend" />
+                                        </span>
+                                    </li>
+                                </ul>
+                            </li>
+                            {% endif %}
+                            {% if not d.vector %}
+                            <li class="closed"><span class="folder">Opacity</span>
+                                <ul>
+                                    <li><span class="file">
+                                        <div id='opacitypanel'>
+                                            <div class='slider-container'>
+                                                <div id='slider_{{d.name}}' class='ui-slider-1'>
+                                                    <div class='ui-slider-handle:' ></div>
+                                                </div>
+                                                <!--<div class='slider_label'>100% Opacity 0%</div>-->
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                {% if forloop.last %}
+                    </ul>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+            
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+<h3>Data Integration and Visualization over Google Earth</h3>
+<br/>
+<div class='row-fluid'>
+    <div id='map-container'>
+        <div class='row-fluid'>
+            <div id='map3d'></div>
+        </div>
+        <div class='row-fluid'>
+            {% block map_footer %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+<div class='row-fluid'>
+    <div id="credit" style="font-style:italic;font-size: 11px;line-height:100%;bottom:0px;">
+    {% block credit %}
+    {% endblock %}
+    </div>
+</div>
+{% endblock %}

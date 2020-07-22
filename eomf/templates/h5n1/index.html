@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %} Data Visualization - Highly Pathogenic Avian Influenza {% endblock %}
+
+{% block head_extra %}
+{{ block.super }}
+    <script src="http://www.google.com/jsapi?key=ABQIAAAAmuvLtH3m9h8LpbkjVzUDhBQyRLBZZgMo3VuWp3Pab5JM-oPN4hRjhrpJr4lifELK29a1ma50wKiWHg""></script>
+    <script>
+        google.load("earth", "1");
+        
+        var ge = null;
+        var kml_url = "http://{{ request.META.HTTP_HOST }}/h5n1/all.kml";
+        
+        function init() {
+          google.earth.createInstance("map3d", initCallback, failureCallback);
+          //var kO = ge.parseKml(kmlString);
+          //alert("test");
+          //ge.getFeatures().appendChild(kO);
+        }
+        
+        function initCallback(object) {
+          ge = object;
+          ge.getWindow().setVisibility(true);
+          ge.getOptions().setStatusBarVisibility(true);
+          ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
+          ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, false);
+          //ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);
+        var la = ge.createLookAt('');
+        la.set(37, 76, 1000, ge.ALTITUDE_RELATIVE_TO_GROUND, 0, 15, 7000000);
+        ge.getView().setAbstractView(la);
+
+
+          google.earth.fetchKml(ge, kml_url, function(kmlObject) {
+          if (kmlObject)
+            ge.getFeatures().appendChild(kmlObject);
+          });
+        }
+        
+        function failureCallback(object) {
+            alert("Error #"+object);
+        }
+    </script>
+{% endblock %}
+
+{% block body_tag %}<body onload='init()' id='body'>{% endblock %}
+
+{% block content %}
+<h3>Avian Influenza Tracking Data</h3>
+<br/><br/><br/>
+<div id='map3d' style='border: 1px solid silver; height: 600px; width: 760px;'></div>
+
+{% endblock %}

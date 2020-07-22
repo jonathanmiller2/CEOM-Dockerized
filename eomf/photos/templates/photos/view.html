@@ -1,0 +1,58 @@
+{% extends "photos/base.html" %}
+{% load photos_tags %}
+
+{% load i18n %}
+{% block title %}{% trans "EOMF Photo view" %} {% endblock %}
+
+{% block content %}
+{% load thumbnail %}
+<div class="span12">
+    <h4>{% trans "View Photo" %}</h4>
+    <a href='{{photo.file.url}}'>
+        {% if photo.file|photoexists %}
+            {% thumbnail photo.file "800x800" as im %}
+            <img class="img-polaroid" src='{{im.url}}'>
+            {% endthumbnail %}
+        {% else %}
+            <img class="img-polaroid" src='' alt="image not available" style="width:300px;height:300px;">
+        {% endif %}
+    </a>
+</div>
+<div class='row-fluid well'>
+    <dl class="dl-horizontal">
+        <dt>{% trans "User" %}</dt><dd>{{photo.user.username}}</dd>
+        <dt>{% trans "Filename" %}</dt><dd>{{photo.basename}}</dd>
+        <dt>{% trans "Landcover" %}</dt><dd>{% if photo.category %}{% trans photo.category.name %} {% else %} {%trans "Not set" %}{% endif %}</dd>
+        <dt>{% trans "Field Notes" %}</dt><dd>{% if photo.notes %}{{photo.notes}} {% else %} {% trans "No notes" %} {% endif %}</dd>
+        {% if photo.user = request.user or request.user.is_admin %}
+        <dt>{% trans "Exif" %}</dt><dd><a target="_blank" href="/photos/exif/{{photo.pk}}">EXIF</a><dd>
+        {% endif %}
+        <!-- <ul class="unstyled">
+            <li>{{photo.takendate}}</li>
+            {% if photo.lon and photo.lat %}
+            <li>{{photo.point|point2str}}</li>
+            {% endif %}
+            {% if photo.category %}
+            <li>{{photo.category.name}}</li>
+            {% else %}
+            <li>Category not set</li>
+            {% endif %}
+            <li>{{photo.alt}} Meters</li>
+            <li>Direction: {{photo.dir_card}}</li>
+            <li>Comments: {{photo.notes}}</li>
+        </ul> -->
+        <div class="span12 text-center" style="margin-top:15px;">
+        {% if photo.user == request.user or request.user.is_superuser %}
+        <a class='btn btn-primary' href="/photos/edit/{{photo.id}}">{% trans "Edit" %}</a>
+        <a class='btn btn-danger btn-small' onclick="return confirm('{% trans 'Are you sure, you want to delete?' %}');" href="/photos/delete/{{photo.id}}/?next={{request.get_full_path|urlencode}}">{% trans "Delete" %}</a>
+        <a class='btn btn-small' href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
+                        <abbr title="{% trans 'View MODIS data for this photo. Click on this button and scroll down to the bottom of the page and to select appropriate dataset and year' %}">MODIS</abbr>
+                    </a>
+
+         {% endif %}
+         
+
+</div>
+    </dl>
+</div>
+{% endblock %}

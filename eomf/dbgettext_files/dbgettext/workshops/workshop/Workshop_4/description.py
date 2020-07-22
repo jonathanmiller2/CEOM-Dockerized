@@ -1,0 +1,2 @@
+# -*- coding: utf-8 -*-
+gettext("""The objectives of the planned two workshops are twofold: (1) identify and assemble available geospatial datasets relevant to HPAI (H5N1) spread, and identify any major gaps in knowledge and data, which would inform and allow prioritization of future research and data collection activities; (2) facilitate capacity building for a network of researchers and institutions, and infrastructure for data synthesis, analysis and modeling.""")

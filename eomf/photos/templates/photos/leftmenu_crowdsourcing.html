@@ -1,0 +1,16 @@
+{% load i18n %}
+		
+    <li class='nav-header'>{% trans "Crowdsourcing and Citizen Science Projects" %}</li>
+    <ul>
+        <li>
+        	<a href='https://picturepost.ou.edu/index.jsp'>{% trans "PicturePost" %}</a>
+        </li>
+        <li {% if request.path == '/photos/' %}class='active' {%endif%}> 
+            <a href='/photos/FieldPhoto'>{% trans "Field Photo Weekend" %}</a>
+        </li>
+        <li> 
+            <a href='https://americaview.org/program-areas/education/earth-observation-day/'>{% trans "Earth Observation Day" %}</a>
+        </li>
+
+    </ul>
+        

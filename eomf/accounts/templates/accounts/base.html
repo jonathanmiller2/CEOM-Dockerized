@@ -1,0 +1,7 @@
+{# This template holds the things that appear on all account pages #}
+{% extends 'base.html' %}
+{% block left_menu %}
+   
+{%include "accounts/leftmenu.html"%}
+{% endblock %}
+{% block content %}{{content}}{% endblock %}

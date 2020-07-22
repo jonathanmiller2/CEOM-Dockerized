@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://earth.google.com/kml/2.1">
+<Folder>
+
+{% for ts in timespans %}
+<GroundOverlay>
+    <name>Modis Dated {{ts.begin}}</name>
+
+    <Region>
+        <LatLonAltBox>
+         <north>90</north>
+         <south>-90</south>
+         <east>179.5</east>
+         <west>-180.5</west>
+            <minAltitude>0.000000</minAltitude>
+            <maxAltitude>0.000000</maxAltitude>
+        </LatLonAltBox>
+        <Lod>
+       <minLodPixels>0</minLodPixels>
+            <maxLodPixels>-1</maxLodPixels>
+            <minFadeExtent>0</minFadeExtent>
+            <maxFadeExtent>0</maxFadeExtent>
+        </Lod>
+    </Region>
+
+
+<Icon>
+      <href>http://{{host}}/wms/modis.php?{{ts.params}}&amp;LAYERS={{ts.layers}}&amp;SERVICE=WMS&amp;WIDTH=800&amp;HEIGHT=600&amp;FORMAT=image%2Fpng&amp;REQUEST=GetMap&amp;SRS=EPSG%3A4326&amp;VERSION=1.1.1</href>
+            <viewRefreshMode>onStop</viewRefreshMode>
+            <viewRefreshTime>0</viewRefreshTime>
+</Icon>
+<LatLonBox>
+<north>90</north>
+<south>-90</south>
+<east>179.5</east>
+<west>-180.5</west>
+</LatLonBox>
+
+<TimeSpan><begin>{{ts.begin}}</begin></TimeSpan>
+<TimeSpan><end>{{ts.end}}</end></TimeSpan>
+
+</GroundOverlay>
+{% endfor %}
+</Folder>
+</kml>

@@ -1,0 +1,43 @@
+{% extends "workshops/base.html" %}
+{% load i18n %}
+{% load extra_template_tags %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="well span12">
+    <h1 class="text-center">{% trans "Presentations" %}  <small>{{workshop.name}}</small></h1>
+    <div class="hr"></div>
+   
+    <div class="span10 offset1">
+    {% if presentations %}
+    {% for p in presentations %} 
+        {% ifchanged p.time_ini.date|date:"Y-m-d"%}
+            {% ifnotequal forloop.counter 1 %}
+            </table>
+            {% endifnotequal %}
+        
+        <h3> {{p.time_ini.date|date:"l F d, Y"}}</h3>
+        <table class="table table-striped">
+            <tr>
+                <th>{% trans "Time" %}</th>
+                <th>{% trans "title" %}</th>
+                <th>{% trans "Presenter" %}</th>
+                <th>{% trans "Institution" %}</th>
+                <th>{% trans "Link" %}</th>
+            </tr> 
+            
+        {% endifchanged %}
+            <tr>    
+                <td>{{p.time_ini|date:"H:i" }}{% if p.time_end %} - {{p.time_end|date:"H:i"}} {% endif %} </td>
+                <td>{{p.title}}</td>
+                <td>{{p.last_name}}, {{p.first_name}}{% if p.other_presenters %} ({{p.other_presenters}}){% endif %}</td>
+                <td><a href="{{p.institution.link}}">{{p.institution.name}}</a></td>
+                <td>{% if p.content %}<a class="btn btn-primary" href="{{p.content.url}}"><i class="icon-download icon-2x"></i></a>{% endif %}</td>
+            </tr>
+        
+    {% endfor %}
+        </table>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

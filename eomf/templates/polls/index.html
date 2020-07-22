@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %} Data Inventory {% endblock %}
+
+{% block content %}
+
+	{% if product_list %}
+		<ul>
+		{% for product in product_list %}
+			<li>{{ product.name }}</li>
+		{% endfor %}
+		</ul>
+	{% else %}
+		<p>No products are available.</p>
+	{% endif %}
+
+{% endblock %}
