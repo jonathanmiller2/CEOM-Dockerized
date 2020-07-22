@@ -5,13 +5,11 @@ from django.conf import settings
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 
-admin.autodiscover()
-from dajaxice.core import dajaxice_autodiscover, dajaxice_config
-dajaxice_autodiscover()
+
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns #For dajax ice
 urlpatterns = [
-    url(r'^admin/filebrowser/', include(site.urls)),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/filebrowser/', site.urls),
+    url(r'^admin/', admin.site.urls),
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^captcha/', include('captcha.urls')),
@@ -37,7 +35,6 @@ urlpatterns = [
     url(r'^feedback/', include('eomf.feedback.urls')),
     url(r'^share/', include('eomf.eomfshare.urls')),
     url(r'^maps/', include('eomf.maps.urls')),
-    url(r'^dheerajTesting/', include('eomf.dheerajtestingapp.urls')),
     url(r'^water/', include('eomf.water.urls')),
     # (r'^aoitest/', include('eomf.aoitest.urls')),
  ##   # (r'^poi/', include('eomf.poi.urls')),
@@ -45,8 +42,8 @@ urlpatterns = [
 
     url(r'^i18n/', include('django.conf.urls.i18n')),
  ##  # Json api
-   url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
-   url(r'^dajaxice/', include('dajaxice.urls')),
+ #  url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
+ #  url(r'^dajaxice/', include('dajaxice.urls')),
 ]
 
 #Development only pages

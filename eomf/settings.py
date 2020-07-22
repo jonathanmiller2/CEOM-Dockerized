@@ -22,9 +22,7 @@ else:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1','eomf.ou.edu','www.eomf.ou.edu']
 ADMINS = (
 
-    ('bhargav', 'bharagvreddy.bolla@ou.edu>'),
-    ('dheeraj', 'dheerajsrivathsav@ou.edu>'),
-    ('bibas', 'bibas.sitoula@ou.edu>'),
+    ('Jonathan', 'jonathan.g.miller@ou.edu>'),
     
 )
 
@@ -42,7 +40,10 @@ DATABASES = {
     },
 }
 
-GEOS_LIBRARY_PATH = '/usr/lib/x86_64-linux-gnu/libgeos_c.so'
+#WARNING: THIS MIGHT NEED TO BE UNCOMMENTED IF GEOS ERRORS OCCUR
+#THIS IS A NOTE TO FUTURE JONATHAN
+#IF YOU SEE THIS I FORGOT ABOUT IT, WHICH IS NOT GOOD
+#GEOS_LIBRARY_PATH = '/usr/lib/x86_64-linux-gnu/libgeos_c.so'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -102,7 +103,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
-    'dajaxice.finders.DajaxiceFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -164,7 +164,6 @@ INSTALLED_APPS = [
     'filebrowser', 
     'sorl.thumbnail', # Picture thumbnails
     'captcha', # Captcha for forms
-    'dajaxice', # AJAX made easy
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -174,7 +173,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     
-    'rosetta', # Translation helper
     'autotranslate',
     'chunked_upload',
 
@@ -196,21 +194,15 @@ INSTALLED_APPS = [
     'eomf.towers',
     'eomf.eomfshare',
     'eomf.maps',
-    'eomf.dheerajtestingapp',
     'eomf.water',
     #'aoitest',
     #'poi',
 
-    'dbgettext', # Model translation
     'multiupload',
     
-    'localflavor', 
     #'olwidget',
     'tinymce', #Cool Text editor
     'crispy_forms', # Cool forms rendered
-    'markdown',
-    # Under testing
-    # 'highcharts'
 ]
 
 AUTH_PROFILE_MODULE = 'accounts.Profile'
@@ -307,4 +299,4 @@ ROSETTA_MESSAGES_PER_PAGE= 50
 DBGETTEXT_PROJECT_OPTIONS = 'eomf.dbgettext_options'
 DBGETTEXT_PATH='dbgettext_files'
 DBGETTEXT_SPLIT_SENTENCES=False
-FEEDBACK_EMAIL = "bhargavreddy.bolla@ou.edu;bhargavreddy.bolla@gmail.com"
+FEEDBACK_EMAIL = "jonathan.g.miller@ou.edu;jonathanmiller2@hotmail.com"
