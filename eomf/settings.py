@@ -44,6 +44,7 @@ DATABASES = {
 #THIS IS A NOTE TO FUTURE JONATHAN
 #IF YOU SEE THIS I FORGOT ABOUT IT, WHICH IS NOT GOOD
 #GEOS_LIBRARY_PATH = '/usr/lib/x86_64-linux-gnu/libgeos_c.so'
+#GDAL_LIBRARY_PATH=
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -106,7 +107,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = ''
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -161,10 +162,13 @@ TEMPLATE_DIRS = (
 INSTALLED_APPS = [
 
     'grappelli', # Better admin interface
+
+    'django.contrib.admin',
+
     'filebrowser', 
     'sorl.thumbnail', # Picture thumbnails
     'captcha', # Captcha for forms
-    'django.contrib.admin',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -198,7 +202,6 @@ INSTALLED_APPS = [
     #'aoitest',
     #'poi',
 
-    'multiupload',
     
     #'olwidget',
     'tinymce', #Cool Text editor

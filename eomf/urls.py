@@ -1,4 +1,5 @@
-from django.conf.urls import url,include
+from django.urls import path
+from django.conf.urls import url, include
 from filebrowser.sites import site
 from django.contrib import admin
 from django.conf import settings
@@ -6,11 +7,12 @@ from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 
 
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns #For dajax ice
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns #For dajaxice
 urlpatterns = [
-    url(r'^admin/filebrowser/', site.urls),
-    url(r'^admin/', admin.site.urls),
-    url(r'^grappelli/', include('grappelli.urls')),
+    path('^grappelli/', include('grappelli.urls')),
+    path('^admin/', admin.site.urls),
+    path('^admin/filebrowser/', site.urls),
+    
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^captcha/', include('captcha.urls')),
 

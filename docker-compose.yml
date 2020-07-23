@@ -10,7 +10,14 @@ services:
       - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+
+    #command: python manage.py migrate
+    #command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    
+    environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY} 
+
     volumes:
       - .:/code
     ports:
