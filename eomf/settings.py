@@ -44,7 +44,6 @@ DATABASES = {
 #THIS IS A NOTE TO FUTURE JONATHAN
 #IF YOU SEE THIS I FORGOT ABOUT IT, WHICH IS NOT GOOD
 #GEOS_LIBRARY_PATH = '/usr/lib/x86_64-linux-gnu/libgeos_c.so'
-#GDAL_LIBRARY_PATH=
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
