@@ -1,5 +1,5 @@
 # from django.contrib.gis import admin
-from models import *
+from eomf.workshops.models import *
 from django.contrib import admin
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -95,8 +95,6 @@ class InstitutionAdmin(admin.ModelAdmin):
     readonly_fields = ("created","modified",)
 admin.site.register(Institution, InstitutionAdmin)
 
-from multiupload.admin import MultiUploadAdmin
-
 
 class GalleryMultiuploadMixing(object):
 
@@ -111,7 +109,7 @@ class GalleryMultiuploadMixing(object):
                 'id': image.id,
                 'name': image.filename
             }
-        except Exception, e:
+        except Exception as e:
             return {
                 'url': 'url',
                 'thumbnail_url': 'thumbnail_url',
@@ -119,7 +117,10 @@ class GalleryMultiuploadMixing(object):
                 'name': e.message
             }
 
-class GalleryAdmin(GalleryMultiuploadMixing, MultiUploadAdmin):
+
+#TODO: I'm removing some multiupload stuff, because it needs to be replaced with Django's multiple file upload handler (https://docs.djangoproject.com/en/2.2/topics/http/file-uploads/)
+#Unfortunately this means this will probably break at some point
+class GalleryAdmin(GalleryMultiuploadMixing):
     inlines = [WorkshopPhotoInlineAdmin,]
     multiupload_form = True
     multiupload_list = False
@@ -132,7 +133,7 @@ class GalleryAdmin(GalleryMultiuploadMixing, MultiUploadAdmin):
         return obj.delete()
 
 
-class ImageAdmin(GalleryMultiuploadMixing, MultiUploadAdmin):
+class ImageAdmin(GalleryMultiuploadMixing):
     multiupload_form = False
     multiupload_list = True
 
