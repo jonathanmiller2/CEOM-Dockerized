@@ -24,7 +24,6 @@ class Case(models.Model):
     destroyed = models.IntegerField(null=True)
     slaughtered = models.IntegerField(null=True)
     location = models.PointField()
-    objects = models.GeoManager()
 
     def __unicode__(self):
         return "Case: "+str(self.id)

@@ -35,7 +35,7 @@ class Year(models.Model):
     def __unicode__(self):
         return str(self.date)
 class Booth(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     non_profit = models.BooleanField()
     institution = models.CharField(max_length=128)
     department = models.CharField(max_length=128)
@@ -75,7 +75,7 @@ class Booth(models.Model):
 
 
 class Visitor(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     last_name = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=30)
@@ -94,8 +94,8 @@ class Visitor(models.Model):
 
 
 class PhotoContestParticipant(models.Model):
-    user = models.ForeignKey(User)
-    year = models.ForeignKey(Year)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     last_name = models.CharField("Last name", max_length=50)
     first_name = models.CharField("First name", max_length=50)
     email = models.EmailField("email", max_length=60)
@@ -113,12 +113,12 @@ class PosterCategory(models.Model):
     def __unicode__(self):
         return self.name 
 class Poster(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     last_name = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
     institution = models.CharField(max_length=128)
     department = models.CharField(max_length=128)
-    category = models.ForeignKey(PosterCategory,null=False)
+    category = models.ForeignKey(PosterCategory,null=False, on_delete=models.CASCADE)
     email = models.EmailField(max_length=30)
     title = models.CharField(max_length=200)
     authors = models.TextField("Poster author list",null=True, blank=True)
@@ -155,9 +155,9 @@ class AboutUsPerson(models.Model):
         return '%s %s %s' % (self.first_name, self.middle_name, self.last_name)
 
 class PersonInGroup(models.Model):
-    group = models.ForeignKey(AboutUsGroup, related_name="pvsgInGroup")
-    person = models.ForeignKey(AboutUsPerson, related_name="pvsgInPerson")
-    year = models.ForeignKey(Year)
+    group = models.ForeignKey(AboutUsGroup, related_name="pvsgInGroup", on_delete=models.CASCADE)
+    person = models.ForeignKey(AboutUsPerson, related_name="pvsgInPerson", on_delete=models.CASCADE)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     highlight = models.BooleanField(default=False)
 
 class SponsorCategory(models.Model):
@@ -179,9 +179,9 @@ class Sponsor(models.Model):
         return str(self.name)
 
 class SponsorInYear(models.Model):
-    sponsor = models.ForeignKey(Sponsor)
-    year = models.ForeignKey(Year)
-    category = models.ForeignKey(SponsorCategory, related_name="categoryOfSponsorInYear")
+    sponsor = models.ForeignKey(Sponsor, on_delete=models.CASCADE)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
+    category = models.ForeignKey(SponsorCategory, related_name="categoryOfSponsorInYear", on_delete=models.CASCADE)
     money = models.IntegerField(null=False)
     class Meta:
        unique_together = (("sponsor","year"),)
@@ -196,9 +196,9 @@ class ItemDonor(models.Model):
         return '%s' % (self.name)
 
 class ItemInYear(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     name = models.CharField(max_length=160, null=True, blank=True) 
-    donor = models.ForeignKey(ItemDonor)
+    donor = models.ForeignKey(ItemDonor, on_delete=models.CASCADE)
     value = models.DecimalField(null=False, max_digits=10, decimal_places=2)
     link = models.CharField(max_length=160, null=True, blank=True)
     def __unicode__(self):
@@ -206,10 +206,10 @@ class ItemInYear(models.Model):
 
 class GisDayPhoto(models.Model):
     picture = models.ImageField(null=True, upload_to='gisday/gallery/')
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
 
 class Agenda(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     entry_name = models.CharField(max_length=100, null=True, blank=True)
     time_ini = models.TimeField(null=False,blank=False)
     time_end = models.TimeField(blank=True,null=True)
@@ -221,7 +221,7 @@ class Agenda(models.Model):
        unique_together = (("year","entry_name"),)
 
 class Announcement(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     position = models.PositiveIntegerField(null=False,blank=False)
     entry_name = models.CharField(max_length=100, null=True, blank=True)
     content = tinymce_models.HTMLField(null=True,blank=True)
@@ -234,46 +234,46 @@ class Announcement(models.Model):
        unique_together = (("year","position"),)
 
 class SummaryContent(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
     class Meta:
         unique_together = (("year",),)
 class PosterContestContent(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
     registration_message = tinymce_models.HTMLField(null=True,blank=True)
     registration_recipients = models.CharField(max_length="600",null=False,blank=False,default="gisday@ou.edu")
     class Meta:
         unique_together = (("year",),)
 class PhotoContestContent(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
     class Meta:
         unique_together = (("year",),)
 class LogisticsContent(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
     class Meta:
         unique_together = (("year",),)
 class VisitorRegistrationContent(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
     registration_message = tinymce_models.HTMLField(null=True,blank=True)
     registration_recipients = models.CharField(max_length="600",null=False,blank=False,default="gisday@ou.edu")
     class Meta:
         unique_together = (("year",),)
 class SponsorsContent(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
     class Meta:
         unique_together = (("year",),)
 class CommitteeContent(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
     class Meta:
         unique_together = (("year",),)
 class BoothContent(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
     max_booths = models.PositiveIntegerField(null=False, blank=False, default=30)
     registration_message_non_profit = tinymce_models.HTMLField(null=True,blank=True)
@@ -383,7 +383,7 @@ PARENTS_DEGREE_CHOICES=(
     ("NR","Prefer not to respond"),
 )
 class DemographicSurvey(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     institution = models.CharField("Participant Institution", max_length=80,choices=INSTITUTION_CHOICES,null=False)
     other_institution = models.CharField('If other, please specify',max_length=80,null=True,blank=True)
 
@@ -428,7 +428,7 @@ class Survey(DemographicSurvey):
     #         return '%s Other(%s) created: %s' % (self.year, self.uther_role,created)
     #     else 
 class SurveyContents(models.Model):
-    year = models.ForeignKey(Year)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True) 
     class Meta:
         unique_together = (("year",),)

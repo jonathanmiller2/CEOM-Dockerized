@@ -71,18 +71,18 @@ class Tile(models.Model):
         return self.name
         
 class File(models.Model):
-    tile = models.ForeignKey(Tile)
+    tile = models.ForeignKey(Tile, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     year = models.IntegerField(null=True)
     day = models.IntegerField(null=True)
     timestamp = models.IntegerField()
-    dataset = models.ForeignKey(Dataset, null=True)
+    dataset = models.ForeignKey(Dataset, null=True, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, null=True, through='Process')
     absolute_path = models.CharField(max_length = 300, null=False, default='N/A')
     def __unicode__(self):
         return self.name
 
 class Process(models.Model):
-    file = models.ForeignKey(File)
-    product = models.ForeignKey(Product)
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     timestamp = models.DateTimeField('date processed', null=True, blank=True)

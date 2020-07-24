@@ -18,7 +18,7 @@ class Datainfo(models.Model):
     label = models.CharField(max_length=100)
     legend = models.BooleanField()
     vector = models.BooleanField()
-    datatype = models.ForeignKey(Datatype, null=True, blank=True)
+    datatype = models.ForeignKey(Datatype, null=True, blank=True, on_delete=models.CASCADE)
     source = models.CharField(max_length=100,blank=True, null=True)
     order = models.IntegerField(blank=True,null=True)
     
@@ -52,7 +52,7 @@ class H5n1(models.Model):
     slaughtered = models.IntegerField(null=True)
     vaccinated = models.IntegerField(null=True)
     location = models.PointField()
-    objects = models.GeoManager()
+
 
     def __unicode__(self):
         return "Case: "+str(self.id)
@@ -115,7 +115,7 @@ class Birds(models.Model):
     latest = models.IntegerField(null=True, blank=True)          # 0
     first = models.IntegerField(null=True, blank=True)           # 0
     location = models.PointField(null=True)
-    objects = models.GeoManager()
+    
     
     def __unicode__(self):
         return "Animal: "+str(self.animal)

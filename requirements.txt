@@ -9,4 +9,8 @@ django-chunked-upload==2.0.0
 django-localflavor==3.0.1
 django-tinymce==3.0.1
 django-crispy-forms==1.9.2
+django-countries==6.1.2
+django-phonenumber-field==4.0.0
+python-dateutil==2.8.1
+phonenumbers==8.12.6
 GDAL==2.4

@@ -61,11 +61,11 @@ class SingleTimeSeriesJob(models.Model):
     
     result = models.FileField(upload_to='visualization/timeseries/single', blank=True,null=True,max_length=300)
     years = models.CommaSeparatedIntegerField(max_length=150,verbose_name="Select years")
-    product = models.ForeignKey(Dataset)
+    product = models.ForeignKey(Dataset, on_delete=models.CASCADE)
 
     # Information for current job state
     completed = models.BooleanField(default=False)
-    user =  models.ForeignKey(User, null=False, blank=False, default=1096)
+    user =  models.ForeignKey(User, null=False, blank=False, default=1096, on_delete=models.CASCADE)
 
     created = models.DateTimeField('created', auto_now_add=True)
     modified = models.DateTimeField('modified', auto_now=True)
@@ -78,12 +78,12 @@ class TimeSeriesJob(models.Model):
     points = models.FileField(upload_to='visualization/timeseries/input',max_length=150,validators=[checkFormat], verbose_name="Upload csv file")
     result = models.FileField(upload_to='visualization/timeseries/multi', blank=True,null=True,max_length=300)
     years = models.CommaSeparatedIntegerField(max_length=200,verbose_name="Select years")
-    product = models.ForeignKey(Dataset)
+    product = models.ForeignKey(Dataset, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
     working = models.BooleanField(default=False)
     error = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now=True)
-    user =  models.ForeignKey(User, null=False, blank=False, default=1096)
+    user =  models.ForeignKey(User, null=False, blank=False, default=1096, on_delete=models.CASCADE)
 
     message = models.CharField(max_length=150,blank=True,null=True)
     task_id = models.CharField(null=True,blank=True,max_length=50)

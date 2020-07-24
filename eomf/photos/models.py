@@ -2,10 +2,10 @@ import os, sys
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from dateutil import parser
 import time
 import datetime
@@ -19,7 +19,6 @@ class ContinentBuffered(models.Model):
     gid = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=13, blank=True,db_column='continent')
     geometry = models.MultiPolygonField(null=True, blank=True)
-    objects = models.GeoManager()
 
     def __unicode__(self):
         return unicode(_(self.name))
@@ -64,7 +63,7 @@ class Country(models.Model):
     colormap = models.IntegerField(null=True, blank=True)
     _oid = models.IntegerField(null=True, blank=True)
     the_geom = models.MultiPolygonField(null=True, blank=True)
-    objects = models.GeoManager()
+
     class Meta:
         db_table = u'country'
         verbose_name = _(u'Country')
@@ -79,7 +78,7 @@ class Region(models.Model):
     sqkm = models.DecimalField(null=True, max_digits=65535, decimal_places=65535, blank=True)
     _oid = models.IntegerField(null=True, blank=True)
     the_geom = models.MultiPolygonField(null=True, blank=True)
-    objects = models.GeoManager()
+
     class Meta:
         db_table = u'region'
         verbose_name = _(u'Region')
@@ -91,7 +90,7 @@ class CountryBuffered(models.Model):
     gid = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=40, blank=True, db_column='cntry_name')
     geometry = models.MultiPolygonField(null=True, blank=True)
-    objects = models.GeoManager()
+
 
     def __unicode__(self):
         return unicode(_(self.name)) 
@@ -194,8 +193,8 @@ class Photo(models.Model):
         blank=True,
         db_column="location"
     )
-    user = models.ForeignKey(User, null=True, blank=True, db_column='userid')
-    theme = models.ForeignKey(Theme, null=True, blank=True, db_column='photogroupid')
+    user = models.ForeignKey(User, null=True, blank=True, db_column='userid', on_delete=models.CASCADE)
+    theme = models.ForeignKey(Theme, null=True, blank=True, db_column='photogroupid', on_delete=models.CASCADE)
     notes = models.TextField(blank=True, db_column='description')
     _lon = models.FloatField(null=True, blank=True, db_column='long')
     _lat = models.FloatField(null=True, blank=True, db_column='lat')
@@ -205,7 +204,7 @@ class Photo(models.Model):
     uploaddate = models.DateField(null=True, blank=True, auto_now_add=True)
     datum = models.CharField(max_length=8, blank=True)
     alt = models.FloatField(null=True, blank=True)
-    category = models.ForeignKey(Category, null=True, blank=True, db_column='categoryid')
+    category = models.ForeignKey(Category, null=True, blank=True, db_column='categoryid', on_delete=models.CASCADE)
     point = models.PointField(null=True, blank=True)
     dir_card = models.CharField(max_length=4, choices=DIR_CARD_CHOICES, db_column='dir',blank=True)
     dir_deg = models.FloatField(null=True, blank=True)
@@ -214,7 +213,6 @@ class Photo(models.Model):
     file_hash = models.CharField(max_length=32, blank=True, db_column='hash')
     source = models.CharField(max_length=100, blank=True)
 
-    objects = models.GeoManager()
 
     def __unicode__(self):
         return self.file.name

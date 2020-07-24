@@ -1,12 +1,12 @@
 from django.contrib.gis.db import models
 from django import forms
 from django.contrib.auth.models import User
-from fields import CountryField
+from django_countries.fields import CountryField
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy  as _
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, unique=True)
+    user = models.OneToOneField(User, unique=True, on_delete=models.CASCADE)
     country = CountryField(verbose_name=_("Country"),null=True,blank=True) 
     affiliation = models.CharField(verbose_name=_("Affiliation"),max_length=250, null=True, blank=True)
     telephone = models.CharField(verbose_name=_("Telephone"),max_length=20, null=True, blank=True)

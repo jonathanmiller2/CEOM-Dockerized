@@ -19,7 +19,7 @@ class DuckTrack(models.Model):
     sen3 = models.IntegerField()
     sen4 = models.IntegerField()
     location = models.PointField()
-    objects = models.GeoManager()
+    
 
     def __unicode__(self):
         return str(self.gid)
@@ -31,7 +31,7 @@ class DuckTrackLine(models.Model):
     gid = models.IntegerField(primary_key=True)
     animal = models.CharField(max_length=20)
     location = models.LineStringField()
-    objects = models.GeoManager()
+    
 
     def __unicode__(self):
         return (self.gid)

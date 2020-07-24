@@ -1,4 +1,4 @@
-from models import *
+from eomf.gisday.models import *
 from django.contrib import admin
 from django import forms
 from django.utils.translation import ugettext_lazy as _

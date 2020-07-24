@@ -47,7 +47,7 @@ class Post(models.Model):
 
 class PostImage(models.Model):
     description = models.CharField("Description", max_length=100)
-    post = models.ForeignKey(Post, related_name="images", null=False)
+    post = models.ForeignKey(Post, related_name="images", null=False, on_delete=models.CASCADE)
     order = models.PositiveIntegerField(null=False)
     image = models.ImageField(null=True, upload_to="news")
    
@@ -61,7 +61,7 @@ class PostImage(models.Model):
 class PostFile(models.Model):
     title =models.CharField("File title",max_length=80, null=False, blank=False,)
     description = models.TextField("Description",null=True, blank=True,)
-    post = models.ForeignKey(Post, related_name="files", null=False)
+    post = models.ForeignKey(Post, related_name="files", null=False, on_delete=models.CASCADE)
     file_attached = models.FileField(null=False, upload_to="news/docs")
     def __unicode__(self):
         return "Post: " + str(self.post) + " File: " +self.title  
@@ -76,8 +76,8 @@ class Group(models.Model):
 
 
 class Person(models.Model):
-    group = models.ForeignKey(Group, related_name="personAsGroup")
-    alumni_group = models.ForeignKey(Group, null=True, blank=True, related_name="personAsAlumniGroup")
+    group = models.ForeignKey(Group, related_name="personAsGroup", on_delete=models.CASCADE)
+    alumni_group = models.ForeignKey(Group, null=True, blank=True, related_name="personAsAlumniGroup", on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100, null=True, blank=True)
     middle_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=100, null=True, blank=True)

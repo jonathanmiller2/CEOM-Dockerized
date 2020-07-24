@@ -1,14 +1,13 @@
 from django.db import models
 from django.contrib.gis.db import models
 from tinymce import models as tinymce_models
-from localflavor.us.models import PhoneNumberField as USPhone
 from phonenumber_field.modelfields import PhoneNumberField as InternationalPhone
 from django.contrib.auth.models import User
 # Create your models here.
 
 class Workshop(models.Model):
     name = models.CharField(max_length=500,null=False,blank=False)
-    category = models.ForeignKey('WorkshopClass')
+    category = models.ForeignKey('WorkshopClass', on_delete=models.CASCADE)
     date_start = models.DateField(null=False,blank=False)
     date_end = models.DateField(null=False,blank=False)
     password = models.CharField(max_length=20,null=True, blank=True,help_text="Enter a password if the user needs a password to register (eg: Closed workshops)")
@@ -36,8 +35,8 @@ class Workshop(models.Model):
         unique_together = (('name',),)
 
 class SponsorInWorkshop(models.Model):
-    workshop = models.ForeignKey('Workshop')
-    sponsor = models.ForeignKey('Sponsor')
+    workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
+    sponsor = models.ForeignKey('Sponsor', on_delete=models.CASCADE)
     def __unicode__(self):
         return u'%s' % (self.sponsor)
     class Meta:
@@ -58,14 +57,13 @@ class WorkshopClass(models.Model):
         return u'%s' % (self.name)
 
 class WorkshopRegistration(models.Model):
-    workshop = models.ForeignKey(Workshop, related_name='workshop', related_query_name='workshop')
+    workshop = models.ForeignKey(Workshop, related_name='workshop', related_query_name='workshop', on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100,null=False,blank=False)
     last_name = models.CharField(max_length=100,null=False,blank=False)
     position = models.CharField(max_length=300,null=False,blank=False)
     institution = models.CharField(max_length=200,null=False,blank=False)
     address = models.CharField(max_length=200,null=False,blank=False)
     email = models.EmailField(null=False,blank=False)
-    phone = USPhone(null=False, blank = False)
     international_phone = InternationalPhone(null=True, blank = True)
     area_of_expertise = models.CharField(max_length=300,null=False,blank=False)
     # Migrated to exta_boolean_field1
@@ -92,7 +90,7 @@ class WorkshopRegistration(models.Model):
 
 class WorkshopPhoto(models.Model):
 
-    workshop = models.ForeignKey('Workshop',related_name='workshop_images')
+    workshop = models.ForeignKey('Workshop',related_name='workshop_images', on_delete=models.CASCADE)
     image = models.FileField(upload_to="workshops/photos", null=True, blank=True)
     priority = models.PositiveIntegerField(default=99999)
     created = models.DateTimeField(auto_now_add=True)
@@ -114,13 +112,13 @@ class Institution(models.Model):
 
 
 class Presentation(models.Model):
-    workshop = models.ForeignKey(Workshop)
+    workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE)
     title = models.CharField(max_length=200,null=False,blank=False)
     first_name = models.CharField(max_length=100,null=False,blank=False)
     last_name = models.CharField(max_length=100,null=False,blank=False)
     other_presenters = models.CharField(max_length=200,null=False,blank=True)
     content = models.FileField(null=True, max_length=300,upload_to="workshops/presentations/", blank=True)
-    institution = models.ForeignKey(Institution)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     time_ini = models.DateTimeField(null=False)
     time_end = models.DateTimeField(null=True) 
     created = models.DateTimeField(auto_now_add=True)

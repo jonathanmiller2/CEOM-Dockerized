@@ -3,7 +3,7 @@ from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 
 class Feedback(models.Model):
-    site = models.ForeignKey(Site)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
     url = models.CharField(max_length=255)
     subject = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField(blank=False, null=True)
@@ -27,7 +27,7 @@ class Feedback(models.Model):
         return u'%s: %s' % (self.url, self.subject)
 
 class Comment(models.Model):
-	Comment_id = models.ForeignKey(Feedback, related_name='comment')
+	Comment_id = models.ForeignKey(Feedback, related_name='comment', on_delete=models.CASCADE)
 	# Comment_user = models.ForeignKey(User)
 	Comment_text = models.TextField(null=False, blank=True)
 
@@ -36,7 +36,7 @@ class Comment(models.Model):
 
 
 class Task_status(models.Model):
-	feedback_track = models.OneToOneField(Feedback, primary_key=True, related_name='stats')
+	feedback_track = models.OneToOneField(Feedback, primary_key=True, related_name='stats', on_delete=models.CASCADE)
 	Bhargav_Kumar_Reddy_Bolla = 'BR'
 	Xibei_jia = 'XJ'
 	developer_choices = ((Bhargav_Kumar_Reddy_Bolla, 'Bhargav Bolla'),

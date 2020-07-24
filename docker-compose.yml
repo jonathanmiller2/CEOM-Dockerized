@@ -15,7 +15,7 @@ services:
     #command: python manage.py runserver 0.0.0.0:8000
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     
-    #This enviornment is in reference to a file called '.env' that's not on the Github page, as it contains the Django secret key.
+    #This environment var is in reference to a file called '.env' that's not on the Github page, as it contains the Django secret key. It's referenced in the Django settings.py file.
     #The file simply contains the line 'DJANGO_SECRET_KEY=<whole bunch of letters and symbols>'
     #If this file is lost, I think you can simply recreate it with a random bunch of letters and symbols. Probably worth researching.
     environment:

@@ -162,12 +162,11 @@ INSTALLED_APPS = [
 
     'grappelli', # Better admin interface
 
-    'django.contrib.admin',
-
     'filebrowser', 
     'sorl.thumbnail', # Picture thumbnails
     'captcha', # Captcha for forms
 
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -176,8 +175,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     
+    'django_countries',
+
     'autotranslate',
     'chunked_upload',
+    #'localflavor',
+    'phonenumber_field',
 
     'eomf.accounts',
     'eomf.photos',
