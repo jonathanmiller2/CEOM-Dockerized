@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.sites.models import Site
 
-import models
+import eomf.feedback.models
 
 class FeedbackForm(forms.ModelForm):
     '''The form shown when giving feedback'''
@@ -10,18 +10,18 @@ class FeedbackForm(forms.ModelForm):
     Description = forms.CharField(widget=forms.Textarea)
     url = forms.URLField()'''
     class Meta:
-        model = models.Feedback
+        model = eomf.feedback.models.Feedback
         fields = ['url','site','subject', 'email', 'text','Priority','Photo']
 
 
 class CommentForm(forms.ModelForm):
 	'''This is the Comment Box Majorly Text'''
 	class Meta:
-		model = models.Comment
+		model = eomf.feedback.models.Comment
 		fields = ['Comment_text']
 
 class TrackStatusForm(forms.ModelForm):
     class Meta:
-        model =models.Task_status
+        model = eomf.feedback.models.Task_status
         fields = ['assigned_to','task_status']
 # vim: et sw=4 sts=4

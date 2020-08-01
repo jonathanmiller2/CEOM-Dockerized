@@ -1,18 +1,18 @@
 # Create your views here.
 from django.contrib.sites.models import Site
 from django.http import HttpResponse
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 from django.core.mail import send_mail
-import models
+import eomf.eomfshare.models
 from django.views.decorators.csrf import csrf_exempt
 from django.template import Context, RequestContext, loader, Template
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from eomf.feedback.models import Feedback
 
 import json
-import forms
+import eomf.eomfshare.forms
 
 def upload_form_view(request):
 	t = loader.get_template('eomfshare/base.html')

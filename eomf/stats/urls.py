@@ -1,6 +1,9 @@
 from django.conf.urls import *
 from django.views.generic import TemplateView
-urlpatterns = patterns('eomf.stats.views',
+
+#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
+#eomf.stats.views
+urlpatterns = [
 	(r'^$', 'stats_main'),
 	(r'^limit/(?P<year1>[0-9]{4})/(?P<year2>[0-9]{4})/$', 'stats_limit'),
 	(r'^cumm/$', 'stats_cumm'),
@@ -12,4 +15,4 @@ urlpatterns = patterns('eomf.stats.views',
 	(r'^test_form/$', 'form_test'),
 	(r'^search_form/$', 'search_frm'),
 	#(r'^limit/$', 'stats_limit'),
-)
+]

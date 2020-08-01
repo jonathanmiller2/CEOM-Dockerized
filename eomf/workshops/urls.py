@@ -1,7 +1,9 @@
 from django.conf.urls import *
 from django.views.generic import TemplateView
 
-urlpatterns = patterns('eomf.workshops.views',
+#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
+#eomf.workshops.views
+urlpatterns = [
     (r'^$','overview' ),
     (r'^current/(?P<year>\d+)','workshop_list_by_year_current' ),
     (r'^current/','workshop_current' ),
@@ -11,4 +13,4 @@ urlpatterns = patterns('eomf.workshops.views',
     (r'^register/(?P<workshop_id>\d+)','workshop_registration'),
     (r'^presentations/(?P<workshop_id>\d+)','presentations'),
     (r'^photos/(?P<workshop_id>\d+)','photos'),
-	)
+]

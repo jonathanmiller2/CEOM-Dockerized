@@ -3,12 +3,12 @@ from django import forms
 # Olwidget not working on django 1.8
 # from olwidget.forms import MapModelForm
 from django.contrib.auth.models import User
-from models import Photo, Category
-from models import ContinentBuffered, CountryBuffered
-from django.forms.extras.widgets import SelectDateWidget, Select
+from eomf.photos.models import Photo, Category
+from eomf.photos.models import ContinentBuffered, CountryBuffered
+from django.forms.widgets import SelectDateWidget, Select
 from django.utils.translation import ugettext_lazy as _
 
-from models import DIR_CARD_CHOICES
+from eomf.photos.models import DIR_CARD_CHOICES
 
 category_qs = Category.objects.order_by("order").all()
 users = Photo.objects.values('user').distinct()

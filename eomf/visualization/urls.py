@@ -1,8 +1,11 @@
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 from django.views.generic import TemplateView
 
 modis_re =  r'(?P<dataset>[mM]\w{6})(?:-(?P<product>\w{3,4}))?_(?P<years>(\d{4})?(,\d{4})*)_(?P<lat>-?\d+(\.\d+)?)_(?P<lon>-?\d+(\.\d+)?)'
-urlpatterns = patterns('eomf.visualization.views',
+
+#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
+#eomf.visualization.views.###
+urlpatterns = [
     (r'^$', 'index'),
     #(r'^test/$', 'test'),
     (r'^kml/evi\.kml$','evi_kml'),
@@ -43,4 +46,4 @@ urlpatterns = patterns('eomf.visualization.views',
 
 # r'mod=\d+_h=\d+_v=\d+_r=\d+_c=\d+_lc1=\d+;\d(?:_lc2=\d+;\d+)?(?:_lc3=\d+;\d+)?$'
     #(r'.*', 'down'),
-)
+]

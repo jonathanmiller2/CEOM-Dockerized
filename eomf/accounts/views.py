@@ -12,7 +12,7 @@ from eomf.accounts.forms import RegistrationForm, ProfileForm, UserForm
 from django.utils.html import escape
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.forms import ValidationError
 
 import django

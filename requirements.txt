@@ -14,3 +14,5 @@ django-phonenumber-field==4.0.0
 python-dateutil==2.8.1
 phonenumbers==8.12.6
 GDAL==2.4
+pylzma==0.5
+pykml==0.2

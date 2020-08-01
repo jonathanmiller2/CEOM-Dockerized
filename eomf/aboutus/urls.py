@@ -1,8 +1,9 @@
 from django.conf.urls import *
 from django.views.generic import TemplateView
 
-
-urlpatterns = patterns('eomf.aboutus.views',
+#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
+#eomf.aboutus.views
+urlpatterns = [
     (r'news/(?P<post_id>\d+)/$', 'news' ),
     (r'news/(?P<post_year>\d{4})/$', 'news'),
     (r'news/$', 'news'),
@@ -25,6 +26,4 @@ urlpatterns = patterns('eomf.aboutus.views',
     (r'bhargavbolla/', 'bhrgvbolla'),
     (r'$', 'news'),
     (r'dd/$', TemplateView.as_view(template_name="aboutus/dheeraj_demo/trail.html")),
-    
-
-)
+]

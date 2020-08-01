@@ -1,6 +1,8 @@
 from django.conf.urls import *
 
-urlpatterns = patterns('eomf.h5n1.views',
+#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
+#eomf.h5n1.views
+urlpatterns = [
     (r'^$', 'index'),
     (r'^all.kml$', 'kml'),
-)
+]

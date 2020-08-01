@@ -1,8 +1,9 @@
 from django.conf.urls import *
 from django.views.generic import TemplateView
 
-
-urlpatterns = patterns('eomf.gisday.views',
+#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
+#eomf.gisday.views
+urlpatterns = [
     (r'^$', 'overview'),
     (r'^overview', 'overview'),
     
@@ -30,8 +31,5 @@ urlpatterns = patterns('eomf.gisday.views',
     (r'^(?P<year>[0-9]{4})/$','announcements'),
     (r'^(?P<year>[0-9]{4})/booth/$', 'booth'),
     (r'^(?P<year>[0-9]{4})/volunteer/$', 'volunteer'),
-
-	
-
-)
+]
 # [\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}

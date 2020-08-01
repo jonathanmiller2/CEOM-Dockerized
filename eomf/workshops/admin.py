@@ -120,7 +120,7 @@ class GalleryMultiuploadMixing(object):
 
 #TODO: I'm removing some multiupload stuff, because it needs to be replaced with Django's multiple file upload handler (https://docs.djangoproject.com/en/2.2/topics/http/file-uploads/)
 #Unfortunately this means this will probably break at some point
-class GalleryAdmin(GalleryMultiuploadMixing):
+class GalleryAdmin(admin.ModelAdmin, GalleryMultiuploadMixing):
     inlines = [WorkshopPhotoInlineAdmin,]
     multiupload_form = True
     multiupload_list = False

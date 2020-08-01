@@ -1,12 +1,12 @@
 from django.template import Context, RequestContext, loader, Template
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
-from django.db.models.sql.aggregates import Count
+from django.db.models import Count
 from django.db import connection, transaction
 from django.contrib.gis.geos import GEOSGeometry, Polygon, Point
 from django.contrib.auth import authenticate, login, logout
@@ -27,16 +27,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template.defaultfilters import wordwrap
 
 
-from templatetags.photos_tags import thumbnail, point2str
-from models import Photo, Category
-from forms import SearchForm, PhotoForm, WorksetForm, BatchEditForm
+from eomf.photos.templatetags.photos_tags import thumbnail, point2str
+from eomf.photos.models import Photo, Category
+from eomf.photos.forms import SearchForm, PhotoForm, WorksetForm, BatchEditForm
 
 import datetime
 import pickle
 import itertools
 import shutil
 import os
-import zlib, bz2, cPickle, base64, pylzma, binascii
+import zlib, bz2, pickle, base64, pylzma, binascii
 
 
 from pykml.factory import KML_ElementMaker as KML
@@ -65,7 +65,7 @@ def decompress(data):
     return cPickle.loads(str(data))
 
 def ranges(i):
-    for a, b in itertools.groupby(enumerate(sorted(i)), lambda (x, y): y - x):
+    for a, b in itertools.groupby(enumerate(sorted(i)), lambda x, y: y - x):
         b = list(b)
         yield b[0][1], b[-1][1]
 
@@ -1139,7 +1139,7 @@ def mobile_upload(request):
 
         data['id'] = int(photo.id)
 
-    except Exception, e:
+    except Exception as e:
         data['error'] = str(e)
 
     response_data = simplejson.dumps(data)
@@ -1187,7 +1187,7 @@ def mobile_upload2(request):
         data['id'] = int(photo.id)
         data['success'] = "true"
 
-    except Exception, e:
+    except Exception as e:
         data['success'] = "false"
         data['error'] = str(e)
 
@@ -1255,7 +1255,7 @@ def mobile_upload3(request):
         data['id'] = int(photo.id)
         data['success'] = "true"
 
-    except Exception, e:
+    except Exception as e:
         data['success'] = "false"
         data['error'] = str(e)
 
