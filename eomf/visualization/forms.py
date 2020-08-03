@@ -1,5 +1,5 @@
 from django import forms
-from models import TimeSeriesJob
+from eomf.visualization.models import TimeSeriesJob
 from django.forms.widgets import RadioSelect, CheckboxSelectMultiple, Select
 import datetime
 import os

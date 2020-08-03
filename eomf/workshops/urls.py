@@ -1,16 +1,18 @@
+#TODO: Are these imports necessary?
 from django.conf.urls import *
 from django.views.generic import TemplateView
 
-#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
-#eomf.workshops.views
+from django.urls import re_path
+import eomf.workshops.views
+
 urlpatterns = [
-    (r'^$','overview' ),
-    (r'^current/(?P<year>\d+)','workshop_list_by_year_current' ),
-    (r'^current/','workshop_current' ),
-    (r'^past/(?P<year>\d+)','workshop_list_by_year_past' ),
-    (r'^past/','workshop_past'),
-    (r'^content/(?P<workshop_id>\d+)','workshop'),
-    (r'^register/(?P<workshop_id>\d+)','workshop_registration'),
-    (r'^presentations/(?P<workshop_id>\d+)','presentations'),
-    (r'^photos/(?P<workshop_id>\d+)','photos'),
+    re_path(r'^$', eomf.workshops.views.overview),
+    re_path(r'^current/(?P<year>\d+)', eomf.workshops.views.workshop_list_by_year_current),
+    re_path(r'^current/', eomf.workshops.views.workshop_current),
+    re_path(r'^past/(?P<year>\d+)', eomf.workshops.views.workshop_list_by_year_past),
+    re_path(r'^past/', eomf.workshops.views.workshop_past),
+    re_path(r'^content/(?P<workshop_id>\d+)', eomf.workshops.views.workshop),
+    re_path(r'^register/(?P<workshop_id>\d+)', eomf.workshops.views.workshop_registration),
+    re_path(r'^presentations/(?P<workshop_id>\d+)', eomf.workshops.views.presentations),
+    re_path(r'^photos/(?P<workshop_id>\d+)', eomf.workshops.views.photos),
 ]

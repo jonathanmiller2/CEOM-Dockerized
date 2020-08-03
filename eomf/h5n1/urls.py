@@ -1,8 +1,10 @@
+#TODO: Is this import necessary?
 from django.conf.urls import *
 
-#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
-#eomf.h5n1.views
+from django.urls import re_path
+import eomf.h5n1.views
+
 urlpatterns = [
-    (r'^$', 'index'),
-    (r'^all.kml$', 'kml'),
+    (r'^$', eomf.h5n1.views.index),
+    (r'^all.kml$', eomf.h5n1.views.kml),
 ]

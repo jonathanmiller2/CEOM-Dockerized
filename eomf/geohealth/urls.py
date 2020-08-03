@@ -1,12 +1,14 @@
+#TODO: Is this import needed?
 from django.conf.urls import *
 
-#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
-#'eomf.geohealth.views.####'
+from django.urls import re_path
+import eomf.geohealth.views
+
 urlpatterns = [
-    (r'^$', 'index'),
-    (r'^kml/evi\.kml$','evi_kml'),
-    (r'^kml/indices_(?P<name>.*)\.kml$','indices_kml'),
-    (r'^kml/(?P<name>.*)\.kml$','kml'),
-    (r'^kml/(?P<name>.*)\.kmz$','kml'),
-    (r'.*', 'down'),
+    re_path(r'^$', eomf.geohealth.views.index),
+    re_path(r'^kml/evi\.kml$', eomf.geohealth.views.evi_kml),
+    re_path(r'^kml/indices_(?P<name>.*)\.kml$', eomf.geohealth.views.indices_kml),
+    re_path(r'^kml/(?P<name>.*)\.kml$', eomf.geohealth.views.kml),
+    re_path(r'^kml/(?P<name>.*)\.kmz$', eomf.geohealth.views.kml),
+    re_path(r'.*', eomf.geohealth.views.down),
 ]

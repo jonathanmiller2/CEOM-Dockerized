@@ -1,10 +1,12 @@
+#TODO: Are these imports necessary?
 from django.conf.urls import *
 from eomf.projects.models import Project
 
-from eomf.projects import views
+from django.urls import re_path
+import eomf.projects.views
 
-#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
-#eomf.projects.views
+
+
 urlpatterns = [
-    (r'^$', 'index'),
+    re_path(r'^$', eomf.projects.views.index),
 ]

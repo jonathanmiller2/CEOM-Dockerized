@@ -1,7 +1,9 @@
+#TODO: Are these imports necessary?
 from django.conf.urls import *
 
-#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
-#eomf.pages.views
+from django.urls import re_path
+import eomf.pages.views
+
 urlpatterns = [
-    (r'^(?P<url>.*)$', 'contentpage'),
+    re_path(r'^(?P<url>.*)$', eomf.pages.views.contentpage),
 ]

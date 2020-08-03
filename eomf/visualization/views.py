@@ -4,9 +4,12 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.core.files.base import ContentFile
 from eomf.inventory.models import Dataset
 from eomf.photos.models import Category, Photo
-from models import TimeSeriesJob,  SingleTimeSeriesJob #,Datainfo, Datatype
-from forms import ProductSelect, TimeSeriesJobForm
-from django.core.context_processors import csrf
+from eomf.visualization.models import TimeSeriesJob,  SingleTimeSeriesJob #,Datainfo, Datatype
+from eomf.visualization.forms import ProductSelect, TimeSeriesJobForm
+
+#TODO: Are these imports necessary?
+#from django.template.context_processors import csrf
+
 import numpy, math
 import  os, re, datetime, glob, sys
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -202,7 +205,7 @@ def timeseries_single_progress(request, task_id):
                                      'years':task_db.years,
                                      'file': settings.MEDIA_URL+'visualization/timeseries_single/'+str(task_db.result),
                                      })
-    except Exception, e:
+    except Exception as e:
         c = RequestContext(request, {"task_id":task_id,"found":False})
     
     return HttpResponse(t.render(c))
@@ -216,7 +219,7 @@ def launch_single_site_timeseries_c6(request, lat, lon, dataset, years, product=
         dataset = Dataset.objects.get(name=dataset)
         dataset_npix = dataset.xdim #2400 for mod09a1
         dataset_freq_in_days = dataset.day_res # 8 for mod09a1
-    except Exception, e:
+    except Exception as e:
         return HttpResponse("An error occurred. If you did not modify the URL please contact the web administrator")
 
     csv_folder = TIMESERIES_LOCATION
@@ -242,7 +245,7 @@ def launch_single_site_timeseries(request, lat, lon, dataset, years, product=Non
         dataset = Dataset.objects.get(name=dataset)
         dataset_npix = dataset.xdim #2400 for mod09a1
         dataset_freq_in_days = dataset.day_res # 8 for mod09a1
-    except Exception, e:
+    except Exception as e:
         return HttpResponse("An error occurred. If you did not modify the URL please contact the web administrator")
 
     csv_folder = TIMESERIES_LOCATION

@@ -1,16 +1,18 @@
+#TODO: Are these imports necessary?
 from django.conf.urls import *
 from django.views.generic import TemplateView
 
-#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
-#eomf.maps.views
+from django.urls import re_path
+import eomf.maps.views
+
 urlpatterns = [
-	(r'^roi/$', 'ROI'),#Regions of interest.
-	(r'^poi/$', 'POI'),#Points of interest.
-	(r'^view_rois/$', 'VIEW_ROI'),#All ROI's
-	(r'^download_rois/$', 'test_kml'),#Test download
-	(r'^filter_rois/$', 'filter_kml'),#Test download
-	(r'^view_pois/$', 'VIEW_POI'),#All POI's
-	(r'^map_gallery/$', 'VIEW_MAPS'),#Viewing uploaded maps
-	(r'^detail_map_gallery/(?P<id>[0-9]+)', 'DETAIL_MAP'),#Viewing uploaded maps
-	(r'^add_map_gallery/$', 'ADD_MAPS'),#Adding new maps
+	re_path(r'^roi/$', eomf.maps.views.ROI),#Regions of interest.
+	re_path(r'^poi/$', eomf.maps.views.POI),#Points of interest.
+	re_path(r'^view_rois/$', eomf.maps.views.VIEW_ROI),#All ROI's
+	re_path(r'^download_rois/$', eomf.maps.views.test_kml),#Test download
+	re_path(r'^filter_rois/$', eomf.maps.views.filter_kml),#Test download
+	re_path(r'^view_pois/$', eomf.maps.views.VIEW_POI),#All POI's
+	re_path(r'^map_gallery/$', eomf.maps.views.VIEW_MAPS),#Viewing uploaded maps
+	re_path(r'^detail_map_gallery/(?P<id>[0-9]+)', eomf.maps.views.DETAIL_MAP),#Viewing uploaded maps
+	re_path(r'^add_map_gallery/$', eomf.maps.views.ADD_MAPS),#Adding new maps
 ]
