@@ -33,7 +33,7 @@ ADMINS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'NAME': 'eomf',
         'USER': 'eomf',
         'PASSWORD': '30mfadmin'
@@ -116,7 +116,7 @@ TEMPLATE_LOADERS = (
 )
 
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -139,24 +139,28 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'eomf.urls'
 WSGI_APPLICATION = 'eomf.wsgi.application'
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    "django.core.context_processors.request",
-    "django.contrib.messages.context_processors.messages",
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(os.path.dirname(__file__), "templates/"),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors' : [
+                "django.contrib.auth.context_processors.auth",
+                "django.core.context_processors.debug",
+                "django.core.context_processors.i18n",
+                "django.core.context_processors.media",
+                "django.core.context_processors.static",
+                "django.core.context_processors.tz",
+                "django.core.context_processors.request",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(os.path.dirname(__file__), "templates/"),
-    #"/usr/local/www/rs/dev/code/eomf/templates",
-)
 
 INSTALLED_APPS = [
 
@@ -174,6 +178,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django.contrib.messages',
     
     'django_countries',
 

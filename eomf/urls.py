@@ -10,9 +10,9 @@ from django.http import HttpResponseRedirect
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns #For dajaxice
 urlpatterns = [
-    path('^grappelli/', include('grappelli.urls')),
-    path('^admin/', admin.site.urls),
-    path('^admin/filebrowser/', site.urls),
+    re_path('^grappelli/', include('grappelli.urls')),
+    re_path('^admin/', admin.site.urls),
+    re_path('^admin/filebrowser/', site.urls),
     
     re_path(r'^tinymce/', include('tinymce.urls')),
     re_path(r'^captcha/', include('captcha.urls')),

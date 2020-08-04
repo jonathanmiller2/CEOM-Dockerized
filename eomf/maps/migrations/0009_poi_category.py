@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='poi',
             name='category',
-            field=models.ForeignKey(related_name='pois', db_column=b'categoryid', blank=True, to='photos.Category', null=True),
+            field=models.ForeignKey(related_name='pois', db_column=b'categoryid', blank=True, to='photos.Category', null=True, on_delete=models.CASCADE),
         ),
     ]

@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                 ('day', models.IntegerField(null=True)),
                 ('timestamp', models.IntegerField()),
                 ('absolute_path', models.CharField(default=b'N/A', max_length=300)),
-                ('dataset', models.ForeignKey(to='inventory.Dataset', null=True)),
+                ('dataset', models.ForeignKey(to='inventory.Dataset', null=True, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('timestamp', models.DateTimeField(null=True, verbose_name=b'date processed', blank=True)),
-                ('file', models.ForeignKey(to='inventory.File')),
+                ('file', models.ForeignKey(to='inventory.File', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='process',
             name='product',
-            field=models.ForeignKey(to='inventory.Product'),
+            field=models.ForeignKey(to='inventory.Product', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='file',
@@ -86,6 +86,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='file',
             name='tile',
-            field=models.ForeignKey(to='inventory.Tile'),
+            field=models.ForeignKey(to='inventory.Tile',on_delete=models.CASCADE),
         ),
     ]

@@ -1,11 +1,7 @@
 from django.forms import ModelForm
 from django.db import models
 from django import forms
-from models import map_gallery, Comment, poi, roi
-
-#capchta
-from captcha.fields import CaptchaField
-from simplemathcaptcha.fields import MathCaptchaField
+from eomf.maps.models import map_gallery, Comment, poi, roi
 
 
 class map_gallery_form(ModelForm):

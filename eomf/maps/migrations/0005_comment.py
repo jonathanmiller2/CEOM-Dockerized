@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('name_comment', models.CharField(max_length=3000, verbose_name=b'Your Name')),
                 ('Comment_text', models.TextField(verbose_name=b'Enter Comment here')),
                 ('created', models.DateTimeField(auto_now_add=True, verbose_name=b'created')),
-                ('Comment_id', models.ForeignKey(related_name='comment', to='maps.map_gallery')),
+                ('Comment_id', models.ForeignKey(related_name='comment', to='maps.map_gallery', on_delete=models.CASCADE)),
             ],
         ),
     ]

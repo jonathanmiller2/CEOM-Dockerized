@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True, verbose_name=b'created')),
                 ('modified', models.DateTimeField(auto_now=True, verbose_name=b'modified')),
                 ('pixelsize', models.IntegerField()),
-                ('user', models.ForeignKey(default=1096, to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(default=1096, to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
     ]

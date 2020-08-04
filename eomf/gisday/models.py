@@ -242,7 +242,7 @@ class PosterContestContent(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
     registration_message = tinymce_models.HTMLField(null=True,blank=True)
-    registration_recipients = models.CharField(max_length="600",null=False,blank=False,default="gisday@ou.edu")
+    registration_recipients = models.CharField(max_length=600,null=False,blank=False,default="gisday@ou.edu")
     class Meta:
         unique_together = (("year",),)
 class PhotoContestContent(models.Model):
@@ -259,7 +259,7 @@ class VisitorRegistrationContent(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
     registration_message = tinymce_models.HTMLField(null=True,blank=True)
-    registration_recipients = models.CharField(max_length="600",null=False,blank=False,default="gisday@ou.edu")
+    registration_recipients = models.CharField(max_length=600,null=False,blank=False,default="gisday@ou.edu")
     class Meta:
         unique_together = (("year",),)
 class SponsorsContent(models.Model):
@@ -278,7 +278,7 @@ class BoothContent(models.Model):
     max_booths = models.PositiveIntegerField(null=False, blank=False, default=30)
     registration_message_non_profit = tinymce_models.HTMLField(null=True,blank=True)
     registration_message_profit = tinymce_models.HTMLField(null=True,blank=True)
-    registration_recipients = models.CharField(max_length="600",null=False,blank=False,default="gisday@ou.edu")
+    registration_recipients = models.CharField(max_length=600,null=False,blank=False,default="gisday@ou.edu")
     class Meta:
         unique_together = (("year",),)
 

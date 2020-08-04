@@ -2,6 +2,7 @@ from django.db import models
 from django import forms
 from eomf.inventory.models import Dataset
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_comma_separated_integer_list
 
 from eomf.photos.models import Category, Photo
 from django.contrib.auth.models import User
@@ -24,7 +25,7 @@ def checkFormat(document):
         dialect = csv.Sniffer().sniff(document.read(1024))
         document.seek(0, 0)
     except csv.Error:
-        raise ValidationError(u'Not a valid CSV file')
+        raise ValidationError(u'fNot a valid CSV file')
     reader = csv.reader(document.read().splitlines(), dialect)
     i=1
     blank_rows=0
@@ -60,7 +61,7 @@ class SingleTimeSeriesJob(models.Model):
     tile = models.CharField(max_length=6,blank=True, null=True)
     
     result = models.FileField(upload_to='visualization/timeseries/single', blank=True,null=True,max_length=300)
-    years = models.CommaSeparatedIntegerField(max_length=150,verbose_name="Select years")
+    years = models.CharField(validators=[validate_comma_separated_integer_list], max_length=150,verbose_name="Select years")
     product = models.ForeignKey(Dataset, on_delete=models.CASCADE)
 
     # Information for current job state
@@ -77,7 +78,7 @@ class TimeSeriesJob(models.Model):
     sender = models.EmailField(max_length=150,verbose_name='Additional sender',null=True,blank=True)
     points = models.FileField(upload_to='visualization/timeseries/input',max_length=150,validators=[checkFormat], verbose_name="Upload csv file")
     result = models.FileField(upload_to='visualization/timeseries/multi', blank=True,null=True,max_length=300)
-    years = models.CommaSeparatedIntegerField(max_length=200,verbose_name="Select years")
+    years = models.CharField(validators=[validate_comma_separated_integer_list], max_length=200,verbose_name="Select years")
     product = models.ForeignKey(Dataset, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
     working = models.BooleanField(default=False)

@@ -89,7 +89,7 @@ class Migration(migrations.Migration):
                 ('max_booths', models.PositiveIntegerField(default=30)),
                 ('registration_message_non_profit', tinymce.models.HTMLField(null=True, blank=True)),
                 ('registration_message_profit', tinymce.models.HTMLField(null=True, blank=True)),
-                ('registration_recipients', models.CharField(default=b'gisday@ou.edu', max_length=b'600')),
+                ('registration_recipients', models.CharField(default=b'gisday@ou.edu', max_length='600')),
             ],
         ),
         migrations.CreateModel(
@@ -143,7 +143,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=160, null=True, blank=True)),
                 ('value', models.DecimalField(max_digits=10, decimal_places=2)),
                 ('link', models.CharField(max_length=160, null=True, blank=True)),
-                ('donor', models.ForeignKey(to='gisday.ItemDonor')),
+                ('donor', models.ForeignKey(to='gisday.ItemDonor', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -175,8 +175,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('highlight', models.BooleanField(default=False)),
-                ('group', models.ForeignKey(related_name='pvsgInGroup', to='gisday.AboutUsGroup')),
-                ('person', models.ForeignKey(related_name='pvsgInPerson', to='gisday.AboutUsPerson')),
+                ('group', models.ForeignKey(related_name='pvsgInGroup', to='gisday.AboutUsGroup', on_delete=models.CASCADE)),
+                ('person', models.ForeignKey(related_name='pvsgInPerson', to='gisday.AboutUsPerson', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -195,7 +195,7 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=60, verbose_name=b'email')),
                 ('comment', models.TextField(null=True, verbose_name=b'Questions & comments', blank=True)),
                 ('validated', models.BooleanField()),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -231,7 +231,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('content', tinymce.models.HTMLField(null=True, blank=True)),
                 ('registration_message', tinymce.models.HTMLField(null=True, blank=True)),
-                ('registration_recipients', models.CharField(default=b'gisday@ou.edu', max_length=b'600')),
+                ('registration_recipients', models.CharField(default=b'gisday@ou.edu', max_length='600')),
             ],
         ),
         migrations.CreateModel(
@@ -260,8 +260,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('money', models.IntegerField()),
-                ('category', models.ForeignKey(related_name='categoryOfSponsorInYear', to='gisday.SponsorCategory')),
-                ('sponsor', models.ForeignKey(to='gisday.Sponsor')),
+                ('category', models.ForeignKey(related_name='categoryOfSponsorInYear', to='gisday.SponsorCategory', on_delete=models.CASCADE)),
+                ('sponsor', models.ForeignKey(to='gisday.Sponsor', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -305,7 +305,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('content', tinymce.models.HTMLField(null=True, blank=True)),
                 ('registration_message', tinymce.models.HTMLField(null=True, blank=True)),
-                ('registration_recipients', models.CharField(default=b'gisday@ou.edu', max_length=b'600')),
+                ('registration_recipients', models.CharField(default=b'gisday@ou.edu', max_length='600')),
             ],
         ),
         migrations.CreateModel(
@@ -332,7 +332,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Survey',
             fields=[
-                ('demographicsurvey_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='gisday.DemographicSurvey')),
+                ('demographicsurvey_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='gisday.DemographicSurvey', on_delete=models.CASCADE)),
                 ('participate_again', models.BooleanField(verbose_name=b'I would like to participate in the event again')),
                 ('role', models.CharField(max_length=50, verbose_name=b'What was you primary role in the event?', choices=[(b'Organizing Committee', b'Organizing Committee'), (b'Faculty Poster Judge', b'Faculty Poster Judge'), (b'Student Poster Contestant', b'Student Poster Contestant'), (b'Booth Exhibitor', b'Booth Exhibitor'), (b'Poster Exhibitor', b'Poster Exhibitor'), (b'Student Facilitator/Volunteer', b'Student Facilitator/Volunteer'), (b'Staff Facilitator', b'Staff Facilitator'), (b'Other', b'Other (please specify)')])),
                 ('other_role', models.CharField(max_length=80, null=True, verbose_name=b'If other, please specify', blank=True)),
@@ -344,62 +344,62 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='visitorregistrationcontent',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='visitor',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='surveycontents',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='summarycontent',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='sponsorscontent',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='sponsorinyear',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='postercontestcontent',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='poster',
             name='category',
-            field=models.ForeignKey(to='gisday.PosterCategory'),
+            field=models.ForeignKey(to='gisday.PosterCategory', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='poster',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='photocontestparticipant',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='photocontestcontent',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='personingroup',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AlterUniqueTogether(
             name='overviewimage',
@@ -408,47 +408,47 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='logisticscontent',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='iteminyear',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='gisdayphoto',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='demographicsurvey',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='committeecontent',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='boothcontent',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='booth',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='announcement',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='agenda',
             name='year',
-            field=models.ForeignKey(to='gisday.Year'),
+            field=models.ForeignKey(to='gisday.Year', on_delete=models.CASCADE),
         ),
         migrations.AlterUniqueTogether(
             name='visitorregistrationcontent',

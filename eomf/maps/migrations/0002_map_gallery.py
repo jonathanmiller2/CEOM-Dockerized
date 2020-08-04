@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True, verbose_name=b'created')),
                 ('modified', models.DateTimeField(auto_now=True, verbose_name=b'modified')),
                 ('validated', models.BooleanField()),
-                ('user', models.ForeignKey(default=1829, to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(default=1829, to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
     ]

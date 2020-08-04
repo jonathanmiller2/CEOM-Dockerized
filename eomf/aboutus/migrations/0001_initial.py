@@ -46,8 +46,8 @@ class Migration(migrations.Migration):
                 ('content', models.TextField(null=True, blank=True)),
                 ('headshot', models.ImageField(default=b'/media/people/dummy_headshot222.jpg', null=True, upload_to=b'people/')),
                 ('order', models.IntegerField(default=9999)),
-                ('alumni_group', models.ForeignKey(related_name='personAsAlumniGroup', blank=True, to='aboutus.Group', null=True)),
-                ('group', models.ForeignKey(related_name='personAsGroup', to='aboutus.Group')),
+                ('alumni_group', models.ForeignKey(related_name='personAsAlumniGroup', blank=True, to='aboutus.Group', null=True, on_delete=models.CASCADE)),
+                ('group', models.ForeignKey(related_name='personAsGroup', to='aboutus.Group', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=80, verbose_name=b'File title')),
                 ('description', models.TextField(null=True, verbose_name=b'Description', blank=True)),
                 ('file_attached', models.FileField(upload_to=b'news/docs')),
-                ('post', models.ForeignKey(related_name='files', to='aboutus.Post')),
+                ('post', models.ForeignKey(related_name='files', to='aboutus.Post', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -77,7 +77,7 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(max_length=100, verbose_name=b'Description')),
                 ('order', models.PositiveIntegerField()),
                 ('image', models.ImageField(null=True, upload_to=b'news')),
-                ('post', models.ForeignKey(related_name='images', to='aboutus.Post')),
+                ('post', models.ForeignKey(related_name='images', to='aboutus.Post', on_delete=models.CASCADE)),
             ],
         ),
         migrations.AlterUniqueTogether(

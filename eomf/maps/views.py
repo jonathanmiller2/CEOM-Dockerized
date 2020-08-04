@@ -2,11 +2,11 @@ from django.shortcuts import render
 from django.template import Context, RequestContext, loader, Template
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models.sql.aggregates import Count
+from django.db.models.aggregates import Count
 from django.db import connection, transaction
 from django.contrib.gis.geos import GEOSGeometry, Polygon, Point
 import json as simplejson 
@@ -27,11 +27,10 @@ from django.db import connection
 
 import datetime
 from datetime import date
-import pickle
 import itertools
 import shutil
 import os
-import zlib, bz2, cPickle, base64, pylzma, binascii
+import zlib, bz2, pickle, base64, pylzma, binascii
 
 
 from pykml.factory import KML_ElementMaker as KML
@@ -39,11 +38,11 @@ from pykml import parser
 from lxml import etree
 from django.shortcuts import render
 import numpy, math
-from models import roi, map_gallery, poi
+from eomf.maps.models import roi, map_gallery, poi
 
-from forms import map_gallery_form, CommentForm, PoiForm, roiForm
+from eomf.maps.forms import map_gallery_form, CommentForm, PoiForm, roiForm
 
-from django.core.servers.basehttp import FileWrapper
+from wsgiref.util import FileWrapper
 import tempfile, zipfile
 
 #simplekml
@@ -76,7 +75,7 @@ def getuser(request):
         if str(user) == "AnonymousUser":
             user = User.objects.get(username="bhargav018")
     except:
-        print "exception raised"
+        print("exception raised")
     return user
 
 

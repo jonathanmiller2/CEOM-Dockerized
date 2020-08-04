@@ -5,6 +5,6 @@ from django.urls import re_path
 import eomf.h5n1.views
 
 urlpatterns = [
-    (r'^$', eomf.h5n1.views.index),
-    (r'^all.kml$', eomf.h5n1.views.kml),
+    re_path(r'^$', eomf.h5n1.views.index),
+    re_path(r'^all.kml$', eomf.h5n1.views.kml),
 ]

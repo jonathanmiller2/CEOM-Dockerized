@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='comment',
             name='Comment_id',
-            field=models.ForeignKey(related_name='comment', to='feedback.Feedback'),
+            field=models.ForeignKey(related_name='comment', to='feedback.Feedback', on_delete=models.CASCADE),
         ),
     ]

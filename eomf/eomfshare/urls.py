@@ -10,5 +10,5 @@ import eomf.eomfshare.views
 
 urlpatterns = [
         re_path(r'^$', eomf.eomfshare.views.upload_form_view),
-        re_path(r'^submit/$', eomf.eomfshare.views.success_upload'),
+        re_path(r'^submit/$', eomf.eomfshare.views.success_upload),
 ]

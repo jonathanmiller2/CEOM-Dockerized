@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='task_status',
             name='feedback_track',
-            field=models.OneToOneField(related_name='stats', primary_key=True, serialize=False, to='feedback.Feedback'),
+            field=models.OneToOneField(related_name='stats', primary_key=True, serialize=False, to='feedback.Feedback', on_delete=models.CASCADE),
         ),
     ]

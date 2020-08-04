@@ -29,8 +29,8 @@ class Migration(migrations.Migration):
                 ('completed', models.BooleanField(default=False)),
                 ('created', models.DateTimeField(auto_now_add=True, verbose_name=b'created')),
                 ('modified', models.DateTimeField(auto_now=True, verbose_name=b'modified')),
-                ('product', models.ForeignKey(to='inventory.Dataset')),
-                ('user', models.ForeignKey(default=1096, to=settings.AUTH_USER_MODEL)),
+                ('product', models.ForeignKey(to='inventory.Dataset', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(default=1096, to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -49,8 +49,8 @@ class Migration(migrations.Migration):
                 ('task_id', models.CharField(max_length=50, null=True, blank=True)),
                 ('total_sites', models.IntegerField(default=1)),
                 ('progress', models.IntegerField(default=0)),
-                ('product', models.ForeignKey(to='inventory.Dataset')),
-                ('user', models.ForeignKey(default=1096, to=settings.AUTH_USER_MODEL)),
+                ('product', models.ForeignKey(to='inventory.Dataset', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(default=1096, to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
     ]

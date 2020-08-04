@@ -4,10 +4,11 @@ services:
   db:
     image: postgis/postgis
     environment:
-      - POSTGRES_DB=postgres
+      - POSTGRES_DBNAME=eomf
       - POSTGRES_USER=eomf
       - POSTGRES_PASSWORD=30mfadmin
       - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
+
   web:
     build: .
 

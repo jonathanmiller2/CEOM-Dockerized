@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Task_status',
             fields=[
-                ('feedback_track', models.OneToOneField(primary_key=True, serialize=False, to='feedback.Feedback')),
+                ('feedback_track', models.OneToOneField(primary_key=True, serialize=False, to='feedback.Feedback', on_delete=models.CASCADE)),
                 ('assigned_to', models.CharField(default=b'XJ', max_length=2, choices=[(b'BR', b'Bhargav Bolla'), (b'XJ', b'Xibei Jia')])),
                 ('task_status', models.CharField(default=b'NW', max_length=2, choices=[(b'CO', b'done'), (b'WR', b'working'), (b'NM', b'need more info'), (b'NW', b'New')])),
             ],
@@ -44,16 +44,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='feedback',
             name='site',
-            field=models.ForeignKey(to='sites.Site'),
+            field=models.ForeignKey(to='sites.Site', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='comment',
             name='Comment_id',
-            field=models.ForeignKey(to='feedback.Feedback'),
+            field=models.ForeignKey(to='feedback.Feedback', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='comment',
             name='Comment_user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
     ]

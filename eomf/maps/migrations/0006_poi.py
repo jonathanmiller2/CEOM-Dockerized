@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('classification', models.CharField(max_length=500, null=True, verbose_name=b'Site Category', blank=True)),
                 ('created', models.DateTimeField(auto_now_add=True, verbose_name=b'created')),
                 ('modified', models.DateTimeField(auto_now=True, verbose_name=b'modified')),
-                ('user', models.ForeignKey(default=1829, to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(default=1829, to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
     ]

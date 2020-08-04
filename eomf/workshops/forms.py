@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.db import models
 from django import forms
-from models import Workshop,WorkshopRegistration
+from eomf.workshops.models import Workshop,WorkshopRegistration
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, HTML, Layout, Field, Row, Div, Column
 from crispy_forms.bootstrap import PrependedText
@@ -11,17 +11,13 @@ from django.core.mail import send_mail
 
 #capchta
 from captcha.fields import CaptchaField
-from simplemathcaptcha.fields import MathCaptchaField
 
 class WorkshopRegistrationForm(ModelForm):
-    captcha = MathCaptchaField()
+    captcha = CaptchaField()
+
+    #TODO: Remove all this debug shit last guy left behind
+
     def __init__(self, *args, **kwargs):
-        #print self.request
-        print "1st debug"
-        print kwargs
-        #print kwargs.pop('initial').pop('full_workshop')
-        print "2nd debug"
-        print args
         try:
             self.workshop = kwargs.pop('data')
         except AttributeError:
@@ -29,15 +25,15 @@ class WorkshopRegistrationForm(ModelForm):
                 self.workshop = kwargs.pop('request')
             except:
                 print("i dont know what happened")
-            print "i got a Attribute error probably because you sent me a post request and i dont know how to handle"
+            print("i got a Attribute error probably because you sent me a post request and i dont know how to handle")
         except KeyError:
-            print "i dont know what hit me!"
+            print("i dont know what hit me!")
             try:
                 self.workshop = kwargs.pop('request')
             except:
                 print("i dont know what happened")
-            print "i got a Attribute error probably because you sent me a post request and i dont know how to handle"
-        print "i came here:"
+            print("i got a Attribute error probably because you sent me a post request and i dont know how to handle")
+        print("i came here:")
         #print self.workshop
         #send_mail('debug:worshop forms', str(type(self))+":"+str(kwargs)+" args: "+str(args), 'admin@eomf.ou.edu', ['bhargavreddy.bolla@ou.edu','bhargavreddy.bolla@gmail.com'], fail_silently=True)
         # foo = open("/media/foo.txt",'a')

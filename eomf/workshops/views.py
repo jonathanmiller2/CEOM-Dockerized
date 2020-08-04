@@ -1,10 +1,10 @@
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
-from models import *
+from eomf.workshops.models import *
 from django.db.models import Count
 from datetime import datetime
-from forms import WorkshopRegistrationForm
+from eomf.workshops.forms import WorkshopRegistrationForm
 from django.core.mail import EmailMultiAlternatives
 import json
 
