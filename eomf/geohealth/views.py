@@ -2,7 +2,7 @@ from django.template import Context, RequestContext, loader
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.files.base import ContentFile
-from models import Datainfo, Datatype
+from eomf.geohealth.models import Datainfo, Datatype
 import numpy, math
 import os, re, datetime, glob, sys
 

@@ -1,16 +1,17 @@
 from django.forms import ModelForm
 from django.db import models
 from django import forms
-from models import Booth, Visitor, PhotoContestParticipant, Poster, Year, Survey, DemographicSurvey
+from eomf.gisday.models import Booth, Visitor, PhotoContestParticipant, Poster, Year, Survey, DemographicSurvey
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, HTML, Layout, Field, Row, Div, Column, Fieldset
 
 #capchta
 from captcha.fields import CaptchaField
-from simplemathcaptcha.fields import MathCaptchaField
+#from simplemathcaptcha.fields import MathCaptchaField
 
 class BoothForm(ModelForm):
-    captcha = MathCaptchaField()
+    captcha = CaptchaField()
+    #captcha = MathCaptchaField()
     non_profit = forms.TypedChoiceField(
         coerce=lambda x: True if x == 'True' else False,
         choices=(
@@ -61,7 +62,8 @@ class BoothForm(ModelForm):
 
 
 class VisitorForm(ModelForm):
-    captcha = MathCaptchaField()
+    captcha = CaptchaField()
+    #captcha = MathCaptchaField()
     # year= models.DateTimeField(widget=widgets.HiddenInput)
     def __init__(self, *args, **kwargs):
         super(VisitorForm, self).__init__(*args, **kwargs)
@@ -87,7 +89,9 @@ class VisitorForm(ModelForm):
 
 
 class PhotoForm(ModelForm):
-    captcha = MathCaptchaField()
+    captcha = CaptchaField()
+    #captcha = MathCaptchaField()
+
     def __init__(self, *args, **kwargs):
         super(PhotoForm, self).__init__(*args, **kwargs)
         self.fields['verifyemail'] = forms.EmailField(label="verify email", required=True, max_length=60)
@@ -125,7 +129,8 @@ class PhotoForm(ModelForm):
             raise forms.ValidationError("Emails do not match")
 
 class PosterForm(ModelForm):
-    captcha = MathCaptchaField()
+    captcha = CaptchaField()
+    #captcha = MathCaptchaField()
     def __init__(self, *args, **kwargs):
         super(PosterForm, self).__init__(*args, **kwargs)
         self.fields['verifyemail'] = forms.EmailField(label="verify email",required=True, max_length=60)
@@ -192,7 +197,7 @@ class PosterForm(ModelForm):
 #         return other_role
 
 class DemographicSurveyForm(ModelForm):
-    captcha = CaptchaField('Please enter the characters in the image')
+    captcha = CaptchaField()
     def __init__(self, *args, **kwargs):
         super(DemographicSurveyForm, self).__init__(*args, **kwargs)
         self.fields['year']=forms.ModelChoiceField(queryset=Year.objects.all(), widget=forms.HiddenInput())
@@ -267,7 +272,7 @@ class DemographicSurveyForm(ModelForm):
             return other_disability
 
 class SurveyForm(ModelForm):
-    captcha = CaptchaField('Please enter the characters in the image')
+    captcha = CaptchaField()
     def __init__(self, *args, **kwargs):
         super(SurveyForm, self).__init__(*args, **kwargs)
         self.fields['year']=forms.ModelChoiceField(queryset=Year.objects.all(), widget=forms.HiddenInput())

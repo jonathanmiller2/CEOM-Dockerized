@@ -1,13 +1,14 @@
+#TODO: Are these imports necessary
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
-from django.forms.util import ErrorList
+from django.forms.utils import ErrorList
 from django.core.mail import send_mail
-from models import *
-from forms import VisitorForm, BoothForm, PhotoForm, PosterForm, SurveyForm, DemographicSurveyForm, volunteerForm
+
+from eomf.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm, SurveyForm, DemographicSurveyForm, volunteerForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
-from models import Booth
+from eomf.gisday.models import Booth
 import os
 import sys
 import json

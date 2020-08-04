@@ -17,4 +17,5 @@ GDAL==2.4
 pylzma==0.5
 pykml==0.2
 numpy==1.19.1
-celery==4.4.7
+redis==3.5.3
+celery[redis]==4.4.7

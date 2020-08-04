@@ -13,7 +13,7 @@ urlpatterns = [
     re_path(r'^2012/$', eomf.gisday.views.year2012),
     re_path(r'^2012/gallery', eomf.gisday.views.gallery_2012),
 
-    re_path(r'^(?P<year>[0-9]{4})/summary','summary),
+    re_path(r'^(?P<year>[0-9]{4})/summary', eomf.gisday.views.summary),
 	re_path(r'^(?P<year>[0-9]{4})/agenda', eomf.gisday.views.agenda),
 	re_path(r'^(?P<year>[0-9]{4})/logistics', eomf.gisday.views.logistics),
 	re_path(r'^(?P<year>[0-9]{4})/announcements/(?P<position>[0-9]+)', eomf.gisday.views.announcements),

@@ -127,6 +127,7 @@
         	var bb = [-55, -120, 55, 120];	
         }
         
+        //TODO: I can almost certainly get this internally without requesting back to the server. This data should be sent with the original HTTP request
         var datasrc = 'http://eomf.ou.edu/photos/gmapclusters.kml?bbox=' + bb[1] + ',' + bb[0] + ',' + bb[3] + ',' + bb[2];
 
         var xhr = new XMLHttpRequest();
