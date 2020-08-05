@@ -77,7 +77,7 @@ class File(models.Model):
     day = models.IntegerField(null=True)
     timestamp = models.IntegerField()
     dataset = models.ForeignKey(Dataset, null=True, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, null=True, through='Process')
+    products = models.ManyToManyField(Product, through='Process')
     absolute_path = models.CharField(max_length = 300, null=False, default='N/A')
     def __unicode__(self):
         return self.name

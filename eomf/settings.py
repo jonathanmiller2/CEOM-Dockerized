@@ -4,26 +4,20 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.text import format_lazy
 # Django settings for eomf project.
 
-#('menarguez', 'mamenarguez@ou.edu>'),
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(__file__)
 
-if len(BASE_DIR.split('/eomf-prod/'))>1:
-    SITE_DEV = False
-else:
-    SITE_DEV = True
-
-DEBUG = SITE_DEV
+SITE_DEV = False
+DEBUG = True
 TEMPLATE_DEBUG = True
 
+#TODO: Remove eomf-dev1 if development environment changes off the VM I'm using right now
 if SITE_DEV:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1','eomf-dev.ou.edu']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1','eomf-dev.ou.edu', 'eomf-dev1.sooner.net.ou.edu']
 else:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1','eomf.ou.edu','www.eomf.ou.edu']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1','eomf.ou.edu','www.eomf.ou.edu', 'eomf-dev1.sooner.net.ou.edu']
 ADMINS = (
-
     ('Jonathan', 'jonathan.g.miller@ou.edu>'),
-    
 )
 
 
@@ -181,6 +175,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     
     'django_countries',
+    'django_extensions', #Needed to nuke/recreate the database
 
     'autotranslate',
     'chunked_upload',
@@ -213,6 +208,8 @@ INSTALLED_APPS = [
     #'olwidget',
     'tinymce', #Cool Text editor
     'crispy_forms', # Cool forms rendered
+
+
 ]
 
 AUTH_PROFILE_MODULE = 'accounts.Profile'

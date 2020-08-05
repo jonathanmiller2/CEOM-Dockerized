@@ -20,7 +20,8 @@ from celery import group
 
 try:
     import database
-except:
+except Exception as e:
+    print(e)
     print("Database.py not found. disregard if it is a worker process")
 
 def get_location_metadata(lat,lon,dataset,dataset_npix,years):

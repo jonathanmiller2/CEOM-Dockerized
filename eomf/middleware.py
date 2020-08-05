@@ -1,12 +1,16 @@
-from cStringIO import StringIO
+from io import StringIO
 import zipfile
 
-class KMLMiddleware(object):
-    """
-    Middleware for serving KML data and optionally converting it to KMZ if the right extension is used.
-    """
-    def process_response(self, request, response):
+#Middleware for serving KML data and optionally converting it to KMZ if the right extension is used.
+class KMLMiddleware:
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
         request_file = request.path.split("/")[-1]
+
+        response = self.get_response(request)
 
         if request_file.lower().endswith(".kmz"):
             kmz = StringIO()
@@ -24,5 +28,5 @@ class KMLMiddleware(object):
             response['Content-Type']        = 'application/vnd.google-earth.kml+xml'
             response['Content-Disposition'] = 'attachment; filename=%s.kml' % save_file_name
             response['Content-Length']      = str(len(response.content))
-            
+        
         return response

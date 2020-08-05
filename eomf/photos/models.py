@@ -74,8 +74,8 @@ class Country(models.Model):
 class Region(models.Model):
     gid = models.IntegerField(primary_key=True)
     region = models.CharField(max_length=21, blank=True)
-    sqmi = models.DecimalField(null=True, max_digits=65535, decimal_places=65535, blank=True)
-    sqkm = models.DecimalField(null=True, max_digits=65535, decimal_places=65535, blank=True)
+    sqmi = models.DecimalField(null=True, max_digits=999, decimal_places=999, blank=True)
+    sqkm = models.DecimalField(null=True, max_digits=999, decimal_places=999, blank=True)
     _oid = models.IntegerField(null=True, blank=True)
     the_geom = models.MultiPolygonField(null=True, blank=True)
 
