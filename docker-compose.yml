@@ -1,41 +1,66 @@
 version: '3'
     
 services:
+
+  web:
+    build: ./app
+
+    #****WARNING***** TODO: REMOVE THE FLUSH COMMAND BELOW WITH LIVE DATA, IT WILL LITERALLY DELETE EVERYTHING IN THE DATABASE ****WARNING*****
+    #If Django is reporting an issue with relations not existing, this may help, but DO NOT RUN THIS COMMAND IF DJANGO IS IN ANY WAY TIED TO THE ONLY COPY OF THE DATA YOU HAVE. IT WILL INSTANTLY DELETE IT WITH NO BACKUP.
+    command: bash -c "python manage.py reset_db --noinput &&
+                      echo RESET_DB_FIN &&         
+                      python manage.py flush --noinput &&         
+                      echo FLUSH_FIN &&
+                      python manage.py makemigrations &&
+                      echo MAKEMIGRATIONS_FIN &&
+                      python manage.py migrate --noinput -v 1 && 
+                      echo MIGRATE_FIN &&
+                      python manage.py loaddata flatpage.json &&
+                      echo LOADDATA_FIN &&
+                      python manage.py check &&
+                      echo CHECK_FIN &&
+                      python manage.py findstatic --verbosity 2 bootstrap-responsive.min.css &&
+                      echo FIND_FIN &&
+                      gunicorn eomf.wsgi:application --bind 0.0.0.0:8000"
+                      #python manage.py runserver 0.0.0.0:8000"
+
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+    expose:
+      - 8000            
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+
+
   db:
     image: postgis/postgis
-    environment:
-      - POSTGRES_DBNAME=eomf
-      - POSTGRES_USER=eomf
-      - POSTGRES_PASSWORD=30mfadmin
-      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    env_file:
+      - ./.env.db
+
+
 
   redis:
     image: "redis"
     ports:
       - "6379:6379"
 
-  web:
-    build: .
 
-    #****WARNING***** TODO: REMOVE THE FLUSH COMMAND BELOW WITH LIVE DATA, IT WILL LITERALLY DELETE EVERYTHING IN THE DATABASE ****WARNING*****
-    #If Django is reporting an issue with relations not existing, this may help, but DO NOT RUN THIS COMMAND IF DJANGO IS IN ANY WAY TIED TO THE ONLY COPY OF THE DATA YOU HAVE. IT WILL INSTANTLY DELETE IT WITH NO BACKUP.
-    command: bash -c "
-                      python manage.py reset_db --noinput &&         
-                      python manage.py flush --noinput &&         
-                      python manage.py makemigrations &&
-                      python manage.py migrate && 
-                      python manage.py check &&
-                      python manage.py runserver 0.0.0.0:8000"
-    
-    #This environment var is in reference to a file called '.env' that's not on the Github page, as it contains the Django secret key. It's referenced in the Django settings.py file.
-    #The file simply contains the line 'DJANGO_SECRET_KEY=<whole bunch of letters and symbols>'
-    #If this file is lost, I think you can simply recreate it with a random bunch of letters and symbols. Probably worth researching.
-    environment:
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}  
 
+  nginx:
+    build: ./nginx
     volumes:
-      - .:/code
+      - static_volume:/home/app/web/staticfiles
     ports:
-      - "80:8000"
+      - 80:80
     depends_on:
-      - db
+      - web
+      
+volumes:
+  postgres_data:
+  static_volume:
