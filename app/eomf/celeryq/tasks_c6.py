@@ -1,6 +1,5 @@
 
-from celery import task
-from celery import Celery
+from celery import shared_task
 import time
 import random
 import os, sys
@@ -8,15 +7,12 @@ import re, glob
 import math
 import datetime
 
-from modis import products, process, band_names, headers
-from modis.aux_functions import latlon2sin
-from modis.process import get_pixel_value,get_band_names,gap_fill
-from modis.headers import get_modis_header
+from eomf.celeryq.modis import products, process, band_names, headers
+from eomf.celeryq.modis.aux_functions import latlon2sin
+from eomf.celeryq.modis.process import get_pixel_value,get_band_names,gap_fill
+from eomf.celeryq.modis.headers import get_modis_header
 from collections import OrderedDict
-app = Celery('tasks_c6', backend='amqp', broker='amqp://')
-app.config_from_object('celeryconfig_c6')
 
-from celery import group
 
 try:
     import database
@@ -167,7 +163,7 @@ def save_data(data,csv_folder,task_id,metadata):
     return filename
 
 
-@app.task(bind=True)
+@shared_task(bind=True)
 def get_modis_raw_data_c6(self,csv_folder,media_base_url,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days):
     # Get the list days we need to retreive its value, each one of
     # them will be send as an independent task to get their value
@@ -242,7 +238,7 @@ def extract_day_data(col,row,dataset,year,day,tile):
         print("Exception at year %d day %d: %s" % (year,day,e.message))
         return None
 
-@app.task(time_limit=50)
+@shared_task(time_limit=50)
 def get_modis_year_data_c6( params_dict):
     p = params_dict
     results = {p['year']:{}}

@@ -23,11 +23,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 # Celery tasks
-from tasks import get_modis_raw_data, latlon2sin
-from tasks_multi import multiple_site_modis,terminate_task
+from eomf.celeryq.tasks import get_modis_raw_data, latlon2sin
+from eomf.celeryq.tasks_multi import multiple_site_modis,terminate_task
 
 ## testing the new celery task for collection-6 data
-from tasks_c6 import get_modis_raw_data_c6, latlon2sin
+from eomf.celeryq.tasks_c6 import get_modis_raw_data_c6, latlon2sin
 
 from celery.result import AsyncResult
 

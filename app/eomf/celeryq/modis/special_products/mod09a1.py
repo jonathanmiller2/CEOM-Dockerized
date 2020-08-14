@@ -1,5 +1,5 @@
-from modis import aux_functions
-from  modis import band_names
+from eomf.celeryq.modis import aux_functions
+from eomf.celeryq.modis import band_names
 
 def mod35_cloud(ii):
     cloud={'00':'clear',

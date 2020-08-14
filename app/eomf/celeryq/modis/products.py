@@ -1,5 +1,5 @@
-from modis.special_products import mod09a1
-from modis import band_names
+from eomf.celeryq.modis.special_products import mod09a1
+from eomf.celeryq.modis import band_names
 def dataset_is_available(dataset):
 
     accepted_list = [

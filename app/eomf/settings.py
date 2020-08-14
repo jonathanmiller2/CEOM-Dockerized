@@ -295,3 +295,7 @@ DBGETTEXT_PROJECT_OPTIONS = 'eomf.dbgettext_options'
 DBGETTEXT_PATH='dbgettext_files'
 DBGETTEXT_SPLIT_SENTENCES=False
 FEEDBACK_EMAIL = "jonathan.g.miller@ou.edu;jonathanmiller2@hotmail.com"
+
+#Celery
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "redis://redis:6379"
