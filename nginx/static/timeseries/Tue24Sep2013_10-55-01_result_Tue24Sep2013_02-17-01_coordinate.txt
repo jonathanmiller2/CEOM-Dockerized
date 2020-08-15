@@ -1,0 +1,145 @@
+
+
+Bad input file formatting: 1 30.41 91.08 
+
+Bad input file formatting: 1 30.41 91.08 
+
+Bad input file formatting: 1 30.41 91.08 
+
+Bad input file formatting: 1 30.41 91.08 
+
+Bad input file formatting: 1 30.41 91.08 
+
+Bad input file formatting: 1 30.41 91.08 
+
+Bad input file formatting: 1 30.41 91.08 
+
+Bad input file formatting: 1 30.41 91.08 
+
+Bad input file formatting: 1 30.41 91.08 
+
+Bad input file formatting: 2 37.66 101.33 
+
+Bad input file formatting: 2 37.66 101.33 
+
+Bad input file formatting: 2 37.66 101.33 
+
+Bad input file formatting: 2 37.66 101.33 
+
+Bad input file formatting: 2 37.66 101.33 
+
+Bad input file formatting: 2 37.66 101.33 
+
+Bad input file formatting: 2 37.66 101.33 
+
+Bad input file formatting: 2 37.66 101.33 
+
+Bad input file formatting: 2 37.66 101.33 
+
+Bad input file formatting: 3 36.95 116.60 
+
+Bad input file formatting: 3 36.95 116.60 
+
+Bad input file formatting: 3 36.95 116.60 
+
+Bad input file formatting: 3 36.95 116.60 
+
+Bad input file formatting: 3 36.95 116.60 
+
+Bad input file formatting: 3 36.95 116.60 
+
+Bad input file formatting: 3 36.95 116.60 
+
+Bad input file formatting: 3 36.95 116.60 
+
+Bad input file formatting: 3 36.95 116.60 
+
+Bad input file formatting: 4 21.95 101.02 
+
+Bad input file formatting: 4 21.95 101.02 
+
+Bad input file formatting: 4 21.95 101.02 
+
+Bad input file formatting: 4 21.95 101.02 
+
+Bad input file formatting: 4 21.95 101.02 
+
+Bad input file formatting: 4 21.95 101.02 
+
+Bad input file formatting: 4 21.95 101.02 
+
+Bad input file formatting: 4 21.95 101.02 
+
+Bad input file formatting: 4 21.95 101.02 
+
+Bad input file formatting: 5 26.74 115.07 
+
+Bad input file formatting: 5 26.74 115.07 
+
+Bad input file formatting: 5 26.74 115.07 
+
+Bad input file formatting: 5 26.74 115.07 
+
+Bad input file formatting: 5 26.74 115.07 
+
+Bad input file formatting: 5 26.74 115.07 
+
+Bad input file formatting: 5 26.74 115.07 
+
+Bad input file formatting: 5 26.74 115.07 
+
+Bad input file formatting: 5 26.74 115.07 
+
+Bad input file formatting: 6 42.40 127.09 
+
+Bad input file formatting: 6 42.40 127.09 
+
+Bad input file formatting: 6 42.40 127.09 
+
+Bad input file formatting: 6 42.40 127.09 
+
+Bad input file formatting: 6 42.40 127.09 
+
+Bad input file formatting: 6 42.40 127.09 
+
+Bad input file formatting: 6 42.40 127.09 
+
+Bad input file formatting: 6 42.40 127.09 
+
+Bad input file formatting: 6 42.40 127.09 
+
+Bad input file formatting: 7 23.17 112.53 
+
+Bad input file formatting: 7 23.17 112.53 
+
+Bad input file formatting: 7 23.17 112.53 
+
+Bad input file formatting: 7 23.17 112.53 
+
+Bad input file formatting: 7 23.17 112.53 
+
+Bad input file formatting: 7 23.17 112.53 
+
+Bad input file formatting: 7 23.17 112.53 
+
+Bad input file formatting: 7 23.17 112.53 
+
+Bad input file formatting: 7 23.17 112.53 
+
+Bad input file formatting: 8 43.60 116.70 
+
+Bad input file formatting: 8 43.60 116.70 
+
+Bad input file formatting: 8 43.60 116.70 
+
+Bad input file formatting: 8 43.60 116.70 
+
+Bad input file formatting: 8 43.60 116.70 
+
+Bad input file formatting: 8 43.60 116.70 
+
+Bad input file formatting: 8 43.60 116.70 
+
+Bad input file formatting: 8 43.60 116.70 
+
+Bad input file formatting: 8 43.60 116.70 

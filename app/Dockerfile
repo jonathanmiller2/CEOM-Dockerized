@@ -21,13 +21,5 @@ RUN apt-get install libgdal-dev netcat -y
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-
-#Staticfiles directory creation
-ENV HOME=/home/app
-ENV APP_HOME=/home/app/web
-RUN mkdir -p $APP_HOME
-RUN mkdir $APP_HOME/staticfiles
-
-
 #Run entrypoint.sh
 ENTRYPOINT ["/code/entrypoint.sh"]

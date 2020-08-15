@@ -24,25 +24,14 @@ def contentpage(request, url):
     
 
     if not url== '' and not url.endswith('/') and settings.APPEND_SLASH:
-        print("DEBUG*** 27 ***DEBUG")
         return HttpResponseRedirect("%s/" % request.path)
     if not url.startswith('/'):
-        print("DEBUG*** 30 ***DEBUG")
         url = "/" + url
-    
-    print("DEBUG*** 33 ***DEBUG")
-    print("url:", url)
-    print("sites_id:", settings.SITE_ID)
-    try:
-        #If 
-        f = get_object_or_404(ContentPage, url__exact=url)#, sites__id__exact=settings.SITE_ID)
-    except Exception as e:
-        print("*DEBUG*** 38 *** DEBUG " + str(e))
+
+    f = get_object_or_404(ContentPage, url__exact=url)#, sites__id__exact=settings.SITE_ID)
+
     # If registration is required for accessing this page, and the user isn't
     # logged in, redirect to the login page.
-
-    print("DEBUG*** 39 ***DEBUG")
-
     if f.registration_required and not request.user.is_authenticated():
         print("DEBUG*** 41 ***DEBUG")
         from django.contrib.auth.views import redirect_to_login
@@ -58,11 +47,9 @@ def contentpage(request, url):
     f.title = mark_safe(f.title)
     f.content = mark_safe(f.content)
     try:
-        print("DEBUG*** 52 ***DEBUG")
         return render_to_response(f.template_name, {'flatpage':f})
         #return render(request, f.template_name, {'flatpage': f})
     except:
-        print("DEBUG*** 58 ***DEBUG")
         return render_to_response(f.template_name, {'flatpage':f})
    # response = HttpResponse(t.render(c))
     #try:
@@ -71,4 +58,3 @@ def contentpage(request, url):
     #except ImportError:
     #    pass
    # return response
-    print("DEBUG*** end ***DEBUG")

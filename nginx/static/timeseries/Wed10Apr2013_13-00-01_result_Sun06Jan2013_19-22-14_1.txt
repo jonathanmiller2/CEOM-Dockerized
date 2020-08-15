@@ -1,0 +1,5 @@
+
+
+Bad input file formatting: 100.252222222
+
+Bad input file formatting: 38.533694444

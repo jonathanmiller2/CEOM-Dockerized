@@ -3,14 +3,14 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-	<link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="/static/images/favicon.ico" type="image/x-icon" />
     <title>{% block title %}{% trans "EOMF: Earth Observation and Modeling Facility" %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-responsive.min.css">
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
@@ -20,18 +20,18 @@
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script>//var url = window.location.href;console.log(url);</script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/animate.css">
+    <link rel="stylesheet" href="/static/css/animate.css">
     
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 
     <!--[if lte IE 7]>
         <link rel="stylesheet" type="text/css" href="/media/css/ie.css" media="screen" />
     <![endif]-->
-    <script src="{{ STATIC_URL }}js/modis.js" type="text/javascript"></script>
+    <script src="/static/js/modis.js" type="text/javascript"></script>
     <!-- for media buttons -->
     <style type="text/css">
 #share-buttons {
@@ -89,7 +89,7 @@ display: inline;
 
         #logo-rice {
             background-repeat: no-repeat;
-            background-image: url({{ STATIC_URL }}images/logo-rice.png);
+            background-image: url(/static/images/logo-rice.png);
             background-size: 100% 100%;
             height: 100%;
             max-height: 100px;
@@ -106,7 +106,7 @@ display: inline;
         }
 
         #logo-title-left {
-            background-image: url({{ STATIC_URL }}images/logo-text-2.png);
+            background-image: url(/static/images/logo-text-2.png);
             background-size: 100% 100%;
             width: 350px;
             max-width: 40%;
@@ -117,7 +117,7 @@ display: inline;
         }
 
         #logo-title-right {
-            background-image: url({{ STATIC_URL }}images/logo-right.png);
+            background-image: url(/static/images/logo-right.png);
             background-size: 100% 100%;
             background-repeat: no-repeat;
             position: absolute;
@@ -310,9 +310,9 @@ display: inline;
 </div>
 
 {% endblock %}
-<script src="{{ STATIC_URL }}js/wow.min.js"></script>
+<script src="/static/js/wow.min.js"></script>
 <script>
- new WOW().init();
+ //new WOW().init();
 /*$(document).ready(function() {
     window.alert("<a href=\"#new_sept_event\">Click here to check out the new Field Photo Weekend event</a>");
 })*/

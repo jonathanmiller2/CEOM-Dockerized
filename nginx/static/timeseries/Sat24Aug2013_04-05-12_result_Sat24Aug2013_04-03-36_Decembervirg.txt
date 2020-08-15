@@ -1,0 +1,235 @@
+
+
+Bad input file formatting: 1,28.785,116.007
+
+Bad input file formatting: 2,29.055,116.125
+
+Bad input file formatting: 3,29.067,116.07
+
+Bad input file formatting: 4,28.982,116.208
+
+Bad input file formatting: 5,28.671,116.281
+
+Bad input file formatting: 6,29.066,116.072
+
+Bad input file formatting: 7,29.059,116.012
+
+Bad input file formatting: 8,29.061,116.064
+
+Bad input file formatting: 9,29.075,116.072
+
+Bad input file formatting: 10,29.015,115.992
+
+Bad input file formatting: 11,28.909,116.007
+
+Bad input file formatting: 12,29.006,116.032
+
+Bad input file formatting: 13,28.983,116.062
+
+Bad input file formatting: 14,29.055,116.121
+
+Bad input file formatting: 15,29.046,116.113
+
+Bad input file formatting: 16,29.068,116.071
+
+Bad input file formatting: 17,29.066,116.073
+
+Bad input file formatting: 18,29.084,116.057
+
+Bad input file formatting: 19,29.102,115.875
+
+Bad input file formatting: 20,29.048,116.051
+
+Bad input file formatting: 21,29.152,116.037
+
+Bad input file formatting: 22,29.074,116.069
+
+Bad input file formatting: 23,29.067,115.913
+
+Bad input file formatting: 24,29.04,116.084
+
+Bad input file formatting: 25,29.074,115.914
+
+Bad input file formatting: 26,29.069,116.06
+
+Bad input file formatting: 27,28.952,116.184
+
+Bad input file formatting: 28,28.972,116.075
+
+Bad input file formatting: 29,29.06,116.023
+
+Bad input file formatting: 30,29.213,115.916
+
+Bad input file formatting: 31,29.0675,116.07117
+
+Bad input file formatting: 32,29.06633,116.07383
+
+Bad input file formatting: 33,29.06767,116.073
+
+Bad input file formatting: 34,29.06717,116.07367
+
+Bad input file formatting: 35,29.06633,116.07267
+
+Bad input file formatting: 36,29.06733,116.07317
+
+Bad input file formatting: 37,29.06767,116.0735
+
+Bad input file formatting: 38,29.06717,116.07333
+
+Bad input file formatting: 39,29.06733,116.07333
+
+Bad input file formatting: 40,29.0675,116.069
+
+Bad input file formatting: 41,29.06717,116.06933
+
+Bad input file formatting: 42,29.06817,116.07333
+
+Bad input file formatting: 43,29.06833,116.07333
+
+Bad input file formatting: 44,29.06833,116.0735
+
+Bad input file formatting: 45,29.06833,116.07317
+
+Bad input file formatting: 46,29.06883,116.073
+
+Bad input file formatting: 47,29.068,116.07317
+
+Bad input file formatting: 48,29.06667,116.068
+
+Bad input file formatting: 49,29.06633,116.06933
+
+Bad input file formatting: 50,29.0685,116.07217
+
+Bad input file formatting: 51,29.06717,116.07
+
+Bad input file formatting: 52,29.06817,116.0735
+
+Bad input file formatting: 53,29.067,116.07317
+
+Bad input file formatting: 54,29.06717,116.07317
+
+Bad input file formatting: 55,29.06667,116.07333
+
+Bad input file formatting: 56,29.06933,116.07233
+
+Bad input file formatting: 57,29.068,116.0715
+
+Bad input file formatting: 58,29.02333,115.98667
+
+Bad input file formatting: 59,29.02333,115.98683
+
+Bad input file formatting: 60,29.02117,115.98633
+
+Bad input file formatting: 61,29.02317,115.98867
+
+Bad input file formatting: 62,29.06783,116.07067
+
+Bad input file formatting: 63,29.06733,116.07017
+
+Bad input file formatting: 64,29.0675,116.07017
+
+Bad input file formatting: 65,29.0675,116.07017
+
+Bad input file formatting: 66,29.06833,116.07333
+
+Bad input file formatting: 67,29.06833,116.07317
+
+Bad input file formatting: 68,29.0675,116.07017
+
+Bad input file formatting: 69,29.0685,116.07333
+
+Bad input file formatting: 70,29.06833,116.07333
+
+Bad input file formatting: 71,29.06833,116.07317
+
+Bad input file formatting: 72,29.06717,116.0705
+
+Bad input file formatting: 73,29.0665,116.06883
+
+Bad input file formatting: 74,29.06767,116.07067
+
+Bad input file formatting: 75,29.06767,116.07033
+
+Bad input file formatting: 76,29.21533,116.0935
+
+Bad input file formatting: 77,29.126,115.87167
+
+Bad input file formatting: 78,29.12517,115.87217
+
+Bad input file formatting: 79,29.12517,115.872
+
+Bad input file formatting: 80,29.06583,116.06783
+
+Bad input file formatting: 81,29.06583,116.06783
+
+Bad input file formatting: 82,29.06583,116.06783
+
+Bad input file formatting: 83,29.06583,116.06783
+
+Bad input file formatting: 84,29.06567,116.06767
+
+Bad input file formatting: 85,29.06567,116.06767
+
+Bad input file formatting: 86,29.06567,116.06767
+
+Bad input file formatting: 87,29.06783,116.06883
+
+Bad input file formatting: 88,29.06783,116.06867
+
+Bad input file formatting: 89,29.06783,116.06867
+
+Bad input file formatting: 90,29.06767,116.06867
+
+Bad input file formatting: 91,29.06767,116.06883
+
+Bad input file formatting: 92,29.06783,116.06867
+
+Bad input file formatting: 93,29.06783,116.06883
+
+Bad input file formatting: 94,29.068,116.06867
+
+Bad input file formatting: 95,29.068,116.06917
+
+Bad input file formatting: 96,29.06833,116.06867
+
+Bad input file formatting: 97,29.07,116.06933
+
+Bad input file formatting: 98,29.07,116.06933
+
+Bad input file formatting: 99,29.06983,116.06933
+
+Bad input file formatting: 100,29.06983,116.06933
+
+Bad input file formatting: 101,29.06983,116.06933
+
+Bad input file formatting: 102,29.07183,116.07017
+
+Bad input file formatting: 103,29.0735,116.06683
+
+Bad input file formatting: 104,29.07617,116.0675
+
+Bad input file formatting: 105,29.07633,116.06733
+
+Bad input file formatting: 106,29.07633,116.06733
+
+Bad input file formatting: 107,29.077,116.06717
+
+Bad input file formatting: 108,29.077,116.06733
+
+Bad input file formatting: 109,29.0745,116.06583
+
+Bad input file formatting: 110,29.0745,116.06583
+
+Bad input file formatting: 111,29.0745,116.066
+
+Bad input file formatting: 112,29.0745,116.06583
+
+Bad input file formatting: 113,29.0745,116.06583
+
+Bad input file formatting: 114,29.06583,116.06767
+
+Bad input file formatting: 115,29.066,116.06667
+
+Bad input file formatting: 116,29.06583,116.06833
+
+Bad input file formatting: 117,29.06583,116.06917
