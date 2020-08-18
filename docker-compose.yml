@@ -19,10 +19,12 @@ services:
                       echo LOADDATA_FIN &&
                       python manage.py check &&
                       echo CHECK_FIN &&
-                      python manage.py findstatic --verbosity 2 bootstrap-responsive.min.css &&
-                      echo FIND_FIN &&
                       gunicorn eomf.wsgi:application --bind 0.0.0.0:8000"
                       #python manage.py runserver 0.0.0.0:8000"
+
+    #TODO: Remove the volume connection in production. There should be no connection between the container and machine in production to avoid attacks on the base machine.
+    volumes:
+      - ./app:/code
     expose:
       - 8000            
     env_file:
@@ -59,7 +61,7 @@ services:
 
   celery:
     build: ./app
-    command: celery -A core worker -l info
+    command: celery -A eomf worker -l info
     volumes:
       - ./app/:/code/
     
