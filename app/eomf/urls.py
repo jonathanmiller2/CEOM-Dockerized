@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
+from django.contrib.flatpages import views
 
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns #For dajaxice
@@ -62,6 +63,6 @@ if 'rosetta' in settings.INSTALLED_APPS:
         re_path(r'^rosetta/', include('rosetta.urls')),
     ]
 #Catch all
-urlpatterns.append( re_path(r'^', include('eomf.pages.urls')) )
-#urlpatterns += staticfiles_urlpatterns()
-# urlpatterns += staticfiles_urlpatterns()
+urlpatterns += [
+    path('<path:url>', views.flatpage),
+]

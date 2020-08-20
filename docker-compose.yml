@@ -54,21 +54,21 @@ services:
   
 
 
-  redis:
-    image: redis:alpine
-
-
-
-  celery:
-    build: ./app
-    command: celery -A eomf worker -l info
-    volumes:
-      - ./app/:/code/
-    
-    #Env variables may be needed here?
-
-    depends_on:
-      - redis
+#  redis:
+#    image: redis:alpine
+#
+#
+#
+#  celery:
+#    build: ./app
+#    command: celery -A eomf worker -l info
+#    volumes:
+#      - ./app/:/code/
+#    
+#    #Env variables may be needed here?
+#
+#    depends_on:
+#      - redis
 
       
 volumes:
