@@ -11,16 +11,14 @@ services:
                       echo RESET_DB_FIN &&         
                       python manage.py flush --noinput &&         
                       echo FLUSH_FIN &&
-                      python manage.py makemigrations &&
-                      echo MAKEMIGRATIONS_FIN &&
                       python manage.py migrate --noinput -v 1 && 
                       echo MIGRATE_FIN &&
-                      python manage.py loaddata flatpage.json &&
-                      echo LOADDATA_FIN &&
                       python manage.py check &&
                       echo CHECK_FIN &&
                       gunicorn eomf.wsgi:application --bind 0.0.0.0:8000"
                       #python manage.py runserver 0.0.0.0:8000"
+
+#                     python manage.py makemigrations --empty pages &&
 
     #TODO: Remove the volume connection in production. There should be no connection between the container and machine in production to avoid attacks on the base machine.
     volumes:
@@ -31,7 +29,7 @@ services:
       - ./.env
     depends_on:
       - db
-      - redis
+#      - redis
 
 
 

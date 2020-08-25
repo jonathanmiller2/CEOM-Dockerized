@@ -62,7 +62,14 @@ if 'rosetta' in settings.INSTALLED_APPS:
     urlpatterns += [
         re_path(r'^rosetta/', include('rosetta.urls')),
     ]
-#Catch all
+
+#Catch flatpages
 urlpatterns += [
-    path('<path:url>', views.flatpage),
+    #re_path(r'^', views.flatpage, {'url':'/'}),
+    re_path(r'', include('django.contrib.flatpages.urls')),
 ]
+
+#Catch all
+#urlpatterns += [
+#    re_path(r'^', views.flatpage),
+#]
