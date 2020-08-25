@@ -10,7 +10,7 @@ from django.contrib.sites.models import Site
 FLATPAGES = [
     {
         "title": "Home",
-        "url": "/home",
+        "url": "/home/",
         "content": "<div class=\"slideshow\">&nbsp;&nbsp;&nbsp;<img src=\"/media/images/Splash/1.png\">&nbsp;&nbsp;&nbsp; <img src=\"/media/images/Splash/2.png\" >&nbsp;&nbsp;&nbsp; <img src=\"/media/images/Splash/3.png\" >&nbsp;&nbsp;&nbsp; <img src=\"/media/images/Splash/4.png\" >&nbsp;&nbsp;&nbsp; <img src=\"/media/images/Splash/5.png\" >&nbsp;&nbsp;&nbsp; <img src=\"/media/images/Splash/6.png\" ></div>",
         "enable_comments": False,
         "template_name":"home.html",
@@ -49,6 +49,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(
             add_flatpages_data,
-            remove_flatpages_data,
+            #remove_flatpages_data,
         ),
     ]
