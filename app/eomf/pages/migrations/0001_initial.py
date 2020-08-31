@@ -10,19 +10,19 @@ from django.contrib.sites.models import Site
 FLATPAGES = [
     {
         "title": "Home",
-        "url": "/home/",
-        "content": "<div class=\"slideshow\">&nbsp;&nbsp;&nbsp;<img src=\"/media/images/Splash/1.png\">&nbsp;&nbsp;&nbsp; <img src=\"/media/images/Splash/2.png\" >&nbsp;&nbsp;&nbsp; <img src=\"/media/images/Splash/3.png\" >&nbsp;&nbsp;&nbsp; <img src=\"/media/images/Splash/4.png\" >&nbsp;&nbsp;&nbsp; <img src=\"/media/images/Splash/5.png\" >&nbsp;&nbsp;&nbsp; <img src=\"/media/images/Splash/6.png\" ></div>",
+        "url": "/",
+        "content": "",
         "enable_comments": False,
         "template_name":"home.html",
         "registration_required": False
-    },
+    }
 ]
 
 
 def add_flatpages_data(apps, schema_editor):
-    new_site = Site.objects.create(domain='eomf.ou.edu', name='eomf.ou.edu')
-    print (new_site.id)
-    current_site = Site.objects.get(pk=1)
+    site = Site.objects.create(domain='eomf.ou.edu', name='eomf.ou.edu')
+    #print (new_site.id)
+    #current_site = Site.objects.get(pk=1)
     for page_dict in FLATPAGES:
         new_page = FlatPage.objects.create(
             title=page_dict['title'],
@@ -32,7 +32,7 @@ def add_flatpages_data(apps, schema_editor):
             template_name=page_dict['template_name'],
             registration_required=page_dict['registration_required'],
             )
-        new_page.sites.add(current_site)
+        new_page.sites.add(site)
 
 
 def remove_flatpages_data(apps, schema_editor):
