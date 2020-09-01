@@ -1,140 +1,149 @@
 {% load i18n %}
 <style type="text/css">
+
 	#menu-home > a:hover {
 		color: #009933;
 		font-weight:bold;
-		-moz-transition: all 0.2s;
-		-webkit-transition: all 0.2s;
-		-o-transition: all 0.2s;
 		transition:all 0.2s;
 	}
 	#menu-about > a:hover {
 		color: #00688B;
 		font-weight:bold;
-		-moz-transition: all 0.2s;
-		-webkit-transition: all 0.2s;
-		-o-transition: all 0.2s;
 		transition:all 0.2s;
 	}
 	#menu-photos > a:hover {
 		color: 	#99993D;
 		font-weight:bold;
-		-moz-transition: all 0.2s;
-		-webkit-transition: all 0.2s;
-		-o-transition: all 0.2s;
 		transition:all 0.2s;
 	}
 	#menu-vis > a:hover {
 		color: #008AE6;
 		font-weight:bold;
-		-moz-transition: all 0.2s;
-		-webkit-transition: all 0.2s;
-		-o-transition: all 0.2s;
 		transition:all 0.2s;
 	}
 	#menu-geohealth > a:hover {
 		color: #FF6666;
 		font-weight:bold;
-		-moz-transition: all 0.2s;
-		-webkit-transition: all 0.2s;
-		-o-transition: all 0.2s;
 		transition:all 0.2s;
 	}
 	#menu-gis > a:hover {
 		color: #19D1A3;
-		
 		font-weight:bold;
-		-moz-transition: all 0.2s;
-		-webkit-transition: all 0.2s;
-		-o-transition: all 0.2s;
 		transition:all 0.2s;
 	}
 	#menu-poi > a:hover {
 		color: 	#D17519;
 		font-weight:bold;
-		-moz-transition: all 0.2s;
-		-webkit-transition: all 0.2s;
-		-o-transition: all 0.2s;
 		transition:all 0.2s;
 	}
 	#menu-account > a:hover {
 		color: #8A8AE6;
 		font-weight:bold;
-		-moz-transition: all 0.2s;
-		-webkit-transition: all 0.2s;
-		-o-transition: all 0.2s;
 		transition:all 0.2s;
 	}
-
 	#menu-inventory > a:hover {
 		color: #8A8AE6;
 		font-weight:bold;
-		top:0;
-		-moz-transition: all 0.2s;
-		-webkit-transition: all 0.2s;
-		-o-transition: all 0.2s;
 		transition:all 0.2s;
 	}
-
 	#menu-water > a:hover {
 		color: #006994;
 		font-weight:bold;
-		top:0;
-		-moz-transition: all 0.2s;
-		-webkit-transition: all 0.2s;
-		-o-transition: all 0.2s;
 		transition:all 0.2s;
 	}
-.myiconsize {
-	font-size: 20px;
-}
-#form-select-language {
-	height:42.4px;
-	width:100px;
-}
-.select-lan {
-	width:100px;
-}
+	#menu-workshops > a:hover {
+		color: #282a2b;
+		font-weight:bold;
+		transition:all 0.2s;
+	}
+
+	.navbar {
+		background-color: #f3f3f3;
+	}
+
+	.active {
+		background-color: #e5e5e5;
+		box-shadow: inset 0px 0px 3px #d7d7d7;
+	}
+
+	.nav-link {
+		color: #777777;
+		width: 115px;
+		text-align: center;
+	}
 
 </style>
-<script type="text/javascript">
-	$('#mainmenu').bind('mouseenter', function(){
-	     $(this).effect("bounce", { times:3 }, 300);
-	});
-</script>
-<nav class="navbar-expand bg-dark wow fadeIn" id="mainmenu">
-	<ul class="navbar-nav">
-		<li id="menu-home" class="nav-item {% if '/' == request.path %} active {% endif %}"><a href="/" ><i id="test"class="icon-home myiconsize"></i> {% trans "Home" %}</a></li>
-		<li id="menu-about" {% if '/aboutus/' in request.path %}class='active'{% endif %}><a href="/aboutus/news"><i class="icon-info-sign myiconsize"></i> {% trans "About Us" %} </a></li>
-		<li id="menu-photos" {% if '/photos/' in request.path %}class='active'{% endif %}><a href="/photos/"><i class="icon-camera myiconsize"></i> {% trans "Photo" %}</a></li>
-		<!--<li id="menu-inventory" {% if '/inventory/' in request.path %}class='active'{% endif %}><a href="/inventory/"><i class="icon-list-ul myiconsize"></i> {% trans "Datasets" %} </a></li>-->
-		<li id="menu-vis" {% if '/modis/' in request.path %}class='active'{% endif %}><a href="/modis/visualization/"><i class="icon-globe myiconsize"></i> {% trans "MODIS" %}</a></li>
-		<li id="menu-geohealth" {% if '/geohealth/' in request.path %}class='active'{% endif %}><a href="/geohealth/">
-		<span class="icon-stack">
-			<i class="icon-circle-blank icon-stack-base"></i>
-  			<i class="icon-plus myiconsize"></i>
-		</span>
-		 {% trans "GeoHealth" %}</a></li>
-		<li id="menu-gis" {% if '/gisday/' in request.path %}class='active'{% endif %}><a href="/gisday/"><i class="icon-rss myiconsize"></i> {% trans "GIS Day" %}</a></li>
-		<li id="menu-workshops" {% if '/workshops/' in request.path %}class='active'{% endif %}><a href="/workshops/"><i class="icon-briefcase myiconsize"></i> {% trans "Workshops" %}</a></li>
-		
-		<li id="menu-water" {% if '/water/' in request.path %}class='active'{% endif %}><a href="/water/"><i class="icon-user myiconsize"></i> {% trans "Water" %}</a></li>
 
-
-		<li id="menu-account" {% if '/accounts/' in request.path %}class='active'{% endif %}><a href="/accounts/"><i class="icon-user myiconsize"></i> {% trans "Account" %}</a></li>
-
-		
-		<li id="form-select-language"><a> <form  action="/i18n/setlang/" method="post">
-			{% csrf_token %} 
-			<input  name="next" type="hidden" value="." />
-			<select name="language" class="select-lan" onchange="this.form.submit()">
-			    {% get_current_language as LANGUAGE_CODE %}
-			    {% for lang in LANGUAGES %}
-			    <option value="{{ lang.0 }}" {% if lang.0|lower == LANGUAGE_CODE|lower %}selected{% endif %}> {{ lang.1 }}</option>
-			    {% endfor %}
-			</select>
-			</form>     </a> 
+<nav class="navbar navbar-expand mb-4 wow fadeIn">
+	<ul class="navbar-nav ml-5">
+		<li id="menu-home" class="nav-item{% if '/' == request.path %} active{% endif %}">
+			<a class="nav-link" href="/">
+				<span class="fas fa-home"></span>
+				{% trans "Home" %}
+			</a>
 		</li>
+		<li id="menu-about" class="nav-item{% if '/aboutus/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/aboutus/news">
+				<span class="fas fa-info-circle"></span> 
+				{% trans "About Us" %} 
+			</a>
+		</li>
+		<li id="menu-photos" class="nav-item{% if '/photos/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/photos/">
+				<span class="fas fa-camera"></span> 
+				{% trans "Photo" %}
+			</a>
+		</li>
+		<!--<li id="menu-inventory" {% if '/inventory/' in request.path %}class='active'{% endif %}><a href="/inventory/"><span class="icon-list-ul navbar-icon"></span> {% trans "Datasets" %} </a></li>-->
+		<li id="menu-vis" class="nav-item{% if '/modis/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/modis/visualization/">
+				<span class="fas fa-globe-americas"></span> 
+				{% trans "MODIS" %}
+			</a>
+		</li>
+		<li id="menu-geohealth" class="nav-item{% if '/geohealth/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/geohealth/">
+				<span class="fas fa-heartbeat"></span>
+				 {% trans "GeoHealth" %}
+			</a>
+		</li>
+		<li id="menu-gis" class="nav-item{% if '/gisday/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/gisday/">
+				<span class="fas fa-rss"></span> 
+				{% trans "GIS Day" %}
+			</a>
+		</li>
+		<li id="menu-workshops" class="nav-item{% if '/workshops/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/workshops/">
+				<span class="fas fa-briefcase"></span> 
+				{% trans "Workshops" %}
+			</a>
+		</li>
+		<li id="menu-water" class="nav-item{% if '/water/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/water/">
+				<span class="fa fa-tint"></span>
+				{% trans "Water" %}
+			</a>
+		</li>
+		<li id="menu-account" class="nav-item{% if '/accounts/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/accounts/">
+				<span class="fa fa-user"></span> 
+				{% trans "Account" %}
+			</a>
+		</li>
+	</ul>
+
+	<form class="form-inline ml-4" action="/i18n/setlang/" method="post">
+		{% csrf_token %} 
+		<input  name="next" type="hidden" value="." />
+		<select name="language" class="select-lan" onchange="this.form.submit()">
+			{% get_current_language as LANGUAGE_CODE %}
+			{% for lang in LANGUAGES %}
+				<option value="{{ lang.0 }}" {% if lang.0|lower == LANGUAGE_CODE|lower %}selected{% endif %}> {{ lang.1 }}</option>
+			{% endfor %}
+		</select>
+	</form>     
+
 	</ul>
 </nav>
 
