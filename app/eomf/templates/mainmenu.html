@@ -95,16 +95,16 @@
 .select-lan {
 	width:100px;
 }
+
 </style>
 <script type="text/javascript">
 	$('#mainmenu').bind('mouseenter', function(){
 	     $(this).effect("bounce", { times:3 }, 300);
 	});
 </script>
-<div class="side-menu">
-<div class="nav-collapse collapse no-transition wow fadeIn" id="mainmenu">
-	<ul class="nav">
-		<li id="menu-home" {% if '/' == request.path %}class='active'{% endif %}><a href="/" ><i id="test"class="icon-home myiconsize"></i> {% trans "Home" %}</a></li>
+<nav class="navbar-expand bg-dark wow fadeIn" id="mainmenu">
+	<ul class="navbar-nav">
+		<li id="menu-home" class="nav-item {% if '/' == request.path %} active {% endif %}"><a href="/" ><i id="test"class="icon-home myiconsize"></i> {% trans "Home" %}</a></li>
 		<li id="menu-about" {% if '/aboutus/' in request.path %}class='active'{% endif %}><a href="/aboutus/news"><i class="icon-info-sign myiconsize"></i> {% trans "About Us" %} </a></li>
 		<li id="menu-photos" {% if '/photos/' in request.path %}class='active'{% endif %}><a href="/photos/"><i class="icon-camera myiconsize"></i> {% trans "Photo" %}</a></li>
 		<!--<li id="menu-inventory" {% if '/inventory/' in request.path %}class='active'{% endif %}><a href="/inventory/"><i class="icon-list-ul myiconsize"></i> {% trans "Datasets" %} </a></li>-->
@@ -136,6 +136,5 @@
 			</form>     </a> 
 		</li>
 	</ul>
-</div>
-</div>
+</nav>
 
