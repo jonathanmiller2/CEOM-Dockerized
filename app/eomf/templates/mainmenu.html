@@ -59,6 +59,8 @@
 
 	.navbar {
 		background-color: #f3f3f3;
+		border-bottom: 1px solid #d7d7d7;
+		box-shadow: 5px 0px 3px #d7d7d7
 	}
 
 	.active {
@@ -68,14 +70,15 @@
 
 	.nav-link {
 		color: #777777;
-		width: 115px;
+		width: 123px;
 		text-align: center;
 	}
-
 </style>
 
+<!-- TODO: Fix issues with buttons being too small to hold text in other languages. Also make sure translations are correct, of course.-->
+
 <nav class="navbar navbar-expand mb-4 wow fadeIn">
-	<ul class="navbar-nav ml-5">
+	<ul class="navbar-nav ml-5 mr-auto">
 		<li id="menu-home" class="nav-item{% if '/' == request.path %} active{% endif %}">
 			<a class="nav-link" href="/">
 				<span class="fas fa-home"></span>
@@ -133,7 +136,7 @@
 		</li>
 	</ul>
 
-	<form class="form-inline ml-4" action="/i18n/setlang/" method="post">
+	<form class="form-inline" action="/i18n/setlang/" method="post">
 		{% csrf_token %} 
 		<input  name="next" type="hidden" value="." />
 		<select name="language" class="select-lan" onchange="this.form.submit()">
@@ -143,7 +146,5 @@
 			{% endfor %}
 		</select>
 	</form>     
-
-	</ul>
 </nav>
 
