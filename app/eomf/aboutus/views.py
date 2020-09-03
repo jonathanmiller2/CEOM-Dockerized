@@ -1,7 +1,7 @@
 # Create your views here.
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from eomf.aboutus.models import Post, Group, Person, GalleryPhoto
 from itertools import chain
 from operator import attrgetter
@@ -14,10 +14,7 @@ def news(request):
         #~ available_years.append(date.year)
     #~ if post_year:
         posts = Post.objects.all().order_by("-date")
-        return render_to_response('aboutus/news.html', {
-            'posts': posts,
-            },context_instance=RequestContext(request)
-        )
+        return render(request, 'aboutus/news.html', context={'posts': posts})
     #~ elif post_id:
         #~ try:
 #~ 
@@ -73,7 +70,7 @@ def group_photos(request, selYear = None):
     return render_to_response('aboutus/group_photos.html', {
 	        'available_years' : available_years,
             'photos': photos,
-            },context_instance=RequestContext(request)
+            },context=RequestContext(request)
         )
     
     

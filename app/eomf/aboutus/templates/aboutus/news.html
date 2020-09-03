@@ -1,5 +1,5 @@
 {% extends "aboutus/base.html" %}
-{% load dbgettext_tags i18n %}
+{% load i18n %}
 {% block content %}
 
 <div class="well demo-4">
@@ -22,7 +22,7 @@
 					<h4>{% trans post.title %}</h4>
 					<h5>{{post.date}}</h5>
 					<div class="hr"></div>
-					<p>{{ post|parsed_gettext:"content"|safe }}</p>
+					<p>{{ post.content }}</p>
 					{% if post.images.all%}
 					<div class="hr"></div>
 					</br >
@@ -63,7 +63,5 @@
 		</div><!--tabbable -->
 	</div>
 </div>
-					<script>
-					</script>
 
 {% endblock %}

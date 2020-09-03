@@ -41,7 +41,7 @@ class Post(models.Model):
     title =models.TextField("Post Title",null=False, blank=False,)
     date = models.DateField("date", null=False)
     content = models.TextField("Content",null=False, blank=False,)
-    image_comlumn_number = models.CharField(" column images",max_length=1, choices=NUM_COLUMNS, default="1")
+    image_column_number = models.CharField(" column images",max_length=1, choices=NUM_COLUMNS, default="1")
     def __unicode__(self):
         return self.date.strftime('%Y-%M-%D') + " [" + self.title + "]"
 

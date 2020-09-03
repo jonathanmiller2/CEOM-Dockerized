@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ('title', models.TextField(verbose_name='Post Title')),
                 ('date', models.DateField(verbose_name='date')),
                 ('content', models.TextField(verbose_name='Content')),
-                ('image_comlumn_number', models.CharField(choices=[('1', 'One column image'), ('2', 'Two columns image')], default='1', max_length=1, verbose_name=' column images')),
+                ('image_column_number', models.CharField(choices=[('1', 'One column image'), ('2', 'Two columns image')], default='1', max_length=1, verbose_name=' column images')),
             ],
         ),
         migrations.CreateModel(
