@@ -176,20 +176,20 @@
             {% block container %}
             <div class="row">
                 {% block sidebar_span %}
-                <div class="span2">
+                <div class="col-2">
                     {% block sidebar %}
-                    <div class='card bg-light sidebar-nav span12'>
-                        <ul class="card-body nav nav-list sidebar-list">
+                    <nav class="card bg-light ml-5 navbar shadow-sm">
+                        <ul class="card-body navbar-nav">
         					{% block left_menu %}
                             {% endblock %}
                         </ul>
-                    </div>
+                    </nav>
                     {% endblock %}
                     {% block sidebar_extra %}{% endblock %}
                 </div>
                 {%endblock%}
                 {% block content_with_span10 %}
-                <div id='content' class="span10">
+                <div id='content' class="col-10">
                     {% block content %}{% endblock %}
                 </div>
                 {% endblock %}
