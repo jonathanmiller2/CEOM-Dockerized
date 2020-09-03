@@ -25,7 +25,8 @@
 
     .gridCard {
         border: 0px;
-        margin: 28px
+        margin: 10px;
+        flex: 0 0 480px;
     }
 
     .gridCardImg {
@@ -58,8 +59,8 @@
         transition: transform 1s ease, opacity .5s ease-out;
     }
 </style>
-<div id="main" class="row justify-content-md-center">
-    <div class="col-md-10 animate__animated animate__fadeIn">
+<div id="main" class="row justify-content-center">
+    <div class="col-10 animate__animated animate__fadeIn">
         <h2 class="animate__animated animate__bounceInRight text-center"> {% blocktrans %} Welcome to the Earth Observation and Modeling Facility {% endblocktrans %}(EOMF)
         </h2>
         <p style="padding:30px"> {% blocktrans %}The EOMF is a member of both (1) <a href='http://mpbio.ou.edu/'> Department of Microbiology and
@@ -70,7 +71,7 @@
             changes, water quality, climate, infectious diseases and public health. It promotes community remote sensing and citizen science to
             address the grand challenges in our dynamic and rapidly changing planet Earth and the society. {% endblocktrans %} </p>
         <div class="row">
-            <div id="box1" class="col gridCard">
+            <div id="box1" class="col mx-auto gridCard">
                 <div id="box1-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
@@ -106,8 +107,8 @@
                     </a>
                 </div>
             </div>
-            <div id="box2" class="col gridCard">
-                <div style="margin: 0px 0px 20px 0px">
+            <div id="box2" class="col mx-auto gridCard">
+                <div>
                     In effort to participate in crowdsourcing and citizen science, we have developed the 
                     <a href='http://www.eomf.ou.edu/photos'>Global Geo-Referenced Field Photo Library,</a> for participants to 
                     <li> share, visualize, and analyze geo-referenced photos from various locations around the world,</li>
@@ -123,22 +124,20 @@
                     href="http://www.eomf.ou.edu/static/Field%20Photo%20Animation%20Draft%2003.mp4">video</a> on how to use the app.<br> Please join
                 thousands of people to share your field photos, show your footprint of travel, and support monitoring of our Planet Earth.
             </div>
-            <div id="box3" class="col gridCard">
+            <div id="box3" class="col mx-auto gridCard">
                 <img class="gridCardImg" src="/static/img/Animation/GPP_2010.gif" />
                 <h5>Featured Activity – Gross Primary Productivity of global terrestrial ecosystems</h5>
             </div>
         </div>
-        <div class="row">
-            <div id="box4" class="col gridCard">
+        <div class="row mt-4">
+            <div id="box4" class="col mx-auto gridCard">
                 <p class="lead">
                     <div align="center">
                         <a href='http://http://www.eomf.ou.edu/photos/'><img class="gridCardImg" src="/static/img/thumbnail_card4.jpg" /> </a>
                     </div>
                 </p>
             </div>
-            <div id="box5" class="col gridCard">
-            </div>
-            <div id="box6" class="col gridCard">
+            <div id="box6" class="col mx-auto gridCard">
                 <p class="lead">
                     <div align="center">
                         <a href='http://www.eomf.ou.edu/photos/'><img class="gridCardImg" src="/static/img/thumbnail_card6.jpg" /> </a>
