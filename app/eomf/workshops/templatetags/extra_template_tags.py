@@ -7,4 +7,4 @@ register = template.Library()
 @register.filter
 @stringfilter
 def render(value):
-    return engines['django'].from_string(value).render(Context())
+    return engines['django'].from_string(value).render()

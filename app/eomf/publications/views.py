@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.template import RequestContext
@@ -23,14 +23,7 @@ def index(request):
         year_list.append(pub)
         years[year] = year_list
 
-    return render_to_response(
-        'publications/section_list.html',
-        {
-            'section_list': years
-        },
-        context_instance=RequestContext(request)
-    )
-
+    return render(request, 'publications/section_list.html', context={'section_list': years})
 
 def detail(request):
     '''

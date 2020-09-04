@@ -45,20 +45,11 @@ def news(request):
 
 def people(request):
     people = Person.objects.all().order_by('group__order', 'alumni_group__order','order', 'last_name')
-    t = loader.get_template('aboutus/people.html')
-    c = RequestContext(request,{
+    return render(request, 'aboutus/people.html', context={
         'people': people,
         'cu':[1,2,3,4,5,6,7,8,9],
         'alum':[10,11,12,13,14,15,16,17,18,19],
     })
-    return HttpResponse(t.render(c))
-
-def bhrgvbolla(request):
-    t = loader.get_template('aboutus/bhrgv.html')
-    c = RequestContext(request,{'conent_raw' : True, 
-        })
-    return HttpResponse(t.render(c))
-
 
 def group_photos(request, selYear = None):
     available_years=GalleryPhoto.objects.all().values_list('year', flat=True).order_by('-year')
@@ -67,11 +58,10 @@ def group_photos(request, selYear = None):
         selYear= available_years[0]
     if selYear:
         photos = GalleryPhoto.objects.all().filter(year=selYear).order_by('-year','order')
-    return render_to_response('aboutus/group_photos.html', {
-	        'available_years' : available_years,
-            'photos': photos,
-            },context=RequestContext(request)
-        )
+    return render(request, 'aboutus/group_photos.html', context={
+        'available_years' : available_years,
+        'photos': photos,
+    })
     
     
      

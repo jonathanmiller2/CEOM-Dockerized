@@ -1,6 +1,6 @@
 from django.template import Context, RequestContext, loader, Template
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -56,11 +56,10 @@ months_list_names = ['january','february','march','april','may','june','july','a
 months_numbers = range(0,12)
 
 def stats_main(request):
-	t = loader.get_template('stats/base.html')
 	set_user = User.objects.raw('select auth_user.id,auth_user.date_joined from auth_user')
 	count, build_cat = getnumusers(set_user)
-	c = RequestContext(request,{'test':set_user,'search_yes':False,'count':count, 'build_cat':build_cat, 'cumm':False, 'useryear':True,})
-	return HttpResponse(t.render(c))
+	return render(request, 'stats/base.html', context={'test':set_user,'search_yes':False,'count':count, 'build_cat':build_cat, 'cumm':False, 'useryear':True,})
+
 
 def getnumusers(set_user):
 	data_list = []
@@ -96,18 +95,14 @@ def getnumusersbyyear(year1, year2, set_user):
 	return out_data_list, build_cat
 
 def stats_limit(request,year1,year2):
-	t = loader.get_template('stats/base.html')
 	set_user = User.objects.raw('select auth_user.id,auth_user.date_joined from auth_user')
 	count, build_cat = getnumusersbyyear(year1, year2, set_user)
-	c = RequestContext(request,{'test':set_user,'count':count,'search_yes':False, 'build_cat':build_cat, 'cumm':False, 'year_range':True, 'year1':year1,'year2':year2,})
-	return HttpResponse(t.render(c))
+	return render(request, 'stats/base.html', context={'test':set_user,'count':count,'search_yes':False, 'build_cat':build_cat, 'cumm':False, 'year_range':True, 'year1':year1,'year2':year2})
 
 def stats_cumm(request):
-	t = loader.get_template('stats/base.html')
 	set_user = User.objects.raw('select auth_user.id,auth_user.date_joined from auth_user')
 	count, build_cat = getnumusersbyyearcumm(2007, 2016, set_user)
-	c = RequestContext(request,{'test':set_user,'search_yes':False,'count':count, 'build_cat':build_cat, 'cumm':True})
-	return HttpResponse(t.render(c))
+	return render(request, 'stats/base.html', context={'test':set_user,'search_yes':False,'count':count, 'build_cat':build_cat, 'cumm':True})
 
 def getnumusersbyyearcumm(year1, year2, set_user):
 	data_list = []
@@ -128,18 +123,14 @@ def getnumusersbyyearcumm(year1, year2, set_user):
 	return out_data_list, build_cat
 
 def stats_limit_mon(request,year1,year2):
-	t = loader.get_template('stats/base.html')
 	set_user = User.objects.raw('select auth_user.id,auth_user.date_joined from auth_user')
 	count, build_cat, data_mon, new_month = getnumusersbymon(year1, year2, set_user)
-	c = RequestContext(request,{'new_month':new_month,'search_yes':False,'months_numbers':months_numbers,'months_list_names':months_list_names,'year1':year1,'year2':year2,'data_mon':data_mon,'test':set_user,'count':count, 'build_cat':build_cat, 'cumm':False, 'year_range':True, 'year1':year1,'year2':year2, 'mont':True})
-	return HttpResponse(t.render(c))
+	return render(request, 'stats/base.html', context={'new_month':new_month,'search_yes':False,'months_numbers':months_numbers,'months_list_names':months_list_names,'year1':year1,'year2':year2,'data_mon':data_mon,'test':set_user,'count':count, 'build_cat':build_cat, 'cumm':False, 'year_range':True, 'year1':year1,'year2':year2, 'mont':True})
 
 def stats_limit_mon1(request,mon1,day1,year1,mon2,day2,year2):
-	t = loader.get_template('stats/base.html')
 	set_user = User.objects.raw('select auth_user.id,auth_user.date_joined from auth_user')
 	count, build_cat, data_mon, new_month = getnumusersbymon(year1, year2, set_user)
-	c = RequestContext(request,{'new_month':new_month,'search_yes':False,'months_numbers':months_numbers,'months_list_names':months_list_names,'year1':year1,'year2':year2,'data_mon':data_mon,'test':set_user,'count':count, 'build_cat':build_cat, 'cumm':False, 'year_range':True, 'year1':year1,'year2':year2, 'mont':True})
-	return HttpResponse(t.render(c))
+	return render(request, 'stats/base.html', context={'new_month':new_month,'search_yes':False,'months_numbers':months_numbers,'months_list_names':months_list_names,'year1':year1,'year2':year2,'data_mon':data_mon,'test':set_user,'count':count, 'build_cat':build_cat, 'cumm':False, 'year_range':True, 'year1':year1,'year2':year2, 'mont':True})
 
 
 # data_mon :  dictionary to contain monthly data year passed as a key 
@@ -192,18 +183,14 @@ def getnumusersbymon(year1, year2, set_user):
 
 
 def stats_limit_phot1(request,mon1,day1,year1,mon2,day2,year2):
-	t = loader.get_template('stats/base.html')
 	set_user = Photo.objects.raw('select photos.id,photos.uploaddate from photos')
 	count, build_cat, data_mon, new_month = getnumphotosbymon(year1, year2, set_user)
-	c = RequestContext(request,{'new_month':new_month,'search_yes':False,'months_numbers':months_numbers,'months_list_names':months_list_names,'year1':year1,'year2':year2,'data_mon':data_mon,'test':set_user,'count':count, 'build_cat':build_cat, 'cumm':False, 'year_range':True, 'year1':year1,'year2':year2, 'phot':True})
-	return HttpResponse(t.render(c))
+	return render(request, 'stats/base.html', context={'new_month':new_month,'search_yes':False,'months_numbers':months_numbers,'months_list_names':months_list_names,'year1':year1,'year2':year2,'data_mon':data_mon,'test':set_user,'count':count, 'build_cat':build_cat, 'cumm':False, 'year_range':True, 'year1':year1,'year2':year2, 'phot':True})
 
 def stats_limit_phot(request,year1,year2):
-	t = loader.get_template('stats/base.html')
 	set_user = Photo.objects.raw('select photos.id,photos.uploaddate from photos')
 	count, build_cat, data_mon, new_month = getnumphotosbymon(year1, year2, set_user)
-	c = RequestContext(request,{'new_month':new_month,'search_yes':False,'months_numbers':months_numbers,'months_list_names':months_list_names,'year1':year1,'year2':year2,'data_mon':data_mon,'test':set_user,'count':count, 'build_cat':build_cat, 'cumm':False, 'year_range':True, 'year1':year1,'year2':year2, 'phot':True})
-	return HttpResponse(t.render(c))
+	return render(request, 'stats/base.html', context={'new_month':new_month,'search_yes':False,'months_numbers':months_numbers,'months_list_names':months_list_names,'year1':year1,'year2':year2,'data_mon':data_mon,'test':set_user,'count':count, 'build_cat':build_cat, 'cumm':False, 'year_range':True, 'year1':year1,'year2':year2, 'phot':True})
 '''
 def getnumphotosbymon(year1, year2, set_user):
 	data_list = []
@@ -336,11 +323,9 @@ def getnumphotosbymon(year1, year2, set_user):
 FROM "photos" WHERE "photos"."uploaddate" BETWEEN 2015-01-01 AND 2015-12-31'''
 
 def stats_photo_cumm(request):
-	t = loader.get_template('stats/base.html')
 	set_user = Photo.objects.raw('select photos.id,photos.uploaddate from photos')
 	count, build_cat = getnumphotosbyyearcumm(2007, 2016, set_user)
-	c = RequestContext(request,{'test':set_user,'search_yes':False,'count':count, 'build_cat':build_cat, 'cumm':True, 'phot':True})
-	return HttpResponse(t.render(c))
+	return render(request, 'stats/base.html', context={'test':set_user,'search_yes':False,'count':count, 'build_cat':build_cat, 'cumm':True, 'phot':True})
 
 def getnumphotosbyyearcumm(year1, year2, set_user):
 	build_cat = []
@@ -365,20 +350,16 @@ def getnumphotosbyyearcumm(year1, year2, set_user):
 	return out_data_list, build_cat
 
 def form_test(request):
-	t = loader.get_template('stats/base.html')
-	c = RequestContext(request,{'test_form': True,'search_yes':False})
-	return HttpResponse(t.render(c))
+	return render(request, 'stats/base.html', context={'test_form': True,'search_yes':False})
 
 def search_frm(request):
 	photos, search = search_for_photos(request)
 	out_data_list, build_cat, data_mon, rebuild_month_data, peryear_list = getSearchData1(photos,2007,2016)
 	#out_data_list, build_cat, data_mon, rebuild_month_data, peryear_list = 1,2,3,4,5
-	t = loader.get_template('stats/base.html')
 	#set_user = User.objects.raw('select auth_user.id,auth_user.date_joined from auth_user')
 	#count, build_cat = getnumusers(set_user)
 	#c = RequestContext(request,{'test':set_user,'count':count, 'build_cat':build_cat, 'cumm':False})
-	c = RequestContext(request,{'peryear':peryear_list,'photos':photos,'search_yes':True, 'search': search, 'count':out_data_list, 'months_list_names':months_list_names,'build_cat':build_cat, 'data_mon':data_mon, 'new_month':rebuild_month_data})
-	return HttpResponse(t.render(c))
+	return render(request, 'stats/base.html', context={{'peryear':peryear_list,'photos':photos,'search_yes':True, 'search': search, 'count':out_data_list, 'months_list_names':months_list_names,'build_cat':build_cat, 'data_mon':data_mon, 'new_month':rebuild_month_data}})
 
 def getSearchData1(set_user,year1,year2):
 	data_list = []

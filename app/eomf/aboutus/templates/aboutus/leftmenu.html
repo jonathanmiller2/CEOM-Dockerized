@@ -9,9 +9,17 @@
 		font-size: 11pt;
 		color: #4f85d1;
 	}
+
+	.nav-header {
+        color: #999999;
+		font-weight: bold;
+		font-size: 8pt;
+		text-transform: uppercase;
+		margin: 1.5em 0em 0.25em 1.5em;
+    }
 </style>
-<li>
-	<h5 class="ml-4 my-3">{% trans "About Us" %}</h5>
+<li class="nav-header">
+	{% trans "About Us" %}
 </li>
 <li>
 	<!--{% if '/news/' in request.path %}class="active"{% endif %}-->

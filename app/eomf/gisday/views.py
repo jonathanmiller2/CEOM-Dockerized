@@ -1,14 +1,14 @@
 #TODO: Are these imports necessary
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.forms.utils import ErrorList
 from django.core.mail import send_mail
 
 from eomf.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm, SurveyForm, DemographicSurveyForm, volunteerForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
-from eomf.gisday.models import Booth
+from eomf.gisday.models import Booth, Year, OverviewImage
 import os
 import sys
 import json
@@ -47,7 +47,7 @@ def gallery_2012(request):
                 '/media/gisday/2012/photo-gallery/', filename))
         except:
             pass
-    return render_to_response('gisday/2012/gallery.html', {'available_years': available_years, 'photos': photos}, context_instance=RequestContext(request))
+    return render(request, 'gisday/2012/gallery.html', context={'available_years': available_years, 'photos': photos})
 
 
 def gallery(request, year):
@@ -70,13 +70,13 @@ def gallery(request, year):
                     'gisday/' + str(year) + '/photo-gallery/', filename))
             except:
                 pass
-        return render_to_response('gisday/20XX/photoGallery.html', {
+        return render(request, 'gisday/20XX/photoGallery.html', context={
             'available_years': available_years,
             'gisdate': date,
             'photos': photos
-        }, context_instance=RequestContext(request))
+        })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
 def images(request, year):
@@ -84,13 +84,13 @@ def images(request, year):
     if year_available(year):
         date = Year.objects.get(date__year=year)
         photos = GisDayPhoto.objects.all().filter(year=date)
-        return render_to_response('gisday/20XX/imageGallery.html', {
+        return render(request, 'gisday/20XX/imageGallery.html', context={
             'available_years': available_years,
             'gisdate': date,
             'photos': photos,
-        }, context_instance=RequestContext(request))
+        })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
 def sponsors(request, year):
@@ -104,15 +104,15 @@ def sponsors(request, year):
             content = SponsorsContent.objects.get(year=date).content
         except:
             content = "Contents is empty, please contact the administrator"
-        return render_to_response('gisday/20XX/sponsors.html', {
+        return render(request, 'gisday/20XX/sponsors.html', context={
             'available_years': available_years,
             'gisdate': date,
             'sponsors': sponsors,
             'items': items,
             'content': content,
-        }, context_instance=RequestContext(request))
+        })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
 photoMessage = '''
@@ -134,7 +134,7 @@ def photo_contest(request, year):
             if date.photo_contest_hidden:
                 raise "content is hidden!"
         except:
-            return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
         form = None
         need_login = False
         already_registered = False
@@ -164,16 +164,16 @@ def photo_contest(request, year):
         else:
             need_login = True
         form = None
-        return render_to_response('gisday/20XX/photoContest.html', {
+        return render(request, 'gisday/20XX/photoContest.html', context={
             'available_years': available_years,
             'gisdate': date,
             "need_login": need_login,
             "already_registered": already_registered,
             "form": form,
             "content": content.content,
-        }, context_instance=RequestContext(request))
+        })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
 def getValidatedPhotoContestCopy(request, form):
@@ -207,7 +207,7 @@ def poster_contest(request, year):
             if date.poster_contest_hidden:
                 raise "content is hidden!"
         except:
-            return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
         if registration_enabled(year):
             if request.method == 'POST':
                 # return HttpResponse("I was here!!")
@@ -242,7 +242,7 @@ def poster_contest(request, year):
         posters = Poster.objects.all().filter(
             validated=True, year=date).order_by('category', "created")[:200]
 
-        return render_to_response("gisday/20XX/posterContest.html", {
+        return render(request, "gisday/20XX/posterContest.html", context={
             'available_years': available_years,
             'gisdate': date,
             "posters": posters,
@@ -250,9 +250,9 @@ def poster_contest(request, year):
             "registration_successful": registration_successful,
             "content": content.content,
             "pyear": year,
-        }, context_instance=RequestContext(request))
+        })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 np = '''Dear Exhibitor,
 
@@ -284,7 +284,7 @@ def booth(request, year):
         try:
             content = BoothContent.objects.get(year=date)
         except:
-            return render_to_response('gisday/registrationsoon.html', {'available_years': available_years}, context_instance=RequestContext(request))
+            return render(request, 'gisday/registrationsoon.html', context={'available_years': available_years})
         registration_successful = False
         if registration_enabled(year):
 
@@ -319,7 +319,7 @@ def booth(request, year):
         booth = Booth.objects.all().filter(validated=True, year=date)[
             :max_number_of_booths]
 
-        return render_to_response("gisday/20XX/booth.html", {
+        return render(request, "gisday/20XX/booth.html", context={
             'available_years': available_years,
             'gisdate': date,
             "booth": booth,
@@ -327,9 +327,9 @@ def booth(request, year):
             "registration_successful": registration_successful,
             'content': content.content,
             "pyear": year,
-        }, context_instance=RequestContext(request))
+        })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
 def visitor_registration(request, year):
@@ -341,7 +341,7 @@ def visitor_registration(request, year):
         try:
             content = VisitorRegistrationContent.objects.get(year=date)
         except:
-            return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
         if registration_enabled(year):
             if request.method == 'POST':
                 form = VisitorForm(request.POST)
@@ -371,16 +371,16 @@ def visitor_registration(request, year):
 
         numberOfVisitors = len(Visitor.objects.filter(year=date))
 
-        return render_to_response("gisday/20XX/visitor.html", {
+        return render(request, "gisday/20XX/visitor.html", context={
             'available_years': available_years,
             'gisdate': date,
             "numberOfVisitors": numberOfVisitors,
             "form": form,
             "registration_successful": registration_successful,
             "content": content.content,
-        }, context_instance=RequestContext(request))
+        })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
 def about_us(request, year):
@@ -393,14 +393,14 @@ def about_us(request, year):
             content = CommitteeContent.objects.get(year=date).content
         except:
             content = "No content in database. Please contact administrator to fix this"
-        return render_to_response('gisday/20XX/aboutus.html', {
+        return render(request, 'gisday/20XX/aboutus.html', context={
             'available_years': available_years,
             'gisdate': date,
             'people': people,
             'content': content,
-        }, context_instance=RequestContext(request))
+        })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
 def summary(request, year):
@@ -412,14 +412,14 @@ def summary(request, year):
             if date.summary_hidden:
                 raise "content is hidden!"
         except:
-            return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
-        return render_to_response('gisday/20XX/summary.html', {
+            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'gisday/20XX/summary.html', context={
             'available_years': available_years,
             'gisdate': date,
             'content': content.content,
-        }, context_instance=RequestContext(request))
+        })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
 def agenda(request, year):
@@ -434,14 +434,14 @@ def agenda(request, year):
             if item.speaker:
                 has_speaker = True
                 break
-        return render_to_response('gisday/20XX/agenda.html', {
+        return render(request, 'gisday/20XX/agenda.html', context={
             'available_years': available_years,
             'gisdate': date,
             'agenda_by_date': agenda_entries_by_date,
             'has_speaker': has_speaker,
-        }, context_instance=RequestContext(request))
+        })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
 def announcements(request, year, position=None):
@@ -454,26 +454,26 @@ def announcements(request, year, position=None):
             position = len(announcements) - 1
         position = max(min(int(position), len(announcements) - 1), 0)
 
-        return render_to_response('gisday/20XX/announcements.html', {
+        return render(request, 'gisday/20XX/announcements.html', context={
             'available_years': available_years,
             'gisdate': date,
             'announcements': announcements,
             'position': position,
-        }, context_instance=RequestContext(request))
+        })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
 def logistics(request, year, name=None):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
     if year_available(year):
         date = Year.objects.get(date__year=year)
-        return render_to_response('gisday/20XX/logistics.html', {
+        return render(request, 'gisday/20XX/logistics.html', context={
             'available_years': available_years,
             'gisdate': date,
-        }, context_instance=RequestContext(request))
+        })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
 def overview(request):
@@ -483,18 +483,18 @@ def overview(request):
         content = OverviewContent.objects.all()[0].content
     except:
         content = 'Error: content is missing in the database for overview.'
-    return render_to_response('gisday/overview.html', {
+    return render(request, 'gisday/overview.html', context={
         'available_years': available_years,
         'content': content,
         'images': images,
-    }, context_instance=RequestContext(request))
+    })
 
 
 def year2012(request):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
-    return render_to_response('gisday/2012/2012.html', {
+    return render(request, 'gisday/2012/2012.html', context={
         'available_years': available_years,
-    }, context_instance=RequestContext(request))
+    })
 
 
 def survey(request, year):
@@ -502,7 +502,7 @@ def survey(request, year):
     if year_available(year):
         date = Year.objects.get(date__year=year)
         if not date.survey_open:
-            return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
         try:
             content = SurveyContents.objects.get(year=date).content
         except:
@@ -511,31 +511,31 @@ def survey(request, year):
             form = SurveyForm(request.POST)
             if form.is_valid():
                 data = form.save()
-                return render_to_response('gisday/20XX/survey.html', {
+                return render(request, 'gisday/20XX/survey.html', context={
                     'available_years': available_years,
                     'gisdate': date,
                     'registration_successful': True,
                     'content': content,
-                }, context_instance=RequestContext(request))
+                })
             else:
-                return render_to_response('gisday/20XX/survey.html', {
+                return render(request, 'gisday/20XX/survey.html', context={
                     'available_years': available_years,
                     'gisdate': date,
                     'form': form,
                     'content': content,
-                }, context_instance=RequestContext(request))
+                })
         else:
             form = SurveyForm(initial={
                 'year': date
             })
-            return render_to_response('gisday/20XX/survey.html', {
+            return render(request, 'gisday/20XX/survey.html', context={
                 'available_years': available_years,
                 'gisdate': date,
                 'form': form,
                 'content': content,
-            }, context_instance=RequestContext(request))
+            })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
 def demographic_survey(request, year):
@@ -543,33 +543,33 @@ def demographic_survey(request, year):
     if year_available(year):
         date = Year.objects.get(date__year=year)
         if not date.survey_open:
-            return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
         if request.method == "POST":
             form = DemographicSurveyForm(request.POST)
             if form.is_valid():
                 data = form.save()
-                return render_to_response('gisday/20XX/demographic_survey.html', {
+                return render(request, 'gisday/20XX/demographic_survey.html', context={
                     'available_years': available_years,
                     'gisdate': date,
                     'registration_successful': True,
-                }, context_instance=RequestContext(request))
+                })
             else:
-                return render_to_response('gisday/20XX/demographic_survey.html', {
+                return render(request, 'gisday/20XX/demographic_survey.html', context={
                     'available_years': available_years,
                     'gisdate': date,
                     'form': form,
-                }, context_instance=RequestContext(request))
+                })
         else:
             form = DemographicSurveyForm(initial={
                 'year': date
             })
-            return render_to_response('gisday/20XX/demographic_survey.html', {
+            return render(request, 'gisday/20XX/demographic_survey.html', context={
                 'available_years': available_years,
                 'gisdate': date,
                 'form': form,
-            }, context_instance=RequestContext(request))
+            })
     else:
-        return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 def boothvalidation(email, email2):
     if(email2 == email):
@@ -592,7 +592,7 @@ def boothupdate(request, id, year, email):
         try:
             content = BoothContent.objects.get(year=date)
         except:
-            return render_to_response('gisday/registrationsoon.html', {'available_years': available_years}, context_instance=RequestContext(request))
+            return render(request, 'gisday/registrationsoon.html', context={'available_years': available_years})
     # available_years = Year.objects.filter(hidden=False).order_by('-date')
     # if year_available(year):
     #     form = None
@@ -653,12 +653,12 @@ def boothupdate(request, id, year, email):
             form = None
             registration_successful = True
             # return HttpResponse("got into post and came till here")
-            return render_to_response("gisday/Booth_update_form.html", {
+            return render(request, "gisday/Booth_update_form.html", context={
                 "booth": booth,
                 "form": form,
                 "registration_successful": registration_successful,
                 "pyear": year,
-            }, context_instance=RequestContext(request))
+            })
     else:
         form = BoothForm(initial={
             'year': date,
@@ -681,9 +681,8 @@ def boothupdate(request, id, year, email):
             'tshirt_size_1': booth.tshirt_size_1,
             'tshirt_size_2': booth.tshirt_size_2,
         })
-        t = loader.get_template('gisday/Booth_update_form.html')
-        c = RequestContext(request, {'pers': booth, 'form': form, 'get': True})
-        return HttpResponse(t.render(c))
+
+        return render(request, 'gisday/Booth_update_form.html', context={'pers': booth, 'form': form, 'get': True})
     return HttpResponse("Some thing went wrong!")
 
 
@@ -709,7 +708,7 @@ def posterupdate(request, id, year, email):
                 if date.poster_contest_hidden:
                     raise "content is hidden!"
             except:
-                return render_to_response('gisday/notfound.html', {'available_years': available_years}, context_instance=RequestContext(request))
+                return render(request, 'gisday/notfound.html', context={'available_years': available_years})
         # available_years = Year.objects.filter(hidden=False).order_by('-date')
         # if year_available(year):
         #     form = None
@@ -763,7 +762,7 @@ def posterupdate(request, id, year, email):
                 registration_successful = True
                 posters = Poster.objects.all().filter(
                 validated=True, year=date).order_by('category', "created")[:200]
-                return render_to_response("gisday/20XX/posterContest.html", {
+                return render(request, "gisday/20XX/posterContest.html", context={
                     'available_years': available_years,
                     'gisdate': date,
                     "posters": posters,
@@ -771,7 +770,7 @@ def posterupdate(request, id, year, email):
                     "registration_successful": registration_successful,
                     "content": content.content,
                     "pyear": year,
-                }, context_instance=RequestContext(request))
+                })
         else:
             form = PosterForm(initial={
                 'year': date,
@@ -788,7 +787,7 @@ def posterupdate(request, id, year, email):
                 'institution' : poster.institution,
             })
             t = loader.get_template('gisday/Poster_update_form.html')
-            c = RequestContext(request, {'pers': poster, 'form': form, 'get': True})
+            c = RequestContext(request, context={'pers': poster, 'form': form, 'get': True})
             return HttpResponse(t.render(c))
         return HttpResponse("Some thing went wrong!")
 
