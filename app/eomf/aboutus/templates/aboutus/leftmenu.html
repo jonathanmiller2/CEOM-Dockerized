@@ -1,67 +1,84 @@
-{% load i18n %}
-<li class="nav-header"><h5>{% trans "About Us" %}</h5></li>
-<li> <!--{% if '/news/' in request.path %}class="active"{% endif %}-->
-	<a href="/aboutus/news/" {% if 'aboutus/news/' in request.path %}class="active"{% endif %} id="news">{% trans "News" %}</a>
-	
-<li> <!--{% if '/people/' in request.path %}class="active"{% endif %}-->
-	<a href="/aboutus/people/">{% trans "People" %}</a>
-</li>
+{% load i18n %} 
+<style>
+	a {
+		font-size: 11pt;
+		color: #4f85d1;
+	}
 
+	a > p {
+		font-size: 11pt;
+		color: #4f85d1;
+	}
+</style>
 <li>
-	<a href="#" data-toggle="collapse" data-target="#Publications"> {% trans "Publications" %}</a>
-		<ul {% if '/aboutus/publications/' in request.path %}style="list-style: none;" id="Publications"
-			{% else %}	class="collapse" id="Publications"
-			{% endif %} >
-			<li {% if request.GET.type == 'jour' %} class="active"{% endif %}> <a href="/aboutus/publications/?type=jour" >{% trans "Referred Journal Publications" %}</a></li>
-			<li {% if request.GET.type == 'chap' %}class="active" {% endif %}><a href="/aboutus/publications/?type=chap">{% trans "Books and Book Chapters" %}</a></li>
-			<li {% if request.GET.type == 'pres' %} class="active" {% endif %}><a href="/aboutus/publications/?type=pres">{% trans "Presentations" %}</a></li>
-		</ul>
+	<h5 class="ml-4 my-3">{% trans "About Us" %}</h5>
 </li>
-
 <li>
-	<a href="/aboutus/research/" data-toggle="collapse" data-target="#Research"> {% trans "Research" %}</a>
-		<ul {% if '/aboutus/research/' in request.path %}style="list-style: none;" id="Research"
-			{% elif '/aboutus/themes/' in request.path %}style="list-style: none;" id="Research"
-			{% elif '/aboutus/projects/' in request.path %}style="list-style: none;" id="Research"
-			{% else %} class="collapse" id="Research" style="list-style: none;"
-			{% endif %}	>
-			<li {% if '/aboutus/research/' in request.path %} class="active"{% endif %}><a href="/aboutus/research/">{% trans "Overview" %}</li></a>
-			<li {% if '/aboutus/projects/' in request.path %}class="active"{% endif %}><a href="/aboutus/research/projects/">{% trans "Projects" %}</a></li>
-			<li {% if '/aboutus/themes/' in request.path %}class="active"{% endif %}><a href="/aboutus/research/themes/">{% trans "Themes" %}</a></li>
-		</ul>
-</li>
-
+	<!--{% if '/news/' in request.path %}class="active"{% endif %}-->
+	<a href="/aboutus/news/" class="btn btn-light btn-block rounded-0 p-0" id="news">
+		<p class="ml-4 m-0 text-left"> {% trans "News" %} </p>
+	</a>
 <li>
-	<a href="#" data-toggle="collapse" data-target="#Education"> {% trans "Education" %}</a>
-		<ul {% if '/aboutus/awards/' in request.path %}style="list-style: none;" id="Education"
-			{% elif '/aboutus/education/' in request.path %}style="list-style: none;" id="Education"
-			{% elif '/aboutus/courses/' in request.path %}style="list-style: none;" id="Education"
-			{% else %} class="collapse" id="Education" style="list-style: none;"
-			{% endif %}	>
-			<li {% if '/aboutus/overview/' in request.path %}class="active"{% endif %}><a href="/aboutus/education/education/">{% trans "Overview" %}</a></li>
-			<li {% if '/aboutus/courses/' in request.path %}class="active"{% endif %}><a href="/aboutus/education/courses/">{% trans "Courses" %}</a></li>
-			<li {% if '/aboutus/awards/' in request.path %}class="active"{% endif %}><a href="/aboutus/education/student_awards/">{% trans "Student Awards" %}</a></li>
-			<a href="/gisday/">{% trans "GIS Day" %}</a></li>
-		</ul>
+	<!--{% if '/people/' in request.path %}class="active"{% endif %}-->
+	<a type="button" class="btn btn-light btn-block rounded-0 p-0" href="/aboutus/people/">
+		<p class="ml-4 m-0 text-left"> {% trans "People" %} </p>
+	</a>
 </li>
-
 <li>
-	<a href="#" data-toggle="collapse" data-target="#Facilities"> {% trans "Facilities" %} </a>
-		<ul {% if '/aboutus/facilities/' in request.path %} style="list-style: none;" id="Facilities"
-			{% elif '/aboutus/facilities/clab/' in request.path %}style="list-style: none;" id="Facilities"
-			{% elif '/aboutus/facilities/vlab/' in request.path %} style="list-style: none;" id="Facilities"
-			{% elif '/aboutus/facilities/rslab/' in request.path %} style="list-style: none;" id="Facilities"
-			{% elif '/aboutus/facilities/isos/' in request.path %} style="list-style: none;" id="Facilities"
-			{% else %}	class="collapse" id="Facilities"
-			{% endif %} >
-			<li {% if '/aboutus/facilities/' in request.path %} class="active"{% endif %}> <a href="/aboutus/facilities/"> {% trans "Overview" %} </a></li>
-			<li {% if '/aboutus/facilities/clab/' in request.path %} class="active"{% endif %}> <a href="/aboutus/facilities/clab/" >{% trans "Computational Lab" %}</a></li>
-			<li {% if '/aboutus/facilities/vlab/' in request.path %}class="active" {% endif %}><a href="/aboutus/facilities/vlab/">{% trans "Visualization Lab" %}</a></li>
-			<li {% if '/aboutus/facilities/rslab/' in request.path %}class="active" {% endif %}><a href="/aboutus/facilities/rslab/">{% trans "Remote Sensing Lab" %}</a></li>
-			<li {% if '/aboutus/facilities/isos/' in request.path %} class="active" {% endif %}><a href="/aboutus/facilities/isos/">{% trans "In-situ Observation Sites" %}</a></li>
-		</ul>
+	<a href="#" data-toggle="collapse" data-target="#Publications" class="btn btn-light btn-block rounded-0 p-0">
+		<p class="ml-4 m-0 text-left"> {% trans "Publications" %} </p>
+	</a>
+	<ul id="Publications" style="list-style: none;" class="collapse {% if '/aboutus/publications/' in request.path%} show{% endif %}">
+		<li><a href="/aboutus/publications/?type=jour">{% trans "Referred Journal Publications" %}</a></li>
+		<li><a href="/aboutus/publications/?type=chap">{% trans "Books and Book Chapters" %}</a></li>
+		<li><a href="/aboutus/publications/?type=pres">{% trans "Presentations" %}</a></li>
+	</ul>
 </li>
-<li> <!--{% if '/groupphotos/' in request.path %}class="active"{% endif %}--><a href="/aboutus/group_photos/">{% trans "Group Photos" %}</a></li>
-<li> <!--{% if '/calendar/' in request.path %}class="active"{% endif %}--><a href="/aboutus/calendar/">{% trans "Calendar" %}</a></li>
-<li><a href="/stats/">{% trans "Website Usage Statistics"%}</a></li>
-
+<li>
+	<a href="/aboutus/research/" data-toggle="collapse" data-target="#Research" class="btn btn-light btn-block rounded-0 p-0">
+		<p class="ml-4 m-0 text-left">{% trans "Research" %}</p>
+	</a>
+	<ul id="Research" style="list-style:none" class="collapse {% if '/aboutus/research/' in request.path%} show{% endif %}">
+		<li><a href="/aboutus/research/">{% trans "Overview" %}</a></li>
+		<li><a href="/aboutus/research/projects/">{% trans "Projects" %}</a></li>
+		<li><a href="/aboutus/research/themes/">{% trans "Themes" %}</a></li>
+	</ul>
+</li>
+<li>
+	<a href="#" data-toggle="collapse" data-target="#Education" class="btn btn-light btn-block rounded-0 p-0">
+		<p class="ml-4 m-0 text-left">{% trans "Education" %}</p>
+	</a>
+	<ul id="Education" style="list-style: none;" class="collapse {% if '/aboutus/education/' in request.path%} show{% endif %}">
+		<li><a href="/aboutus/education/education/">{% trans "Overview" %}</a></li>
+		<li><a href="/aboutus/education/courses/">{% trans "Courses" %}</a></li>
+		<li><a href="/aboutus/education/student_awards/">{% trans "Student Awards" %}</a></li>
+		<li><a href="/gisday/">{% trans "GIS Day" %}</a></li>
+	</ul>
+</li>
+<li>
+	<a href="#" data-toggle="collapse" data-target="#Facilities" class="btn btn-light btn-block rounded-0 p-0">
+		<p class="ml-4 m-0 text-left"> {% trans "Facilities" %} </p>
+	</a>
+	<ul id="Facilities" style="list-style: none;" class="collapse {% if '/aboutus/facilities/' in request.path%} show{% endif %}">
+		<li><a href="/aboutus/facilities/"> {% trans "Overview" %} </a></li>
+		<li><a href="/aboutus/facilities/clab/">{% trans "Computational Lab" %}</a></li>
+		<li><a href="/aboutus/facilities/vlab/">{% trans "Visualization Lab" %}</a></li>
+		<li><a href="/aboutus/facilities/rslab/">{% trans "Remote Sensing Lab" %}</a></li>
+		<li><a href="/aboutus/facilities/isos/">{% trans "In-situ Observation Sites" %}</a></li>
+	</ul>
+</li>
+<li>
+	<a href="/aboutus/group_photos/" class="btn btn-light btn-block rounded-0 p-0">
+		<p class="ml-4 m-0 text-left"> {% trans "Group Photos" %} </p>
+	</a>
+</li>
+<li>
+	<a href="/aboutus/calendar/" class="btn btn-light btn-block rounded-0 p-0">
+		<p class="ml-4 m-0 text-left"> {% trans "Calendar" %} </p>
+	</a>
+</li>
+<li>
+	<a href="/stats/" class="btn btn-light btn-block rounded-0 p-0">
+		<p class="ml-4 m-0 text-left"> {% trans "Website Usage Statistics" %} </p>
+	</a>
+</li>

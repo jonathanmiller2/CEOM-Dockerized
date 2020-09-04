@@ -24,7 +24,7 @@
         <script src="/static/js/modis.js"></script>
 
         <!-- for media buttons -->
-        <style type="text/css">
+        <style>
             #share-buttons {
                 position: fixed;
                 top:20%;
@@ -43,7 +43,7 @@
             }
         </style>
 
-        <style type="text/css">
+        <style>
 
             body, html {
               height: 100%;
@@ -178,8 +178,8 @@
                 {% block sidebar_span %}
                 <div class="col-2">
                     {% block sidebar %}
-                    <nav class="card bg-light ml-5 navbar shadow-sm">
-                        <ul class="card-body navbar-nav">
+                    <nav class="card bg-light ml-5 shadow-sm">
+                        <ul class="p-0" style="list-style: none;">
         					{% block left_menu %}
                             {% endblock %}
                         </ul>

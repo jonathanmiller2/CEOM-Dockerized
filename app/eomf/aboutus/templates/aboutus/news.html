@@ -2,8 +2,8 @@
 {% load i18n %}
 {% block content %}
 
-<div class="card bg-light demo-4">
-	<div class="grid" >
+<div class="card bg-light shadow-sm p-4">
+	<div class="card-body grid">
 		<h2 style="color: #dc143c;">{% trans "News" %}</h2>
 				<div class="hr"></div>&nbsp;
 
@@ -60,8 +60,10 @@
 					</div>
 				{% endfor %}
 				</div><!--tab-content-->
+				
 		</div><!--tabbable -->
+		{% lorem 50%}
 	</div>
-	{% lorem 50%}
+	
 </div>
 {% endblock %}
