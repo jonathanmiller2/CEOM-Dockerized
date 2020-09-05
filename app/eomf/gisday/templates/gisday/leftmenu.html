@@ -1,64 +1,89 @@
-<li class='nav-header'>GIS Day</li>
-        <!-- No need to collapse if its current year -->
-<li {% if "overview" in request.path %}class='active'{% endif %}><a href="/gisday/overview/">Overview</a></li>
+<style>
+	a {
+		font-size: 11pt;
+		color: #4f85d1;
+	}
+
+	a > p {
+		font-size: 11pt;
+		color: #4f85d1;
+	}
+
+	.nav-header {
+        color: #999999;
+		font-weight: bold;
+		font-size: 8pt;
+		text-transform: uppercase;
+		margin: 1.5em 0em 0.25em 1.5em;
+    }
+</style>
+<li class='nav-header'>
+	GIS Day
+</li>
+<li>
+	<a href="/gisday/overview/" id="news" class="btn btn-light btn-block rounded-0 p-0">
+		<p class="ml-4 m-0 text-left">Overview </p>
+	</a>
+<li>
 
 {% for year in available_years %}
 <li>
-	<a href="#" data-toggle="collapse" data-target="#{{year.date|date:'Y'}}">GIS Day {{year.date|date:'Y'}}
+	<a href="#" data-toggle="collapse" data-target="#{{year.date|date:'Y'}}" class="btn btn-light btn-block rounded-0 p-0">
+		<p class="ml-4 m-0 text-left">GIS Day {{year.date|date:'Y'}}</p>
 	
-	<img src="/static/images/f_logo.png" style="width:16px;height:16px" onclick="window.location.href = 'https://www.facebook.com/events/652245244934349/'">
-	<img src="/static/images/twitter_logo.png" style="width:25px;height:25px" onclick="window.location.href = 'https://twitter.com/@ougisday'">
-	
-	</a>
-<!-- <a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
-	<a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a> -->
-		</p>
-		<ul id="{{year.date|date:'Y'}}" class="nav-list nav collapse {% if year.date|date:"Y" in request.path  %}in{% endif %}">
-			{% if not year.summary_hidden%}
-			<li {% if "{{year.date|date:'Y'}}/summary" in request.path %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/summary">Summary</a></li>
-			{% endif %}
-			<li {% if request.path == '/gisday/2013' %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/announcements">Announcements</a></li>
-			<li {% if "{{year.date|date:'Y'}}/aboutus" in request.path %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/aboutus/">Commitee</a></li>
-			{% if not year.agenda_hidden%}
-			<li {% if "{{year.date|date:'Y'}}/agenda" in request.path %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/agenda/">Agenda</a></li>
-			{% endif %}
-			<li {% if "{{year.date|date:'Y'}}/logistics" in request.path %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/logistics/">Logistics</a></li>
-			{% if not year.photo_contest_hidden%}
-			<li {% if "{{year.date|date:'Y'}}/photo-contest" in request.path %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/photo-contest/">Photo Contest</a></li>
-			{% endif %}
-			{% if not year.poster_contest_hidden%}
-			<li {% if "{{year.date|date:'Y'}}/poster" in request.path %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/poster-contest/">Poster Registration</a></li>
-			{% endif %}
-			<li {% if "{{year.date|date:'Y'}}/booth" in request.path %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/booth/">Exhibitor Registration</a></li>
-			<li {% if "{{year.date|date:'Y'}}/guest" in request.path %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/guests/">Visitor Registration</a></li>
-			<li><a href="/gisday/{{year.date|date:'Y'}}/volunteer/">Volunteer Registration</a></li>
-			<li {% if "{{year.date|date:'Y'}}/sponsors" in request.path %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/sponsors/">Sponsors</a></li>
-			{% if not year.photo_gallery_hidden%}
-			<li {% if "{{year.date|date:'Y'}}/photo-gallery" in request.path %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/photo-gallery">Photo gallery</a></li>
-			{% endif %}
-			{% if not year.image_gallery_hidden%}
-			<li {% if "{{year.date|date:'Y'}}/image-gallery" in request.path %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/image-gallery">Image gallery</a></li>
-			{% endif %}
-			{% if year.survey_open %}
-			<li {% if "{{year.date|date:'Y'}}/survey" in request.path %}class='active'{% endif %}><a href="/gisday/{{year.date|date:'Y'}}/survey/">Survey</a></li>
-			{% endif %}
 
-		</ul>
+		<!-- <img src="/static/images/twitter_logo.png" style="width:25px;height:25px" onclick="window.location.href = 'https://twitter.com/@ougisday'"> -->
+	</a>
+
+	<ul id="{{year.date|date:'Y'}}" class="collapse {% if year.date|date:"Y" in request.path  %}show{% endif %}">
+		{% if not year.summary_hidden%}
+		<li><a href="/gisday/{{year.date|date:'Y'}}/summary">Summary</a></li>
+		{% endif %}
+		<li><a href="/gisday/{{year.date|date:'Y'}}/announcements">Announcements</a></li>
+		<li><a href="/gisday/{{year.date|date:'Y'}}/aboutus/">Commitee</a></li>
+		{% if not year.agenda_hidden%}
+		<li><a href="/gisday/{{year.date|date:'Y'}}/agenda/">Agenda</a></li>
+		{% endif %}
+		<li><a href="/gisday/{{year.date|date:'Y'}}/logistics/">Logistics</a></li>
+		{% if not year.photo_contest_hidden%}
+		<li><a href="/gisday/{{year.date|date:'Y'}}/photo-contest/">Photo Contest</a></li>
+		{% endif %}
+		{% if not year.poster_contest_hidden%}
+		<li><a href="/gisday/{{year.date|date:'Y'}}/poster-contest/">Poster Registration</a></li>
+		{% endif %}
+		<li><a href="/gisday/{{year.date|date:'Y'}}/booth/">Exhibitor Registration</a></li>
+		<li><a href="/gisday/{{year.date|date:'Y'}}/guests/">Visitor Registration</a></li>
+		<li><a href="/gisday/{{year.date|date:'Y'}}/volunteer/">Volunteer Registration</a></li>
+		<li><a href="/gisday/{{year.date|date:'Y'}}/sponsors/">Sponsors</a></li>
+		{% if not year.photo_gallery_hidden%}
+		<li><a href="/gisday/{{year.date|date:'Y'}}/photo-gallery">Photo gallery</a></li>
+		{% endif %}
+		{% if not year.image_gallery_hidden%}
+		<li><a href="/gisday/{{year.date|date:'Y'}}/image-gallery">Image gallery</a></li>
+		{% endif %}
+		{% if year.survey_open %}
+		<li><a href="/gisday/{{year.date|date:'Y'}}/survey/">Survey</a></li>
+		{% endif %}
+
+	</ul>
 
 </li>
 {% endfor %}
 
-<li  {% if '2012' in request.path %}class="active"{% endif %}>
-	<a href="#" data-toggle="collapse" data-target="#twentytwelve">GIS Day 2012</a>
-		<ul id="twentytwelve" class="collapse {% if '2012' in request.path %}in{% endif %}" id="twentytwelve">
-			<li><a href="/gisday/2012/">Summary</a></li>
-			<li><a href="/gisday/2012/#Participation">Participation</a></li>
-			<li><a href="/gisday/2012/#Sponsorship">Sponsorship</a></li>
-			<li><a href="/gisday/2012/#Exhibitors">Exhibitors</a></li>
-			<li><a href="/gisday/2012/#Speakers">Speakers</a></li>
-			<li><a href="/gisday/2012/#Poster-Contest">Poster Contest</a></li>
-			<li><a href="/gisday/2012/#K-12-Participation">K-12 Participation </a></li>
-			<li><a href="/gisday/2012/#Organizing-Committee">Organizing Committee</a></li>
-			<li><a href="/gisday/2012/gallery">Photo Gallery</a></li>
-		</ul>
+<!-- TODO: Figure out why 2012 isn't displayed the same way as all of the other years-->
+<li>
+	<a href="#" data-toggle="collapse" data-target="#twentytwelve" class="btn btn-light btn-block rounded-0 p-0">
+		<p class="ml-4 m-0 text-left">GIS Day 2012</p>
+	</a>
+	<ul id="twentytwelve" class="collapse {% if '2012' in request.path %}show{% endif %}">
+		<li><a href="/gisday/2012/">Summary</a></li>
+		<li><a href="/gisday/2012/#Participation">Participation</a></li>
+		<li><a href="/gisday/2012/#Sponsorship">Sponsorship</a></li>
+		<li><a href="/gisday/2012/#Exhibitors">Exhibitors</a></li>
+		<li><a href="/gisday/2012/#Speakers">Speakers</a></li>
+		<li><a href="/gisday/2012/#Poster-Contest">Poster Contest</a></li>
+		<li><a href="/gisday/2012/#K-12-Participation">K-12 Participation </a></li>
+		<li><a href="/gisday/2012/#Organizing-Committee">Organizing Committee</a></li>
+		<li><a href="/gisday/2012/gallery">Photo Gallery</a></li>
+	</ul>
 </li>

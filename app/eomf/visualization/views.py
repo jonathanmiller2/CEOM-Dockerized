@@ -1,6 +1,6 @@
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.files.base import ContentFile
 from eomf.inventory.models import Dataset
 from eomf.photos.models import Category, Photo
@@ -127,8 +127,7 @@ def indices_kml(request):
                              'end':time+datetime.timedelta(d+6) })
 
     #test = points[0].kml
-    return render_to_response('kml/wrap_wms_time.kml',{'timespans' : timespans, 'host':request.META['HTTP_HOST']},
-        mimetype = "application/vnd.google-earth.kml+xml")
+    return render(request, 'kml/wrap_wms_time.kml', context={'timespans' : timespans, 'host':request.META['HTTP_HOST']}, content_type = "application/vnd.google-earth.kml+xml")
 
 
 def evi_kml(request):
@@ -142,45 +141,17 @@ def evi_kml(request):
                              'end':time+datetime.timedelta(d+6) })
 
     #test = points[0].kml
-    return render_to_response('kml/wrap_wms_time.kml',{'timespans' : timespans, 'host':request.META['HTTP_HOST']},
-        mimetype = "application/vnd.google-earth.kml+xml")
+    return render(request, 'kml/wrap_wms_time.kml', context={'timespans' : timespans, 'host':request.META['HTTP_HOST']}, content_type="application/vnd.google-earth.kml+xml")
 
 
 def kml(request, name):
+    try:
+        styles = targetModel().styles()
+    except AttributeError:
 
-    # d = Datainfo.objects.get(name=name)
+        styles = [{'name':'default', 'color':'8800ff00', 'icon':'http://maps.google.com/mapfiles/kml/shapes/info.png'}]
 
-    # if d.datatype.name == 'wms':
-    #     t = loader.get_template('kml/wrap_wms.kml')
-    #     c = RequestContext(request,{'layer': name })
-
-    # elif d.datatype.name == 'url':
-    #     t = loader.get_template('kml/wrap_url.kml')
-    #     c = RequestContext(request, {'url': d.source })
-
-    # elif d.datatype.name == 'file':
-    #     t = loader.get_template('kml/'+d.source)
-    #     c = RequestContext(request)
-
-    # elif d.datatype.name == 'object':
-    #     targetModel = getattr(maps, d.source)
-    #     objects = targetModel.objects.kml()
-
-        try:
-            styles = targetModel().styles()
-        except AttributeError:
-            styles = [{'name':'default', 'color':'8800ff00', 'icon':'http://maps.google.com/mapfiles/kml/shapes/info.png'}]
-
-        t = loader.get_template('kml/main.kml')
-        c = RequestContext(request,{
-            'styles':styles,
-            'geometries':objects,
-        })
-
-    # else:
-    #     pass
-
-        return HttpResponse(t.render(c), mimetype="application/vnd.google-earth.kml+xml")
+    return render(request, 'kml/main.kml', context= {'styles':styles, 'geometries':objects}, mimetype="application/vnd.google-earth.kml+xml")
 
 TIMESERIES_LOCATION = os.path.join(settings.BASE_DIR,settings.MEDIA_ROOT,'visualization','timeseries','single')
 
@@ -192,23 +163,22 @@ def timeseries_single_progress(request, task_id):
         task_db = SingleTimeSeriesJob.objects.get(task_id=task_id)
         if task_db.user != request.user:
             raise Exception('User does not own the task')
-        c = RequestContext(request, {"job_id":task_db.id,
-                                     "task_id":task_id,
-                                     "found":True,
-                                     "completed": task_db.completed,
-                                     "lat":task_db.lat,
-                                     "lon":task_db.lon,
-                                     "dataset":task_db.product,
-                                     'row':task_db.row,
-                                     'col':task_db.col,
-                                     'tile':task_db.tile,
-                                     'years':task_db.years,
-                                     'file': settings.MEDIA_URL+'visualization/timeseries_single/'+str(task_db.result),
-                                     })
+        c = {"job_id":task_db.id,
+            "task_id":task_id,
+            "found":True,
+            "completed": task_db.completed,
+            "lat":task_db.lat,
+            "lon":task_db.lon,
+            "dataset":task_db.product,
+            'row':task_db.row,
+            'col':task_db.col,
+            'tile':task_db.tile,
+            'years':task_db.years,
+            'file': settings.MEDIA_URL+'visualization/timeseries_single/'+str(task_db.result)}
     except Exception as e:
-        c = RequestContext(request, {"task_id":task_id,"found":False})
+        c = {"task_id":task_id,"found":False}
     
-    return HttpResponse(t.render(c))
+    return render(request, 'visualization/single_site_timeseries.html', context=c)
 
 ## TEMP FOR COLLECTION-6 DATASET
 @login_required()

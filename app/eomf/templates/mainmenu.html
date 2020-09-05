@@ -1,5 +1,5 @@
 {% load i18n %}
-<style type="text/css">
+<style>
 
 	#menu-home > a:hover {
 		color: #009933;
@@ -57,6 +57,12 @@
 		transition:all 0.2s;
 	}
 
+	.select-lan {
+		border: 1pt solid lightgrey;
+		border-radius: 3px;
+		margin-left: 1em;
+	}
+
 	.navbar {
 		background-color: #f3f3f3;
 		border-bottom: 1px solid #d7d7d7;
@@ -68,16 +74,43 @@
 		box-shadow: inset 0px 0px 3px #d7d7d7;
 	}
 
-	.nav-link {
-		color: #777777;
-		width: 123px;
-		text-align: center;
+	
+	#mobile-nav-btn {
+		width: 75px;
 	}
+
+	@media screen and (min-width: 1400px) {
+		#mobile-navbar {
+			display: none;
+		}
+
+		.nav-link {
+			color: #777777;
+			width: 123px;
+			text-align: center;
+		}
+	}
+
+	@media screen and (max-width: 1400px) {
+		#full-navbar {
+			display: none;
+		}
+
+		.nav-link {
+			color: #777777;
+			margin-left: 1em;
+		}
+
+		.nav-item {
+			border-radius: 4px;
+		}
+	}
+	
 </style>
 
 <!-- TODO: Fix issues with buttons being too small to hold text in other languages. Also make sure translations are correct, of course.-->
 
-<nav class="navbar navbar-expand mb-4 animate__animated animate__fadeIn">
+<nav id="full-navbar" class="navbar navbar-expand mb-4 animate__animated animate__fadeIn">
 	<ul class="navbar-nav ml-5 mr-auto">
 		<li id="menu-home" class="nav-item{% if '/' == request.path %} active{% endif %}">
 			<a class="nav-link" href="/">
@@ -148,3 +181,75 @@
 	</form>     
 </nav>
 
+<nav id="mobile-navbar" class="card bg-light mb-4 flex-column animate__animated animate__fadeIn">
+	<button id="mobile-nav-btn" class="btn btn-dark ml-auto mr-5 my-2" type="button" data-toggle="collapse" data-target="#mobile-nav-body" aria-expanded="false" aria-controls="mobile-nav-body">Menu</button>
+	<ul id="mobile-nav-body" class="navbar-nav mx-5 mt-0 collapse">
+		<li id="menu-home" class="nav-item{% if '/' == request.path %} active{% endif %}">
+			<a class="nav-link" href="/">
+				<span class="fas fa-home"></span>
+				{% trans "Home" %}
+			</a>
+		</li>
+		<li id="menu-about" class="nav-item{% if '/aboutus/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/aboutus/news">
+				<span class="fas fa-info-circle"></span> 
+				{% trans "About Us" %} 
+			</a>
+		</li>
+		<li id="menu-photos" class="nav-item{% if '/photos/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/photos/">
+				<span class="fas fa-camera"></span> 
+				{% trans "Photo" %}
+			</a>
+		</li>
+		<!--<li id="menu-inventory" {% if '/inventory/' in request.path %}class='active'{% endif %}><a href="/inventory/"><span class="icon-list-ul navbar-icon"></span> {% trans "Datasets" %} </a></li>-->
+		<li id="menu-vis" class="nav-item{% if '/modis/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/modis/visualization/">
+				<span class="fas fa-globe-americas"></span> 
+				{% trans "MODIS" %}
+			</a>
+		</li>
+		<li id="menu-geohealth" class="nav-item{% if '/geohealth/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/geohealth/">
+				<span class="fas fa-heartbeat"></span>
+				 {% trans "GeoHealth" %}
+			</a>
+		</li>
+		<li id="menu-gis" class="nav-item{% if '/gisday/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/gisday/">
+				<span class="fas fa-rss"></span> 
+				{% trans "GIS Day" %}
+			</a>
+		</li>
+		<li id="menu-workshops" class="nav-item{% if '/workshops/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/workshops/">
+				<span class="fas fa-briefcase"></span> 
+				{% trans "Workshops" %}
+			</a>
+		</li>
+		<li id="menu-water" class="nav-item{% if '/water/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/water/">
+				<span class="fa fa-tint"></span>
+				{% trans "Water" %}
+			</a>
+		</li>
+		<li id="menu-account" class="nav-item{% if '/accounts/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/accounts/">
+				<span class="fa fa-user"></span> 
+				{% trans "Account" %}
+			</a>
+		</li>
+		<li class="my-3">
+			<form class="form" action="/i18n/setlang/" method="post">
+				{% csrf_token %} 
+				<input name="next" type="hidden" value="." />
+				<select name="language" class="select-lan" onchange="this.form.submit()">
+					{% get_current_language as LANGUAGE_CODE %}
+					{% for lang in LANGUAGES %}
+						<option value="{{ lang.0 }}" {% if lang.0|lower == LANGUAGE_CODE|lower %}selected{% endif %}> {{ lang.1 }}</option>
+					{% endfor %}
+				</select>
+			</form>    
+		</li>
+	</ul>
+</nav>
