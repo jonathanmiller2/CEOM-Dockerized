@@ -23,7 +23,6 @@
         <!-- Local Files-->    
         <script src="/static/js/modis.js"></script>
 
-        <!-- for media buttons -->
         <style>
             #share-buttons {
                 position: fixed;
@@ -41,9 +40,6 @@
                 box-shadow: 0;
                 display: inline;
             }
-        </style>
-
-        <style>
 
             body, html {
               height: 100%;
@@ -140,8 +136,54 @@
     			background-color: rgb(100,100,0);
     		}
 
+            @media screen and (min-width: 1250px) {
+                #outer-layout {
+                    display: -ms-flexbox;
+                    display: flex;
+                    -ms-flex-wrap: wrap;
+                    flex-wrap: wrap;
+                    margin-right: -15px;
+                    margin-left: -15px;
+                }
+
+                #sidebar-col {
+                    position: relative;
+                    width: 100%;
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    flex: 0 0 16.666667%;
+                    max-width: 16.666667%;
+                }
+
+                #content {
+                    position: relative;
+                    width: 100%;
+                    padding-right: 15px;
+                    padding-left: 15px;
+                    -ms-flex: 0 0 83.333333%;
+                    flex: 0 0 83.333333%;
+                    max-width: 83.333333%;
+                }
+        	}
+        
+        	@media screen and (max-width: 1250px) {
+                #outer-layout {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                #sidebar-col {
+                    margin: 0 3em 1.5em 0;
+                }
+
+                #content {
+                    margin: 0 3em 0 3em;
+                }
+        	}
         </style>
+
         {% block head_extra %}{% endblock %}
+        
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -150,7 +192,6 @@
 
           ga('create', 'UA-57015323-1', 'auto');
           ga('send', 'pageview');
-
         </script>
 
         <!-- in header block -->
@@ -174,9 +215,9 @@
 
         <div class="container-fluid">
             {% block container %}
-            <div class="row">
+            <div id="outer-layout">
                 {% block sidebar_span %}
-                <div class="col-2">
+                <div id="sidebar-col">
                     {% block sidebar %}
                     <nav class="card bg-light ml-5 shadow-sm">
                         <ul class="p-0" style="list-style: none;">
@@ -189,7 +230,7 @@
                 </div>
                 {%endblock%}
                 {% block content_with_span10 %}
-                <div id='content' class="col-10">
+                <div id='content'>
                     {% block content %}{% endblock %}
                 </div>
                 {% endblock %}
