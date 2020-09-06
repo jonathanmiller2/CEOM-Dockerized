@@ -9,7 +9,6 @@ urlpatterns = [
     re_path(r'^$', eomf.photos.views.home),
     re_path(r'^browse/$', eomf.photos.views.browse),
     re_path(r'^map/$', eomf.photos.views.map),
-    re_path(r'^testmap/$', eomf.photos.views.testmap),
     re_path(r'^FieldPhoto/$', eomf.photos.views.FieldPhoto),
     #Personalized
     re_path(r'^cocorahs(?P<date>\w*)/$', eomf.photos.views.cocorahs),

@@ -1,6 +1,6 @@
 from django.template import Context, RequestContext, loader, Template
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -71,9 +71,7 @@ def ranges(i):
 
 
 def home(request):
-    t = loader.get_template('photos/overview.html')
-    c = RequestContext(request)
-    return HttpResponse(t.render(c))
+    return render(request, 'photos/overview.html')
 
 
 def search_for_photos(request):
@@ -160,13 +158,11 @@ def user_photos(request):
 
         if 'date' in request.GET:
             if 'sort' in request.GET:
-                # return HttpResponse("safdsafd")
                 photos = base.filter(user=request.user).filter(takendate=request.GET['date']).order_by('id')
                 if len(photos)>0:
                     if photos[0].takendate:
                         data['gallerytitle'] = photos[0].takendate
             else:
-                # return HttpResponse("afd")
                 photos = base.filter(user=request.user).filter(uploaddate=request.GET['date']).order_by('id')
                 if len(photos)>0:
                     if photos[0].uploaddate:
@@ -204,10 +200,7 @@ def user_photos(request):
             data['photos'] = photos
         data['checkbox'] = True
         form_f = BatchEditForm()
-        return render_to_response('photos/user.html',{'form':form_f, 'modis_timeseries':True},context_instance=RequestContext(request, data))
-        #t = loader.get_template('photos/user.html')
-        #c = RequestContext(request, data)
-        #return HttpResponse(t.render(c))
+        return render(request, 'photos/user.html', context={'form':form_f, 'modis_timeseries':True})
     else:
         return HttpResponseRedirect("/accounts/login/")
 
@@ -260,8 +253,7 @@ def browse(request):
         paginator = None
         page_range = range(10)
         
-    t = loader.get_template('photos/browse.html')
-    c = RequestContext(request, {
+    return render(request, 'photos/browse.html', context={
         'photos': photos,
         'paginator' : paginator,
         'search': search,
@@ -270,40 +262,19 @@ def browse(request):
         'checkbox': True,
         'modis_timeseries': True,
     })
-    return HttpResponse(t.render(c))
 
 
 def map(request):
     photos, search = search_for_photos(request)
 
-    t = loader.get_template('photos/map.html')
-    c = RequestContext(request, {
+    # Testing purposes
+    # return clusters(request)
+
+    return render(request, 'photos/map.html', context={
         'search': search,
         'checkbox':True,
         'modis_timeseries':True
     })
-    
-    # Testing purposes
-    # return clusters(request)
-
-    return HttpResponse(t.render(c))
-
-def testmap(request):
-    photos, search = search_for_photos(request)
-
-    t = loader.get_template('photos/testmap.html')
-    c = RequestContext(request, {
-        'search': search,
-        'checkbox':True,
-        'modis_timeseries':True
-    })
-    
-    # Testing purposes
-    # return clusters(request)
-
-    return HttpResponse(t.render(c))
-
-
 
 def cocorahs(request, date):
     request.session['query'] = pickle.dumps({
@@ -599,8 +570,7 @@ def photos_html(request):
         paginator = None
         page_range = range(10)
         
-    t = loader.get_template('photos/browse_gallery_map.html')
-    c = RequestContext(request, {
+    return render(request, 'photos/browse_gallery_map.html', context={
         'photos': photos,
         'paginator' : paginator,
         'search': search,
@@ -609,7 +579,6 @@ def photos_html(request):
         'checkbox': True,
         'modis_timeseries': True
     })
-    return HttpResponse(t.render(c))
 
 def photos_html2(request):
     photos, search = search_for_photos(request)
@@ -645,8 +614,7 @@ def photos_html2(request):
         paginator = None
         page_range = range(10)
         
-    t = loader.get_template('photos/browse_gallery_reduced.html')
-    c = RequestContext(request, {
+    return render(request, 'photos/browse_gallery_reduced.html', context={
         'photos': photos,
         'paginator' : paginator,
         'search': search,
@@ -655,7 +623,7 @@ def photos_html2(request):
         'checkbox': False,
         'modis_timeseries': False
     })
-    return HttpResponse(t.render(c))
+    
 
 def kml(request):
     return HttpResponse()
@@ -663,11 +631,9 @@ def kml(request):
 
 def view(request, id):
     photo = get_object_or_404(Photo,pk=id) 
-    t = loader.get_template('photos/view.html')
-    c = RequestContext(request, {
+    return render(request, 'photos/view.html', context={
         'photo': photo,
     })
-    return HttpResponse(t.render(c))
 
 
 def batchedit(request):
@@ -793,11 +759,9 @@ def exif(request, id):
     photo = Photo.objects.get(pk=id)
 
     if photo.has_change_permission(request):
-        t = loader.get_template('photos/exif.html')
-        c = RequestContext(request, {
+        return render(request, 'photos/exif.html', context={
             'photo': photo
         })
-        return HttpResponse(t.render(c))
     else:
         return HttpResponseRedirect("/photos/browse/")
 
@@ -1003,13 +967,11 @@ def upload(request):
             request.session['workset'] = compress(ids)
             return HttpResponseRedirect("/photos/workset/")
 
-    t = loader.get_template('photos/upload.html')
-    c = RequestContext(request, {
+    return render(request, 'photos/upload.html', context={
         'js_upload': True,
         'enable_bootstrap': True,
         'js_template': js_template,
     })
-    return HttpResponse(t.render(c))
 
 def get_file_info(file, work_url):
     if type(file) == str or type(file) == unicode:
@@ -1321,6 +1283,4 @@ def photos_coord(request,lat ,lon,radius):
 
 
 def FieldPhoto(request):
-    t = loader.get_template('photos/Field_photo_weekend.html')
-    c = RequestContext(request)
-    return HttpResponse(t.render(c))
+    return render(request, 'photos/Field_photo_weekend.html')
