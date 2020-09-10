@@ -1,57 +1,85 @@
 {% load i18n %}
+<style>
+	a {
+		font-size: 11pt;
+		color: #4f85d1;
+	}
 
-        <li class='nav-header'>{% trans "Photos Actions" %}</li>
-        <li {% if request.path == '/photos/' %}class='active' {%endif%}> 
-            <a href='/photos/'>{% trans "Overview" %}</a>
-        </li>
-        <li {% if request.path == '/photos/browse/' %}class='active' {%endif%}> 
-            <a href='/photos/browse/'>{% trans "Browse" %}</a>
-        </li>
-        <li {% if request.path == '/photos/map/' %}class='active' {%endif%}> 
-            <a href='/photos/map/'>{% trans "Map" %}</a>
-        </li>
-        {% if request.user.is_authenticated %}
-        <li {% if request.path == '/photos/user/' %}class='active' {%endif%}> 
-            <a href='/photos/user/'>{% trans "My Photos" %}</a>
-        </li>
-        <li {% if request.path == '/photos/upload/' %}class='active' {%endif%}> 
-            <a href='/photos/upload/'>{% trans "Upload" %}</a>
-        </li>
-            {% if request.session.workset %}
-            <li {% if request.path == '/photos/workset/' %}class='active' {%endif%}> 
-                <a href='/photos/workset/'>{% trans "Working Photos" %}</a>
-            </li>
-            {%endif%}
-        <li > 
-            <a href='/accounts/logout/'>{% trans "Log out" %}</a>
-        </li>
-        {% else %}
-        <li {% if request.path == '/photos/login/' %}class='active' {%endif%}> 
-            <a href='/accounts/login/?next={{request.path}}'>{% trans "Log in" %}</a>
-        </li>
-        <li {% if request.path == '/photos/register/' %}class='active' {%endif%}> 
-            <a href='/accounts/register/'>{% trans "Register" %}</a>
-        </li>
-        {% endif %}
-        {% if user.is_staff %}
-        <li><a href="/admin/photos/">{% trans "Admin Site" %}</a></li>
-        {% endif %}
+	a > p {
+		font-size: 11pt;
+		color: #4f85d1;
+	}
 
-	<!-- <div style="margin-top: 0px; margin-left: 18px;">
-	<p><a href="https://www.facebook.com/pages/Field-Photos/556179751100992"><img style="height: 20px; width: 20px;" alt="facebook" src="/static/images/facebook_logo.png" border="0"></a>
-	<a href="https://twitter.com/Field_Photos"><img style="height: 30px; width: 30px;" alt="twitter_logo" src="/static/images/twitter_logo.png" border="0"></a></p>
-	</div> -->
-	
+	.nav-header {
+        color: #999999;
+		font-weight: bold;
+		font-size: 8pt;
+		text-transform: uppercase;
+		margin: 1.5em 0em 0.25em 1.5em;
+    }
+</style>
+<li class='nav-header'>
+    {% trans "Photos Actions" %}
+</li>
+<li> 
+    <a href='/photos/' class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">{% trans "Overview" %}</p>
+    </a>
+</li>
+<li> 
+    <a href='/photos/browse/' class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">{% trans "Browse" %}</p>
+    </a>
+</li>
+<li> 
+    <a href='/photos/map/' class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">{% trans "Map" %}</p>
+    </a>
+</li>
+{% if request.user.is_authenticated %}
+    <li> 
+        <a href='/photos/user/' class="btn btn-light btn-block rounded-0 p-0">
+            <p class="mx-4 m-0 text-left">{% trans "My Photos" %}</p>
+        </a>
+    </li>
+    <li> 
+        <a href='/photos/upload/' class="btn btn-light btn-block rounded-0 p-0">
+            <p class="mx-4 m-0 text-left">{% trans "Upload" %}</p>
+        </a>
+    </li>
 
-    <div style="margin-top: 10px; margin-left: 18px;">
+    {% if request.session.workset %}
+        <li> 
+            <a href='/photos/workset/' class="btn btn-light btn-block rounded-0 p-0">
+                <p class="mx-4 m-0 text-left">{% trans "Working Photos" %}</p>
+            </a>
+        </li>
+    {%endif%}
 
-	<!-- AddThis Button BEGIN -->
-	<div class="addthis_toolbox addthis_default_style "> 
-		<!-- <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-		<a class="addthis_button_tweet"></a> -->
-	<a class="addthis_counter addthis_pill_style"></a>
-		</div>
-		<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51d4550f5a005e88"></script>
-	<!-- AddThis Button END -->
-	</div>
+    <li> 
+        <a href='/accounts/logout/' class="btn btn-light btn-block rounded-0 p-0">
+            <p class="mx-4 m-0 text-left">{% trans "Log out" %}</p>
+        </a>
+    </li>
 
+{% else %}
+
+    <li> 
+        <a href='/accounts/login/?next={{request.path}}' class="btn btn-light btn-block rounded-0 p-0">
+            <p class="mx-4 m-0 text-left">{% trans "Log in" %}</p>
+        </a>
+    </li>
+    <li> 
+        <a href='/accounts/register/' class="btn btn-light btn-block rounded-0 p-0">
+            <p class="mx-4 m-0 text-left">{% trans "Register" %}</p>
+        </a>
+    </li>
+{% endif %}
+
+{% if user.is_staff %}
+<li>
+    <a href="/admin/photos/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">{% trans "Admin Site" %}</p>
+    </a>
+</li>
+{% endif %}
