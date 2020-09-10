@@ -89,20 +89,11 @@ function check(e){
 function warning(){
     alert("{{warning}}");
 }
-/*
-if (window.addEventListener) {
-    window.addEventListener("load", prepare, false);
-} else if (window.attachEvent) {
-    window.attachEvent("onload", prepare)
-} else if (document.getElementById) {
-    window.onload = prepare;
-}
-*/
 </script>
 
 {% endblock %}
 
 {% block left_menu %} {% include "photos/leftmenu.html" %}{% endblock %}
-{% block left_menu_crowdsourcing %} {% include "photos/leftmenu_crowdsourcing.html" %}{% endblock %}
+{% block left_menu_extra %} {% include "photos/leftmenu_crowdsourcing.html" %}{% endblock %}
 
 
