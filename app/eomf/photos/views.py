@@ -75,9 +75,9 @@ def home(request):
 
 
 def search_for_photos(request):
-    photos = Photo.objects.order_by('uploaddate').select_related("category__name").reverse()
+    photos = Photo.objects.order_by('uploaddate').select_related("category").reverse()
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         photos = photos.filter(Q(status=1) | (Q(status=2) & Q(user=request.user)))
     else:
         photos = photos.filter(status=1)
