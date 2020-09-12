@@ -1,6 +1,6 @@
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.core.files.base import ContentFile
 from eomf.geohealth.models import Datainfo, Datatype
 import numpy, math
@@ -12,14 +12,12 @@ def down(request):
 def index(request):
     #ds = Datainfo.objects.order_by('label','order').all()
     ds = Datainfo.objects.order_by('order', 'label').all()
-    t = loader.get_template('geohealth/gemap.html')
-    c = RequestContext(request,{
+    return render(request, 'geohealth/gemap.html', context={
         'content': "This is a map",
         'datasets': ds,
         'kml_path': request.path+'kml/',
         'kml_ext': ".kmz",
     })
-    return HttpResponse(t.render(c))
 
 def indices_kml(request):
     timespans = []
@@ -32,8 +30,7 @@ def indices_kml(request):
                              'end':time+datetime.timedelta(d+6) })
     
     #test = points[0].kml
-    return render_to_response('kml/wrap_wms_time.kml',{'timespans' : timespans, 'host':request.META['HTTP_HOST']},
-        mimetype = "application/vnd.google-earth.kml+xml")
+    return render(request, 'kml/wrap_wms_time.kml', context={'timespans' : timespans, 'host':request.META['HTTP_HOST']}, mimetype="application/vnd.google-earth.kml+xml")
 
 
 def evi_kml(request):
@@ -47,8 +44,7 @@ def evi_kml(request):
                              'end':time+datetime.timedelta(d+6) })
     
     #test = points[0].kml
-    return render_to_response('kml/wrap_wms_time.kml',{'timespans' : timespans, 'host':request.META['HTTP_HOST']},
-        mimetype = "application/vnd.google-earth.kml+xml")
+    return render(request, 'kml/wrap_wms_time.kml', context={'timespans' : timespans, 'host':request.META['HTTP_HOST']}, mimetype = "application/vnd.google-earth.kml+xml")
 
 
 def kml(request, name):
@@ -61,16 +57,16 @@ def kml(request, name):
         if ':' in name:
             service, name = name.split(':')
             
-        t = loader.get_template('kml/wrap_wms.kml')
-        c = RequestContext(request,{'service':service, 'layer': name })
+        t = 'kml/wrap_wms.kml'
+        c = {'service':service, 'layer': name }
         
     elif d.datatype.name == 'url':
-        t = loader.get_template('kml/wrap_url.kml')
-        c = RequestContext(request, {'url': d.source })
+        t = 'kml/wrap_url.kml'
+        c = {'url': d.source }
         
     elif d.datatype.name == 'file':
-        t = loader.get_template('kml/'+d.source)
-        c = RequestContext(request)
+        t = 'kml/'+d.source
+        c = None
         
     elif d.datatype.name == 'object':
         targetModel = getattr(maps, d.source)
@@ -81,11 +77,11 @@ def kml(request, name):
         except AttributeError:
             styles = [{'name':'default', 'color':'8800ff00', 'icon':'http://maps.google.com/mapfiles/kml/shapes/info.png'}]
             
-        t = loader.get_template('kml/main.kml')
-        c = RequestContext(request,{
+        t = 'kml/main.kml'
+        c = {
             'styles':styles,
             'geometries':objects,
-        })
+        }
         
     elif d.datatype.name == 'function':
 
@@ -95,14 +91,14 @@ def kml(request, name):
         if styles is None:
             styles = [{'name':'default', 'color':'8800ff00', 'icon':'http://maps.google.com/mapfiles/kml/shapes/info.png'}]
             
-        t = loader.get_template('kml/main.kml')
-        c = RequestContext(request,{
+        t = 'kml/main.kml'
+        c = {
             'styles':styles,
             'geometries':objects,
-        })
+        }
         
     else:
         pass
             
-    return HttpResponse(t.render(c), mimetype="application/vnd.google-earth.kml+xml")    
+    return render(request, t, context=c, mimetype="application/vnd.google-earth.kml+xml")    
 

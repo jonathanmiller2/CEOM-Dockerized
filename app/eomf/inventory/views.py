@@ -1,7 +1,7 @@
 from eomf.inventory.models import File, Product, Dataset, Tile
 from django.template import Context, loader, RequestContext
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 import numpy
 import sys
 
@@ -11,12 +11,10 @@ def remote_sensing_datasets(request):
     dataset_list = Dataset.objects.all().order_by("name")
     product_list = Product.objects.all().order_by("name")
 
-    t = loader.get_template('inventory/remote_sensing_datasets.html')
-    c = RequestContext(request, {
+    return render(request, 'inventory/remote_sensing_datasets.html', context={
         'dataset_list' : dataset_list,
         'product_list' : product_list,
     })
-    return HttpResponse(t.render(c))
 
 def tilemap(request, dataset_id, year):
     # Need to replace existing and dataset_list query. It is too slow... use subqueries and group by!!!  
@@ -44,8 +42,7 @@ def tilemap(request, dataset_id, year):
     else:
         splittiles(46)
     
-    t = loader.get_template('inventory/map.html')
-    c = RequestContext(request, {
+    return render(request, 'inventory/map.html', context={
         'dataset' : dataset_id,
         'dataset_list' : dataset_list,
         'good_list' : good_list,
@@ -54,8 +51,6 @@ def tilemap(request, dataset_id, year):
         'year_int': int(year),
         'year_list' : year_list,
     })
-    
-    return HttpResponse(t.render(c))
     
 def tile(request, x, y):
     def daystoranges( days,day_res):
@@ -145,16 +140,12 @@ def tile(request, x, y):
     dataset_day_res_dict = {d['name']:d['day_res'] for d in dataset_day_res_query}
     files = [ row['name'] for row in files_query]
     files = getproducts(files,dataset_day_res_dict)
-    d = ''
-    t = loader.get_template('inventory/tile.html')
-    c = RequestContext(request, {
+    
+    return render(request, 'inventory/tile.html', context={
         'tile': tileq,
         'files': files,
         'total': len(files_query),
-        'debug': d,
     })
-    
-    return HttpResponse(t.render(c))
     
 def tile_details(request, x, y):
     return HttpRequest()
@@ -164,4 +155,4 @@ def detail(request, product_id):
         prod = Product.objects.get(pk=product_id)
     except Product.DoesNotExist:
         raise Http404
-    return render_to_response('inventory/remote_sensing_datasets.html',{'prod': prod})
+    return render(request, 'inventory/remote_sensing_datasets.html', context={'prod': prod})

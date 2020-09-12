@@ -1,6 +1,6 @@
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from eomf.workshops.models import *
 from django.db.models import Count
 from datetime import datetime
@@ -9,10 +9,8 @@ from django.core.mail import EmailMultiAlternatives
 import json
 
 def overview(request):
-    return render_to_response('workshops/overview.html', {
-        }, 
-        context_instance=RequestContext(request)
-    )
+    return render(request, 'workshops/overview.html')
+
 def get_workshop_count_yearly(max_date=None,min_date=None):
     workshops = None
     if max_date:
@@ -30,67 +28,62 @@ def workshop_current(request):
     years = get_workshop_count_yearly(min_date=datetime.now())
     workshops = Workshop.objects.filter(date_end__gte=datetime.now()).order_by('-date_start')
     categories = WorkshopClass.objects.all()
-    return render_to_response('workshops/workshop_list_current.html', {
+    return render(request, 'workshops/workshop_list_current.html', context={
          'years': years,
          'workshops':workshops,
          'total_workshops':  workshops.count,
          'categories': categories,
         }, 
-        context_instance=RequestContext(request)
     )
 def workshop_past(request):
     years = get_workshop_count_yearly(max_date=datetime.now())
     workshops = Workshop.objects.filter(date_end__lt=datetime.now()).order_by('-date_end')
     categories = WorkshopClass.objects.all()
-    return render_to_response('workshops/workshop_list_past.html', {
+    return render(request, 'workshops/workshop_list_past.html', context={
          'years': years,
          'workshops':workshops,
          'total_workshops': workshops.count,
          'categories': categories,
-        }, 
-        context_instance=RequestContext(request)
+        }
     )
 
 def workshop_list_by_year_past(request,year):
     years = get_workshop_count_yearly(max_date=datetime.now())
     workshops = Workshop.objects.filter(date_start__year=year,date_end__lt=datetime.now()).order_by('-date_start')
     categories = WorkshopClass.objects.all()
-    return render_to_response('workshops/workshop_list_past.html', {
+    return render(request, 'workshops/workshop_list_past.html', context={
          'years': years,
          'workshops': workshops,
          'year_selected': year,
          'total_workshops': Workshop.objects.filter(date_end__lt=datetime.now()).count,
          'categories': categories,
         }, 
-        context_instance=RequestContext(request)
     )
 
 def workshop_list_by_year_current(request,year):
     years = get_workshop_count_yearly(min_date=datetime.now())
     workshops = Workshop.objects.filter(date_start__year=year,date_end__gte=datetime.now()).order_by('-date_start')
     categories = WorkshopClass.objects.all()
-    return render_to_response('workshops/workshop_list_current.html', {
+    return render(request, 'workshops/workshop_list_current.html', context={
          'years': years,
          'workshops': workshops,
          'year_selected': year,
          'total_workshops':  Workshop.objects.filter(date_end__gte=datetime.now()).count,
          'categories': categories,
-        }, 
-        context_instance=RequestContext(request)
+        }
     )
 
 def workshop(request, workshop_id):
     try:
         workshop = Workshop.objects.get(id = workshop_id)
     except:
-            return render_to_response('workshops/not_found.html', {}, context_instance=RequestContext(request))
+        return render(request, 'workshops/not_found.html')
     validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('created')
     awaiting_validation_registrations =  WorkshopRegistration.objects.filter(workshop=workshop,validated=False)
     sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
     num_presentations = len(Presentation.objects.filter(workshop=workshop))
     num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
-    return render_to_response('workshops/workshop.html', 
-        {
+    return render(request, 'workshops/workshop.html', context={
          'title':workshop.name,
          'content': workshop.content,
          'registration_enabled': workshop.registration_open,
@@ -101,17 +94,16 @@ def workshop(request, workshop_id):
          'show_registration':True,
          'num_presentations':num_presentations,
          'num_photos':num_photos,
-        }, 
-        context_instance=RequestContext(request)
+        }
     )
 
 def workshop_registration(request, workshop_id):
     try:
         workshop = Workshop.objects.get(id = workshop_id)
     except:
-        return render_to_response('workshops/not_found.html', {}, context_instance=RequestContext(request))
+        return render(request, 'workshops/not_found.html')
     if not workshop.registration_open:
-        return render_to_response('workshops/not_found.html', {}, context_instance=RequestContext(request))
+        return render(request, 'workshops/not_found.html')
     validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('created')
     awaiting_validation_registrations =  WorkshopRegistration.objects.filter(workshop=workshop,validated=False)
     sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
@@ -137,8 +129,7 @@ def workshop_registration(request, workshop_id):
             msg = EmailMultiAlternatives(subject, message, from_email, tos)
             msg.attach_alternative(message, "text/html")
             msg.send()
-            return render_to_response('workshops/registration.html', 
-                {
+            return render(request, 'workshops/registration.html', context={
                  'title':workshop.name,
                  'content': workshop.content,
                  'workshop_reg':workshop,
@@ -150,12 +141,10 @@ def workshop_registration(request, workshop_id):
                  'show_registration':False,
                  'num_presentations':num_presentations,
                  'num_photos':num_photos,
-                }, 
-                context_instance=RequestContext(request)
+                }
             )
         else:
-            return render_to_response('workshops/registration.html', 
-                {
+            return render(request, 'workshops/registration.html', context={
                  'title':workshop.name,
                  'content': workshop.content,
                  'workshop_reg':workshop,
@@ -169,7 +158,7 @@ def workshop_registration(request, workshop_id):
                  'num_presentations':num_presentations,
                  'num_photos':num_photos,
                 }, 
-                context_instance=RequestContext(request)
+                
             )
     else:
         form = WorkshopRegistrationForm(data=workshop
@@ -177,8 +166,7 @@ def workshop_registration(request, workshop_id):
         # form = WorkshopRegistrationForm(request.POST={
         #     'full_workshop':workshop
         #     })
-    return render_to_response('workshops/registration.html', 
-        {
+    return render(request, 'workshops/registration.html', context={
          'title':workshop.name,
          'content': workshop.content,
          'workshop_reg':workshop,
@@ -191,19 +179,18 @@ def workshop_registration(request, workshop_id):
          'num_presentations':num_presentations,
          'num_photos':num_photos,
         }, 
-        context_instance=RequestContext(request)
+        
     )
 
 def presentations(request, workshop_id):
     try:
         workshop = Workshop.objects.get(id = workshop_id)
     except:
-        return render_to_response('workshops/not_found.html', {}, context_instance=RequestContext(request))
+        return render(request, 'workshops/not_found.html', {})
     sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
     presentations = Presentation.objects.filter(workshop=workshop)
     num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
-    return render_to_response('workshops/workshop_presentations.html', 
-        {
+    return render(request, 'workshops/workshop_presentations.html', context={
          'title':workshop.name,
          'content': workshop.content,
          'workshop':workshop,
@@ -213,19 +200,18 @@ def presentations(request, workshop_id):
          'num_presentations':len(presentations),
          'num_photos':num_photos,
         }, 
-        context_instance=RequestContext(request)
+        
     )
 
 def photos(request, workshop_id):
     try:
         workshop = Workshop.objects.get(id = workshop_id)
     except:
-        return render_to_response('workshops/not_found.html', {}, context_instance=RequestContext(request))
+        return render(request, 'workshops/not_found.html', {})
     sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
     presentations = len(Presentation.objects.filter(workshop=workshop))
     photos = WorkshopPhoto.objects.filter(workshop=workshop).order_by("priority")
-    return render_to_response('workshops/photos.html', 
-        {
+    return render(request, 'workshops/photos.html', context={
          'title':workshop.name,
          'content': workshop.content,
          'workshop':workshop,
@@ -235,5 +221,5 @@ def photos(request, workshop_id):
          'num_photos':len(photos),
          'photos':photos,
         }, 
-        context_instance=RequestContext(request)
+        
     )

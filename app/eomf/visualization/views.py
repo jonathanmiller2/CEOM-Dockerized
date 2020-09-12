@@ -63,58 +63,46 @@ def down(request):
     return HttpResponse("Temporarily offline")
 
 def index(request):
-    t = loader.get_template('visualization/overview.html')
-    c = RequestContext(request)
-    return HttpResponse(t.render(c))
+    return render(request, 'visualization/overview.html')
 
 @login_required()
 def gmap(request):
-
-    t = loader.get_template('visualization/gmap.html')
     datasets = Dataset.objects.filter(is_global=False).order_by('name')
     years = [y for y in range (2000,datetime.date.today().year +1)]
-    c = RequestContext(request,{
+    return render(request, 'visualization/gmap.html', context={
         'datasets':datasets,
         'years':years,
-        })
-    return HttpResponse(t.render(c))
+    })
 
 @login_required()
 def gmap1(request, lat, lon):
     lon = float(lon)
     lat = float(lat)
-    t = loader.get_template('visualization/gmap.html')
     datasets = Dataset.objects.filter(is_global=False).order_by('name')
     years = [y for y in range (2000,datetime.date.today().year +1)]
-    c = RequestContext(request,{
+
+    return render(request, 'visualization/gmap.html', context={
         'datasets':datasets,
         'years':years,
         'lonRedirect':lon,
         'latRedirect':lat,
         'photoRedirect':True,
-        })
-    return HttpResponse(t.render(c))
-    
+    })
+
 def manual(request):
-    t = loader.get_template('visualization/manual.html')
-    c = RequestContext(request)
-    return HttpResponse(t.render(c))
+    return render(request, 'visualization/manual.html')
 
 def olmap(request):
     form = ProductSelect()
-    t = loader.get_template('visualization/olmap.html')
-    c = RequestContext(request, {"product_form":form})
-    return HttpResponse(t.render(c))
+    return render(request, 'visualization/olmap.html', context={"product_form":form})
 
 def gemap(request):
     # ds = Datainfo.objects.all().order_by('label')
     ds = None
-    t = loader.get_template('visualization/gemap.html')
-    c = RequestContext(request,{
+    return render(request, 'visualization/gemap.html', context={
         'content': "This is a map",
         'datasets': ds,
     })
-    return HttpResponse(t.render(c))
 
 def indices_kml(request):
     timespans = []
@@ -248,9 +236,7 @@ def timeseries_single_history(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         jobs = paginator.page(paginator.num_pages)
-    c = RequestContext(request, {"jobs": jobs})
-    t = loader.get_template('visualization/single_timeseries_history.html')
-    return HttpResponse(t.render(c))
+    return render(request, 'visualization/single_timeseries_history.html', context={"jobs": jobs})
 
 def read_from_csv(absolute_path):
     header=None
@@ -537,9 +523,7 @@ def multiple(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         jobs = paginator.page(paginator.num_pages)
     task_in_progress = any([job.working for job in jobs])
-    t = loader.get_template('visualization/multiple.html')
-    c = RequestContext(request, {"task_in_progress":task_in_progress, 'jobs':jobs})
-    return HttpResponse(t.render(c))
+    return render(request, 'visualization/multiple.html', context={"task_in_progress":task_in_progress, 'jobs':jobs})
 @login_required
 def multiple_del(request,del_id):
     tsj = TimeSeriesJob.objects.filter(user=request.user,id=del_id)
@@ -570,9 +554,7 @@ def multiple_add(request):
     if len(user_pending_jobs)>=2:
         message="You can only have a maximum of two pending jobs in the queue. Please wait at least for the first to finish or cancel any of them."
         user_timeseries = TimeSeriesJob.objects.filter(user=request.user).order_by('-timestamp')
-        t = loader.get_template('visualization/multiple.html')
-        c = RequestContext(request, {"title":"Multiple Points Time Series Tool", 'timeseries':user_timeseries,"message":message})
-        return HttpResponse(t.render(c))
+        return render(request, 'visualization/multiple.html', context={"title":"Multiple Points Time Series Tool", 'timeseries':user_timeseries,"message":message})
    
     if request.method == 'POST':
         form = TimeSeriesJobForm(request.POST, request.FILES)
@@ -593,9 +575,7 @@ def multiple_add(request):
     else:
         form = TimeSeriesJobForm()
     #It is the first visit or form had errors
-    t = loader.get_template('visualization/multiple_add.html')
-    c = RequestContext(request, {"title":"Add Multiple Points time series request",'form':form})
-    return HttpResponse(t.render(c))
+    return render(request, 'visualization/multiple_add.html', context={"title":"Add Multiple Points time series request",'form':form})
 
 def composite(request, year = None, julian_day = None):
     prod='MOD09'
@@ -618,7 +598,7 @@ def composite(request, year = None, julian_day = None):
     if previous8_day < 1:
         previous8_day = 365
         previous8_year=int(year)-1
-    return render_to_response('visualization/composite.html', {'julian_day': str(julian_day).zfill(3),
+    return render(request, 'visualization/composite.html', context={'julian_day': str(julian_day).zfill(3),
             'year': year,
             'next8_year': next8_year,
             'next8_day': str(next8_day).zfill(3),
@@ -628,5 +608,5 @@ def composite(request, year = None, julian_day = None):
             'sat_ver': sat_ver,
             'version': version,
             'sat_name': sat_name,
-            },context_instance=RequestContext(request)
+            }
         )
