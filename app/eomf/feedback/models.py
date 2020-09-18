@@ -23,7 +23,7 @@ class Feedback(models.Model):
     feedback_date = models.DateField(auto_now=True)
     #Feedback_user = models.ForeignKey(User, blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s: %s' % (self.url, self.subject)
 
 class Comment(models.Model):
@@ -31,7 +31,7 @@ class Comment(models.Model):
 	# Comment_user = models.ForeignKey(User)
 	Comment_text = models.TextField(null=False, blank=True)
 
-	def __unicode__ (self):
+	def __str__ (self):
 		return self.Comment_text
 
 
@@ -52,7 +52,7 @@ class Task_status(models.Model):
 		(NEW, 'New'))
 	task_status = models.CharField(max_length=2, choices=track_choices,default=NEW)
 
-	def __unicode__ (self):
+	def __str__ (self):
 		return self.task_status
 
 

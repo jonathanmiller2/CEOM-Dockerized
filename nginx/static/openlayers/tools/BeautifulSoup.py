@@ -359,7 +359,7 @@ class NavigableString(unicode, PageElement):
         else:
             raise AttributeError, "'%s' object has no attribute '%s'" % (self.__class__.__name__, attr)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.__str__(None)
 
     def __str__(self, encoding=DEFAULT_OUTPUT_ENCODING):
@@ -504,7 +504,7 @@ class Tag(PageElement):
         """Renders this tag as a string."""
         return self.__str__(encoding)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.__str__(None)
 
     def __str__(self, encoding=DEFAULT_OUTPUT_ENCODING,

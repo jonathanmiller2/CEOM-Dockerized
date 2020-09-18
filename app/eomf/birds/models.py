@@ -21,7 +21,7 @@ class DuckTrack(models.Model):
     location = models.PointField()
     
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.gid)
     
     class Meta:
@@ -33,7 +33,7 @@ class DuckTrackLine(models.Model):
     location = models.LineStringField()
     
 
-    def __unicode__(self):
+    def __str__(self):
         return (self.gid)
     
     class Meta:

@@ -20,7 +20,7 @@ class ContinentBuffered(models.Model):
     name = models.CharField(max_length=13, blank=True,db_column='continent')
     geometry = models.MultiPolygonField(null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return unicode(_(self.name))
 
     class Meta:
@@ -33,7 +33,7 @@ class Category(models.Model):
     id_prim = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=40, blank=True)
     order = models.IntegerField()
-    def __unicode__(self):
+    def __str__(self):
         return unicode(_(self.name))
 
     class Meta:
@@ -68,7 +68,7 @@ class Country(models.Model):
         db_table = u'country'
         verbose_name = _(u'Country')
         verbose_name_plural = _(u'Countries')
-    def __unicode__(self):
+    def __str__(self):
         return unicode(_(self.cntry_name))
 
 class Region(models.Model):
@@ -83,7 +83,7 @@ class Region(models.Model):
         db_table = u'region'
         verbose_name = _(u'Region')
         verbose_name_plural = _(u'Regions')
-    def __unicode__(self):
+    def __str__(self):
         return unicode(_(self.region)) 
 
 class CountryBuffered(models.Model):
@@ -92,7 +92,7 @@ class CountryBuffered(models.Model):
     geometry = models.MultiPolygonField(null=True, blank=True)
 
 
-    def __unicode__(self):
+    def __str__(self):
         return unicode(_(self.name)) 
 
     class Meta:
@@ -107,7 +107,7 @@ class Research(models.Model):
         db_table = u'research'
         verbose_name = _(u'Research')
         verbose_name_plural = _(u'Researches')
-    def __unicode__(self):
+    def __str__(self):
         return unicode(_(self.name)) 
 
 class PhotoUser(models.Model):
@@ -142,7 +142,7 @@ class Theme(models.Model):
     class Meta:
         verbose_name = _(u'Theme')
         verbose_name_plural = _(u'Themes')
-    def __unicode__(self):
+    def __str__(self):
         return unicode(_(self.name)) 
 STATUS_CHOICES = (
     (0, _("Deleted")),
@@ -214,7 +214,7 @@ class Photo(models.Model):
     source = models.CharField(max_length=100, blank=True)
 
 
-    def __unicode__(self):
+    def __str__(self):
         return self.file.name
 
     def set_lon(self, lon):

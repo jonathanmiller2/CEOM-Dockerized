@@ -4,7 +4,7 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=125)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -44,7 +44,7 @@ class Publication(models.Model):
     keywords = models.TextField(null=True, blank=True)
     abstract = models.TextField(null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 

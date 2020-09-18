@@ -42,7 +42,7 @@ class Post(models.Model):
     date = models.DateField("date", null=False)
     content = models.TextField("Content",null=False, blank=False,)
     image_column_number = models.CharField(" column images",max_length=1, choices=NUM_COLUMNS, default="1")
-    def __unicode__(self):
+    def __str__(self):
         return self.date.strftime('%Y-%M-%D') + " [" + self.title + "]"
 
 class PostImage(models.Model):
@@ -54,7 +54,7 @@ class PostImage(models.Model):
     #We want the order for each image to be unique at the posts
     class Meta:
         unique_together = ('post', 'order')
-    def __unicode__(self):
+    def __str__(self):
         return "Image  " + str(self.order) + ": " + str(self.post) 
  
  
@@ -63,7 +63,7 @@ class PostFile(models.Model):
     description = models.TextField("Description",null=True, blank=True,)
     post = models.ForeignKey(Post, related_name="files", null=False, on_delete=models.CASCADE)
     file_attached = models.FileField(null=False, upload_to="news/docs")
-    def __unicode__(self):
+    def __str__(self):
         return "Post: " + str(self.post) + " File: " +self.title  
         
         
@@ -71,7 +71,7 @@ class Group(models.Model):
     name = models.CharField(max_length=125)
     order = models.IntegerField()
 	
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -91,7 +91,7 @@ class Person(models.Model):
     content = models.TextField(null=True, blank=True)
     headshot = models.ImageField(null=True, upload_to='people/', default='/media/people/dummy_headshot222.jpg')
     order= models.IntegerField(null=False, default=9999)
-    def __unicode__(self):
+    def __str__(self):
         return '%s %s %s' % (self.first_name, self.middle_name, self.last_name)
     class Meta:
         unique_together = ('first_name', 'middle_name','last_name')
@@ -105,6 +105,6 @@ class GalleryPhoto(models.Model):
     #We want the order for each image and its order to be unique
     class Meta:
         unique_together = ('year', 'order')
-    def __unicode__(self):
+    def __str__(self):
         return str(self.year) + "("+str(self.order)+"): " + self.title
         

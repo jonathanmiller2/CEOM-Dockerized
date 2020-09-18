@@ -29,7 +29,7 @@ class Workshop(models.Model):
     extra_text_field2 = models.CharField(max_length=100, null=True, blank=True)
     extra_text_field3 = models.CharField(max_length=100, null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s (%d)' % (self.name, self.date_start.year)
     class Meta:
         unique_together = (('name',),)
@@ -37,14 +37,14 @@ class Workshop(models.Model):
 class SponsorInWorkshop(models.Model):
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     sponsor = models.ForeignKey('Sponsor', on_delete=models.CASCADE)
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.sponsor)
     class Meta:
         unique_together = (('workshop','sponsor'),)
 class Sponsor(models.Model):
     name = models.CharField(max_length=200,null=False,blank=False)
     logo = models.FileField(null=False, max_length=300,upload_to="workshops/sponsors/")
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.name)
     class Meta:
         unique_together = (('name',),)
@@ -53,7 +53,7 @@ class WorkshopClass(models.Model):
     image = models.ImageField(upload_to="workshops/categories", null=False)
     class Meta:
         unique_together = (('name',),)
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.name)
 
 class WorkshopRegistration(models.Model):
@@ -84,7 +84,7 @@ class WorkshopRegistration(models.Model):
 
     class Meta:
         unique_together = (('workshop','email'),)
-    def __unicode__(self):
+    def __str__(self):
         return u'%s, %s (%s)' % (self.last_name,self.first_name,self.workshop)
 
 
@@ -107,7 +107,7 @@ class Institution(models.Model):
     modified = models.DateTimeField(auto_now=True)
     class Meta:
         unique_together = (('name',),)
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.name)
 
 
@@ -125,5 +125,5 @@ class Presentation(models.Model):
     modified = models.DateTimeField(auto_now=True)
     class Meta:
         unique_together = (('workshop','time_ini'),)
-    def __unicode__(self):
+    def __str__(self):
         return u'%s (%s)' % (self.title, self.workshop)

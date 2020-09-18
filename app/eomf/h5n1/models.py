@@ -25,5 +25,5 @@ class Case(models.Model):
     slaughtered = models.IntegerField(null=True)
     location = models.PointField()
 
-    def __unicode__(self):
+    def __str__(self):
         return "Case: "+str(self.id)

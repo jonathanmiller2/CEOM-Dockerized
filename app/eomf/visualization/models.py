@@ -71,7 +71,7 @@ class SingleTimeSeriesJob(models.Model):
     created = models.DateTimeField('created', auto_now_add=True)
     modified = models.DateTimeField('modified', auto_now=True)
     
-    def __unicode__(self):
+    def __str__(self):
         return str(self.user)+' ['+str(self.created)+']'
 
 class TimeSeriesJob(models.Model):
@@ -91,7 +91,7 @@ class TimeSeriesJob(models.Model):
     total_sites = models.IntegerField(default=1)
     progress = models.IntegerField(default=0)
     
-    def __unicode__(self):
+    def __str__(self):
         return self.sender
     def calculate_progress_percentage(self):
         if self.total_sites==0:

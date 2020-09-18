@@ -32,7 +32,7 @@ class Year(models.Model):
     facebook_link =  models.CharField(null=True, blank=True,max_length = 300)
     twitter_link =  models.CharField(null=True, blank=True,max_length = 300)
     survey_open = models.BooleanField(default=True)
-    def __unicode__(self):
+    def __str__(self):
         return str(self.date)
 class Booth(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
@@ -62,7 +62,7 @@ class Booth(models.Model):
     modified = models.DateTimeField(auto_now=True)
     validated = models.BooleanField()
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.last_name + ", "+self.first_name)
     
     class Meta:
@@ -89,7 +89,7 @@ class Visitor(models.Model):
 
     class Meta:
        unique_together = (("year","email"),)
-    def __unicode__(self):
+    def __str__(self):
         return self.first_name + " " + self.last_name
 
 
@@ -104,13 +104,13 @@ class PhotoContestParticipant(models.Model):
     )
     validated = models.BooleanField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.first_name + " " + self.last_name
 
 class PosterCategory(models.Model):
     name = models.CharField(max_length=100,null=False)
     description = models.CharField(max_length=200,null=False)
-    def __unicode__(self):
+    def __str__(self):
         return self.name 
 class Poster(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
@@ -131,7 +131,7 @@ class Poster(models.Model):
     validated = models.BooleanField()
     preview = models.FileField(null=True, max_length=300,upload_to="gisday/posters/", blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.first_name + " " + self.last_name
     class Meta:
        unique_together = (("year","email"),)
@@ -140,7 +140,7 @@ class AboutUsGroup(models.Model):
     name = models.CharField(max_length=125)
     order = models.IntegerField(null=False)
     
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 class AboutUsPerson(models.Model):
@@ -151,7 +151,7 @@ class AboutUsPerson(models.Model):
     phone = models.CharField(max_length=16, null=True, blank=True)
     headshot = models.ImageField(null=True, upload_to='gisday/aboutus/', default='gisday/aboutus/dummy_headshot222.jpg')
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s %s %s' % (self.first_name, self.middle_name, self.last_name)
 
 class PersonInGroup(models.Model):
@@ -165,7 +165,7 @@ class SponsorCategory(models.Model):
     min_inversion = models.IntegerField(null=False)
     max_inversion = models.IntegerField(null=False)
     logo = models.ImageField(null=True, upload_to='gisday/sponsors/')
-    def __unicode__(self):
+    def __str__(self):
        return '%s %s %s' % (self.name, self.min_inversion, self.max_inversion)
 
 class Sponsor(models.Model):
@@ -175,7 +175,7 @@ class Sponsor(models.Model):
     contact_person_mail = models.CharField(max_length=160, null=True, blank=True)
     link=models.CharField(max_length=300, null=True, blank=True)
     
-    def __unicode__(self):
+    def __str__(self):
         return str(self.name)
 
 class SponsorInYear(models.Model):
@@ -185,14 +185,14 @@ class SponsorInYear(models.Model):
     money = models.IntegerField(null=False)
     class Meta:
        unique_together = (("sponsor","year"),)
-    def __unicode__(self):
+    def __str__(self):
         return str("Year: "+str(self.year)+" Name: "+str(self.sponsor))
 
 class ItemDonor(models.Model):
     name = models.CharField(max_length=160, null=True, blank=True)
     link = models.CharField(max_length=300, null=True, blank=True)
     logo = models.ImageField(null=True, upload_to='gisday/item_donors/')
-    def __unicode__(self):
+    def __str__(self):
         return '%s' % (self.name)
 
 class ItemInYear(models.Model):
@@ -201,7 +201,7 @@ class ItemInYear(models.Model):
     donor = models.ForeignKey(ItemDonor, on_delete=models.CASCADE)
     value = models.DecimalField(null=False, max_digits=10, decimal_places=2)
     link = models.CharField(max_length=160, null=True, blank=True)
-    def __unicode__(self):
+    def __str__(self):
         return '%s %s' % (self.name, self.value)
 
 class GisDayPhoto(models.Model):
@@ -215,7 +215,7 @@ class Agenda(models.Model):
     time_end = models.TimeField(blank=True,null=True)
     speaker = models.CharField(max_length=160, null=True, blank=True)
     
-    def __unicode__(self):
+    def __str__(self):
         return '%s %s' % (self.year, self.entry_name)
     class Meta:
        unique_together = (("year","entry_name"),)
@@ -228,7 +228,7 @@ class Announcement(models.Model):
     date = models.DateField(null=True,blank=True)
     image = models.ImageField(null=True,blank=True, upload_to='gisday/announcements/')
     
-    def __unicode__(self):
+    def __str__(self):
         return '%s %s' % (self.year, self.entry_name)
     class Meta:
        unique_together = (("year","position"),)
@@ -423,7 +423,7 @@ class Survey(DemographicSurvey):
     other_role = models.CharField('If other, please specify',max_length=80,null=True,blank=True)
     beneficial_aspects = models.TextField('What was the most beneficial or interesting aspect of the event?',null=False,blank=False)
     comments_and_suggestions = models.TextField('Please provide any additional comments or suggestions:',null=True,blank=True)
-    # def __unicode__(self):
+    # def __str__(self):
     #     if self.role="Other":
     #         return '%s Other(%s) created: %s' % (self.year, self.uther_role,created)
     #     else 

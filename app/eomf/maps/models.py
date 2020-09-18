@@ -37,7 +37,7 @@ class roi(models.Model):
 	points = models.TextField()
 
 
-	def __unicode__(self):
+	def __str__(self):
 		return str(self.user)+' ['+str(self.created)+']'
 
 
@@ -55,7 +55,7 @@ class poi(models.Model):
 	category = models.ForeignKey(Category, null=True, blank=True, db_column='categoryid', related_name='pois', on_delete=models.CASCADE)
 	# pixelsize = models.IntegerField(blank=False, null=False)
 
-	def __unicode__(self):
+	def __str__(self):
 		return str(self.user)+' ['+str(self.created)+']'
 
 
@@ -72,7 +72,7 @@ class map_gallery(models.Model):
 	validated = models.BooleanField()# for consent or for validation in admin page.
 	map_image_legend = models.ImageField(upload_to = 'media/map_gallery', verbose_name = "Legend", blank=False, null=False, default = 'media/feedback/image5.jpg')#Image not available.
 
-	def __unicode__(self):
+	def __str__(self):
 		return str(self.user)+' : '+str(self.title)+'| |'
 
 
@@ -82,5 +82,5 @@ class Comment(models.Model):
 	Comment_text = models.TextField(null=False, verbose_name = "Enter Comment here", blank=False)
 	created = models.DateTimeField('created', auto_now_add=True)
 	
-	def __unicode__ (self):
+	def __str__ (self):
 		return self.Comment_text

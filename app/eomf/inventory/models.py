@@ -22,14 +22,14 @@ class Dataset(models.Model):
     is_global = models.BooleanField(default=False)
     # timeseries_enabled = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 class Product(models.Model):
     name = models.CharField(max_length=10, primary_key=True)
     long_name = models.CharField(max_length=50)
     
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 class TileManager(models.Manager):
@@ -67,7 +67,7 @@ class Tile(models.Model):
         return self.name + ";ih=" + str(self.ih) + ";long_min=" \
                + str(self.lon_min) +";" + self.continent + ";"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
         
 class File(models.Model):
@@ -79,7 +79,7 @@ class File(models.Model):
     dataset = models.ForeignKey(Dataset, null=True, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='Process')
     absolute_path = models.CharField(max_length = 300, null=False, default='N/A')
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 class Process(models.Model):

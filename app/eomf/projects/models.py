@@ -7,5 +7,5 @@ class Project(models.Model):
     end_date = models.DateField('project end date', null=True, blank=True)
     fund = models.IntegerField('total amount of fund', null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.project_title

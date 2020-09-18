@@ -5,13 +5,7 @@ services:
   web:
     build: ./app
 
-    #****WARNING***** TODO: REMOVE THE FLUSH COMMAND BELOW WITH LIVE DATA, IT WILL LITERALLY DELETE EVERYTHING IN THE DATABASE ****WARNING*****
-    #If Django is reporting an issue with relations not existing, this may help, but DO NOT RUN THIS COMMAND IF DJANGO IS IN ANY WAY TIED TO THE ONLY COPY OF THE DATA YOU HAVE. IT WILL INSTANTLY DELETE IT WITH NO BACKUP.
-    command: bash -c "python manage.py reset_db --noinput &&
-                      echo RESET_DB_FIN &&         
-                      python manage.py flush --noinput &&         
-                      echo FLUSH_FIN &&
-                      python manage.py migrate --noinput -v 1 && 
+    command: bash -c "python manage.py migrate --noinput -v 1 && 
                       echo MIGRATE_FIN &&
                       python manage.py check &&
                       echo CHECK_FIN &&

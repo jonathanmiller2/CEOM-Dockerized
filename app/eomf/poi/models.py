@@ -10,7 +10,7 @@ class PixelDataset(models.Model):
     name = models.CharField(max_length=100,blank=False, null=False)
     ncol= models.IntegerField(null=False, blank=False)
     nrow = models.IntegerField(null=False, blank=False)
-    def __unicode__(self):
+    def __str__(self):
         return self.name
     
 class Pixel(models.Model):
@@ -22,7 +22,7 @@ class Pixel(models.Model):
     
     class Meta:
         unique_together = (('h', 'v','col','row','dataset'),)
-    def __unicode__(self):
+    def __str__(self):
         return u'%s: h%02dv%02d c:%s r:%s' % (self.dataset ,self.h,self.v,self.col,self.row) 
         
 
@@ -34,7 +34,7 @@ class PixelValidation(models.Model):
     notes = models.TextField(blank=True)
     photo_used = models.ForeignKey(Photo, null=True, blank=True)
    
-    def __unicode__(self):
+    def __str__(self):
         return u'%s -- %s' % (self.pixel,self.user) 
 
 class PixelValidationLandcover(models.Model):
@@ -44,7 +44,7 @@ class PixelValidationLandcover(models.Model):
 
     class Meta:
         unique_together = (('validation','category'),)
-    def __unicode__(self):
+    def __str__(self):
         return u'%s: %s %s %s category' % (self.validation,self.percentage,'%',self.category)
 
 class Research(models.Model):
@@ -54,7 +54,7 @@ class Research(models.Model):
     created = models.DateField(auto_now=False, auto_now_add=True)
     modified =  models.DateField(auto_now=True, auto_now_add=True)
     order = models.IntegerField(null=True, blank = True)
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.name)
 class ResearchPixel(models.Model):
     pixel = models.ForeignKey(Pixel, null=False, blank=False)
@@ -67,5 +67,5 @@ class ResearchPixel(models.Model):
     lon = models.FloatField(null=False, blank=False)
     class Meta:
         unique_together = (('pixel','research'),)
-    def __unicode__(self):
+    def __str__(self):
         return u'%s: %s (%s) ' % (self.research,self.pixel,self.user)

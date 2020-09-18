@@ -8,7 +8,7 @@ class Datatype(models.Model):
     name = models.CharField(max_length=10, primary_key=True, unique=True)
     description = models.CharField(max_length=100)
     
-    def __unicode__(self):
+    def __str__(self):
         return self.name
         
 class Datainfo(models.Model):
@@ -25,7 +25,7 @@ class Datainfo(models.Model):
     #class Meta:
     #    db_table = u'map_dataset'
     
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 class H5n1(models.Model):
@@ -54,7 +54,7 @@ class H5n1(models.Model):
     location = models.PointField()
 
 
-    def __unicode__(self):
+    def __str__(self):
         return "Case: "+str(self.id)
     
     def name(self):
@@ -117,7 +117,7 @@ class Birds(models.Model):
     location = models.PointField(null=True)
     
     
-    def __unicode__(self):
+    def __str__(self):
         return "Animal: "+str(self.animal)
     
     def timeString(self):
