@@ -73,6 +73,9 @@ MEDIA_ROOT = os.path.join(os.path.dirname(__file__), "media/")
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
+#File permissions for uploaded media
+FILE_UPLOAD_PERMISSIONS = 0o644
+
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".

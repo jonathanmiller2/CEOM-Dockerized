@@ -52,8 +52,8 @@ services:
     #user: eomfuser
 
     #TODO: Nginx NEEDS this link to the active files because media files are added during runtime, after docker's copy command. Thus the container doesn't have the new media files.
-    #volumes: 
-      #blah:#blah
+    volumes: 
+      - .:/code
 
     ports:
       - 80:80
