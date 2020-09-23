@@ -5,6 +5,8 @@ services:
   web:
     build: ./app
 
+    #user: eomfuser
+
     command: bash -c "python manage.py migrate --noinput -v 1 && 
                       echo MIGRATE_FIN &&
                       python manage.py check &&
@@ -29,21 +31,34 @@ services:
 
   db:
     image: postgis/postgis
+
+    #user: eomfuser
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
     env_file:
       - ./.env.db
+  
 
 
 
   nginx:
-    build: ./nginx
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+
+    #TODO: Figure out how to avoid containers running as root
+    #user: eomfuser
+
+    #TODO: Nginx NEEDS this link to the active files because media files are added during runtime, after docker's copy command. Thus the container doesn't have the new media files.
+    #volumes: 
+      #blah:#blah
+
     ports:
       - 80:80
     depends_on:
       - web
-  
 
 
 #  redis:
