@@ -18,12 +18,9 @@
     {{block.super}}
 {% endblock %}
 {% block sidebar_extra %}
-<div class="well sidebar-nav span12" style="margin-left: 0px; margin-bottom: 0px">
-    <div class='row-fluid'>
+<nav class="card bg-light ml-5 mt-3 shadow-sm">
     {% include "photos/search_form.html" %}
-    </div>
-
-    </div>
+</nav>
 
 
 {% endblock %}
@@ -32,10 +29,8 @@
 <div class="span12" style="margin-left:0px;">
     <h2 class="legend" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
     <div class="container-fluid" style="padding-left:0px;">
-    <!-- <div class="span12 well"> -->
     <div class="span12" style="height:50px; margin-left:0px !important;">
         <div class='span4 text-left'>
-            <!-- <div class="">{% trans "Search Results" %}: <span class="badge">{{paginator.count}}</span></div> -->
             <label><b>{% trans "Search Results" %}:</b> <span class="badge">{{paginator.count}}</span></label>
         </div>
         <div class='span4 text-center'>

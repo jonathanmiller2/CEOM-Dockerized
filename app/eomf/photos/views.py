@@ -147,7 +147,7 @@ def search_for_photos(request):
 
 
 def user_photos(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         base = Photo.objects.exclude(status=0)
         if 'sort' in request.GET: #Sorts by Takendate
             dates = base.distinct('takendate').filter(user=request.user).order_by('-takendate')
@@ -206,7 +206,7 @@ def user_photos(request):
 
 
 def workset_photos(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.method == 'POST':
             ids = request.method['ids']
 
@@ -661,7 +661,7 @@ def batchedit(request):
 
 
 def edit(request, id):
-    if request.user.is_authenticated()==False:
+    if request.user.is_authenticated==False:
         return redirect('/photos/')
     else:
         photo = Photo.objects.get(pk=id)
@@ -689,7 +689,7 @@ def edit(request, id):
                     return redirect('/photos/user')
                 
                 if 'Save_and_Goto_Next_Photo' in request.POST:
-                    if request.user.is_authenticated():
+                    if request.user.is_authenticated:
                         base = Photo.objects.exclude(
                             status=0
                         ).filter(
@@ -712,7 +712,7 @@ def edit(request, id):
                     else:
                         return HttpResponseRedirect("/accounts/login")
                 if 'Save_and_Goto_Prev_Photo' in request.POST:
-                    if request.user.is_authenticated():
+                    if request.user.is_authenticated:
                         base = Photo.objects.exclude(
                             status=0
                         ).filter(
