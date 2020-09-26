@@ -121,14 +121,7 @@
         }
     }
 </script>
-<style>
-    .formBox {
-        font-size: 14px;
-        width: 100%;
-        border: 1px solid red;
-    }
-</style>
-<form id='search' class='mx-3 mt-3' action="." method="post" name="searchform" onkeypress="return runScript(event)">{% csrf_token %}
+<form id='search' class="mx-3 mt-3" action="." method="post" name="searchform" onkeypress="return runScript(event)">{% csrf_token %}
     <fieldset>
         {{ search.non_field_errors }}
         <legend class="text-center mb-0">{% trans "Search By:" %}</legend>
@@ -138,92 +131,132 @@
             <h6>{% trans "1. Land Cover Type" %}</h6>
         </label>
         <div id="LandCover" class="collapse">
-            {{search.category.errors}}
-            {{search.category}}
+            <div class="pt-2 pb-3">
+                {{search.category.errors}}
+                {{search.category}}
+            </div>
         </div>
 
-        {{search.keywords.errors}}
-        <label for="keywords" data-toggle="collapse" data-target="#metadata">
-            <h6>{% trans "2. Keywords In Metadata" %}</h6>
-        </label>
-        <div id="metadata" class="collapse">
-            <input type="text" placeholder="EX: cocorahs" id="keywords" name="keywords" value="{%if search.keywords.value%}{{search.keywords.value}}{% endif %}">
-        </div>
-
+        
+       {{search.keywords.errors}}
+       <label for="keywords" data-toggle="collapse" data-target="#metadata">
+           <h6>{% trans "2. Keywords In Metadata" %}</h6>
+       </label>
+       <div id="metadata" class="collapse">
+           <div class="pt-2 pb-3">
+               <input class="form-control form-control-sm" type="text" placeholder="EX: cocorahs" id="keywords" name="keywords" value="{%if search.keywords.value%}{{search.keywords.value}}{% endif %}">
+           </div>
+       </div>
+        
+        
+        
         {{ search.date_min.errors }}
         <label data-toggle="collapse" data-target="#date">
             <h6>{% trans "3. Time Period" %}</h6>
         </label>
         <div id="date" class="collapse">
-            <label><b>{% trans "Date from" %}</b></label>
-            {{ search.date_min }}
-            {{ search.lat_max.errors }}
-            <label><b>{% trans "Date to" %}</b></label>
-            {{ search.date_max }}
+            <div class="pt-2 pb-3">
+                <label><b>{% trans "Date from" %}</b></label>
+                {{ search.date_min }}
+                {{ search.lat_max.errors }}
+                <label><b>{% trans "Date to" %}</b></label>
+                {{ search.date_max }}
+            </div>
         </div>
 
+        
         <label data-toggle="collapse" data-target="#geoLocation" font-size:.9em;>
             <h6>{%trans "4. Geographic Location"%}</h6>
         </label>
         <div id="geoLocation" class="collapse">
-            <input placeholder="Street, City, State" type="text" id="address_get" name="address_get" value="{% if search.address_get.value %}{{search.address_get.value}}{%endif%}"></input>
-            <span><small>{%trans "(OR)"%}</small></span>
-            <label><b>{% trans  "Enter Latitude" %}</b></label>
-            <div class="row mx-1">
-                <input class="col-4" placeholder='DEG' type="text" id="LAT_DEG" name="LAT_DEG" value="{% if search.LAT_DEG.value %}{{search.LAT_DEG.value}}{%endif%}"></input>
-                <input class="col-4" placeholder='MIN' type="text" id="LAT_MIN" name="LAT_MIN" value="{% if search.LAT_MIN.value %}{{search.LAT_MIN.value}}{%endif%}"></input>
-                <input class="col-4" placeholder='SEC' type="text" id="LAT_SEC" name="LAT_SEC" value="{% if search.LAT_SEC.value %}{{search.LAT_SEC.value}}{%endif%}"></input>
-            </div>
-            <span><small>{%trans "(OR)"%}</small></span>
-            <input placeholder='DECIMAL_DEG' type="text" id="LAT_DEG1" name="LAT_DEG1" value="{% if search.LAT_DEG1.value %}{{search.LAT_DEG1.value}}{%endif%}"></input>
-            <span><small>{%trans "(OR)"%}</small></span>
-            <br />
-            <label><b>{% trans  "Enter Longitude" %}</b></label>
-            <input placeholder='DEG' type="text" id="LON_DEG" name="LON_DEG" value="{% if search.LON_DEG.value %}{{search.LON_DEG.value}}{%endif%}"></input>
-            <input placeholder='MIN' type="text" id="LON_MIN" name="LON_MIN" value="{% if search.LON_MIN.value %}{{search.LON_MIN.value}}{%endif%}"></input>
-            <input placeholder='SEC' type="text" id="LON_SEC" name="LON_SEC" value="{% if search.LON_SEC.value %}{{search.LON_SEC.value}}{%endif%}"></input>
-            <span><small>{%trans "(OR)"%}</small></span>
-            <input placeholder='DECIMAL_DEG' type="text" id="LON_DEG1" name="LON_DEG1" value="{% if search.LON_DEG1.value %}{{search.LON_DEG1.value}}{%endif%}"></input>
-            <label><b>{% trans  "Enter Nearness" %}</b></label>
-            <input placeholder="EX: 1.305 degree" type="text" id="precise" name="precise" value="{% if search.precise.value %}{{search.precise.value}}{%endif%}"></input>
-        </div>
+            <div class="pt-2 pb-3">
 
+                <div class="py-3">
+                    <input class="form-control form-control-sm" placeholder="Street, City, State" type="text" id="address_get" name="address_get" value="{% if search.address_get.value %}{{search.address_get.value}}{%endif%}"></input>
+                    <span><small>{%trans "(OR)"%}</small></span>
+                </div>
+
+                <div class="py-3">
+                    <label><b>{% trans  "Enter Latitude" %}</b></label>
+                    <div class="d-flex justify-content-between">
+                        <input class="form-control form-control-sm" style="width: 32%" placeholder='DEG' type="text" id="LAT_DEG" name="LAT_DEG" value="{% if search.LAT_DEG.value %}{{search.LAT_DEG.value}}{%endif%}"></input>
+                        <input class="form-control form-control-sm" style="width: 32%" placeholder='MIN' type="text" id="LAT_MIN" name="LAT_MIN" value="{% if search.LAT_MIN.value %}{{search.LAT_MIN.value}}{%endif%}"></input>
+                        <input class="form-control form-control-sm" style="width: 32%" placeholder='SEC' type="text" id="LAT_SEC" name="LAT_SEC" value="{% if search.LAT_SEC.value %}{{search.LAT_SEC.value}}{%endif%}"></input>
+                    </div>
+                    <span><small>{%trans "(OR)"%}</small></span>
+                    <input class="form-control form-control-sm" placeholder='DECIMAL_DEG' type="text" id="LAT_DEG1" name="LAT_DEG1" value="{% if search.LAT_DEG1.value %}{{search.LAT_DEG1.value}}{%endif%}"></input>
+                </div>
+
+                <div class="py-3">
+                    <label><b>{% trans  "Enter Longitude" %}</b></label>
+                    <div class="d-flex justify-content-between">
+                        <input class="form-control form-control-sm" style="width: 32%" placeholder='DEG' type="text" id="LON_DEG" name="LON_DEG" value="{% if search.LON_DEG.value %}{{search.LON_DEG.value}}{%endif%}"></input>
+                        <input class="form-control form-control-sm" style="width: 32%" placeholder='MIN' type="text" id="LON_MIN" name="LON_MIN" value="{% if search.LON_MIN.value %}{{search.LON_MIN.value}}{%endif%}"></input>
+                        <input class="form-control form-control-sm" style="width: 32%" placeholder='SEC' type="text" id="LON_SEC" name="LON_SEC" value="{% if search.LON_SEC.value %}{{search.LON_SEC.value}}{%endif%}"></input>
+                    </div>
+                    <span><small>{%trans "(OR)"%}</small></span>
+                    <input class="form-control form-control-sm" placeholder='DECIMAL_DEG' type="text" id="LON_DEG1" name="LON_DEG1" value="{% if search.LON_DEG1.value %}{{search.LON_DEG1.value}}{%endif%}"></input>
+                </div>
+                <div class="py-3">
+                    <label><b>{% trans  "Enter Nearness" %}</b></label>
+                    <input class="form-control form-control-sm" placeholder="EX: 1.305 degree" type="text" id="precise" name="precise" value="{% if search.precise.value %}{{search.precise.value}}{%endif%}"></input>
+                </div>
+            </div>
+        </div>
+        
+
+        
         <label class="text-left" data-toggle="collapse" data-target="#region">
             <h6>{%trans "5. Region"%}</h6>
         </label>
         <div id="region" class="collapse">
-            {{ search.lon_min.errors }}
-            <input id="lon_min" placeholder='{% trans "Min-Lon" %}' type="text" name="lon_min" value="{% if search.lon_min.value %}{{search.lon_min.value}}{%endif%}"/>
-            {{ search.lon_max.errors }}
-            <input id="lon_max" placeholder='{% trans "Max-Lon" %}' type="text" name="lon_max" value="{% if search.lon_max.value %}{{search.lon_max.value}}{%endif%}"/>
-            {{ search.lat_min.errors }}
-            <input id="lat_min" placeholder='{% trans "Min-Lat" %}' type="text" name="lat_min" value="{% if search.lat_min.value %}{{search.lat_min.value}}{%endif%}" />
-            {{ search.lat_max.errors }}
-            <input id="lat_max" placeholder='{% trans "Max-Lat" %}' type="text" name="lat_max" value="{% if search.lat_max.value %}{{search.lat_max.value}}{%endif%}" />
+            <div class="pt-2 pb-3">
+                <div class="d-flex justify-content-between">
+                    {{ search.lon_min.errors }}
+                    <input id="lon_min" class="form-control form-control-sm" style="width: 48%" placeholder='{% trans "Min-Lon" %}' type="text" name="lon_min" value="{% if search.lon_min.value %}{{search.lon_min.value}}{%endif%}"/>
+                    {{ search.lon_max.errors }}
+                    <input id="lon_max" class="form-control form-control-sm" style="width: 48%" placeholder='{% trans "Max-Lon" %}' type="text" name="lon_max" value="{% if search.lon_max.value %}{{search.lon_max.value}}{%endif%}"/>
+                </div>
+                <div class="d-flex justify-content-between">
+                    {{ search.lat_min.errors }}
+                    <input id="lat_min" class="form-control form-control-sm" style="width: 48%" placeholder='{% trans "Min-Lat" %}' type="text" name="lat_min" value="{% if search.lat_min.value %}{{search.lat_min.value}}{%endif%}" />
+                    {{ search.lat_max.errors }}
+                    <input id="lat_max" class="form-control form-control-sm" style="width: 48%" placeholder='{% trans "Max-Lat" %}' type="text" name="lat_max" value="{% if search.lat_max.value %}{{search.lat_max.value}}{%endif%}" />
+                </div>
+            </div>
         </div>
 
+        
         <label data-toggle="collapse" data-target="#country">
             <h6>{% trans "6. Country" %}</h6>
         </label>
         <div id="country" class="collapse">
-            {{search.country.errors}}
-            {{search.country}}
+            <div class="pt-2 pb-3">
+                {{search.country.errors}}
+                {{search.country}}
+            </div>
         </div>
+         
 
         <label data-toggle="collapse" data-target="#continent">
             <h6>{% trans "7. Continent" %}</h6>
         </label>
         <div id="continent" class="collapse">
-            {{search.contient.errors}}
-            {{search.continent}}
+            <div class="pt-2 pb-3">
+                {{search.contient.errors}}
+                {{search.continent}}
+            </div>
         </div>
 
+        
         <label data-toggle="collapse" data-target="#username">
             <h6>{% trans "8. Username" %}</h6>
         </label>
         <div id="username" class="collapse">
-            {{search.user.errors}}
-            {{search.user}}
+            <div class="pt-2 pb-3">
+                {{search.user.errors}}
+                {{search.user}}
+            </div>
         </div>
         
 

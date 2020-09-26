@@ -52,13 +52,13 @@ class SearchForm(forms.Form):
     precise = forms.FloatField(max_value=30, min_value=-30, required=False)
     date_min = forms.DateField(
         initial=None, required=False,
-        widget=forms.DateInput(format='%m/%d/%Y', attrs={'placeholder':'mm/dd/yyyy', 'class':'formBox'}),
+        widget=forms.DateInput(format='%m/%d/%Y', attrs={'placeholder':'mm/dd/yyyy', 'class':'form-control form-control-sm'}),
         input_formats=('%m/%d/%Y', '%d/%m/%Y', '%d-%m-%Y', '%Y-%m-%d')
     )
 
     date_max = forms.DateField(
         initial=None, required=False,
-        widget=forms.DateInput(format='%d/%m/%Y', attrs={'placeholder':'mm/dd/yyyy', 'class':'formBox'}),        
+        widget=forms.DateInput(format='%d/%m/%Y', attrs={'placeholder':'mm/dd/yyyy', 'class':'form-control form-control-sm'}),        
         input_formats=('%m/%d/%Y', '%d/%m/%Y', '%d-%m-%Y', '%Y-%m-%d')
     )
 
@@ -68,7 +68,7 @@ class SearchForm(forms.Form):
         empty_label=_("All"),
         widget=Select(
             attrs={
-                'class':'formBox'
+                'class':'form-control form-control-sm'
             },
             choices=(('notnull', 'Is Set'), ('null', 'Not Set'))
         )
@@ -80,7 +80,7 @@ class SearchForm(forms.Form):
         required=False,
         widget = forms.TextInput(
             attrs={
-                'class':'formBox'
+                'class':'form-control form-control-sm'
             },
         )
     )
@@ -91,7 +91,7 @@ class SearchForm(forms.Form):
         empty_label=_("All"),
         widget=Select(
             attrs={
-                'class':'formBox'
+                'class':'form-control form-control-sm'
             },
             choices=(('notnull', 'Is Set'), ('null', 'Not Set'))
         )
@@ -103,7 +103,7 @@ class SearchForm(forms.Form):
         empty_label=_("All"),
         widget=Select(
             attrs={
-                'class':'formBox'
+                'class':'form-control form-control-sm'
             },
             choices=(('notnull', 'Is Set'), ('null', 'Not Set'))
         )
