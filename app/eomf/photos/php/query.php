@@ -1,4 +1,5 @@
 <?php
+/*
 require_once("include/h2o.php");
 require_once("include/session.php");
 require_once("include/gallery.php");
@@ -173,4 +174,5 @@ $content = ob_get_clean();
 $menu = menu(true);
 $h2o = new h2o(TEMPLATES_DIR."photos/main.html");
 echo $h2o->render(compact("session","menu","title","content"));
+*/
 ?>

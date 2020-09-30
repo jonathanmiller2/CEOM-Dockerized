@@ -9,13 +9,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="/static/css/datePicker.css" />
     <!-- required plugins -->
     <link href="/static/css/datepicker.css" rel="stylesheet">
-    <script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#id_date_min').datepicker();
-            $('#id_date_max').datepicker();
-        });
-    </script>
+
 
     <style type="text/css">
         #map {
@@ -43,11 +37,9 @@
 {% block body_tag %}<body bgcolor="#FFFFFF">{% endblock %}
 
 {% block sidebar_extra %}
-<div class="well sidebar-nav span12">
-    <div class='row-fluid'>
+<nav class="card bg-light ml-5 mt-3 shadow-sm">
     {% include "photos/search_form.html" %}
-    </div>
-</div>
+</nav>
 
 {% endblock %}
 {% block content_with_span10 %}

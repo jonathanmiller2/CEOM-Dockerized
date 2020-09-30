@@ -46,8 +46,9 @@ urlpatterns = [
     #(r'^photos_near_coord/lat=(?P<lat>-?\d+(\.\d+)?)_lon=(?P<lon>-?\d+(\.\d+)?)_rad=(?P<radius>\d+(\.\d+)?)/$','photos_coord'),
 
     #Legacy redirects
-    re_path(r'^map.php$', RedirectView.as_view(url='/photos/map/')),
-    re_path(r'^testmap.php$', RedirectView.as_view(url='/photos/testmap/')),
-    re_path(r'^query.php$',  RedirectView.as_view(url='/photos/browse/')),
-    re_path(r'^upload.php$',  RedirectView.as_view(url='/photos/upload/')),
+    #TODO: DELETE ALL PHP FILES?
+    #re_path(r'^map.php$', RedirectView.as_view(url='/photos/map/')),
+    #re_path(r'^testmap.php$', RedirectView.as_view(url='/photos/testmap/')),
+    #re_path(r'^query.php$',  RedirectView.as_view(url='/photos/browse/')),
+    #re_path(r'^upload.php$',  RedirectView.as_view(url='/photos/upload/')),
 ]

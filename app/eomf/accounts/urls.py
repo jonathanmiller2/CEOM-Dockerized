@@ -1,7 +1,6 @@
 from django.conf.urls import re_path
 from django.contrib.auth.models import User
 from django.contrib.auth import views as auth_views
-from eomf.accounts.forms import LoginForm
 
 import eomf.accounts.views
 import django.contrib.auth.views
@@ -13,7 +12,7 @@ info_users = {
 urlpatterns = [
     re_path(r'^$', eomf.accounts.views.index),
 
-    re_path(r'^login/$', auth_views.LoginView.as_view(), {'template_name': 'accounts/login.html', 'authentication_form': LoginForm}, name='login'),
+    re_path(r'^login/$', eomf.accounts.views.login, name="login"),
     re_path(r'^logout/$', auth_views.LogoutView.as_view(), {'template_name': 'accounts/logout.html'},name='logout'),
 
     re_path(r'^mobile_login/$', eomf.accounts.views.mobile_login,name='mobile_login'),    

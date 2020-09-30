@@ -229,7 +229,7 @@ def workset_photos(request):
 
 
 def browse(request):
-    photos, search = search_for_photos(request)
+    photos, search = search_for_photos(request) #TODO: This search is causing the serialization error
     #request.session['query'] = pickle.dumps(photos.query)
     
     page = request.GET.get('page',1)
@@ -498,6 +498,7 @@ def get_photos_id_form_cluster_photo_id(request, id,x_size=22.25,y_size=11.125):
     for row in cursor.fetchall():
         ids, count, cluster, point = row
         return ids
+        
 def photos_json(request):
     id = request.GET['ids']
     ids = get_photos_id_form_cluster_photo_id(request, id)

@@ -12,8 +12,10 @@ from eomf.accounts.forms import RegistrationForm, ProfileForm, UserForm
 from django.utils.html import escape
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse
 from django.forms import ValidationError
+from django.contrib import messages
 
 import django
 
@@ -22,6 +24,26 @@ def index(request):
         return HttpResponseRedirect('/accounts/profile/')
     else:
         return HttpResponseRedirect('/accounts/login/')
+        
+def login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request=request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}")
+                return redirect('/')
+            else:
+                messages.error(request, "Invalid username or password.")
+        else:
+            messages.error(request, "Invalid username or password.")
+
+
+    form = AuthenticationForm()
+    return render(request, template_name="login.html", context={"form":form})
 
 def logout(request):
     logout(request)

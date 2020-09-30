@@ -3,10 +3,6 @@
 {% load thumbnail %}
 {% load i18n %}
 {% block head_extra %}
-    <!--[if IE]><script type="text/javascript" src="{{STATIC_URL}}js/jquery.bgiframe.js"></script><![endif]-->
-
-    <link href="/static/css/datepicker.css" rel="stylesheet">
-    <script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $('#id_date_min').datepicker().on('show',function(){

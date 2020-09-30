@@ -36,21 +36,6 @@ class InitModelForm(forms.ModelForm):
 # lands in trunk, this will no longer be necessary.
 attrs_dict = {'class': 'required'}
 
-
-class LoginForm(AuthenticationForm, forms.Form):
-    class Meta:
-        layout = (
-            Fieldset(_("Please Login"), "username", "password", ),
-        )
-
-    def __init__(self, *args, **kwargs):
-        super(LoginForm, self).__init__(*args, **kwargs)
-
-        self.helper = FormHelper(self)
-        self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit('submit', 'Log in'))
-
-
 class RegistrationForm(forms.Form):
     """
     Form for registering a new user account.
