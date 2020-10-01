@@ -17,6 +17,10 @@ class BootstrapForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit('submit', 'Save'))
+        
+class CustomLoginForm(AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class':'validate form-control form-control-sm','placeholder': 'Username'}), label='')
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-sm', 'placeholder':'Password'}), label='')
 
 
 class InitModelForm(forms.ModelForm):

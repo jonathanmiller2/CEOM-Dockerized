@@ -202,6 +202,7 @@ INSTALLED_APPS = [
     #'olwidget',
     'tinymce', #Cool Text editor
     'crispy_forms', # Cool forms rendered
+    #TODO: Remove all references to crispy forms. Unnescessary dependency. 
 
 
 ]

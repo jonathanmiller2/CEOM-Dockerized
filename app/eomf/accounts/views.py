@@ -8,11 +8,10 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.forms.models import model_to_dict
 from eomf.accounts.models import Profile
-from eomf.accounts.forms import RegistrationForm, ProfileForm, UserForm
+from eomf.accounts.forms import RegistrationForm, ProfileForm, UserForm, CustomLoginForm
 from django.utils.html import escape
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse
 from django.forms import ValidationError
 from django.contrib import messages
@@ -27,7 +26,7 @@ def index(request):
         
 def login(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request=request, data=request.POST)
+        form = CustomLoginForm(request=request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
@@ -42,8 +41,8 @@ def login(request):
             messages.error(request, "Invalid username or password.")
 
 
-    form = AuthenticationForm()
-    return render(request, template_name="login.html", context={"form":form})
+    form = CustomLoginForm()
+    return render(request, template_name="accounts/login.html", context={"form":form})
 
 def logout(request):
     logout(request)

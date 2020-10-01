@@ -5,15 +5,17 @@
 {% block title %}{% trans "EOMF: Log in" %}{% endblock %}
 
 {% block content %}
-
-    <div class="container">
+    <legend><h4>{% trans "Log in" %}</h4></legend>
+    <hr />
+    
+    <div class="col-lg-2 my-3">
         <form method="POST">
-        {% csrf_token %}
-        {{form.as_p}}
-            <button style="background-color:#F4EB16; color:blue" class="btn btn-outline-info" type="submit">Login</button>
+            {% csrf_token %}
+            {{form.as_p}}
+            <button style="width: 100%" class="btn btn-primary btn-sm" type="submit">Login</button>
         </form>
-        Don't have an account? <a href="/register" target="blank"><strong>register here</strong></a>!
     </div>
+    <p class="ml-3">Don't have an account? <a href="/accounts/register/" target="blank"><strong>register here!</strong></a></p>
 
     {% for message in messages %}
         <div class="alert alert-success">
