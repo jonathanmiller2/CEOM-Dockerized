@@ -5,7 +5,8 @@ import json
 from django.template import RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth import login as auth_login
 from django.forms.models import model_to_dict
 from eomf.accounts.models import Profile
 from eomf.accounts.forms import RegistrationForm, ProfileForm, UserForm, CustomLoginForm
@@ -32,7 +33,7 @@ def login(request):
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
-                login(request, user)
+                auth_login(request, user)
                 messages.info(request, f"You are now logged in as {username}")
                 return redirect('/')
             else:
@@ -54,7 +55,7 @@ def mobile_login(request):
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
 
         if user is not None:
-            login(request, user)
+            auth_login(request, user)
             return HttpResponse("login-success", status=200)
         else: 
             return HttpResponse("login-failed", status=404)
@@ -75,7 +76,7 @@ def register(request):
             
             user = authenticate(username=request.POST['username'], password=request.POST['password1'])
             if user is not None:
-                login(request,user)
+                auth_login(request,user)
                 
             return HttpResponseRedirect("/accounts/profile/")
     else:

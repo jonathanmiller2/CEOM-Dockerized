@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from eomf.accounts.models import Profile
@@ -7,6 +8,10 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.contrib.auth.forms import AuthenticationForm
 
+from django_countries.fields import CountryField
+from django_countries.widgets import CountrySelectWidget
+
+#TODO: Remove all references to crispy forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Div
 
@@ -38,8 +43,19 @@ class InitModelForm(forms.ModelForm):
 # on them with CSS or JavaScript if they have a class of "required"
 # in the HTML. Your mileage may vary. If/when Django ticket #3515
 # lands in trunk, this will no longer be necessary.
-attrs_dict = {'class': 'required'}
+#attrs_dict = {'class': 'required'}
+#TODO: Is this^ needed ?s
 
+#class RegisterForm(UserCreationForm):
+#
+#    firstname = forms.CharField(max_length=100, help_text='First name')
+#    lastname = forms.CharField(max_length=100, help_text='Last name')
+#
+#    class Meta:
+#        model = Profile
+#        fields = ["username", "password1", "password2", "firstname", "lastname", "country", "affiliation", "telephone", "address1", "address2", "city", "state", "postal", "url"]
+
+#TODO: Adapt this registration form to inherit from Django's UserCreationForm? (as shown above)
 class RegistrationForm(forms.Form):
     """
     Form for registering a new user account.
@@ -56,7 +72,7 @@ class RegistrationForm(forms.Form):
     username = forms.RegexField(
         regex=r'^\w+$',
         max_length=30,
-        widget=forms.TextInput(attrs=attrs_dict),
+        widget=forms.TextInput(),
         label=_("Username"),
         error_messages={'invalid': _("This value must contain only letters, numbers and underscores.")}
     )
@@ -65,23 +81,21 @@ class RegistrationForm(forms.Form):
     last_name = forms.CharField(max_length=30, label=_("Last name"), required=False)
 
     email = forms.EmailField(
-        widget=forms.TextInput(attrs=dict(attrs_dict, maxlength=75)),
+        widget=forms.TextInput(attrs=dict(maxlength=75)),
         label=_("Email address")
     )
     password1 = forms.CharField(
-        widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),
+        widget=forms.PasswordInput(render_value=False),
         label=_("Password")
     )
     password2 = forms.CharField(
-        widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),
+        widget=forms.PasswordInput(render_value=False),
         label=_("Password (again)")
     )
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
 
-        self.helper = FormHelper(self)
-        self.helper.form_class = 'form-horizontal'
 
 
     def clean_username(self):
@@ -151,14 +165,21 @@ class ProfileForm(InitModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
 
-        self.helper = FormHelper(self)
-        self.helper.form_class = 'form-horizontal'
-        self.helper.form_tag = False
+    country = CountryField(blank=True,).formfield(
+        widget=forms.Select(attrs={'class':'form-control form-control-sm'})
+    )
+
+    affiliation = forms.CharField(
+        max_length=250,
+        widget=forms.TextInput(attrs={'class':'form-control form-control-sm'})
+    )
+
+    #TODO: Add fields with widgets for each of the below listed fields
 
     class Meta:
         model = Profile
         fields = (
-            'country',
+            'country',          #TODO: Why is listing the fields here nescessary? What does it do when we remove these?
             'affiliation',
             'address1',
             'address2',

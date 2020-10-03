@@ -35,7 +35,7 @@ class Profile(models.Model):
                     value = None
 
             # only display fields with values and skip some fields entirely
-            if f.editable and value and f.name not in ('id', 'status', 'workshop', 'user', 'complete') :
+            if f.editable and value and f.name not in ('id', 'status', 'workshop', 'user', 'complete'):
 
                 fields.append(
                   {
