@@ -72,25 +72,34 @@ class RegistrationForm(forms.Form):
     username = forms.RegexField(
         regex=r'^\w+$',
         max_length=30,
-        widget=forms.TextInput(),
+        widget=forms.TextInput(attrs={'class':'form-control form-control-sm'}),
         label=_("Username"),
         error_messages={'invalid': _("This value must contain only letters, numbers and underscores.")}
     )
 
-    first_name = forms.CharField(max_length=30, label=_("First name"), required=False)
-    last_name = forms.CharField(max_length=30, label=_("Last name"), required=False)
+    first_name = forms.CharField(
+        max_length=30,
+        required=False,
+        widget=forms.TextInput(attrs={'class':'form-control form-control-sm'})
+    )
+
+    last_name = forms.CharField(
+        max_length=30,
+        required=False,
+        widget=forms.TextInput(attrs={'class':'form-control form-control-sm'})
+    )
 
     email = forms.EmailField(
-        widget=forms.TextInput(attrs=dict(maxlength=75)),
-        label=_("Email address")
+        max_length=75,
+        widget=forms.TextInput(attrs={'class':'form-control form-control-sm'})
     )
+
     password1 = forms.CharField(
-        widget=forms.PasswordInput(render_value=False),
-        label=_("Password")
+        widget=forms.PasswordInput(attrs={'class':'form-control form-control-sm'}, render_value=False),
     )
+
     password2 = forms.CharField(
-        widget=forms.PasswordInput(render_value=False),
-        label=_("Password (again)")
+        widget=forms.PasswordInput(attrs={'class':'form-control form-control-sm'}, render_value=False),
     )
 
     def __init__(self, *args, **kwargs):
@@ -166,15 +175,57 @@ class ProfileForm(InitModelForm):
         super(ProfileForm, self).__init__(*args, **kwargs)
 
     country = CountryField(blank=True,).formfield(
+        required=False,
         widget=forms.Select(attrs={'class':'form-control form-control-sm'})
     )
 
     affiliation = forms.CharField(
         max_length=250,
+        required=False,
         widget=forms.TextInput(attrs={'class':'form-control form-control-sm'})
     )
 
-    #TODO: Add fields with widgets for each of the below listed fields
+    telephone = forms.CharField(
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={'class':'form-control form-control-sm'})
+    )
+
+    address1 = forms.CharField(
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(attrs={'class':'form-control form-control-sm'})
+    )
+
+    address2 = forms.CharField(
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(attrs={'class':'form-control form-control-sm'})
+    )
+
+    city = forms.CharField(
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(attrs={'class':'form-control form-control-sm'})
+    )
+
+    state = forms.CharField(
+        max_length=80,
+        required=False,
+        widget=forms.TextInput(attrs={'class':'form-control form-control-sm'})
+    )
+
+    postal = forms.CharField(
+        max_length=10,
+        required=False,
+        widget=forms.TextInput(attrs={'class':'form-control form-control-sm'})
+    )
+
+    url = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={'class':'form-control form-control-sm'})
+    )
 
     class Meta:
         model = Profile

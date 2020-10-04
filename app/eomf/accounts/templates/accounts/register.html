@@ -37,10 +37,10 @@
         <hr class="my-1" />
         <div class="col-lg-2 m-3">
             <label>{% trans "First name" %}</label>
-            {{user_form.first_name.as_text}}
+            {{user_form.first_name}}
 
             <label>{% trans "Last name" %}</label>
-            {{user_form.last_name.errors}}{{user_form.last_name.as_text}}
+            {{user_form.last_name}}
 
             <label>{% trans "Country" %}</label>
             {{profile_form.country}}
