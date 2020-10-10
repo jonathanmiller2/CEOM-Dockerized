@@ -5,12 +5,9 @@ from eomf.h5n1.models import Case
 # Create your views here.
 
 def index(request):
-    t = loader.get_template('h5n1/index.html')
-    c = RequestContext(request)
-    return HttpResponse(t.render(c))
+    return render(request, 'h5n1/index.html')
 
 def kml(request):
     points = Case.objects.all().kml()
-    
-    return render('h5n1/base.kml', context={'points' : points}, mimetype = "application/vnd.google-earth.kml+xml")
+    return render(request, 'h5n1/base.kml', context={'points' : points}, mimetype = "application/vnd.google-earth.kml+xml")
     

@@ -265,7 +265,7 @@ class Photo(models.Model):
         for k in tags.keys():
             if k != 'JPEGThumbnail':
                 try:
-                    tags[k] = force_unicode(tags[k])
+                    tags[k] = force_text(tags[k])
                 except:
                     del tags[k]
 

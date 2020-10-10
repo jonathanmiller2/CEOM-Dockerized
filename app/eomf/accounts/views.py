@@ -4,7 +4,7 @@ import json
 
 from django.template import RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as auth_login
 from django.forms.models import model_to_dict

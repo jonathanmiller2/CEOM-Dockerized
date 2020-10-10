@@ -36,7 +36,7 @@ import pickle
 import itertools
 import shutil
 import os
-import zlib, bz2, pickle, base64, pylzma, binascii
+import zlib, bz2, base64, pylzma, binascii
 
 
 from pykml.factory import KML_ElementMaker as KML
@@ -48,21 +48,21 @@ from django.utils.encoding import smart_str
 import json
 
 def zencode(obj):
-    d = pylzma.compress(binascii.hexlify(cPickle.dumps(obj,cPickle.HIGHEST_PROTOCOL)))
+    d = pylzma.compress(binascii.hexlify(pickle.dumps(obj,pickle.HIGHEST_PROTOCOL)))
     return base64.urlsafe_b64encode(d)
 
 
 def zdecode(zstr):
     s = binascii.unhexlify(base64.urlsafe_b64decode(zstr))
-    return cPickle.loads(pylzma.decompress(s))
+    return pickle.loads(pylzma.decompress(s))
 
 
 def compress(obj):
- #   return pylzma.compress(cPickle.dumps(obj))
-    return cPickle.dumps(obj).encode('utf-8')
+ #   return pylzma.compress(pickle.dumps(obj))
+    return pickle.dumps(obj)
 
 def decompress(data):
-    return cPickle.loads(str(data))
+    return pickle.loads(str(data))
 
 def ranges(i):
     for a, b in itertools.groupby(enumerate(sorted(i)), lambda x, y: y - x):
@@ -265,11 +265,19 @@ def browse(request):
 
 
 def map(request):
+
+    #TODO: Once the map is working, go through and trim/optimize map(), clusters(), and gmapclusters(). Clusters() is likely not needed.
+
     photos, search = search_for_photos(request)
 
+    kml = ""
+
+    if 'bbox' in request.GET:
+        kml = gmapclusters(request, photos)
     
     return render(request, 'photos/map.html', context={
         'search': search,
+        'cluster_kml':kml,
         'checkbox':True,
         'modis_timeseries':True
     })
@@ -372,10 +380,10 @@ def clusters(request):
 
     return HttpResponse(etree.tostring(doc))
 
-def gmapclusters(request):
-    photos, search = search_for_photos(request)
+def gmapclusters(request, photos):
     photos = photos.exclude(Q(point__bboverlaps=Point(0,0))|Q(point__isnull=True))
 
+    #TODO: This check is redundant
     if 'bbox' in request.GET:
         bb = request.GET['bbox'].split(',')
         bb = [float(x) for x in bb]
@@ -418,14 +426,11 @@ def gmapclusters(request):
     cursor.execute(query, where_params)
 
 
-
-
     doc = KML.kml(
         KML.Document(
             KML.name("EOMF Photos"),
         )
     )
-
 
 
     pmid = 0
@@ -463,9 +468,9 @@ def gmapclusters(request):
         doc.Document.append(pm)
 
     #Add xml tag
-    response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + etree.tostring(doc)
+    kml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "aa" + str(etree.tostring(doc))
 
-    return HttpResponse(response)
+    return kml
 
 def get_photos_id_form_cluster_photo_id(request, id,x_size=22.25,y_size=11.125):
 
@@ -973,7 +978,7 @@ def upload(request):
     })
 
 def get_file_info(file, work_url):
-    if type(file) == str or type(file) == unicode:
+    if type(file) == str:
         file = open(file)
     filename = os.path.basename(file.name)
 

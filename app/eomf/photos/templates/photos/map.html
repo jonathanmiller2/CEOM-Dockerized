@@ -121,7 +121,7 @@
         
         //TODO: I can almost certainly get this internally without requesting back to the server. This data should be sent with the original HTTP request
         //TODO: Change this URL when a flat URL has been created
-        var datasrc = 'http://eomf-dev1.sooner.net.ou.edu/photos/gmapclusters.kml?bbox=' + bb[1] + ',' + bb[0] + ',' + bb[3] + ',' + bb[2];
+        var datasrc = 'http://eomf-dev1.sooner.net.ou.edu/photos/map/?bbox=' + bb[1] + ',' + bb[0] + ',' + bb[3] + ',' + bb[2];
 
         var xhr = new XMLHttpRequest();
 		xhr.open('GET', datasrc, true);
@@ -237,4 +237,3 @@
 
  </div>
 {% endblock %}
-

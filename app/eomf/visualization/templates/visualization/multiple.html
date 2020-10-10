@@ -1,6 +1,5 @@
 {% extends "visualization/base.html" %}
 {% load crispy_forms_tags %}
-{% load dajaxice_templatetags %}
 
 {% load i18n %}
 {% block title %} {% trans "EOMF MODIS timeseries Multiple Site" %} {% endblock %}
@@ -101,7 +100,6 @@
 
 
 {% block js_code %}
-{% dajaxice_js_import %}
 <script type="text/javascript">
   var tasksInProgressList=[{% for t in jobs %}{% if t.working %}{{t.id}},{% endif %}{% endfor %}]
   var intervalID;
