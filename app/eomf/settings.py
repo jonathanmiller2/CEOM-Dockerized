@@ -102,6 +102,8 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 
 MIDDLEWARE = (
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -156,6 +158,8 @@ INSTALLED_APPS = [
     'filebrowser', 
     'sorl.thumbnail', # Picture thumbnails
     'captcha', # Captcha for forms
+
+    'corsheaders',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -307,3 +311,8 @@ FEEDBACK_EMAIL = "jonathan.g.miller@ou.edu;jonathanmiller2@hotmail.com"
 #Celery
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
+
+#TODO: Change the http to https
+#CORS_ALLOWED_ORIGINS = ["http://"+x for x in os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")]
+CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOWED_ORIGINS = ["http://eomf-dev1.sooner.net.ou.edu"]

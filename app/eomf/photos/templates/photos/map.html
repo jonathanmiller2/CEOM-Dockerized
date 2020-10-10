@@ -7,8 +7,8 @@
 {{block.super|safe}}
     
     <link rel="stylesheet" type="text/css" media="screen" href="/static/css/datePicker.css" />
+    
     <!-- required plugins -->
-    <link href="/static/css/datepicker.css" rel="stylesheet">
 
 
     <style type="text/css">
@@ -18,7 +18,7 @@
     </style>
     
  	
-    
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=initMap" />
 
     <script type="text/javascript">
     var lon = 0;
@@ -120,7 +120,8 @@
         }
         
         //TODO: I can almost certainly get this internally without requesting back to the server. This data should be sent with the original HTTP request
-        var datasrc = 'http://eomf.ou.edu/photos/gmapclusters.kml?bbox=' + bb[1] + ',' + bb[0] + ',' + bb[3] + ',' + bb[2];
+        //TODO: Change this URL when a flat URL has been created
+        var datasrc = 'http://eomf-dev1.sooner.net.ou.edu/photos/gmapclusters.kml?bbox=' + bb[1] + ',' + bb[0] + ',' + bb[3] + ',' + bb[2];
 
         var xhr = new XMLHttpRequest();
 		xhr.open('GET', datasrc, true);
@@ -231,7 +232,8 @@
 
 
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=initMap" />
+    
+    
 
  </div>
 {% endblock %}

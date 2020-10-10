@@ -267,9 +267,7 @@ def browse(request):
 def map(request):
     photos, search = search_for_photos(request)
 
-    # Testing purposes
-    # return clusters(request)
-
+    
     return render(request, 'photos/map.html', context={
         'search': search,
         'checkbox':True,
@@ -1234,9 +1232,6 @@ def mobile_upload3(request):
 
     return HttpResponse(response_data, content_type=mimetype)
     
-
-
-
 
 def photos_coord(request,lat ,lon,radius):
     MAX_PHOTOS = 40
