@@ -102,8 +102,6 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 
 MIDDLEWARE = (
-    'corsheaders.middleware.CorsMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -158,8 +156,6 @@ INSTALLED_APPS = [
     'filebrowser', 
     'sorl.thumbnail', # Picture thumbnails
     'captcha', # Captcha for forms
-
-    'corsheaders',
 
     'django.contrib.admin',
     'django.contrib.auth',

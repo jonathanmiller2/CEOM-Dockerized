@@ -503,6 +503,8 @@ def get_photos_id_form_cluster_photo_id(request, id,x_size=22.25,y_size=11.125):
         return ids
         
 def photos_json(request):
+    print("Beginning photos_json") #TODO: Remove me
+
     id = request.GET['ids']
     ids = get_photos_id_form_cluster_photo_id(request, id)
     photos = Photo.objects.filter(id__in=ids.split(','))
@@ -539,6 +541,8 @@ def photos_json(request):
 
 
 def photos_html(request):
+    print("Beginning photos_html") #TODO: Remove me
+
     # return HttpResponse(json.dumps({'request':request.GET['ids']}))
     # return HttpResponse(json.dumps)
     photos, search = search_for_photos(request)
@@ -585,6 +589,8 @@ def photos_html(request):
     })
 
 def photos_html2(request):
+    print("Beginning photos_html2") #TODO: Remove me
+
     photos, search = search_for_photos(request)
     id = request.GET['ids']
     x_size = float(request.GET['x_size'])
@@ -772,6 +778,8 @@ def exif(request, id):
 
 @csrf_exempt
 def download(request):
+    print("Beginning download") #TODO: Remove me
+
     if request.method != 'POST':
         return HttpResponseRedirect("/photos/browse/")
 
@@ -885,6 +893,8 @@ def download(request):
 #############
 
 def upload(request):
+    print("Beginning upload") #TODO: Remove me
+
     js_template = '''
     <!-- The template to display files available for upload -->
     <script id="template-upload" type="text/x-tmpl">
@@ -969,7 +979,7 @@ def upload(request):
 
         if len(ids) > 0:
             request.session['workset'] = compress(ids)
-            return HttpResponseRedirect("/photos/workset/")
+
 
     return render(request, 'photos/upload.html', context={
         'js_upload': True,
@@ -978,6 +988,8 @@ def upload(request):
     })
 
 def get_file_info(file, work_url):
+    print("Beginning get_file_info") #TODO: Remove me
+
     if type(file) == str:
         file = open(file)
     filename = os.path.basename(file.name)
@@ -1004,6 +1016,7 @@ def get_work_dir(request):
 
 @csrf_exempt
 def preload_delete(request, name):
+    print("Beginning preload_delete") #TODO: Remove me
     work_dir = get_work_dir(request)
     file_path = os.path.join(work_dir, name)
     success = os.path.isfile(file_path) and name[0] != "." and os.remove(file_path)
@@ -1011,6 +1024,8 @@ def preload_delete(request, name):
 
 @csrf_exempt
 def preload(request):
+    print("Beginning preload") #TODO: Remove me
+
     """
     Main Multiuploader module.
     Parses data from jQuery plugin and makes database changes.
@@ -1061,6 +1076,7 @@ def preload(request):
                     results.append(get_file_info(file_path, work_url))
 
             response_data = simplejson.dumps(results)
+        
 
     #checking for json data type
     #big thanks to Guy Shapiro
@@ -1071,6 +1087,8 @@ def preload(request):
             mimetype = 'text/plain'
     except:
         mimetype = 'text/plain'
+
+
     return HttpResponse(response_data, content_type=mimetype)
 
 

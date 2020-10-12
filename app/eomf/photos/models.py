@@ -301,6 +301,7 @@ class Photo(models.Model):
             return dt
 
     def exifPopulate(self):
+        print("Beginning exifPopulate") #TODO: Remove me
         tags = self.exif()
 
         if 'GPS GPSLatitude' in tags:
