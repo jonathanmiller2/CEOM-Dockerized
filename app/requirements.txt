@@ -14,6 +14,7 @@ django-countries==6.1.2
 django-phonenumber-field==4.0.0
 django-extensions==3.0.3
 python-dateutil==2.8.1
+python-memcached==1.59
 phonenumbers==8.12.6
 GDAL==2.4
 pylzma==0.5
