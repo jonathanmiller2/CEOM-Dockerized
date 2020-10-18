@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from models import Research
+from .models import Research
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 import datetime
@@ -60,7 +60,7 @@ class ResearchForm(forms.ModelForm):
     def set_user(self, user):
         self.user = user
     def clean_name(self):
-        a = self.cleaned_data.keys()
+        a = list(self.cleaned_data.keys())
         user = self.user
         if not user:
             raise forms.ValidationError("No user selected. Make sure that you are logged in")

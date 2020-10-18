@@ -195,7 +195,7 @@ def user_photos(request):
 
             else:
                 paginator = None
-                page_range = range(10)
+                page_range = list(range(10))
             
             data['photos'] = photos
         data['checkbox'] = True
@@ -213,15 +213,13 @@ def workset_photos(request):
         if 'workset' in request.session:
             data = {}
 
-            ids = decompress(request.session['workset'])
+            ids = json.loads(request.session['workset'])
 
             photos = Photo.objects.filter(id__in=ids)
             data['photos'] = photos
             data['gallerytitle'] = "Working set of photos"
-
-            t = loader.get_template('photos/user.html')
-            c = RequestContext(request, data)
-            return HttpResponse(t.render(c))
+            
+            return render(request, 'photos/user.html')
         else:
             return HttpResponseRedirect("/photos/browse/")
     else:
@@ -251,7 +249,7 @@ def browse(request):
         page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
     else:
         paginator = None
-        page_range = range(10)
+        page_range = list(range(10))
         
     return render(request, 'photos/browse.html', context={
         'photos': photos,
@@ -576,7 +574,7 @@ def photos_html(request):
         page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
     else:
         paginator = None
-        page_range = range(10)
+        page_range = list(range(10))
         
     return render(request, 'photos/browse_gallery_map.html', context={
         'photos': photos,
@@ -622,7 +620,7 @@ def photos_html2(request):
         page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
     else:
         paginator = None
-        page_range = range(10)
+        page_range = list(range(10))
         
     return render(request, 'photos/browse_gallery_reduced.html', context={
         'photos': photos,
@@ -785,7 +783,7 @@ def download(request):
 
     # return HttpResponse(json.dumps({'request':request.POST}))
     import zipfile, os, tempfile
-    from StringIO import StringIO
+    from io import StringIO
 
     work_dir = get_work_dir(request)
     ids = request.POST.getlist('ids')
@@ -894,6 +892,7 @@ def download(request):
 
 def upload(request):
     print("Beginning upload") #TODO: Remove me
+    
 
     js_template = '''
     <!-- The template to display files available for upload -->
@@ -958,6 +957,8 @@ def upload(request):
     </script>
     '''
     if request.method == 'POST':
+        print("POST to upload view") #TODO: Remove me
+        #breakpoint() #TODO: Remove me
         work_dir = get_work_dir(request)
         files = os.listdir(work_dir)
         ids = []
@@ -978,14 +979,14 @@ def upload(request):
                 #photo.point = Point(lon,lat)
 
         if len(ids) > 0:
-            request.session['workset'] = compress(ids)
+            request.session['workset'] = json.dumps(ids)
 
 
     return render(request, 'photos/upload.html', context={
         'js_upload': True,
         'enable_bootstrap': True,
         'js_template': js_template,
-    })
+    })  
 
 def get_file_info(file, work_url):
     print("Beginning get_file_info") #TODO: Remove me
@@ -1037,7 +1038,7 @@ def preload(request):
         os.makedirs(work_dir)
 
     try:
-        post = request.POST.items()
+        post = list(request.POST.items())
     except IOError:
         import time
         time.sleep(3)
@@ -1050,7 +1051,7 @@ def preload(request):
     if request.method == 'POST':
         result = []
         #getting file data for further manipulations
-        for file in request.FILES.getlist(u'files[]'):
+        for file in request.FILES.getlist('files[]'):
             if 'image' not in file.content_type.lower():
                 return HttpResponse("Only Image Files Allowed")
 
@@ -1107,7 +1108,7 @@ def mobile_upload(request):
     data = {}
 
     try:
-        tmp_file = request.FILES[u'file']
+        tmp_file = request.FILES['file']
         if 'image' not in tmp_file.content_type.lower():
             raise Exception("Only Image Files Allowed")
 
@@ -1153,9 +1154,9 @@ def mobile_upload2(request):
     data = {}
 
     try:
-        landcover_cat = int(request.POST[u'landcover_cat'])
-        notes = request.POST[u'notes']
-        tmp_file = request.FILES[u'file']
+        landcover_cat = int(request.POST['landcover_cat'])
+        notes = request.POST['notes']
+        tmp_file = request.FILES['file']
         if 'image' not in tmp_file.content_type.lower():
             raise Exception("Only Image Files Allowed")
         category = Category.objects.get(id=landcover_cat)
@@ -1204,9 +1205,9 @@ def mobile_upload3(request):
     data = {}
 
     try:
-        landcover_cat = int(request.POST[u'landcover_cat'])
-        notes = request.POST[u'notes']
-        tmp_file = request.FILES[u'file']
+        landcover_cat = int(request.POST['landcover_cat'])
+        notes = request.POST['notes']
+        tmp_file = request.FILES['file']
         if 'image' not in tmp_file.content_type.lower():
             raise Exception("Only Image Files Allowed")
         category = Category.objects.get(id=landcover_cat)

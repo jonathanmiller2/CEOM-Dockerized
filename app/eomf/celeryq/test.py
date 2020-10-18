@@ -1,4 +1,4 @@
-from tasks import get_modis_raw_data
+from .tasks import get_modis_raw_data
 
 # lat =  42.587495
 # lon = -104.828119
@@ -15,4 +15,4 @@ from tasks import get_modis_raw_data
 #         print pixel_val[i].result
 task_id = '6b997fef-5bb7-4141-99cd-4899c1ccb176'
 result = get_modis_raw_data.AsyncResult(task_id)
-print result.result
+print(result.result)

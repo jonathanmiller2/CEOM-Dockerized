@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 import os, mapnik
 from copy import deepcopy
 from ogcserver.WMS import BaseWMSFactory
-from util import *
+from .util import *
 
 base_path, tail = os.path.split(__file__)
 

@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
-from models import Post, Group, Person, GalleryPhoto
+from .models import Post, Group, Person, GalleryPhoto
 from itertools import chain
 from operator import attrgetter
 from datetime import date

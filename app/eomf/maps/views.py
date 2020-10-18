@@ -66,7 +66,7 @@ def latlon2sin(lat,lon,modis='mod09a1',npix=2400.0):
  
     xi = int(x)
     yi = int(y)
-    folder = u'h%02dv%02d' % (ih,iv) 
+    folder = 'h%02dv%02d' % (ih,iv) 
     return ih,iv,xi,yi,folder
 
 def getuser(request):

@@ -17,7 +17,7 @@ import eomf.feedback.forms
 #lets see if this works--bitbucket test
 
 def sanitize(errors):
-    dct = dict((str(k),list(force_unicode(a) for a in v)) for k,v in errors.items())
+    dct = dict((str(k),list(force_unicode(a) for a in v)) for k,v in list(errors.items()))
     return dct
 
 @csrf_exempt

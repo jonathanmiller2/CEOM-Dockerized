@@ -34,10 +34,10 @@ def thumbnail(file, size, prefix=""):
         file_url  = file.url
     else:
         pre, post = file.name.split("media")
-        file_url = u"/media"+post
+        file_url = "/media"+post
 
     name, extension = file_name.rsplit('.', 1)
-    thumb = prefix + name + u'_' + size + '.' + extension
+    thumb = prefix + name + '_' + size + '.' + extension
     thumb_filename = os.path.join(os.path.dirname(file_path), thumb)
     thumb_url = os.path.join(os.path.dirname(file_url), thumb)
 

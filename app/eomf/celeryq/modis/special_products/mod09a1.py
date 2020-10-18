@@ -125,7 +125,7 @@ def get_special_products(data):
     modis_qc = band_names.get_band_names('mod09a1')['state']
     qc_dict = decodeQC(data[modis_qc])
     extra = get_extra_fields(data)
-    data = dict(data.items()+qc_dict.items()+extra.items())
+    data = dict(list(data.items())+list(qc_dict.items())+list(extra.items()))
     return data
 
 def is_bad_observation(data):

@@ -56,7 +56,7 @@ def latlon2sin(lat,lon,modis='mod09a1',npix=2400.0):
  
     xi = int(x)
     yi = int(y)
-    folder = u'h%02dv%02d' % (ih,iv) 
+    folder = 'h%02dv%02d' % (ih,iv) 
     return ih,iv,xi,yi,folder
 
 def down(request):
@@ -106,8 +106,8 @@ def gemap(request):
 
 def indices_kml(request):
     timespans = []
-    for y in xrange(2002,2003):
-        for d in xrange(1,96,8):
+    for y in range(2002,2003):
+        for d in range(1,96,8):
             time = datetime.date(y,1,1) + datetime.timedelta(d-1)
             timespans.append({'layers':"TOP%2CBOT%2Cocean_mask",
                              'params':"year=%d&day=%d&prod=evi"%(y,d),
@@ -120,8 +120,8 @@ def indices_kml(request):
 
 def evi_kml(request):
     timespans = []
-    for y in xrange(2002,2003):
-        for d in xrange(1,96,8):
+    for y in range(2002,2003):
+        for d in range(1,96,8):
             time = datetime.date(y,1,1) + datetime.timedelta(d-1)
             timespans.append({'layers':"TOP%2CBOT%2Cocean_mask",
                              'params':"year=%d&day=%d&prod=evi"%(y,d),

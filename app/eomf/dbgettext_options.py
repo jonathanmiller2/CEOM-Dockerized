@@ -1,8 +1,8 @@
 from dbgettext.registry import registry, Options
 from dbgettext.lexicons import html
-from aboutus.models import Post, Group, Person
-from workshops.models import Workshop,WorkshopClass
-from photos.models import Category as PhotoCategory
+from .aboutus.models import Post, Group, Person
+from .workshops.models import Workshop,WorkshopClass
+from .photos.models import Category as PhotoCategory
 
 # PHOTOS
 class PhotoCategoryOptions(Options):

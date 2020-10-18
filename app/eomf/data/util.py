@@ -17,7 +17,7 @@ modis_srs = "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=
 merc_srs  = "+init=epsg:3857"
 stand_srs = "+init=epsg:4326"
 
-from StringIO import StringIO
+from io import StringIO
 from mapnik import Image, render
 from ogcserver.common import PIL_TYPE_MAPPING, Response
 
@@ -58,7 +58,7 @@ def makeSimple(c1=[0,0,0],c2=[255,255,255], min=-1, max=1, num=16):
     op1 = '>='
     op2 = '<'
     val = min
-    min, max = map(float, (min,max))
+    min, max = list(map(float, (min,max)))
     scale = []
     while ( val < max ):
         val2 = val + (max-min)/num
@@ -95,7 +95,7 @@ def makeThreeScale(cm, c1, c2, mid, min=-1, max=1, num=16, step=None, log=False)
     if step is None:
         step = (max - min)/float(num)
 
-    mid, min, max = map(float, (mid, min, max))
+    mid, min, max = list(map(float, (mid, min, max)))
     scale = []
     i = 0
     mid1 = (mid - min)/step
@@ -119,7 +119,7 @@ def makeThreeScale(cm, c1, c2, mid, min=-1, max=1, num=16, step=None, log=False)
             i = 0
         elif (val > mid):
             color = [cm[0]+(c2[0]-cm[0])*(i/mid2), cm[1]+(c2[1]-cm[1])*(i/mid2), cm[2]+(c2[2]-cm[2])*(i/mid2) ]
-        color = map(int, color)
+        color = list(map(int, color))
         scale.append({'name':name, 'exp':exp, 'color':color, 'stop':val2})
 
         i += 1
@@ -127,7 +127,7 @@ def makeThreeScale(cm, c1, c2, mid, min=-1, max=1, num=16, step=None, log=False)
     return scale
 
 def makeThreeScale2(cm, c1, c2, mid, min=-1, max=1, num=16, step=None, log=False):
-    mid, min, max, num = map(float, (mid, min, max, num))
+    mid, min, max, num = list(map(float, (mid, min, max, num)))
     
     scale = []
     
@@ -169,7 +169,7 @@ def makeThreeScale2(cm, c1, c2, mid, min=-1, max=1, num=16, step=None, log=False
             b = cm[2]+(c2[2]-cm[2]) * ratio2
             color = [r, g, b]
         
-        color = map(int, color)
+        color = list(map(int, color))
         
         scale.append({'name':name, 'exp':exp, 'color':color, 'stop':val2})
 
@@ -189,17 +189,17 @@ def ogc_response(request, mapfactory):
 
     onlineresource = 'http://%s%s?' % (request.META['HTTP_HOST'], request.META['PATH_INFO'])
 
-    if not reqparams.has_key('request'):
+    if 'request' not in reqparams:
         raise OGCException('Missing request parameter.')
     req = reqparams['request']
     del reqparams['request']
-    if req == 'GetCapabilities' and not reqparams.has_key('service'):
+    if req == 'GetCapabilities' and 'service' not in reqparams:
         raise OGCException('Missing service parameter.')
     if req in ['GetMap', 'GetFeatureInfo']:
         service = 'WMS'
     else:
         service = reqparams['service']
-    if reqparams.has_key('service'):
+    if 'service' in reqparams:
         del reqparams['service']
     try:
         ogcserver = __import__('ogcserver.' + service)
@@ -207,9 +207,9 @@ def ogc_response(request, mapfactory):
         raise OGCException('Unsupported service "%s".' % service)
     ServiceHandlerFactory = getattr(ogcserver, service).ServiceHandlerFactory
     servicehandler = ServiceHandlerFactory(conf, mapfactory, onlineresource, reqparams.get('version', None))
-    if reqparams.has_key('version'):
+    if 'version' in reqparams:
         del reqparams['version']
-    if req not in servicehandler.SERVICE_PARAMS.keys():
+    if req not in list(servicehandler.SERVICE_PARAMS.keys()):
         raise OGCException('Operation "%s" not supported.' % request, 'OperationNotSupported')
     ogcparams = servicehandler.processParameters(req, reqparams)
     try:
@@ -232,6 +232,6 @@ def ogc_response(request, mapfactory):
 
 def lowerparams(params):
     reqparams = {}
-    for key, value in params.items():
+    for key, value in list(params.items()):
         reqparams[key.lower()] = value
     return reqparams

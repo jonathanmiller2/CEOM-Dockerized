@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 class Command(NoArgsCommand):
     help = 'This command processes time series from top'
     def handle_noargs(self, **options):
-        print "executing command"
+        print("executing command")
         try:
             count = TimeSeriesJob.objects.filter(working=True).count()
             if count > 0:
@@ -22,7 +22,7 @@ class Command(NoArgsCommand):
             if job.working:
                 sys.exit(1)
             else:
-                print ""
+                print("")
                 job.working = True
                 job.save()
 
@@ -53,13 +53,13 @@ class Command(NoArgsCommand):
                 msg += "EOMF team"
                 send_mail("Timeseries completed: "+name, msg, "noreply@eomf.ou.edu", mail_recipients, fail_silently=False)
                        #Undefined error occured 
-            except Exception, e:
-                print str(e)
+            except Exception as e:
+                print(str(e))
                 job.completed = False
                 job.working = False
                 job.error = True
                 job.save()
  
         except ObjectDoesNotExist:
-            print 'No jobs to process'
+            print('No jobs to process')
             pass

@@ -51,7 +51,7 @@ def get_vegetation_indexes(dataset,data):
             data[bn['swir2']],
             data[bn['green']])
         special_indexes = mod09a1.get_special_products(data)
-        data = dict(data.items()+veg_indexes.items()+special_indexes.items())
+        data = dict(list(data.items())+list(veg_indexes.items())+list(special_indexes.items()))
         return data
     return {}
       

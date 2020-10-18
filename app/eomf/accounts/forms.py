@@ -35,7 +35,7 @@ class InitModelForm(forms.ModelForm):
     for the form to actually validate.
     """
     def merge_from_initial(self):
-        filt = lambda v: v not in self.data.keys()
+        filt = lambda v: v not in list(self.data.keys())
         for field in filter(filt, getattr(self.Meta, 'fields', ())):
             self.data[field] = self.initial.get(field, None)
 
@@ -126,7 +126,7 @@ class RegistrationForm(forms.Form):
         """
 
         if User.objects.filter(email__iexact=self.cleaned_data['email']).count():
-            raise forms.ValidationError(_(u'This email address is already in use. Please supply a different email address.'))
+            raise forms.ValidationError(_('This email address is already in use. Please supply a different email address.'))
         return self.cleaned_data['email']
 
     def clean(self):

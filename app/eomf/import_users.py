@@ -2,7 +2,7 @@
 import sys, os
 from datetime import datetime
 from django.core.management import setup_environ
-import settings
+from . import settings
 setup_environ(settings)
 from django.contrib.gis.db import models
 
@@ -10,12 +10,12 @@ from django.contrib.gis.db import models
 #il = list(Birds.objects.all())
 #objects = Birds.objects.order_by("animal","gmt_date").distinct("animal","gmt_date")
 from django.contrib.auth.models import User
-from accounts.models import Profile, user_post_save
-from accounts.fields import COUNTRIES
-from photos.models import Photo, PhotoUser
+from .accounts.models import Profile, user_post_save
+from .accounts.fields import COUNTRIES
+from .photos.models import Photo, PhotoUser
 objects = PhotoUser.objects.all().filter(id__gt=760)
 l = list(objects)
-print len(l)
+print(len(l))
 
 models.signals.post_save.disconnect(user_post_save, User)
 
@@ -33,7 +33,7 @@ for pu in l:
         names = pu.name.strip().split(' ',1)
         for n in names:
             if len(n) > 29:
-                print n
+                print(n)
                 
         if len(names) == 1:
             u.first_name = names[0].strip()
@@ -64,7 +64,7 @@ for pu in l:
             puc = 'united states of america'
         elif puc in ('uk',):
             puc = "united kingdom"
-        elif puc in (u'việt nam', 'vietnam'):
+        elif puc in ('việt nam', 'vietnam'):
             puc = "viet nam"
             
         for c in COUNTRIES:

@@ -23,12 +23,12 @@ try:
 except ImportError:
     try:
         import simplejson as json
-    except ImportError, E:
+    except ImportError as E:
         missing_deps = E 
     
 try:
     from BeautifulSoup import BeautifulSoup
-except ImportError, E:
+except ImportError as E:
     missing_deps = E 
 
 feedName = "example-list.xml"
@@ -47,7 +47,7 @@ def getExampleHtml(path):
     """
     returns html of a specific example
     """
-    print '.',
+    print('.', end=' ')
     f = open(path)
     html = f.read()
     f.close()
@@ -180,8 +180,8 @@ def wordIndex(examples):
                 for word in words:
                     if word:
                         word = word.lower()
-                        if index.has_key(word):
-                            if index[word].has_key(i):
+                        if word in index:
+                            if i in index[word]:
                                 index[word][i] += 1
                             else:
                                 index[word][i] = 1
@@ -192,7 +192,7 @@ def wordIndex(examples):
 if __name__ == "__main__":
 
     if missing_deps:
-        print "This script requires json or simplejson and BeautifulSoup. You don't have them. \n(%s)" % E
+        print("This script requires json or simplejson and BeautifulSoup. You don't have them. \n(%s)" % E)
         sys.exit()
     
     if len(sys.argv) == 3:
@@ -204,7 +204,7 @@ if __name__ == "__main__":
     
     outFile = open(os.path.join(outExampleDir, "example-list.js"), "w")
     
-    print 'Reading examples from %s and writing out to %s' % (inExampleDir, outFile.name)
+    print('Reading examples from %s and writing out to %s' % (inExampleDir, outFile.name))
    
     exampleList = []
     docIds = ['title','shortdesc','tags']
@@ -226,7 +226,7 @@ if __name__ == "__main__":
 
         exampleList.append(tagvalues)
         
-    print
+    print()
     
     exampleList.sort(key=lambda x:x['example'].lower())
     
@@ -239,13 +239,13 @@ if __name__ == "__main__":
     outFile.close()
 
     outFeedPath = os.path.join(outExampleDir, feedName);
-    print "writing feed to %s " % outFeedPath
+    print("writing feed to %s " % outFeedPath)
     atom = open(outFeedPath, 'w')
     doc = createFeed(exampleList)
     atom.write(doc.toxml())
     atom.close()
 
 
-    print 'complete'
+    print('complete')
 
     

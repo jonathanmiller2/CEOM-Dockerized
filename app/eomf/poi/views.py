@@ -1,8 +1,8 @@
 # Create your views here.
-from models import *
+from .models import *
 from django.shortcuts import render_to_response
 from django.template import Context, RequestContext, loader
-from forms import AddPixelToResearchForm, ResearchForm,ResearchFormEdit
+from .forms import AddPixelToResearchForm, ResearchForm,ResearchFormEdit
 from django.http import HttpResponse, HttpResponseRedirect
 import simplejson
 from django.db import connection
@@ -120,7 +120,7 @@ def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
     desc = cursor.description
     return [
-        dict(zip([col[0] for col in desc], row))
+        dict(list(zip([col[0] for col in desc], row)))
         for row in cursor.fetchall()
     ]
 

@@ -25,7 +25,7 @@ class DuckTrack(models.Model):
         return str(self.gid)
     
     class Meta:
-        db_table = u'duck_tracks'
+        db_table = 'duck_tracks'
 
 class DuckTrackLine(models.Model):
     gid = models.IntegerField(primary_key=True)
@@ -37,4 +37,4 @@ class DuckTrackLine(models.Model):
         return (self.gid)
     
     class Meta:
-        db_table = u'duck_track_line'
+        db_table = 'duck_track_line'

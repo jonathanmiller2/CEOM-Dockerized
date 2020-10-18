@@ -6,9 +6,9 @@ import os, sys
 import re, glob
 import math, datetime
 
-from modis import products, process, band_names, headers
-from modis.aux_functions import latlon2sin
-from modis.process import get_pixel_value,get_band_names
+from .modis import products, process, band_names, headers
+from .modis.aux_functions import latlon2sin
+from .modis.process import get_pixel_value,get_band_names
 
 app = Celery('tasks', backend='amqp', broker='amqp://')
 app.config_from_object('celeryconfig')
@@ -27,17 +27,17 @@ def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,datase
     metadata = {
         'lat': lat,
         'lon': lon,
-        'tile': u'h%02dv%02d' % (ih,iv),
+        'tile': 'h%02dv%02d' % (ih,iv),
         'dataset':dataset,
         'col':xi,
         'row':yi
     }
-    get_modis_raw_data.update_state(state=u'STARTED', meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
+    get_modis_raw_data.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
     days = [i+1 for i in range(0,366) if i%dataset_freq_in_days==0]
     num_tasks = 0 # Number of tasks to perform
     # multi_day is used to know erther the field real_date will be in modis bands
     multi_day = (int(dataset_freq_in_days)!=1)
-    print "Sending tasks to queue:"
+    print("Sending tasks to queue:")
     tasks={}
     num_errors = {} # Number of times the task failes <= MAX_ERRORS
     fatal_failures = {} # Tasks that failed MAX_ERRORS times and won't be rerunned
@@ -53,19 +53,19 @@ def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,datase
             num_tasks += 1
             tasks[year][day] = get_modis_day_data.delay(ih, iv, xi, yi, folder,dataset,year,day,vi,multi_day)
             num_errors[year][day] = fatal_failures[year][day] = 0
-    get_modis_raw_data.update_state(state=u'STARTED', meta={'completed': 0,'error':0,'total':num_tasks,'started':True,'metadata':metadata})
-    print "Monitoring tasks:"
+    get_modis_raw_data.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':num_tasks,'started':True,'metadata':metadata})
+    print("Monitoring tasks:")
     for i in range(0,NUM_STEPS):
         finished = started = retry = error = pending = 0
-        for year,days_dict in tasks.items():
-            for day,task in days_dict.items():
+        for year,days_dict in list(tasks.items()):
+            for day,task in list(days_dict.items()):
                 state = task.state
-                finished += state==u'SUCCESS' # When task finished
-                started += state==u'STARTED'   #When task is started
-                retry += state==u'RETRY' # When task failed to send
-                error +=  state==u'FAILURE' #Task had an error
-                pending += state==u'PENDING' # Task is pending to be processed from the queue
-                if tasks[year][day].state==u'FAILURE':
+                finished += state=='SUCCESS' # When task finished
+                started += state=='STARTED'   #When task is started
+                retry += state=='RETRY' # When task failed to send
+                error +=  state=='FAILURE' #Task had an error
+                pending += state=='PENDING' # Task is pending to be processed from the queue
+                if tasks[year][day].state=='FAILURE':
                     if num_errors[year][day] < MAX_ERRORS:
                         tasks[year][day] =  get_modis_day_data.delay(ih, iv, xi, yi,folder,dataset,year,day,vi,multi_day)
                         num_errors[year][day] += 1
@@ -74,19 +74,19 @@ def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,datase
                         fatal_failures_counter+=1
         total_finished = finished + fatal_failures_counter
         progress = int((float(total_finished)/num_tasks)*100)
-        print ("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d ") % (progress,finished, error, retry, started, pending)
+        print(("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d ") % (progress,finished, error, retry, started, pending))
 
-        get_modis_raw_data.update_state(state=u'STARTED',  meta={'completed': finished,'error':fatal_failures_counter,'total':num_tasks,'metadata':metadata})
+        get_modis_raw_data.update_state(state='STARTED',  meta={'completed': finished,'error':fatal_failures_counter,'total':num_tasks,'metadata':metadata})
 
         if total_finished==num_tasks:
             break
         time.sleep(TIME_CHECK)
     result = {}
     data = {}
-    for year,days_dict in tasks.items():
+    for year,days_dict in list(tasks.items()):
         data[year] = {}
-        for day,task in days_dict.items():
-            if task.state== u'SUCCESS':
+        for day,task in list(days_dict.items()):
+            if task.state== 'SUCCESS':
                 data[year][day] = task.result
                 task.forget()
             else:
@@ -119,7 +119,7 @@ def get_sample(data):
         for day in sorted(data[year].keys()):
             if data[year][day] is not None:
                 return data[year][day]
-    raise Exception(u'There is no data available')
+    raise Exception('There is no data available')
 
 def get_header(dataset,sample,vi=True):
     if dataset.upper()=='MOD09A1':
@@ -137,7 +137,7 @@ def get_band_names_list_from_dict(dict_sample):
 
 def save_data_to_csv(data, header, filepath):
     try:
-        print filepath
+        print(filepath)
         f = open( filepath, 'w' )
         # Write header
         header_titles = [ header_tuple[1] for header_tuple in header]
@@ -154,7 +154,7 @@ def save_data_to_csv(data, header, filepath):
                         line.append('NA')
                 f.write(','.join(line)+"\n")
         f.close()
-    except Exception, e:
+    except Exception as e:
         raise Exception( "Error saving the csv file: [%s] " % (e.message))
         
     return True
@@ -176,7 +176,7 @@ def get_modis_day_data( ih, iv, xi, yi, folder,dataset, year, day,  vi = False, 
         fn = flist[0]
         try:
             pixel_values = get_pixel_value(fn,xi,yi)
-        except Exception, e:
+        except Exception as e:
             raise Exception("Error retrieving pixel values for file: %s %s " % (fn,e.message))
         m = r.match(fn)
         if m is None:
@@ -185,14 +185,14 @@ def get_modis_day_data( ih, iv, xi, yi, folder,dataset, year, day,  vi = False, 
         data = process.get_dates(dataset,pixel_values,year,day,multi_day)
         if vi and products.dataset_is_available(dataset):
            vegetation_indexes = products.get_vegetation_indexes(dataset,pixel_values)   
-           data = dict(data.items()+vegetation_indexes.items())  
+           data = dict(list(data.items())+list(vegetation_indexes.items()))  
         data = make_serializable_dict(data)
         return data
     else:
         raise Exception('No files found for %s' % (search))
 
 def make_serializable_dict(mydict):
-    for key,value in mydict.items():
+    for key,value in list(mydict.items()):
         mydict[key] = str(value)
     return mydict
 
@@ -208,7 +208,7 @@ if __name__ == "__main__":
     dataset_npix = 1200
     csv_folder = '/webapps/eomf_admin/celeryq/tests'
     pixel_val = get_modis_raw_data.delay(csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days,vi)
-    print pixel_val.result
+    print(pixel_val.result)
 
 # For testing purposes (worker)
 # if __name__ == "__main__":

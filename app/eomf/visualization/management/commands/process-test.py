@@ -24,9 +24,9 @@ class Command(NoArgsCommand):
             process.npix = int(ds.xdim)
             #process.debug = True
             
-            print process.process_job(points,years,modis)
+            print(process.process_job(points,years,modis))
             
         except ObjectDoesNotExist:
             pass
-            print 'No jobs to process'
+            print('No jobs to process')
 

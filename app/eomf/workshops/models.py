@@ -30,7 +30,7 @@ class Workshop(models.Model):
     extra_text_field3 = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-        return u'%s (%d)' % (self.name, self.date_start.year)
+        return '%s (%d)' % (self.name, self.date_start.year)
     class Meta:
         unique_together = (('name',),)
 
@@ -38,14 +38,14 @@ class SponsorInWorkshop(models.Model):
     workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
     sponsor = models.ForeignKey('Sponsor', on_delete=models.CASCADE)
     def __str__(self):
-        return u'%s' % (self.sponsor)
+        return '%s' % (self.sponsor)
     class Meta:
         unique_together = (('workshop','sponsor'),)
 class Sponsor(models.Model):
     name = models.CharField(max_length=200,null=False,blank=False)
     logo = models.FileField(null=False, max_length=300,upload_to="workshops/sponsors/")
     def __str__(self):
-        return u'%s' % (self.name)
+        return '%s' % (self.name)
     class Meta:
         unique_together = (('name',),)
 class WorkshopClass(models.Model):
@@ -54,7 +54,7 @@ class WorkshopClass(models.Model):
     class Meta:
         unique_together = (('name',),)
     def __str__(self):
-        return u'%s' % (self.name)
+        return '%s' % (self.name)
 
 class WorkshopRegistration(models.Model):
     workshop = models.ForeignKey(Workshop, related_name='workshop', related_query_name='workshop', on_delete=models.CASCADE)
@@ -85,7 +85,7 @@ class WorkshopRegistration(models.Model):
     class Meta:
         unique_together = (('workshop','email'),)
     def __str__(self):
-        return u'%s, %s (%s)' % (self.last_name,self.first_name,self.workshop)
+        return '%s, %s (%s)' % (self.last_name,self.first_name,self.workshop)
 
 
 class WorkshopPhoto(models.Model):
@@ -108,7 +108,7 @@ class Institution(models.Model):
     class Meta:
         unique_together = (('name',),)
     def __str__(self):
-        return u'%s' % (self.name)
+        return '%s' % (self.name)
 
 
 class Presentation(models.Model):
@@ -126,4 +126,4 @@ class Presentation(models.Model):
     class Meta:
         unique_together = (('workshop','time_ini'),)
     def __str__(self):
-        return u'%s (%s)' % (self.title, self.workshop)
+        return '%s (%s)' % (self.title, self.workshop)

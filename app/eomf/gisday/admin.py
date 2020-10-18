@@ -28,13 +28,13 @@ def export_as_csv_action(description="Export selected objects as CSV file",
             field_names = field_names - excludeset
         
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename=%s.csv' % unicode(opts).replace('.', '_')
+        response['Content-Disposition'] = 'attachment; filename=%s.csv' % str(opts).replace('.', '_')
         
         writer = csv.writer(response)
         if header:
             writer.writerow(list(field_names))
         for obj in queryset:
-            writer.writerow([unicode(getattr(obj, field)).encode('utf-8') for field in field_names])
+            writer.writerow([str(getattr(obj, field)).encode('utf-8') for field in field_names])
         return response
     export_as_csv.short_description = description
     return export_as_csv

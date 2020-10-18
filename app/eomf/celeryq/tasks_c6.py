@@ -15,7 +15,7 @@ from collections import OrderedDict
 
 
 try:
-    import database
+    from . import database
 except:
     print("Database.py not found. disregard if it is a worker process")
 
@@ -24,7 +24,7 @@ def get_location_metadata(lat,lon,dataset,dataset_npix,years):
     metadata = {
         'lat': lat,
         'lon': lon,
-        'tile': u'h%02dv%02d' % (ih,iv),
+        'tile': 'h%02dv%02d' % (ih,iv),
         'dataset':dataset,
         'col':xi,
         'row':yi,
@@ -41,15 +41,15 @@ def monitor_tasks(tasks,fun,metadata):
     for i in range(0,NUM_STEPS):
         num_tasks = 0
         finished = started = retry = error = pending = 0
-        for year,chunks in tasks.iteritems():
-            for chunk, task in chunks.iteritems():
+        for year,chunks in tasks.items():
+            for chunk, task in chunks.items():
                 num_tasks+=1
                 state = task.state
-                finished += state==u'SUCCESS' # When task finished
-                started += state==u'STARTED'  # When task is started
-                retry += state==u'RETRY'      # When task failed to send
-                error +=  state==u'FAILURE'   # Task had an error
-                pending += state==u'PENDING'  # Task is pending to be processed from the queue
+                finished += state=='SUCCESS' # When task finished
+                started += state=='STARTED'  # When task is started
+                retry += state=='RETRY'      # When task failed to send
+                error +=  state=='FAILURE'   # Task had an error
+                pending += state=='PENDING'  # Task is pending to be processed from the queue
                 # if state==u'FAILURE':
                 #     if curret_year_errors < MAX_ERRORS:
                 #         tasks[year][day] =  get_modis_year_data.delay(ih, iv, xi, yi,folder,dataset,year,dataset_freq_in_days,vi,multi_day)
@@ -58,26 +58,26 @@ def monitor_tasks(tasks,fun,metadata):
                 #         fatal_failures[year][day] = 1
                 #         fatal_failures_counter+=1
         progress = int((float(finished + error)/num_tasks)*100)
-        print(("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d ") % (progress,finished, error, retry, started, pending))
-        fun.update_state(state=u'STARTED',  meta={'completed': finished,'error':error,'total':num_tasks,'metadata':metadata})
+        print((("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d ") % (progress,finished, error, retry, started, pending)))
+        fun.update_state(state='STARTED',  meta={'completed': finished,'error':error,'total':num_tasks,'metadata':metadata})
         if finished + error == num_tasks:
             break
         time.sleep(TIME_CHECK)
 
 def get_data(tasks):
     data = {}
-    for year,chunks in tasks.iteritems():
+    for year,chunks in tasks.items():
         data[year]={}
-        for chunk, task in chunks.iteritems():
+        for chunk, task in chunks.items():
             state = task.state
-            if state!=u'SUCCESS':
+            if state!='SUCCESS':
                 # data[year].update{''}
                 # Should set to none or error the days of this tasks
                 pass
             else:
                 bands_dict={}
 
-                for day, day_data_list in task.result[str(year)].items():
+                for day, day_data_list in list(task.result[str(year)].items()):
                     if day_data_list:
                         bands_dict [day] = OrderedDict(day_data_list)
                     else:
@@ -91,10 +91,10 @@ def process_data(data,dataset):
 
 def send_tasks(function, params_dict):
     tasks =  {}
-    for year,chunks in params_dict.iteritems():
+    for year,chunks in params_dict.items():
         tasks[year]={}
-        for chunk, param_dict in chunks.iteritems():
-            tasks[year][chunk] = apply(function,[param_dict])
+        for chunk, param_dict in chunks.items():
+            tasks[year][chunk] = function(*[param_dict])
     return tasks
 
 def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chunks=5):
@@ -103,7 +103,7 @@ def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chun
     current_doy = datetime.datetime.now().timetuple().tm_yday
     for year in years:
         days = [i+1 for i in range(0,366) if i % dataset_freq_in_days==0]
-        if year not in range(2000,current_year+1):
+        if year not in list(range(2000,current_year+1)):
             continue
         if year == 2000:
             days = [day for day in days if day > 56 ] # Modis has no days before this date
@@ -171,7 +171,7 @@ def get_modis_raw_data_c6(self,csv_folder,media_base_url,lat,lon,dataset,years,d
     metadata = get_location_metadata(lat,lon,dataset,dataset_npix,years) # metadata of the selected site
     # Set task initial state to started
     #print metadata
-    get_modis_raw_data_c6.update_state(state=u'STARTED', meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
+    get_modis_raw_data_c6.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
     num_tasks = len(years) # Number of tasks to perform
     multi_day = (int(dataset_freq_in_days)!=1)
     # Send all tasks to queue and store their queing id in a double dictionary (year-->day-->task_id) object
@@ -193,7 +193,7 @@ def get_modis_raw_data_c6(self,csv_folder,media_base_url,lat,lon,dataset,years,d
         db = database.pgDatabase()
         db.updateCompletedSingleTimeSeriestask(get_modis_raw_data_c6.request.id,os.path.join(media_base_url,filename),)
     except Exception as e:
-        print('Error : %s' % e.message)
+        print(('Error : %s' % e.message))
         pass
     return {'filename':filename,'metadata':metadata,}
 
@@ -203,14 +203,14 @@ MODIS_FOLDER_PATH = "/data/ifs/modis/datasets_006/"
 import multiprocessing as mp
 def make_serializable_dict(mydict):
     serialized_dict = OrderedDict()
-    for key,value in mydict.items():
+    for key,value in list(mydict.items()):
         serialized_dict[key] = str(value)
     return serialized_dict
 
 def extract_day_data(col,row,dataset,year,day,tile):
     try:
         multi_day = True
-        print("Getting day: %d" % day)
+        print(("Getting day: %d" % day))
         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*.hdf$")
         items = (dataset, year, tile, year, day)
         search = MODIS_FOLDER_PATH+"%s/%d/%s/*%d%03d*.hdf" % items
@@ -223,19 +223,19 @@ def extract_day_data(col,row,dataset,year,day,tile):
             try:
                 pixel_values = get_pixel_value(fn,col,row)
             except Exception as e:
-                print("Error retrieving pixel values for file: %s %s " % (fn,e.message))
+                print(("Error retrieving pixel values for file: %s %s " % (fn,e.message)))
 
             data = process.get_dates(pixel_values,year,day,multi_day)
             if products.dataset_is_available(dataset):
                vegetation_indexes = products.get_vegetation_indexes(dataset,pixel_values)
-               data = dict(data.items()+vegetation_indexes.items())
+               data = dict(list(data.items())+list(vegetation_indexes.items()))
             data = make_serializable_dict(data)
-            data = [(k,v) for k,v in data.items() ]
+            data = [(k,v) for k,v in list(data.items()) ]
         else:
             data = None
         return data
     except Exception as e:
-        print("Exception at year %d day %d: %s" % (year,day,e.message))
+        print(("Exception at year %d day %d: %s" % (year,day,e.message)))
         return None
 
 @shared_task(time_limit=50)
@@ -252,11 +252,11 @@ if __name__ == "__main__":
     lon = -102.828119
     dataset= 'mod09a1'
     dataset_freq_in_days=8
-    years = range(2015,2016)
+    years = list(range(2015,2016))
     dataset_npix = 1200
     csv_folder = '/webapps/eomf_admin/celeryq/tests'
     pixel_val = get_modis_raw_data_c6.delay(csv_folder,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days)
-    print(pixel_val.result)
+    print((pixel_val.result))
 
 def terminate_task(task_id):
     app.control.revoke(task_id, terminate=True)

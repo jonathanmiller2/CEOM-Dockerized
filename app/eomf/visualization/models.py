@@ -25,7 +25,7 @@ def checkFormat(document):
         dialect = csv.Sniffer().sniff(document.read(1024))
         document.seek(0, 0)
     except csv.Error:
-        raise ValidationError(u'fNot a valid CSV file')
+        raise ValidationError('fNot a valid CSV file')
     reader = csv.reader(document.read().splitlines(), dialect)
     i=1
     blank_rows=0
@@ -36,7 +36,7 @@ def checkFormat(document):
         if not ''.join(str(x) for x in row):
             blank_rows+=1
             if blank_rows>= MAX_BLANK_ROWS:
-                raise ValidationError(u'Too many blank rows in file. Please delete them')
+                raise ValidationError('Too many blank rows in file. Please delete them')
             continue
         if len(row)!= 3:
             raise forms.ValidationError("Format error at line "+ str(i)+": More than three columns detected. ["+str(row)+"]")

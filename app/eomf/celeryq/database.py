@@ -11,7 +11,7 @@ class pgDatabase:
         try:
             self.conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'"%(self.dbname,self.user,self.host,self.password))
         except Exception as e :
-            print("Error: %s" % e.message)
+            print(("Error: %s" % e.message))
             raise Exception("Unnable to connect to database")
 
         self.cur = self.conn.cursor()
@@ -30,7 +30,7 @@ class pgDatabase:
             sql = '''UPDATE visualization_singletimeseriesjob set result='%s', completed=True WHERE task_id='%s'; ''' % (result,task_id)
             self.execute(sql)
         except Exception as e:
-            print("Error with query:" + sql)
+            print(("Error with query:" + sql))
             raise Exception("Error msg: %s" % str(e))
             pass
     def updateMultipleSiteTimeSeries(self,task_id,result,message,progress,total_sites,completed,error,working):
@@ -42,7 +42,7 @@ class pgDatabase:
             ''' % (result,message,progress,total_sites,completed,error,working,task_id)
             self.execute(sql)
         except Exception as e:
-            print("Error with query:" + sql)
+            print(("Error with query:" + sql))
             raise Exception("Error msg: %s" % str(e))
             pass
 

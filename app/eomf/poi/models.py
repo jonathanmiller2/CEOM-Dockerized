@@ -23,7 +23,7 @@ class Pixel(models.Model):
     class Meta:
         unique_together = (('h', 'v','col','row','dataset'),)
     def __str__(self):
-        return u'%s: h%02dv%02d c:%s r:%s' % (self.dataset ,self.h,self.v,self.col,self.row) 
+        return '%s: h%02dv%02d c:%s r:%s' % (self.dataset ,self.h,self.v,self.col,self.row) 
         
 
 class PixelValidation(models.Model):
@@ -35,7 +35,7 @@ class PixelValidation(models.Model):
     photo_used = models.ForeignKey(Photo, null=True, blank=True)
    
     def __str__(self):
-        return u'%s -- %s' % (self.pixel,self.user) 
+        return '%s -- %s' % (self.pixel,self.user) 
 
 class PixelValidationLandcover(models.Model):
     validation = models.ForeignKey(PixelValidation, null=False, blank=False)
@@ -45,7 +45,7 @@ class PixelValidationLandcover(models.Model):
     class Meta:
         unique_together = (('validation','category'),)
     def __str__(self):
-        return u'%s: %s %s %s category' % (self.validation,self.percentage,'%',self.category)
+        return '%s: %s %s %s category' % (self.validation,self.percentage,'%',self.category)
 
 class Research(models.Model):
     name = models.CharField(max_length=100,blank=False, null=False, unique=True)
@@ -55,7 +55,7 @@ class Research(models.Model):
     modified =  models.DateField(auto_now=True, auto_now_add=True)
     order = models.IntegerField(null=True, blank = True)
     def __str__(self):
-        return u'%s' % (self.name)
+        return '%s' % (self.name)
 class ResearchPixel(models.Model):
     pixel = models.ForeignKey(Pixel, null=False, blank=False)
     research = models.ForeignKey(Research, null=False, blank=False)
@@ -68,4 +68,4 @@ class ResearchPixel(models.Model):
     class Meta:
         unique_together = (('pixel','research'),)
     def __str__(self):
-        return u'%s: %s (%s) ' % (self.research,self.pixel,self.user)
+        return '%s: %s (%s) ' % (self.research,self.pixel,self.user)

@@ -21,12 +21,12 @@ class ContinentBuffered(models.Model):
     geometry = models.MultiPolygonField(null=True, blank=True)
 
     def __str__(self):
-        return unicode(_(self.name))
+        return str(_(self.name))
 
     class Meta:
-        db_table = u'continent_buffered'
-        verbose_name = _(u'Continent')
-        verbose_name_plural = _(u'Continents')
+        db_table = 'continent_buffered'
+        verbose_name = _('Continent')
+        verbose_name_plural = _('Continents')
 
 class Category(models.Model):
     id = models.IntegerField(null=False)
@@ -34,12 +34,12 @@ class Category(models.Model):
     name = models.CharField(max_length=40, blank=True)
     order = models.IntegerField()
     def __str__(self):
-        return unicode(_(self.name))
+        return str(_(self.name))
 
     class Meta:
-        db_table = u'categories'
-        verbose_name = _(u'Category')
-        verbose_name_plural = _(u'Categories')
+        db_table = 'categories'
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
 
 
 class Country(models.Model):
@@ -65,11 +65,11 @@ class Country(models.Model):
     the_geom = models.MultiPolygonField(null=True, blank=True)
 
     class Meta:
-        db_table = u'country'
-        verbose_name = _(u'Country')
-        verbose_name_plural = _(u'Countries')
+        db_table = 'country'
+        verbose_name = _('Country')
+        verbose_name_plural = _('Countries')
     def __str__(self):
-        return unicode(_(self.cntry_name))
+        return str(_(self.cntry_name))
 
 class Region(models.Model):
     gid = models.IntegerField(primary_key=True)
@@ -80,11 +80,11 @@ class Region(models.Model):
     the_geom = models.MultiPolygonField(null=True, blank=True)
 
     class Meta:
-        db_table = u'region'
-        verbose_name = _(u'Region')
-        verbose_name_plural = _(u'Regions')
+        db_table = 'region'
+        verbose_name = _('Region')
+        verbose_name_plural = _('Regions')
     def __str__(self):
-        return unicode(_(self.region)) 
+        return str(_(self.region)) 
 
 class CountryBuffered(models.Model):
     gid = models.IntegerField(primary_key=True)
@@ -93,22 +93,22 @@ class CountryBuffered(models.Model):
 
 
     def __str__(self):
-        return unicode(_(self.name)) 
+        return str(_(self.name)) 
 
     class Meta:
-        db_table = u'country_buffered'
-        verbose_name = _(u'Country')
-        verbose_name_plural = _(u'Countries')
+        db_table = 'country_buffered'
+        verbose_name = _('Country')
+        verbose_name_plural = _('Countries')
 
 class Research(models.Model):
     name = models.CharField(max_length=16, blank=True)
     description = models.TextField(blank=True)
     class Meta:
-        db_table = u'research'
-        verbose_name = _(u'Research')
-        verbose_name_plural = _(u'Researches')
+        db_table = 'research'
+        verbose_name = _('Research')
+        verbose_name_plural = _('Researches')
     def __str__(self):
-        return unicode(_(self.name)) 
+        return str(_(self.name)) 
 
 class PhotoUser(models.Model):
     username = models.CharField(max_length=30, blank=True)
@@ -131,19 +131,19 @@ class PhotoUser(models.Model):
     postal = models.CharField(max_length=10, blank=True)
     country = models.CharField(max_length=50, blank=True)
     class Meta:
-        db_table = u'users'
-        verbose_name = _(u'Photo User')
-        verbose_name_plural = _(u'Photo Users')
+        db_table = 'users'
+        verbose_name = _('Photo User')
+        verbose_name_plural = _('Photo Users')
 
 class Theme(models.Model):
     name = models.CharField(max_length=32)
     description = models.TextField()
     icon = models.ImageField(upload_to="photos/themes/")
     class Meta:
-        verbose_name = _(u'Theme')
-        verbose_name_plural = _(u'Themes')
+        verbose_name = _('Theme')
+        verbose_name_plural = _('Themes')
     def __str__(self):
-        return unicode(_(self.name)) 
+        return str(_(self.name)) 
 STATUS_CHOICES = (
     (0, _("Deleted")),
     (1, _("Public")),
@@ -151,22 +151,22 @@ STATUS_CHOICES = (
 )
 
 DIR_CARD_CHOICES = (
-    (u'N', _('North')),
-    (u'NNE', _('NNE')),
-    (u'NE', _('NE')),
-    (u'ENE', _('ENE')),
-    (u'E', _('East')),
-    (u'ESE', _('ESE')),
-    (u'SE', _('SE')),
-    (u'SSE', _('SSE')),
-    (u'S', _('South')),
-    (u'SSW', _('SSW')),
-    (u'SW', _('SW')),
-    (u'WSW', _('WSW')),
-    (u'W', _('West')),
-    (u'WNW', _('WNW')),
-    (u'NW', _('NW')),
-    (u'NNW', _('NNW')),
+    ('N', _('North')),
+    ('NNE', _('NNE')),
+    ('NE', _('NE')),
+    ('ENE', _('ENE')),
+    ('E', _('East')),
+    ('ESE', _('ESE')),
+    ('SE', _('SE')),
+    ('SSE', _('SSE')),
+    ('S', _('South')),
+    ('SSW', _('SSW')),
+    ('SW', _('SW')),
+    ('WSW', _('WSW')),
+    ('W', _('West')),
+    ('WNW', _('WNW')),
+    ('NW', _('NW')),
+    ('NNW', _('NNW')),
 )
 
 
@@ -179,7 +179,7 @@ photo_storage = FileSystemStorage(
 
 def photo_path(instance, filename):
     ts = time.strftime(settings.TIMESTAMP_FORMAT)
-    path = u"%d/%s_%s" % (instance.user.id, ts, filename)
+    path = "%d/%s_%s" % (instance.user.id, ts, filename)
     #os.makedirs(os.path.dirname(dest))
     return path
 
@@ -262,7 +262,7 @@ class Photo(models.Model):
 
     def exifStringed(self):
         tags = self.exif()
-        for k in tags.keys():
+        for k in list(tags.keys()):
             if k != 'JPEGThumbnail':
                 try:
                     tags[k] = force_text(tags[k])
@@ -415,9 +415,9 @@ class Photo(models.Model):
         return p[1]
 
     class Meta:
-        db_table = u'photos'
-        verbose_name = _(u'Photo')
-        verbose_name_plural = _(u'Photos')
+        db_table = 'photos'
+        verbose_name = _('Photo')
+        verbose_name_plural = _('Photos')
 
 def tf(f):
     if hasattr(f, 'num'):

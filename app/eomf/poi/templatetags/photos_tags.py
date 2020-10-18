@@ -34,10 +34,10 @@ def thumbnail(file, size, prefix=""):
         file_url  = file.url
     else:
         pre, post = file.name.split("media")
-        file_url = u"/media"+post
+        file_url = "/media"+post
 
     name, extension = file_name.rsplit('.', 1)
-    thumb = prefix + name + u'_' + size + '.' + extension
+    thumb = prefix + name + '_' + size + '.' + extension
     thumb_filename = os.path.join(os.path.dirname(file_path), thumb)
     thumb_url = os.path.join(os.path.dirname(file_url), thumb)
 
@@ -48,7 +48,7 @@ def thumbnail(file, size, prefix=""):
                 os.unlink(thumb_filename)
             else:
                 create_new = False
-        except OSError, e:
+        except OSError as e:
             #something wrong with source file
             create_new = False
     else:
@@ -59,7 +59,7 @@ def thumbnail(file, size, prefix=""):
         if not os.path.exists(thumb_dir):
             try:
                 os.makedirs(thumb_dir)
-            except OSError, e:
+            except OSError as e:
                 if e.errno == 17:
                     pass
         try:

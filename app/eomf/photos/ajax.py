@@ -15,11 +15,11 @@ def get_task_progress(request,image_id,resolution):
             return json.dumps({'success':False,'message':'Resolution not supported: %s' % e.message})
         im = get_thumbnail(photo.file.name, resolution, crop='center', quality=95)
         return  json.dumps({'failure':True,'imageUrl':str(im)})
-    except Exception, e:
+    except Exception as e:
         return json.dumps({'failure':False,'message':'Error: %s' % e.message})
 
 def __test__():
-    print 'OK'
+    print('OK')
 
 def __test__():
-    print 'OK'
+    print('OK')

@@ -53,7 +53,7 @@ SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth
 #Photo.objects.raw('select photos.id,photos.uploaddate from photos')
 # Create your views here.
 months_list_names = ['january','february','march','april','may','june','july','august','september','october','november','december']
-months_numbers = range(0,12)
+months_numbers = list(range(0,12))
 
 def stats_main(request):
 	set_user = User.objects.raw('select auth_user.id,auth_user.date_joined from auth_user')
@@ -286,7 +286,7 @@ def getnumphotosbymon(year1, year2, set_user):
 	year2 = int(year2)
 	data_mon = {}
 	rebuild_month_data = []
-	build_cat = range(year1,year2+1)
+	build_cat = list(range(year1,year2+1))
 	cursor = connection.cursor()
 	cursor.execute('SELECT EXTRACT(YEAR FROM UPLOADDATE) AS YYYY, COUNT(*) AS "PHOTOST" FROM PHOTOS GROUP BY 1 ORDER BY YYYY ASC')
 	query1 = cursor.fetchall()
@@ -334,7 +334,7 @@ def getnumphotosbyyearcumm(year1, year2, set_user):
 	year2 = int(year2)
 	data_mon = {}
 	rebuild_month_data = []
-	build_cat = range(year1,year2+1)
+	build_cat = list(range(year1,year2+1))
 	cursor = connection.cursor()
 	cursor.execute('SELECT EXTRACT(YEAR FROM UPLOADDATE) AS YYYY, COUNT(*) AS "PHOTOST" FROM PHOTOS GROUP BY 1 ORDER BY YYYY ASC')
 	query1 = cursor.fetchall()

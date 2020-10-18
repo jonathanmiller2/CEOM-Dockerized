@@ -13,7 +13,7 @@ from eomf.celeryq.modis.headers import get_modis_header
 from collections import OrderedDict
 
 try:
-    import database
+    from . import database
 except:
     print("Database.py not found. disregard if it is a worker process")
 
@@ -22,7 +22,7 @@ def get_location_metadata(lat,lon,dataset,dataset_npix,years):
     metadata = {
         'lat': lat,
         'lon': lon,
-        'tile': u'h%02dv%02d' % (ih,iv),
+        'tile': 'h%02dv%02d' % (ih,iv),
         'dataset':dataset,
         'col':xi,
         'row':yi,
@@ -39,15 +39,15 @@ def monitor_single_site_tasks(tasks,metadata):
     for i in range(0,NUM_STEPS):
         num_tasks = 0
         finished = started = retry = error = pending = 0
-        for year,chunks in tasks.iteritems():
-            for chunk, task in chunks.iteritems():
+        for year,chunks in tasks.items():
+            for chunk, task in chunks.items():
                 num_tasks+=1
                 state = task.state
-                finished += state==u'SUCCESS' # When task finished
-                started += state==u'STARTED'  # When task is started
-                retry += state==u'RETRY'      # When task failed to send
-                error +=  state==u'FAILURE'   # Task had an error
-                pending += state==u'PENDING'  # Task is pending to be processed from the queue
+                finished += state=='SUCCESS' # When task finished
+                started += state=='STARTED'  # When task is started
+                retry += state=='RETRY'      # When task failed to send
+                error +=  state=='FAILURE'   # Task had an error
+                pending += state=='PENDING'  # Task is pending to be processed from the queue
                 # if state==u'FAILURE':
                 #     if curret_year_errors < MAX_ERRORS:
                 #         tasks[year][day] =  get_modis_year_data.delay(ih, iv, xi, yi,folder,dataset,year,dataset_freq_in_days,vi,multi_day)
@@ -63,18 +63,18 @@ def monitor_single_site_tasks(tasks,metadata):
 
 def get_data(tasks):
     data = {}
-    for year,chunks in tasks.iteritems():
+    for year,chunks in tasks.items():
         data[year]={}
-        for chunk, task in chunks.iteritems():
+        for chunk, task in chunks.items():
             state = task.state
-            if state!=u'SUCCESS':
+            if state!='SUCCESS':
                 # data[year].update{''}
                 # Should set to none or error the days of this tasks
                 pass
             else:
                 bands_dict={}
 
-                for day, day_data_list in task.result[str(year)].items():
+                for day, day_data_list in list(task.result[str(year)].items()):
                     if day_data_list:
                         bands_dict [day] = OrderedDict(day_data_list)
                     else:
@@ -88,10 +88,10 @@ def process_data(data,dataset):
 
 def send_tasks(function, params_dict):
     tasks =  {}
-    for year,chunks in params_dict.iteritems():
+    for year,chunks in params_dict.items():
         tasks[year]={}
-        for chunk, param_dict in chunks.iteritems():
-            tasks[year][chunk] = apply(function,[param_dict])
+        for chunk, param_dict in chunks.items():
+            tasks[year][chunk] = function(*[param_dict])
     return tasks
 
 def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chunks=5):
@@ -100,7 +100,7 @@ def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chun
     current_doy = datetime.datetime.now().timetuple().tm_yday
     for year in years:
         days = [i+1 for i in range(0,366) if i % dataset_freq_in_days==0]
-        if year not in range(2000,current_year+1):
+        if year not in list(range(2000,current_year+1)):
             continue
         if year == 2000:
             days = [day for day in days if day > 56 ] # Modis has no days before this date
@@ -182,7 +182,7 @@ def read_input_file(file_path):
             continue
         if len(line_data[0])>MAX_SITE_ID_LENGTH:
             raise Exception('Line %d has a site_id longer than the maximum allowed (%d)'% (line_cont,MAX_SITE_ID_LENGTH))
-        if input_sites.has_key(line_data[0]):
+        if line_data[0] in input_sites:
              raise Exception('Line %d has a duplicated key the site ' % line_cont)
         if len(line_data)!=3:
             raise Exception('Line %d does not contain 3 columns. Correct Format is Unique ID value, Latitude, Longitude eg: 1, 20.2343, -100.26432 ' % line_cont)
@@ -200,7 +200,7 @@ def updateDB(task_id,result,message,progress,total_sites,error=False,working=Tru
         completed = total_sites==progress
         db.updateMultipleSiteTimeSeries(task_id,result,message,progress,total_sites,completed,error,working)
     except Exception as e:
-        print('Error : %s' % e.message)
+        print(('Error : %s' % e.message))
         pass   
 @shared_task(time_limit=7200)
 def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,dataset_npix,dataset_freq_in_days):
@@ -215,18 +215,18 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
             input_sites = read_input_file(input_file)
         except Exception as e :
             # Set error to the task in the db (Wrong input file)
-            print("Exception reading input file: %s" % str(e.message))
+            print(("Exception reading input file: %s" % str(e.message)))
             updateDB(task_id,file_result,str(e.message),0,total_sites,True,False)
             return None;
         time_ini = time.time() # Initial time to extract execution time
         total_sites = len(input_sites)
-        multiple_site_modis.update_state(state=u'STARTED', meta={'completed': 0,'error':0,'total':0,'started':False})
+        multiple_site_modis.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':0,'started':False})
         updateDB(task_id,file_result,message,0,total_sites,False,True)
         filename = get_file_name(dataset,years)
         site_cont=0
 
-        for site_id,site_data in input_sites.items():
-            multiple_site_modis.update_state(state=u'STARTED', meta={'completed': site_cont,'error':0,'total':total_sites,'started':True})
+        for site_id,site_data in list(input_sites.items()):
+            multiple_site_modis.update_state(state='STARTED', meta={'completed': site_cont,'error':0,'total':total_sites,'started':True})
             updateDB(task_id,file_result,message,site_cont,total_sites,False,True)
             site_cont+=1
             lat = site_data['lat']
@@ -240,7 +240,7 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
             # Create parameter list for all years
             chunks = 12
             tasks_params = split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,chunks)
-            print("Sending tasks to queue site %d of %d:" %(site_cont,total_sites))
+            print(("Sending tasks to queue site %d of %d:" %(site_cont,total_sites)))
             tasks = send_tasks(get_modis_year_data.delay,tasks_params)
             print('Monitoring tasks')
             monitor_single_site_tasks(tasks,metadata)
@@ -262,14 +262,14 @@ MODIS_FOLDER_PATH = "/data/ifs/modis/datasets/"
 import multiprocessing as mp
 def make_serializable_dict(mydict):
     serialized_dict = OrderedDict()
-    for key,value in mydict.items():
+    for key,value in list(mydict.items()):
         serialized_dict[key] = str(value)
     return serialized_dict
 
 def extract_day_data(col,row,dataset,year,day,tile):
     try:
         multi_day = False
-        print("Getting day: %d" % day)
+        print(("Getting day: %d" % day))
         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*.hdf$")
         items = (dataset, year, tile, year, day)
         search = MODIS_FOLDER_PATH+"%s/%d/%s/*%d%03d*.hdf" % items
@@ -282,19 +282,19 @@ def extract_day_data(col,row,dataset,year,day,tile):
             try:
                 pixel_values = get_pixel_value(fn,col,row)
             except Exception as e:
-                print("Error retrieving pixel values for file: %s %s " % (fn,e.message))
+                print(("Error retrieving pixel values for file: %s %s " % (fn,e.message)))
 
             data = process.get_dates(pixel_values,year,day,multi_day)
             if products.dataset_is_available(dataset):
                vegetation_indexes = products.get_vegetation_indexes(dataset,pixel_values)
-               data = dict(data.items()+vegetation_indexes.items())
+               data = dict(list(data.items())+list(vegetation_indexes.items()))
             data = make_serializable_dict(data)
-            data = [(k,v) for k,v in data.items() ]
+            data = [(k,v) for k,v in list(data.items()) ]
         else:
             data = None
         return data
     except Exception as e:
-        print("Exception at year %d day %d: %s" % (year,day,e.message))
+        print(("Exception at year %d day %d: %s" % (year,day,e.message)))
         return None
 
 
@@ -313,10 +313,10 @@ def get_modis_year_data( params_dict):
 if __name__ == "__main__":
     dataset= 'mod11a1'
     dataset_freq_in_days=1
-    years = range(2014,2015)
+    years = list(range(2014,2015))
     dataset_npix = 1200
     csv_folder = '/webapps/eomf_admin/celeryq/tests'
     input_file = '/webapps/eomf_admin/celeryq/test_multi.csv'
     media_base_url ='/media/'
     pixel_val = multiple_site_modis.delay(input_file,csv_folder,media_base_url,dataset,years,dataset_npix,dataset_freq_in_days)
-    print(pixel_val.result)
+    print((pixel_val.result))

@@ -24,7 +24,7 @@ class Feedback(models.Model):
     #Feedback_user = models.ForeignKey(User, blank=True, null=True)
 
     def __str__(self):
-        return u'%s: %s' % (self.url, self.subject)
+        return '%s: %s' % (self.url, self.subject)
 
 class Comment(models.Model):
 	Comment_id = models.ForeignKey(Feedback, related_name='comment', on_delete=models.CASCADE)

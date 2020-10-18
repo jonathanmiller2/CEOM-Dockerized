@@ -12,6 +12,9 @@ services:
                       python manage.py check &&
                       echo CHECK_FIN &&
                       gunicorn eomf.wsgi:application --bind 0.0.0.0:8000"
+                      
+                      #tail -F anything"
+                      #gunicorn eomf.wsgi:application --bind 0.0.0.0:8000"
                       #python manage.py runserver 0.0.0.0:8000"
 
 #                     python manage.py makemigrations --empty pages &&

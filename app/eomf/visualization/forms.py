@@ -44,9 +44,9 @@ now = datetime.datetime.now()
 def makeChoice(a):
     return (str(a), str(a).upper())
 
-PRODUCTS = map(makeChoice, ('evi', 'lswi', 'ndsi', 'ndvi', 'ndwi', 'snow'))
-DAYS = map(makeChoice, range(1, 362, 8))
-YEARS = map(makeChoice, range(2000, now.year+1))
+PRODUCTS = list(map(makeChoice, ('evi', 'lswi', 'ndsi', 'ndvi', 'ndwi', 'snow')))
+DAYS = list(map(makeChoice, list(range(1, 362, 8))))
+YEARS = list(map(makeChoice, list(range(2000, now.year+1))))
 
 class ProductSelect(forms.Form):
     products = forms.ChoiceField(choices=PRODUCTS, widget=Select(attrs={'class': 'span2'}))

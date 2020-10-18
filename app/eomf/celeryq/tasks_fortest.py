@@ -8,10 +8,10 @@ import re, glob
 import math
 import datetime
 
-from modis import products, process, band_names, headers
-from modis.aux_functions import latlon2sin
-from modis.process import get_pixel_value,get_band_names,gap_fill
-from modis.headers import get_modis_header
+from .modis import products, process, band_names, headers
+from .modis.aux_functions import latlon2sin
+from .modis.process import get_pixel_value,get_band_names,gap_fill
+from .modis.headers import get_modis_header
 from collections import OrderedDict
 app = Celery('tasks', backend='amqp', broker='amqp://')
 app.config_from_object('celeryconfig')
@@ -19,16 +19,16 @@ app.config_from_object('celeryconfig')
 from celery import group
 
 try:
-    import database
+    from . import database
 except:
-    print "Database.py not found. disregard if it is a worker process"
+    print("Database.py not found. disregard if it is a worker process")
 
 def get_location_metadata(lat,lon,dataset,dataset_npix,years):
     ih, iv, xi, yi, folder = latlon2sin(float(lat), float(lon), dataset, dataset_npix)
     metadata = {
         'lat': lat,
         'lon': lon,
-        'tile': u'h%02dv%02d' % (ih,iv),
+        'tile': 'h%02dv%02d' % (ih,iv),
         'dataset':dataset,
         'col':xi,
         'row':yi,
@@ -45,15 +45,15 @@ def monitor_tasks(tasks,fun,metadata):
     for i in range(0,NUM_STEPS):
         num_tasks = 0
         finished = started = retry = error = pending = 0
-        for year,chunks in tasks.iteritems():
-            for chunk, task in chunks.iteritems():
+        for year,chunks in tasks.items():
+            for chunk, task in chunks.items():
                 num_tasks+=1
                 state = task.state
-                finished += state==u'SUCCESS' # When task finished
-                started += state==u'STARTED'  # When task is started
-                retry += state==u'RETRY'      # When task failed to send
-                error +=  state==u'FAILURE'   # Task had an error
-                pending += state==u'PENDING'  # Task is pending to be processed from the queue
+                finished += state=='SUCCESS' # When task finished
+                started += state=='STARTED'  # When task is started
+                retry += state=='RETRY'      # When task failed to send
+                error +=  state=='FAILURE'   # Task had an error
+                pending += state=='PENDING'  # Task is pending to be processed from the queue
                 # if state==u'FAILURE':
                 #     if curret_year_errors < MAX_ERRORS:
                 #         tasks[year][day] =  get_modis_year_data.delay(ih, iv, xi, yi,folder,dataset,year,dataset_freq_in_days,vi,multi_day)
@@ -62,26 +62,26 @@ def monitor_tasks(tasks,fun,metadata):
                 #         fatal_failures[year][day] = 1
                 #         fatal_failures_counter+=1
         progress = int((float(finished + error)/num_tasks)*100)
-        print ("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d ") % (progress,finished, error, retry, started, pending)
-        fun.update_state(state=u'STARTED',  meta={'completed': finished,'error':error,'total':num_tasks,'metadata':metadata})
+        print(("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d ") % (progress,finished, error, retry, started, pending))
+        fun.update_state(state='STARTED',  meta={'completed': finished,'error':error,'total':num_tasks,'metadata':metadata})
         if finished + error == num_tasks:
             break
         time.sleep(TIME_CHECK)
 
 def get_data(tasks):
     data = {}
-    for year,chunks in tasks.iteritems():
+    for year,chunks in tasks.items():
         data[year]={}
-        for chunk, task in chunks.iteritems():
+        for chunk, task in chunks.items():
             state = task.state
-            if state!=u'SUCCESS':
+            if state!='SUCCESS':
                 # data[year].update{''}
                 # Should set to none or error the days of this tasks
                 pass
             else:
                 bands_dict={}
 
-                for day, day_data_list in task.result[str(year)].items():
+                for day, day_data_list in list(task.result[str(year)].items()):
                     if day_data_list:
                         bands_dict [day] = OrderedDict(day_data_list)
                     else:
@@ -95,16 +95,16 @@ def process_data(data,dataset):
 
 def send_tasks(function, params_dict):
     tasks =  {}
-    for year,chunks in params_dict.iteritems():
+    for year,chunks in params_dict.items():
         tasks[year]={}
-        for chunk, param_dict in chunks.iteritems():
-            tasks[year][chunk] = apply(function,[param_dict])
+        for chunk, param_dict in chunks.items():
+            tasks[year][chunk] = function(*[param_dict])
     return tasks
 
 def debug(name, thing):
-    print "debugging starts for : "+str(name)
-    print thing
-    print "debugging ends for : "+str(name)
+    print("debugging starts for : "+str(name))
+    print(thing)
+    print("debugging ends for : "+str(name))
 
 def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chunks=5):
     task_params = dict([(year,{}) for year in years])
@@ -112,7 +112,7 @@ def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chun
     current_doy = datetime.datetime.now().timetuple().tm_yday
     for year in years:
         days = [i+1 for i in range(0,366) if i % dataset_freq_in_days==0]
-        if year not in range(2000,current_year+1):
+        if year not in list(range(2000,current_year+1)):
             continue
         if year == 2000:
             days = [day for day in days if day > 56 ] # Modis has no days before this date
@@ -179,7 +179,7 @@ def get_modis_raw_data(self,csv_folder,media_base_url,lat,lon,dataset,years,data
     time_ini = time.time() # Initial time to extract execution time
     metadata = get_location_metadata(lat,lon,dataset,dataset_npix,years) # metadata of the selected site
     # Set task initial state to started
-    get_modis_raw_data.update_state(state=u'STARTED', meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
+    get_modis_raw_data.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
     num_tasks = len(years) # Number of tasks to perform
     multi_day = (int(dataset_freq_in_days)!=1)
     # Send all tasks to queue and store their queing id in a double dictionary (year-->day-->task_id) object
@@ -190,33 +190,33 @@ def get_modis_raw_data(self,csv_folder,media_base_url,lat,lon,dataset,years,data
     debug("task_params", tasks_params)
     # tasks_params[2009].keys()
     # x tasks_params[2009][x][days]
-    for x in tasks_params[2009].keys():
-        debug("task_params 2009 "+str(x), tasks_params[2009][x][u'days'])
-    print "Sending tasks to queue:"
+    for x in list(tasks_params[2009].keys()):
+        debug("task_params 2009 "+str(x), tasks_params[2009][x]['days'])
+    print("Sending tasks to queue:")
     tasks = send_tasks(get_modis_year_data,tasks_params)
     # tasks = send_tasks(get_modis_year_data.delay,tasks_params)
-    print 'Monitoring tasks'
+    print('Monitoring tasks')
     # monitor_tasks(tasks,self,metadata)
     data  = get_data(tasks)
     debug("data_after_tasks", data)
     debug("length of initial data", len(data[2009]))
-    debug("Keys in the initial data", data[2009].keys())
+    debug("Keys in the initial data", list(data[2009].keys()))
     debug_lis = []
-    for x in data[2009].keys():
+    for x in list(data[2009].keys()):
         debug("data in key "+str(x), data[2009][x])
         if data[2009][x] is None:
                debug_lis.append(str(x))
     debug("List of debug_lis", debug_lis)
-    print 'Processing data'
+    print('Processing data')
     data = process_data(data,dataset)
-    print len(data[2009])
-    print 'saving data'
+    print(len(data[2009]))
+    print('saving data')
     filename = save_data(data,csv_folder,get_modis_raw_data.request.id,metadata)
     try:
         db = database.pgDatabase()
         db.updateCompletedSingleTimeSeriestask(get_modis_raw_data.request.id,os.path.join(media_base_url,filename),)
-    except Exception, e:
-        print 'Error : %s' % e.message
+    except Exception as e:
+        print('Error : %s' % e.message)
         pass
     return {'filename':filename,'metadata':metadata,}
 
@@ -226,14 +226,14 @@ MODIS_FOLDER_PATH = "/data/ifs/modis/datasets/"
 import multiprocessing as mp
 def make_serializable_dict(mydict):
     serialized_dict = OrderedDict()
-    for key,value in mydict.items():
+    for key,value in list(mydict.items()):
         serialized_dict[key] = str(value)
     return serialized_dict
 
 def extract_day_data(col,row,dataset,year,day,tile):
     try:
         multi_day = False
-        print "Getting day: %d" % day
+        print("Getting day: %d" % day)
         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*.hdf$")
         items = (dataset, year, tile, year, day)
         search = MODIS_FOLDER_PATH+"%s/%d/%s/*%d%03d*.hdf" % items
@@ -245,22 +245,22 @@ def extract_day_data(col,row,dataset,year,day,tile):
             pixel_values = None
             try:
                 pixel_values = get_pixel_value(fn,col,row)
-            except Exception, e:
-                print "Error retrieving pixel values for file: %s %s " % (fn,e.message)
+            except Exception as e:
+                print("Error retrieving pixel values for file: %s %s " % (fn,e.message))
 
             data = process.get_dates(pixel_values,year,day,multi_day)
             if products.dataset_is_available(dataset):
                vegetation_indexes = products.get_vegetation_indexes(dataset,pixel_values)
-               data = dict(data.items()+vegetation_indexes.items())
+               data = dict(list(data.items())+list(vegetation_indexes.items()))
             data = make_serializable_dict(data)
-            data = [(k,v) for k,v in data.items() ]
+            data = [(k,v) for k,v in list(data.items()) ]
             debug ("data that you are interested filename: "+str(fn), data)
         else:
             debug ("data that you are interested filename: "+str(fn), data)
             data = None
         return data
-    except Exception, e:
-        print "Exception at year %d day %d: %s" % (year,day,e.message)
+    except Exception as e:
+        print("Exception at year %d day %d: %s" % (year,day,e.message))
         return None
 
 @app.task(time_limit=50)
@@ -277,7 +277,7 @@ if __name__ == "__main__":
     lon = -102.828119
     dataset= 'mod09a1'
     dataset_freq_in_days=8
-    years = range(2009,2011)
+    years = list(range(2009,2011))
     dataset_npix = 1200
     csv_folder = '/webapps/eomf_admin/celeryq/tests'
     pixel_val = get_modis_raw_data(csv_folder,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days)
