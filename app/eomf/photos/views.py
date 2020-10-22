@@ -59,6 +59,7 @@ def zdecode(zstr):
 
 def compress(obj):
  #   return pylzma.compress(pickle.dumps(obj))
+    #TODO: For some reason, pickle dumps are causing issues. If you see "could not decode bytes to JSON", with a confusing stack trace, it probably originates here.
     return pickle.dumps(obj)
 
 def decompress(data):
@@ -86,11 +87,11 @@ def search_for_photos(request):
         if request.method == 'POST':
             search = SearchForm(request.POST)
         else:
-            search = SearchForm(pickle.loads(request.session['query']))
+            search = SearchForm(request.session['query'])
 
         if search.is_valid():
             if request.method == 'POST':
-                request.session['query'] = pickle.dumps(request.POST)
+                request.session['query'] = request.POST #pickle.dumps(request.POST)
 
 
             l, t, r, b = -180, 90, 180, -90
@@ -291,7 +292,7 @@ def cocorahs(request, date):
 
     return HttpResponseRedirect('/photos/map/')
 
-
+#TODO: Clusters may be unused, in favor of gmapclusters
 def clusters(request):
     photos, search = search_for_photos(request)
     photos = photos.exclude(Q(point__bboverlaps=Point(0,0))|Q(point__isnull=True))
@@ -378,10 +379,11 @@ def clusters(request):
 
     return HttpResponse(etree.tostring(doc))
 
-def gmapclusters(request, photos):
+def gmapclusters(request):
+    photos, search = search_for_photos(request)
     photos = photos.exclude(Q(point__bboverlaps=Point(0,0))|Q(point__isnull=True))
 
-    #TODO: This check is redundant
+    #TODO: This check is redundant?
     if 'bbox' in request.GET:
         bb = request.GET['bbox'].split(',')
         bb = [float(x) for x in bb]
@@ -466,9 +468,11 @@ def gmapclusters(request, photos):
         doc.Document.append(pm)
 
     #Add xml tag
-    kml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "aa" + str(etree.tostring(doc))
+    response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + etree.tostring(doc).decode('utf-8')
 
-    return kml
+    print(response) #TODO: Remove me
+
+    return HttpResponse(response)
 
 def get_photos_id_form_cluster_photo_id(request, id,x_size=22.25,y_size=11.125):
 

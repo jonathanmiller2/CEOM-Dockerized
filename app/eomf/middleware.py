@@ -23,8 +23,9 @@ class KMLMiddleware:
             response['Content-Type']        = 'application/vnd.google-earth.kmz'
             response['Content-Disposition'] = 'attachment; filename=%s.kmz' % save_file_name
             response['Content-Length']      = str(len(response.content))
+
         if request_file.lower().endswith(".kml"):
-            save_file_name = request_file[:request_file.lower().rfind(".kml")] # strips off the .kmz extension
+            save_file_name = request_file[:request_file.lower().rfind(".kml")] # strips off the .kml extension
             response['Content-Type']        = 'application/vnd.google-earth.kml+xml'
             response['Content-Disposition'] = 'attachment; filename=%s.kml' % save_file_name
             response['Content-Length']      = str(len(response.content))
