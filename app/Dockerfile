@@ -13,6 +13,9 @@ RUN apt-get update
 RUN apt-get install libgdal-dev netcat -y
 #RUN gdal-config --version
 
+#Gettext Installation
+RUN apt-get install gettext libgettextpo-dev -y
+
 #Unsure what these do, and they are likely not needed, but I am keeping them here in case future GDAL issues arise.
 #RUN export CPLUS_INCLUDE_PATH=/usr/include/gdal
 #RUN export C_INCLUDE_PATH=/usr/include/gdal

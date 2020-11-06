@@ -1,0 +1,4707 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-11-06 03:20-0600\n"
+"PO-Revision-Date: 2015-06-12 11:44-0551\n"
+"Last-Translator:   <adamjia0313@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Translated-Using: django-rosetta 0.7.6\n"
+
+#: eomf/aboutus/models.py:9
+msgid "One column image"
+msgstr "一列图像"
+
+#: eomf/aboutus/models.py:10
+msgid "Two columns image"
+msgstr "两列图像"
+
+#: eomf/aboutus/templates/aboutus/dheeraj_demo/trail.html:7
+#: eomf/aboutus/templates/aboutus/leftmenu.html:27
+#: eomf/aboutus/templates/aboutus/news.html:7
+#: eomf/water/templates/water/trail.html:8
+msgid "News"
+msgstr "新闻"
+
+#: eomf/aboutus/templates/aboutus/dheeraj_demo/trail.html:29
+#: eomf/aboutus/templates/aboutus/news.html:29
+#: eomf/water/templates/water/trail.html:30
+msgid "Images"
+msgstr "图片"
+
+#: eomf/aboutus/templates/aboutus/dheeraj_demo/trail.html:52
+#: eomf/aboutus/templates/aboutus/news.html:52
+#: eomf/water/templates/water/trail.html:53
+msgid "Files"
+msgstr "文件"
+
+#: eomf/aboutus/templates/aboutus/education/courses.html:6
+#: eomf/aboutus/templates/aboutus/leftmenu.html:62
+msgid "Courses"
+msgstr "课程"
+
+#: eomf/aboutus/templates/aboutus/education/courses.html:9
+msgid "Environmental Remote Sensing"
+msgstr "环境遥感"
+
+#: eomf/aboutus/templates/aboutus/education/courses.html:10
+#: eomf/aboutus/templates/aboutus/education/courses.html:14
+msgid "Fall Semester"
+msgstr "秋季学期"
+
+#: eomf/aboutus/templates/aboutus/education/courses.html:11
+msgid ""
+"This 3-credit course aims to help students to develop comprehensive "
+"knowledge and advanced skills of remote sensing, and to apply it for "
+"studying the composition, structure, and function of plants, ecosystems, "
+"landscapes and the biosphere. The course will teach (1) laboratory- and "
+"field- based hyperspectral data acquisition and analysis, (2) field survey "
+"methods, (3) multi-spectral remote sensing of land use and land cover, "
+"vegetation, and water quality, (4) thermal remote sensing, and (5) microwave "
+"remote sensing. The course is composed of lecture, computer laboratory, "
+"field data collection, student&rsquo;s project, presentation and reports as "
+"well as literature reviews. Students will learn image processing software "
+"(ENVI) and algorithms. This course is designed for advanced undergraduate "
+"and graduate students who are interested in remote sensing and its "
+"applications, e.g., ecology, natural resources, agriculture, forestry, "
+"wildlife, water, climate, and urban. Perspective students could come from "
+"various departments, including biology, geography, geology, hydrology, "
+"atmospheric science, computer science, mathematics and statistics."
+msgstr ""
+"这3学分的课程旨在帮助学生制定全面的知识和遥感的先进技术，并运用它研究的组成，"
+"结构，植物，生态，景观和生物圈的功能。本课程将教导（1）laboratory-和基于现场"
+"光谱数据采集和分析，（2）实地调查方法，土地利用和土地覆盖，植被和水质（3）多"
+"光谱遥感，（4）热遥感，和（5）微波遥感。该课程由讲座，计算机实验室，野外数据"
+"采集，学生和放大器; rsquo的; S项目，演示和报告，以及文学评论。学生将学习图像"
+"处理软件（ENVI）和算法。本课程是专为先进的本科生和研究生谁感兴趣的遥感及其应"
+"用，例如，生态，自然资源，农业，林业，野生动物，水，气候和城市。透视学生可能"
+"来自不同的部门，包括生物，地理，地质，水文，大气科学，计算机科学，数学和统"
+"计。"
+
+#: eomf/aboutus/templates/aboutus/education/courses.html:13
+msgid "Computational Remote Sensing"
+msgstr "计算遥感"
+
+#: eomf/aboutus/templates/aboutus/education/courses.html:15
+msgid ""
+"This 3-credit course focuses on data analysis and modeling with large "
+"volumes of satellite images. It is organized in four modules: (1) computer "
+"programming in computer servers with Linux/Unix environment, (2) in-depth "
+"literature review of remote sensing in the areas of land use and land cover "
+"change, biophysical and biochemical parameters of vegetation and water, (3) "
+"individual or group (2-3 students per group) projects that analyze large "
+"amounts of satellite images, and (4) student presentations and manuscript "
+"writing for peer-reviewed SCI journals. Students will learn how to use the "
+"Interactive Data Language (IDL), ENVI image processing software, Python, R, "
+"and GRASS to analyze large volumes of remote sensing data from optical "
+"sensors (Landsat, MODIS) and synthetic aperture radar (PALSAR). Student "
+"projects may cover diverse topics, including urban, water, vegetation, "
+"soils, minerals, and disturbance (fire, drought, flood, insect infestation). "
+"This course is designed for graduate students and advanced undergraduate "
+"students who are interested in satellite remote sensing. Perspective "
+"students could come from various departments, including biology, geography, "
+"hydrology, atmospheric science, computer science, mathematics and "
+"statistics. Pre-requisites are a course in remote sensing (PBIO 4733/5733 "
+"and GIS 4733/5733 Environmental Remote Sensing, or equivalent), statistical "
+"data analysis, computer programming, or permission of instructor and advisor."
+msgstr ""
+"这3学分的课程侧重于数据分析和建模与大量的卫星图像。它由四个模块：（1）计算机"
+"编程使用Linux / Unix环境下的计算机服务器，（2）深入文献遥感技术在土地利用和土"
+"地覆盖变化，植被生物物理和生化指标等方面的审查和水，（3）个人或组（2-3人一"
+"组），其分析大量卫星图片的项目，以及（4）学生演讲和文稿写作同行评审SCI收录。"
+"学生将学习如何使用交互式数据语言（IDL），ENVI图像处理软件，Python和R，和草来"
+"分析大量从光传感器（美国陆地资源卫星，MODIS）和合成孔径雷达（PALSAR）遥感数"
+"据。学生项目可能涵盖不同主题，包括城市，水，植被，土壤，矿物质和干扰（火灾，"
+"旱灾，水灾，虫灾）。本课程是专为研究生和高年级本科生的学生谁感兴趣的卫星遥"
+"感。透视学生可能来自不同的部门，包括生物，地理，水文，大气科学，计算机科学，"
+"数学和统计。前提条件是当然遥感（PBIO5733分之4733和GIS五千七百三十三分之四千七"
+"百三十三环境遥感，或同等学历），统计数据分析，计算机编程，或者教练和顾问的许"
+"可。"
+
+#: eomf/aboutus/templates/aboutus/education/overview.html:7
+#: eomf/aboutus/templates/aboutus/leftmenu.html:58
+msgid "Education"
+msgstr "教育"
+
+#: eomf/aboutus/templates/aboutus/education/overview.html:9
+msgid ""
+"The EOMF faculty, post-doctoral researchers, and Ph.D. students have been "
+"involved in formal and informal education of geospatial technologies, "
+"science and applications. For example, we teach &ldquo;Environmental Remote "
+"Sensing&rdquo; course in fall semester, which is a cross-listing course "
+"between the Department of Microbiology and Plant Biology and the Department "
+"of Geography and Environmental Sustainability (PBIO-4733/5733 and "
+"GIS-4733/5733). In 2012, we also launched and led an effort to host the "
+"first campus-wide GIS Day 2012 event at the OU Norman&nbsp;campus, which "
+"attracted many high school students from several local high schools and "
+"undergraduate students from the OU."
+msgstr ""
+"该EOMF教师，博士后研究人员，和博士学位学生参与地理空间技术，科学和应用的正式"
+"和非正式教育。例如，我们教和放大器; ldquo;环境遥感和放大器; rdquo;的当然在秋"
+"季学期，这是微生物和植物生物学系和地理系和环境可持续性（PBIO-5733分之4733和"
+"GIS-5733分之4733）之间的交叉上市的课程。在2012年，我们还发动和领导的努力，举"
+"办首届校园范围内的GIS日2012年活动在OU诺曼＆放大器; NBSP;校园内，吸引了许多高"
+"中学生从几个当地高中，并从欧本科生。"
+
+#: eomf/aboutus/templates/aboutus/education/student_awards.html:6
+#: eomf/aboutus/templates/aboutus/leftmenu.html:63
+msgid "Student Awards"
+msgstr "学生获奖"
+
+#: eomf/aboutus/templates/aboutus/education/student_awards.html:10
+msgid ""
+"Computer Science Graduate Alumni scholarship (2014, University of Oklahoma)"
+msgstr "计算机专业毕业的校友奖学金（2014年，俄克拉荷马大学）"
+
+#: eomf/aboutus/templates/aboutus/facilities/clab.html:3
+msgid "EOMF Facilities: Computational Labory"
+msgstr "EOMF设施：计算实验室"
+
+#: eomf/aboutus/templates/aboutus/facilities/clab.html:9
+msgid "The Computational Laboratory"
+msgstr "计算实验室"
+
+#: eomf/aboutus/templates/aboutus/facilities/clab.html:12
+msgid "1. Computer servers"
+msgstr "1.计算机服务器"
+
+#: eomf/aboutus/templates/aboutus/facilities/clab.html:13
+msgid ""
+"The EOMF has 14 computer servers: six for storage servers, two for web "
+"servers (internal and external web service), one for ArcGIS servers, and six "
+"for computational servers. Two  of the storage servers are Dell Poweredge "
+"2950s, each with two quad core 2.33GHz Intel E5410 processors, 16 gigabytes "
+"of memory, and 3 x 146 gigabyte Serial Attached SCSI (SAS) local hard drives "
+"in a RAID5 configuration. They are both double attached to the Storage Area "
+"Network (SAN) via Qlogic 2462 dual channel Host Bus Adapters (HBAs). Four of "
+"the storage servers are Poweredge 720XD’s.  They have four Quad core E5-2650 "
+"CPU’s, 24TB of local storage, 128GB RAM and 10GB Ethernet adapters.  They "
+"are connected to an Isilon storage system that provides an additional 293TB "
+"of storage via the 10gig Ethernet.  The eight computer servers are Dell "
+"Poweredge 1950s, each with two quad core 2.33GHz Intel E5410 processors, 16 "
+"gigabytes of memory, and 3 x 146 gigabyte SAS local hard drives in a RAID5 "
+"configuration. 10 servers mentioned above run RedHat Enterprise Linux "
+"version 5.2 as their operating system and are attached to OU's network at 1 "
+"Gigabit/second. One server runs Window system for ArcGIS."
+msgstr ""
+"该EOMF有14个计算机服务器：六为存储服务器，两台Web服务器（内部和外部Web服"
+"务），一个用于ArcGIS的服务器，以及六项计算服务器。两个存储服务器是戴尔的"
+"PowerEdge 2950，每两个四核2.33GHz的英特尔E5410处理器，内存16千兆字节，并且在"
+"RAID5配置3×146千兆字节串行连接SCSI（SAS）的本地硬盘驱动器。它们都通过双Qlogic"
+"的2462双通道主机总线适配器（HBA）连接到存储区域网络（SAN）。四个存储服务器是"
+"的PowerEdge 720XD的。他们有四个四核E5-2650 CPU的，24TB的本地存储，128GB RAM和"
+"10GB以太网适配器。它们被连接到一个Isilon存储系统，提供存储的附加293TB经由万兆"
+"以太网。八个计算机服务器是Dell的PowerEdge 1950，每两个四芯2.33GHz的英特尔"
+"E5410处理器，存储器16千兆字节，并且在RAID5构造3×146千兆字节的SAS本地硬盘驱动"
+"器。上面运行红帽企业Linux 5.2版作为其操作系统中提到，并连接到OU的网络在千兆/"
+"秒的10台服务器。一台服务器运行Window系统ArcGIS的。"
+
+#: eomf/aboutus/templates/aboutus/facilities/clab.html:14
+msgid "2. The data center"
+msgstr "2.数据中心"
+
+#: eomf/aboutus/templates/aboutus/facilities/clab.html:15
+msgid ""
+"The EOMF has space in two data centers on Research campus with a SAN-"
+"attached mass storage system of <b>500 Terabytes</b> in a RAID6 (8+2) "
+"configuration from Data Direct Networks S2A9900. The S2A9900 is a dual "
+"controller specifically designed for high performance computing (HPC). The "
+"storage area network (SAN) consists of a dual 8-Gbps fibre channel (FC) "
+"fabric with 96 ports in each fabric. Each fabric is comprised of one 80-port "
+"Brocade 5300 8-Gbps FC switch and one Brocade 16-port Brocade 200E switch. "
+"This enables each host to be dual-connected to the SAN for high availability "
+"and greater performance.  In the other datacenter there is an Isilon storage "
+"system that provides an additional 293TB of storage from three Isilon "
+"NL400’s that are interconnected with infiniband networking and then the "
+"filesystem is networked to the compute servers via 10gig Ethernet and also "
+"1gig Ethernet depending on which datacenter the server is in."
+msgstr ""
+"该EOMF有空间与SAN连接的海量存储系统的研究校园的两个数据中心的<b> 500兆兆字节"
+"</ B>从数据直接网络S2A9900一个RAID6（8 + 2）的配置。该S2A9900是专为高性能计算"
+"（HPC）设计了一个双控制器。存储区域网络（SAN）由一个双8 Gbps光纤通道（FC）织"
+"物，在每个织物96的端口。每个结构由一个80端口的Brocade 5300 8-Gbps的光纤通道交"
+"换机和一个16博科端口的Brocade 200E交换机。这使得可以双连接到SAN的高可用性和更"
+"高的性能每台主机。在其他数据中心有一个Isilon存储系统提供存储从三个Isilon公司"
+"NL400的额外293TB的通过万兆以太网互连，InfiniBand网络，然后将文件系统联网的计"
+"算服务器，也1GIG以太网，这取决于数据中心中的服务器是研究。"
+
+#: eomf/aboutus/templates/aboutus/facilities/clab.html:17
+msgid "3. Image processing and GIS software"
+msgstr "3.图像处理及地理信息系统软件"
+
+#: eomf/aboutus/templates/aboutus/facilities/clab.html:18
+msgid ""
+"25-seat lab licenses of IDL/ENVI, 5-licenses of ERDAS Imagine, ESRI ArcGIS, "
+"statistics packages (R, Matlab), and Python"
+msgstr ""
+"25个座位的IDL / ENVI的实验室许可证，ERDAS 5-许可证试想，ESRI公司的ArcGIS，统"
+"计包（R，Matlab的），和Python"
+
+#: eomf/aboutus/templates/aboutus/facilities/clab.html:19
+msgid ""
+" \"4 The data portal (<a href=\"http://www.eomf.ou.edu/\">http://www.eomf.ou."
+"edu</a>) and web service"
+msgstr ""
+"“4中的数据门户网站（<a href=\"http://www.eomf.ou.edu/\"> http://www.eomf.ou."
+"edu </A>）和Web服务"
+
+#: eomf/aboutus/templates/aboutus/facilities/clab.html:20
+msgid ""
+"The data center hosts a number of global datasets of climate, satellite "
+"images, population, land cover, agriculture and forests, including the "
+"citizen science &ldquo;Global Geo-Referenced Field Photo Library (<a href="
+"\"http://www.eomf.ou.edu/photos\">http://www.eomf.ou.edu/photos</a>). The "
+"data portal (<a href=\"http://www.eomf.ou.edu/\">http://www.eomf.ou.edu</a>) "
+"provides a number of web services to users, including automated data "
+"inventory, query, visualization and distribution to the users. The web-based "
+"applications were developed from open source software and tools, including "
+"PostgresSQL, PostGIS, MapServer, OGC standard WMS/WFS/WCS, and GDAL "
+"(Geospatial data abstraction library), and OGR simple feature library. The "
+"data portal is largely written with Python, PHP, and HTML scripting "
+"languages.>"
+msgstr ""
+"该数据中心承载了一些气候的全球数据，卫星图像，人口，土地覆盖，农业和森林，包"
+"括公民的科学和放大器; ldquo;全球地理基准场的照片库（的<a href =“HTTP：// "
+"WWW .eomf.ou.edu /照片“> http://www.eomf.ou.edu/photos </A>）。数据门户（<a "
+"href=\"http://www.eomf.ou.edu/\"> http://www.eomf.ou.edu </A>）提供了一些网络"
+"服务给用户，包括自动数据库存，查询，可视化和分配给用户。基于Web的应用程序是由"
+"开源软件和工具，包括PostgreSQL的，PostGIS中，地图服务器，OGC标准的WMS / "
+"WFS / WCS和GDAL（地理空间数据抽象库），并OGR简单特征库开发。该数据门户网站主"
+"要是使用Python编写的，PHP，HTML和脚本语言。>"
+
+#: eomf/aboutus/templates/aboutus/facilities/clab.html:22
+msgid ""
+"The OU Supercomputing Center for Education and Research (OSCER) has a high-"
+"performance supercomputer with 536 compute nodes (quad core CPU), which is "
+"available to all faculty and students in OU. The OSCER also has the "
+"PetaStore facility with a capacity of multiple petabyte storage system (both "
+"tapes and disks). The PetaStore facility was established with a NSF Major "
+"Research Instrument (MRI) grant in 2010 &ldquo;(Acquisition of extensible "
+"Petascale storage for data intensive research, OCI-1039829, 10/01/2010 "
+"&ndash; 09/31/2013) and supports long-term data archive. Dr. Xiao is a Co-PI "
+"for the NSF MRI grant and has access to the PetaStore facility. The specific "
+"equipment is (a) an IBM DCS9900 disk system (rebranded DataDirect Networks "
+"S2A9900) of 1200 disk drive slots, expandable to at least 1.7 PB usable at "
+"current disk drive capacity (e.g., 2 TB SATA 7200 RPM disk drive), and (b) "
+"an IBM TS3500 tape library of 4 LTO-5 tape drives (560 MB/sec peak "
+"throughput) and 2889 tape cartridge slots (expandable to over 4 PB at LTO-5)."
+">"
+msgstr ""
+"开放大学超级计算中心的教育与研究（OSCER）与536个计算节点（四核CPU），这是提供"
+"给所有的教师和学生在OU高性能的超级计算机。该OSCER也有PetaStore设施，可容纳多"
+"个PB级的存储系统（包括磁带和磁盘）。该PetaStore工厂成立了美国国家科学基金会主"
+"要研究仪器（MRI）授予2010年和放大器; ldquo;（收购扩展存储千万亿次的数据密集型"
+"研究，OCI-1039829，10/01/2010和放大器; ndash的; 2013年9月31日），并支持长期数"
+"据归档。肖医生是一个共同主持人为美国国家科学基金会资助的MRI具有访问PetaStore"
+"设施。具体的设备是1200磁盘驱动器插槽（一）的IBM DCS9900磁盘系统（更名的"
+"DataDirect网络S2A9900），可扩展到至少1.7 PB在目前的磁盘驱动器的容量（例如，2 "
+"TB SATA 7200转硬盘驱动器），可用（二）4 LTO-5磁带驱动器（560 MB /秒的峰值吞吐"
+"量）和2889磁带盒插槽（可扩展的IBM TS3500磁带库超过4 PB在LTO-5）。>"
+
+#: eomf/aboutus/templates/aboutus/facilities/isos.html:3
+msgid "EOMF Facilities: Integrated Land Observation Sites (iLOS)"
+msgstr "EOMF设施：综合陆地观测站点（劳工组织）"
+
+#: eomf/aboutus/templates/aboutus/facilities/isos.html:7
+msgid "Integrated Land Observation Sites (iLOS)"
+msgstr "综合土地观测站点（劳工组织）"
+
+#: eomf/aboutus/templates/aboutus/facilities/isos.html:9
+msgid ""
+" The integrated field observation platforms aim to link in-situ observations "
+"with airborne and satellite observations, and collect data for development "
+"and validation of algorithms and models. Through collaboration effort "
+"between OU and USDA/ARS Grazinglands Research Laboratory at El Reno, "
+"Oklahoma, we have established one Integrated Grassland Observation System "
+"(iGOS) for native grassland and one integrated Cropland Observation system "
+"(iCOS) for winter wheat field. It currently has LI-COR instruments for CO2, "
+"H2O and CH4 fluxes, PhenoCam for phenology, and COSMOS for soil moisture, as "
+"well as Oklahoma Mesonet stations.>"
+msgstr ""
+"综合野外观测平台，旨在与空中和卫星观测链接实地观测，并收集开发的算法和模型和"
+"验证数据。通过在厄尔尼诺里诺，俄克拉荷马州和OU USDA / ARS Grazinglands研究实"
+"验室之间的合作努力，我们已经建立了一体的综合草原观测系统（政府间组织）的天然"
+"草地和一个农田综合观测系统（ICOS）冬小麦田间。它目前拥有LI-COR仪器CO2，H2O和"
+"CH4通量，PhenoCam物候和COSMOS土壤水分，以及俄克拉何马州中尺度站站。>"
+
+#: eomf/aboutus/templates/aboutus/facilities/overview.html:3
+msgid "EOMF Facilities"
+msgstr "EOMF设施"
+
+#: eomf/aboutus/templates/aboutus/facilities/overview.html:7
+#: eomf/aboutus/templates/aboutus/leftmenu.html:69
+msgid "Facilities"
+msgstr "设施"
+
+#: eomf/aboutus/templates/aboutus/facilities/overview.html:9
+msgid ""
+"The EOMF is located at the Stephenson Research and Technology Center (SRTC) "
+"in the Research Campus of the University of Oklahoma (<a href=\"http://srtc."
+"ou.edu/\">http://srtc.ou.edu</a>). The EOMF has approximately 2500 square "
+"feet office space and 2000 square feet laboratory space at the SRTC. It "
+"currently has three core laboratories and one field observation platform."
+msgstr ""
+"该EOMF位于斯蒂芬森研究与技术中心（SRTC）在俄克拉何马大学（<a href=\"http://"
+"srtc.ou.edu/\"> http://srtc.ou.edu的研究校园</A>）。该EOMF有大约2500平方英尺"
+"办公空间和2000平方英尺实验室空间的SRTC。它目前有三个核心实验室和一个野外观测"
+"平台。"
+
+#: eomf/aboutus/templates/aboutus/facilities/overview.html:11
+msgid ""
+"The SRTC hosts several research laboratories, including the <a href=\"http://"
+"www.genome.ou.edu/\">Advanced Center for Genome Technology</a>, <a href="
+"\"http://ieg.ou.edu/\">Institute for Environmental Genomics</a>, Molecular "
+"Anthropology Laboratory, Health and Human Biology Laboratory, <a href="
+"\"http://bmelab.ou.edu/\">Biomedical Engineering Laboratory</a>, Ecology "
+"Laboratory and the <a href=\"http://www.oscer.ou.edu\"> OU Supercomputing "
+"Center for Education and Research (OSCER)</a>. It has a meeting room with "
+"Tele-Conference facility and an advanced teaching and meeting room (CORE). "
+"The open-space design and diverse research groups at the SRTC provide a "
+"productive environment to pursue integration of bio-, eco- and geo- "
+"informatics."
+msgstr ""
+"该SRTC主机多个研究实验室，其中包括<a href=\"http://www.genome.ou.edu/\">中心"
+"高级基因组技术</a>，的<a href =“HTTP：//ieg.ou埃杜/“>研究所环境基因组学</A>，"
+"分子人类学实验室，健康和人类生物学实验室，<a href=\"http://bmelab.ou.edu/\">"
+"生物医学工程实验室</A>，生态学实验室和<a href=\"http://www.oscer.ou.edu\"> OU"
+"超级计算中心的教育与研究（OSCER）</A>。它有一个会议室，远程会议设施和先进的教"
+"学和会议室（CORE）。开放式的空间设计和多样化的研究小组在SRTC提供了一个高效的"
+"环境去追求一体化的生物，生态和地理信息学。"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:3
+msgid "EOMF Facilities: Remote sensing Laboratory"
+msgstr "EOMF设施：遥感实验室"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:8
+msgid "The Remote Sensing Laboratory"
+msgstr "遥感实验室"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:10
+msgid ""
+"This lab is equipped with a number of instruments for in-situ data "
+"collection in hyperspectral remote sensing, multi-spectral remote sensing, "
+"thermal remote sensing, as well as landscape and vegetation surveys."
+msgstr ""
+"该实验室配备了一批仪器进行高光谱遥感，多光谱遥感，热遥感现场数据采集，以及景"
+"观和植被调查。"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:12
+msgid "Optical remote sensing"
+msgstr "光学遥感"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:14
+msgid "One ASD FieldSpec@Handheld (325 &ndash; 1075 nm)"
+msgstr "其中的FieldSpec ASD手持@（325安培; ndash的; 1075纳米）"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:15
+msgid "One ASD FieldSpec@3 (350 &ndash; 2500 nm)"
+msgstr "其中的FieldSpec ASD 3 @（350安培; ndash的; 2500nm的）"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:16
+msgid "ASD Integrated Sphere"
+msgstr "ASD积分球"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:17
+msgid "Plant probe and leaf clip One ADC Agricultural Digital Camera"
+msgstr "植物探头和叶一夹ADC农业数码相机"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:20
+msgid "Thermal remote sensing"
+msgstr "热遥感"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:23
+msgid "One FLIR R&amp;D infrared camera (FLIR SC600)"
+msgstr "一个FLIR R＆放大器;放大器; d红外热像仪（FLIR SC600）"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:26
+msgid "Landscape surveys"
+msgstr "景观调查"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:29
+msgid "One Ford F-150 truck"
+msgstr "一个福特F-150卡车"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:30
+msgid "One GeoExplorer 2008 series high accuracy GPS receiver"
+msgstr "一个GeoExplorer 2008系列高精度GPS接收机"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:31
+msgid "12 handheld GPS receivers, 44 GPS-digital cameras"
+msgstr "12手持GPS接收机，GPS 44，数码相机"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:34
+msgid "Vegetation analyses"
+msgstr "植被分析"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:37
+msgid "One LI-COR 2000 plant canopy analyzer"
+msgstr "其中LI-COR 2000植物冠层分析仪"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:38
+msgid "One Li-COR 2200 plant canopy analyzer"
+msgstr "其中LI-COR 2200植物冠层分析仪"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:39
+msgid "One oven for drying plant and soil samples"
+msgstr "一个烘箱干燥植物和土壤样本"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:40
+msgid "One refrigerator"
+msgstr "一台冰箱"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:42
+msgid "Wild birds and biodiversity"
+msgstr "野生鸟类和生物多样性"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:44
+msgid "Two binocular for wild bird watch"
+msgstr "两个双目野生鸟类观察"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:45
+msgid "12 GPS data loggers"
+msgstr "12台GPS数据记录仪"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:48
+msgid "Mobile workstations"
+msgstr "移动工作站"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:51
+msgid "Two mobile PCs (Thinkpad)"
+msgstr "两个移动PC（Thinkpad的）"
+
+#: eomf/aboutus/templates/aboutus/facilities/rslab.html:52
+msgid "One high-end mobile workstation for the field data collection"
+msgstr "一个高端的移动工作站的现场数据采集"
+
+#: eomf/aboutus/templates/aboutus/facilities/vlab.html:3
+msgid "EOMF Facilities: Data Visualization Laboratory"
+msgstr "EOMF设施：数据可视化实验室"
+
+#: eomf/aboutus/templates/aboutus/facilities/vlab.html:8
+msgid "The Data Visualization Laboratory"
+msgstr "数据可视化实验室"
+
+#: eomf/aboutus/templates/aboutus/facilities/vlab.html:10
+msgid ""
+"This lab has a video wall display system for visualization of large-scale "
+"datasets. The Multi-Monitor Displays system is composed of one computer "
+"server and eight 30&rsquo; monitors, and is produced by the CineMassive "
+"Company "
+msgstr ""
+"该实验室拥有的大规模数据集的可视化的视频墙显示系统。多监视器显示系统是由一台"
+"计算机服务器和八种30安培; rsquo的;监视器，并且由CineMassive公司生产"
+
+#: eomf/aboutus/templates/aboutus/group_photos.html:9
+msgid "Group photos"
+msgstr "合影"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:22
+#: eomf/templates/mainmenu.html:124 eomf/templates/mainmenu.html:196
+msgid "About Us"
+msgstr "关于我们"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:33
+msgid "People"
+msgstr "人"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:38
+#: eomf/publications/templates/publications/publication_list.html:8
+msgid "Publications"
+msgstr "刊物"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:41
+#: eomf/publications/templates/publications/section_list.html:9
+msgid "Referred Journal Publications"
+msgstr "提到杂志刊物"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:42
+#: eomf/publications/templates/publications/section_list.html:10
+msgid "Books and Book Chapters"
+msgstr "书籍和书籍章节"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:43
+#: eomf/publications/templates/publications/section_list.html:11
+#: eomf/workshops/templates/workshops/workshop_extra_menu.html:23
+#: eomf/workshops/templates/workshops/workshop_presentations.html:8
+msgid "Presentations"
+msgstr "演讲"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:48
+#: eomf/aboutus/templates/aboutus/research/overview.html:8
+#: eomf/photos/models.py:108
+msgid "Research"
+msgstr "研究"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:51
+#: eomf/aboutus/templates/aboutus/leftmenu.html:61
+#: eomf/aboutus/templates/aboutus/leftmenu.html:72
+#: eomf/inventory/templates/inventory/leftmenu.html:4
+#: eomf/photos/templates/photos/leftmenu.html:26
+#: eomf/visualization/templates/visualization/leftmenu.html:26
+#: eomf/visualization/templates/visualization/overview.html:8
+#: eomf/water/templates/water/leftmenu.html:27
+#: eomf/water/templates/water/overview.html:8
+#: eomf/workshops/templates/workshops/leftmenu.html:26
+msgid "Overview"
+msgstr "概观"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:52
+#: eomf/aboutus/templates/aboutus/research/projects.html:9
+msgid "Projects"
+msgstr "工程"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:53 eomf/photos/models.py:144
+msgid "Themes"
+msgstr "主题"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:64
+#: eomf/templates/mainmenu.html:149 eomf/templates/mainmenu.html:221
+msgid "GIS Day"
+msgstr "GIS日"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:73
+msgid "Computational Lab"
+msgstr "计算实验室"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:74
+msgid "Visualization Lab"
+msgstr "可视化实验室"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:75
+msgid "Remote Sensing Lab"
+msgstr "遥感实验室"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:76
+msgid "In-situ Observation Sites"
+msgstr "原位观测站点"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:81
+msgid "Group Photos"
+msgstr "合影"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:86
+#: eomf/visualization/templates/visualization/composite.html:189
+msgid "Calendar"
+msgstr "日历"
+
+#: eomf/aboutus/templates/aboutus/leftmenu.html:91
+#: eomf/stats/templates/stats/leftmenu.html:3
+msgid "Website Usage Statistics"
+msgstr ""
+
+#: eomf/aboutus/templates/aboutus/people.html:3
+#: eomf/aboutus/templates/aboutus/people_old.html:3
+msgid "Researchers at EOMF"
+msgstr "EOMF的研究人员"
+
+#: eomf/aboutus/templates/aboutus/people.html:23
+#: eomf/aboutus/templates/aboutus/people_old.html:23
+msgid "Researchers at the University of Oklahoma"
+msgstr "俄克拉荷马大学的研究人员"
+
+#: eomf/aboutus/templates/aboutus/people.html:29
+msgid "People who are currently working at OU, EOMF"
+msgstr ""
+
+#: eomf/aboutus/templates/aboutus/people.html:36
+#: eomf/aboutus/templates/aboutus/people_old.html:37
+#: eomf/aboutus/templates/aboutus/people_old.html:75
+msgid ""
+" The following OU IT members provide information technology support and "
+"service to the EOMF. Please contact them at if you have any questions and "
+"need any help related to the computing facilities available at the EOMF(<a "
+"href=\"mailto:support@rccc.ou.edu\">support@rccc.ou.edu</a>) and OSCER(<a "
+"href=\"mailto:support@oscer.ou.edu\">support@oscer.ou.edu</a>) (including "
+"Oklahoma PetaStore and supercomputers)."
+msgstr ""
+"下面OU IT人员提供信息技术支持和服务的EOMF。请在如果您有任何问题与他们联系，并"
+"需要相关的EOMF（<a href=\"mailto:support@rccc.ou.edu\"> support@rccc.ou.edu "
+"</A>可用的计算设施的任何帮助）和OSCER（<a href=\"mailto:support@oscer.ou.edu"
+"\"> support@oscer.ou.edu </A>）（包括俄克拉荷马PetaStore和超级计算机）。"
+
+#: eomf/aboutus/templates/aboutus/people.html:73
+#: eomf/aboutus/templates/aboutus/people_old.html:115
+#: eomf/dbgettext_files/dbgettext/aboutus/group/Group_9/name.py:2
+msgid "Alumni"
+msgstr "校友"
+
+#: eomf/aboutus/templates/aboutus/people_old.html:29
+msgid "current"
+msgstr ""
+
+#: eomf/aboutus/templates/aboutus/research/overview.html:3
+msgid "EOMF Research"
+msgstr "EOMF研究"
+
+#: eomf/aboutus/templates/aboutus/research/overview.html:10
+msgid ""
+"The <abbr class=\"initialism\" title=\"Earth Observation and Modelling "
+"Facility\">EOMF</abbr> has worked in a number of research topics and here we "
+"briefly highlight land use and land cover changes, biogeochemical cycles, "
+"ecology and epidemiology of infectious diseases."
+msgstr ""
+"在<简称类=“首字母”称号=“地球观测和模拟工具”> EOMF </简称>的若干研究课题曾在这"
+"里，我们简要地突出土地利用和土地覆盖变化，生物地球化学循环，生态和流行病学传"
+"染病。"
+
+#: eomf/aboutus/templates/aboutus/research/overview.html:12
+msgid "Land use and land cover changes"
+msgstr "土地利用和土地覆盖变化"
+
+#: eomf/aboutus/templates/aboutus/research/overview.html:13
+msgid ""
+"We use satellite images from optical sensors (e.g., Landsat, MODIS, and SPOT-"
+"VEGETASTION) and synthetic aperture radar (e.g., PALSAR) to map croplands, "
+"forests, wetlands, and urban in the world."
+msgstr ""
+"我们使用卫星图像来自光学传感器（例如，陆地卫星，MODIS和SPOT-VEGETASTION）和合"
+"成孔径雷达（如PALSAR）来映射农田，森林，湿地和城市在世界上。"
+
+#: eomf/aboutus/templates/aboutus/research/overview.html:15
+msgid "Biogeochemical cycles"
+msgstr "生物地球化学循环"
+
+#: eomf/aboutus/templates/aboutus/research/overview.html:16
+msgid ""
+"We combined integrated in-situ observation systems (e.g., eddy co-variance "
+"technique for CO2, water and CH4 fluxes), satellite-based diagnostic models "
+"(e.g., Vegetation Photosynthesis Model), and process-based prognostic models "
+"to quantify and predict changes in biogeochemical cycles of terrestrial "
+"ecosystems."
+msgstr ""
+"我们结合综合原位观测系统（二氧化碳，水和甲烷通量例如，涡流协方差技术），基于"
+"卫星的诊断模型（例如，植被光合作用模型），以及基于流程的预后模型进行量化和预"
+"测的变化陆地生态系统的生物地球化学循环。"
+
+#: eomf/aboutus/templates/aboutus/research/overview.html:19
+msgid "Ecology and epidemiology of infectious diseases"
+msgstr "生态与传染病流行病学"
+
+#: eomf/aboutus/templates/aboutus/research/overview.html:20
+msgid ""
+"We applied geospatial technologies to track the dynamics of landscapes (e."
+"g., wetlands, paddy rice fields) and the local movement and seasonal "
+"migration of wild birds, and then incorporate the resultant geospatial "
+"datasets with spatial epidemiological models to predict hot-spots and hot-"
+"times of highly pathogenic avian influenza (e.g., H5N1 subtype) &nbsp;&nbsp;"
+msgstr ""
+"我们采用地理空间技术来跟踪景观（例如，湿地，水稻田）和本地移动和野生鸟类的季"
+"节性迁徙的动态，然后将所得的地理空间数据集的空间流行病学模型来预测热点和热时"
+"间高致病性禽流感（如H5N1亚型）及NBSP;＆放大器; NBSP;"
+
+#: eomf/aboutus/templates/aboutus/research/projects.html:4
+msgid "EOMF Research projects"
+msgstr "EOMF研究项目"
+
+#: eomf/aboutus/templates/aboutus/research/projects.html:11
+msgid "Funded Grants (a total of "
+msgstr "资助资助（共"
+
+#: eomf/accounts/fields.py:9
+msgid "Afghanistan"
+msgstr "阿富汗"
+
+#: eomf/accounts/fields.py:10
+msgid "Aland Islands"
+msgstr "奥兰群岛"
+
+#: eomf/accounts/fields.py:11
+msgid "Albania"
+msgstr "阿尔巴尼亚"
+
+#: eomf/accounts/fields.py:12
+msgid "Algeria"
+msgstr "阿尔及利亚"
+
+#: eomf/accounts/fields.py:13
+msgid "American Samoa"
+msgstr "美属萨摩亚"
+
+#: eomf/accounts/fields.py:14
+msgid "Andorra"
+msgstr "安道​​尔"
+
+#: eomf/accounts/fields.py:15
+msgid "Angola"
+msgstr "安哥拉"
+
+#: eomf/accounts/fields.py:16
+msgid "Anguilla"
+msgstr "安圭拉"
+
+#: eomf/accounts/fields.py:17
+msgid "Antigua and Barbuda"
+msgstr "安提瓜和巴布达"
+
+#: eomf/accounts/fields.py:18
+msgid "Argentina"
+msgstr "阿根廷"
+
+#: eomf/accounts/fields.py:19
+msgid "Armenia"
+msgstr "亚美尼亚"
+
+#: eomf/accounts/fields.py:20
+msgid "Aruba"
+msgstr "阿鲁巴"
+
+#: eomf/accounts/fields.py:21
+msgid "Australia"
+msgstr "澳大利亚"
+
+#: eomf/accounts/fields.py:22
+msgid "Austria"
+msgstr "奥地利"
+
+#: eomf/accounts/fields.py:23
+msgid "Azerbaijan"
+msgstr "阿塞拜疆"
+
+#: eomf/accounts/fields.py:24
+msgid "Bahamas"
+msgstr "巴哈马"
+
+#: eomf/accounts/fields.py:25
+msgid "Bahrain"
+msgstr "巴林"
+
+#: eomf/accounts/fields.py:26
+msgid "Bangladesh"
+msgstr "孟加拉国"
+
+#: eomf/accounts/fields.py:27
+msgid "Barbados"
+msgstr "巴巴多斯"
+
+#: eomf/accounts/fields.py:28
+msgid "Belarus"
+msgstr "白俄罗斯"
+
+#: eomf/accounts/fields.py:29
+msgid "Belgium"
+msgstr "比利时"
+
+#: eomf/accounts/fields.py:30
+msgid "Belize"
+msgstr "伯利兹"
+
+#: eomf/accounts/fields.py:31
+msgid "Benin"
+msgstr "贝宁"
+
+#: eomf/accounts/fields.py:32
+msgid "Bermuda"
+msgstr "百慕大"
+
+#: eomf/accounts/fields.py:33
+msgid "Bhutan"
+msgstr "不丹"
+
+#: eomf/accounts/fields.py:34
+msgid "Bolivia"
+msgstr "玻利维亚"
+
+#: eomf/accounts/fields.py:35
+msgid "Bosnia and Herzegovina"
+msgstr "波斯尼亚和黑塞哥维那"
+
+#: eomf/accounts/fields.py:36
+msgid "Botswana"
+msgstr "博茨瓦纳"
+
+#: eomf/accounts/fields.py:37
+msgid "Brazil"
+msgstr "巴西"
+
+#: eomf/accounts/fields.py:38
+msgid "British Virgin Islands"
+msgstr "英属维尔京群岛"
+
+#: eomf/accounts/fields.py:39
+msgid "Brunei Darussalam"
+msgstr "文莱达鲁萨兰国"
+
+#: eomf/accounts/fields.py:40
+msgid "Bulgaria"
+msgstr "保加利亚"
+
+#: eomf/accounts/fields.py:41
+msgid "Burkina Faso"
+msgstr "布基纳法索"
+
+#: eomf/accounts/fields.py:42
+msgid "Burundi"
+msgstr "布隆迪"
+
+#: eomf/accounts/fields.py:43
+msgid "Cambodia"
+msgstr "柬埔寨"
+
+#: eomf/accounts/fields.py:44
+msgid "Cameroon"
+msgstr "喀麦隆"
+
+#: eomf/accounts/fields.py:45
+msgid "Canada"
+msgstr "加拿大"
+
+#: eomf/accounts/fields.py:46
+msgid "Cape Verde"
+msgstr "佛得角"
+
+#: eomf/accounts/fields.py:47
+msgid "Cayman Islands"
+msgstr "开曼群岛"
+
+#: eomf/accounts/fields.py:48
+msgid "Central African Republic"
+msgstr "中非共和国"
+
+#: eomf/accounts/fields.py:49
+msgid "Chad"
+msgstr "乍得"
+
+#: eomf/accounts/fields.py:50
+msgid "Channel Islands"
+msgstr "海峡群岛"
+
+#: eomf/accounts/fields.py:51
+msgid "Chile"
+msgstr "智利"
+
+#: eomf/accounts/fields.py:52
+msgid "China"
+msgstr "中国"
+
+#: eomf/accounts/fields.py:53
+msgid "China - Hong Kong"
+msgstr "中国 - 香港"
+
+#: eomf/accounts/fields.py:54
+msgid "China - Macao"
+msgstr "中国 - 澳门"
+
+#: eomf/accounts/fields.py:55
+msgid "Colombia"
+msgstr "哥伦比亚"
+
+#: eomf/accounts/fields.py:56
+msgid "Comoros"
+msgstr "科摩罗"
+
+#: eomf/accounts/fields.py:57
+msgid "Congo"
+msgstr "刚果"
+
+#: eomf/accounts/fields.py:58
+msgid "Cook Islands"
+msgstr "库克群岛"
+
+#: eomf/accounts/fields.py:59
+msgid "Costa Rica"
+msgstr "哥斯达黎加"
+
+#: eomf/accounts/fields.py:60
+msgid "Cote d'Ivoire"
+msgstr "科特迪瓦"
+
+#: eomf/accounts/fields.py:61
+msgid "Croatia"
+msgstr "克罗地亚"
+
+#: eomf/accounts/fields.py:62
+msgid "Cuba"
+msgstr "古巴"
+
+#: eomf/accounts/fields.py:63
+msgid "Cyprus"
+msgstr "塞浦路斯"
+
+#: eomf/accounts/fields.py:64
+msgid "Czech Republic"
+msgstr "捷克共和国"
+
+#: eomf/accounts/fields.py:65
+msgid "Democratic People's Republic of Korea"
+msgstr "朝鲜人民民主共和国"
+
+#: eomf/accounts/fields.py:66
+msgid "Democratic Republic of the Congo"
+msgstr "刚果民主共和国"
+
+#: eomf/accounts/fields.py:67
+msgid "Denmark"
+msgstr "丹麦"
+
+#: eomf/accounts/fields.py:68
+msgid "Djibouti"
+msgstr "吉布提"
+
+#: eomf/accounts/fields.py:69
+msgid "Dominica"
+msgstr "多米尼加"
+
+#: eomf/accounts/fields.py:70
+msgid "Dominican Republic"
+msgstr "多明尼加共和国"
+
+#: eomf/accounts/fields.py:71
+msgid "Ecuador"
+msgstr "厄瓜多尔"
+
+#: eomf/accounts/fields.py:72
+msgid "Egypt"
+msgstr "埃及"
+
+#: eomf/accounts/fields.py:73
+msgid "El Salvador"
+msgstr "萨尔瓦多"
+
+#: eomf/accounts/fields.py:74
+msgid "Equatorial Guinea"
+msgstr "赤道几内亚"
+
+#: eomf/accounts/fields.py:75
+msgid "Eritrea"
+msgstr "厄立特里亚"
+
+#: eomf/accounts/fields.py:76
+msgid "Estonia"
+msgstr "爱沙尼亚"
+
+#: eomf/accounts/fields.py:77
+msgid "Ethiopia"
+msgstr "埃塞俄比亚"
+
+#: eomf/accounts/fields.py:78
+msgid "Faeroe Islands"
+msgstr "法罗群岛"
+
+#: eomf/accounts/fields.py:79
+msgid "Falkland Islands (Malvinas)"
+msgstr "福克兰群岛（马尔维纳斯群岛）"
+
+#: eomf/accounts/fields.py:80
+msgid "Fiji"
+msgstr "斐"
+
+#: eomf/accounts/fields.py:81
+msgid "Finland"
+msgstr "芬兰"
+
+#: eomf/accounts/fields.py:82
+msgid "France"
+msgstr "法国"
+
+#: eomf/accounts/fields.py:83
+msgid "French Guiana"
+msgstr "法属圭亚那"
+
+#: eomf/accounts/fields.py:84
+msgid "French Polynesia"
+msgstr "法属波利尼西亚"
+
+#: eomf/accounts/fields.py:85
+msgid "Gabon"
+msgstr "加蓬"
+
+#: eomf/accounts/fields.py:86
+msgid "Gambia"
+msgstr "冈比亚"
+
+#: eomf/accounts/fields.py:87
+msgid "Georgia"
+msgstr "格鲁吉亚"
+
+#: eomf/accounts/fields.py:88
+msgid "Germany"
+msgstr "德国"
+
+#: eomf/accounts/fields.py:89
+msgid "Ghana"
+msgstr "加纳"
+
+#: eomf/accounts/fields.py:90
+msgid "Gibraltar"
+msgstr "直布罗陀"
+
+#: eomf/accounts/fields.py:91
+msgid "Greece"
+msgstr "希腊"
+
+#: eomf/accounts/fields.py:92
+msgid "Greenland"
+msgstr "格陵兰"
+
+#: eomf/accounts/fields.py:93
+msgid "Grenada"
+msgstr "格林纳达"
+
+#: eomf/accounts/fields.py:94
+msgid "Guadeloupe"
+msgstr "瓜德罗普岛"
+
+#: eomf/accounts/fields.py:95
+msgid "Guam"
+msgstr "关岛"
+
+#: eomf/accounts/fields.py:96
+msgid "Guatemala"
+msgstr "危地马拉"
+
+#: eomf/accounts/fields.py:97
+msgid "Guernsey"
+msgstr "根西岛"
+
+#: eomf/accounts/fields.py:98
+msgid "Guinea"
+msgstr "几内亚"
+
+#: eomf/accounts/fields.py:99
+msgid "Guinea-Bissau"
+msgstr "几内亚比绍"
+
+#: eomf/accounts/fields.py:100
+msgid "Guyana"
+msgstr "圭亚那"
+
+#: eomf/accounts/fields.py:101
+msgid "Haiti"
+msgstr "海地"
+
+#: eomf/accounts/fields.py:102
+msgid "Holy See (Vatican City)"
+msgstr "教廷（梵蒂冈）"
+
+#: eomf/accounts/fields.py:103
+msgid "Honduras"
+msgstr "洪都拉斯"
+
+#: eomf/accounts/fields.py:104
+msgid "Hungary"
+msgstr "匈牙利"
+
+#: eomf/accounts/fields.py:105
+msgid "Iceland"
+msgstr "冰岛"
+
+#: eomf/accounts/fields.py:106
+msgid "India"
+msgstr "印度"
+
+#: eomf/accounts/fields.py:107
+msgid "Indonesia"
+msgstr "印尼"
+
+#: eomf/accounts/fields.py:108
+msgid "Iran"
+msgstr "伊朗"
+
+#: eomf/accounts/fields.py:109
+msgid "Iraq"
+msgstr "伊拉克"
+
+#: eomf/accounts/fields.py:110
+msgid "Ireland"
+msgstr "爱尔兰"
+
+#: eomf/accounts/fields.py:111
+msgid "Isle of Man"
+msgstr "马恩岛"
+
+#: eomf/accounts/fields.py:112
+msgid "Israel"
+msgstr "以色列"
+
+#: eomf/accounts/fields.py:113
+msgid "Italy"
+msgstr "意大利"
+
+#: eomf/accounts/fields.py:114
+msgid "Jamaica"
+msgstr "牙买加"
+
+#: eomf/accounts/fields.py:115
+msgid "Japan"
+msgstr "日本"
+
+#: eomf/accounts/fields.py:116
+msgid "Jersey"
+msgstr "泽西岛"
+
+#: eomf/accounts/fields.py:117
+msgid "Jordan"
+msgstr "约旦"
+
+#: eomf/accounts/fields.py:118
+msgid "Kazakhstan"
+msgstr "哈萨克斯坦"
+
+#: eomf/accounts/fields.py:119
+msgid "Kenya"
+msgstr "肯尼亚"
+
+#: eomf/accounts/fields.py:120
+msgid "Kiribati"
+msgstr "基里巴斯"
+
+#: eomf/accounts/fields.py:121
+msgid "Kuwait"
+msgstr "科威特"
+
+#: eomf/accounts/fields.py:122
+msgid "Kyrgyzstan"
+msgstr "吉"
+
+#: eomf/accounts/fields.py:123
+msgid "Lao People's Democratic Republic"
+msgstr "老挝人民民主共和国"
+
+#: eomf/accounts/fields.py:124
+msgid "Latvia"
+msgstr "拉脱维亚"
+
+#: eomf/accounts/fields.py:125
+msgid "Lebanon"
+msgstr "黎巴嫩"
+
+#: eomf/accounts/fields.py:126
+msgid "Lesotho"
+msgstr "莱索托"
+
+#: eomf/accounts/fields.py:127
+msgid "Liberia"
+msgstr "利比里亚"
+
+#: eomf/accounts/fields.py:128
+msgid "Libyan Arab Jamahiriya"
+msgstr "阿拉伯利比亚民众国"
+
+#: eomf/accounts/fields.py:129
+msgid "Liechtenstein"
+msgstr "列支敦士登"
+
+#: eomf/accounts/fields.py:130
+msgid "Lithuania"
+msgstr "立陶宛"
+
+#: eomf/accounts/fields.py:131
+msgid "Luxembourg"
+msgstr "卢森堡"
+
+#: eomf/accounts/fields.py:132
+msgid "Macedonia"
+msgstr "马其顿"
+
+#: eomf/accounts/fields.py:133
+msgid "Madagascar"
+msgstr "马达加斯加"
+
+#: eomf/accounts/fields.py:134
+msgid "Malawi"
+msgstr "马拉维"
+
+#: eomf/accounts/fields.py:135
+msgid "Malaysia"
+msgstr "马来西亚"
+
+#: eomf/accounts/fields.py:136
+msgid "Maldives"
+msgstr "马尔代夫"
+
+#: eomf/accounts/fields.py:137
+msgid "Mali"
+msgstr "马里"
+
+#: eomf/accounts/fields.py:138
+msgid "Malta"
+msgstr "马耳他"
+
+#: eomf/accounts/fields.py:139
+msgid "Marshall Islands"
+msgstr "马绍尔群岛"
+
+#: eomf/accounts/fields.py:140
+msgid "Martinique"
+msgstr "马提尼克"
+
+#: eomf/accounts/fields.py:141
+msgid "Mauritania"
+msgstr "毛里塔尼亚"
+
+#: eomf/accounts/fields.py:142
+msgid "Mauritius"
+msgstr "毛里求斯"
+
+#: eomf/accounts/fields.py:143
+msgid "Mayotte"
+msgstr "马约特"
+
+#: eomf/accounts/fields.py:144
+msgid "Mexico"
+msgstr "墨西哥"
+
+#: eomf/accounts/fields.py:145
+msgid "Micronesia, Federated States of"
+msgstr "密克罗尼西亚联邦"
+
+#: eomf/accounts/fields.py:146
+msgid "Monaco"
+msgstr "摩纳哥"
+
+#: eomf/accounts/fields.py:147
+msgid "Mongolia"
+msgstr "蒙古"
+
+#: eomf/accounts/fields.py:148
+msgid "Montenegro"
+msgstr "黑山共和国"
+
+#: eomf/accounts/fields.py:149
+msgid "Montserrat"
+msgstr "蒙特塞拉特"
+
+#: eomf/accounts/fields.py:150
+msgid "Morocco"
+msgstr "摩洛哥"
+
+#: eomf/accounts/fields.py:151
+msgid "Mozambique"
+msgstr "莫桑比克"
+
+#: eomf/accounts/fields.py:152
+msgid "Myanmar"
+msgstr "缅甸"
+
+#: eomf/accounts/fields.py:153
+msgid "Namibia"
+msgstr "纳米比亚"
+
+#: eomf/accounts/fields.py:154
+msgid "Nauru"
+msgstr "瑙鲁"
+
+#: eomf/accounts/fields.py:155
+msgid "Nepal"
+msgstr "尼泊尔"
+
+#: eomf/accounts/fields.py:156
+msgid "Netherlands"
+msgstr "荷兰"
+
+#: eomf/accounts/fields.py:157
+msgid "Netherlands Antilles"
+msgstr "荷属安的列斯"
+
+#: eomf/accounts/fields.py:158
+msgid "New Caledonia"
+msgstr "新喀里多尼亚"
+
+#: eomf/accounts/fields.py:159
+msgid "New Zealand"
+msgstr "新西兰"
+
+#: eomf/accounts/fields.py:160
+msgid "Nicaragua"
+msgstr "尼加拉瓜"
+
+#: eomf/accounts/fields.py:161
+msgid "Niger"
+msgstr "尼日尔"
+
+#: eomf/accounts/fields.py:162
+msgid "Nigeria"
+msgstr "尼日利亚"
+
+#: eomf/accounts/fields.py:163
+msgid "Niue"
+msgstr "纽埃"
+
+#: eomf/accounts/fields.py:164
+msgid "Norfolk Island"
+msgstr "诺福克岛"
+
+#: eomf/accounts/fields.py:165
+msgid "Northern Mariana Islands"
+msgstr "北马里亚纳群岛"
+
+#: eomf/accounts/fields.py:166
+msgid "Norway"
+msgstr "挪威"
+
+#: eomf/accounts/fields.py:167
+msgid "Occupied Palestinian Territory"
+msgstr "巴勒斯坦被占领土"
+
+#: eomf/accounts/fields.py:168
+msgid "Oman"
+msgstr "阿曼"
+
+#: eomf/accounts/fields.py:169
+msgid "Pakistan"
+msgstr "巴基斯坦"
+
+#: eomf/accounts/fields.py:170
+msgid "Palau"
+msgstr "帕劳"
+
+#: eomf/accounts/fields.py:171
+msgid "Panama"
+msgstr "巴拿马"
+
+#: eomf/accounts/fields.py:172
+msgid "Papua New Guinea"
+msgstr "巴布亚新几内亚"
+
+#: eomf/accounts/fields.py:173
+msgid "Paraguay"
+msgstr "巴拉圭"
+
+#: eomf/accounts/fields.py:174
+msgid "Peru"
+msgstr "秘鲁"
+
+#: eomf/accounts/fields.py:175
+msgid "Philippines"
+msgstr "菲律宾"
+
+#: eomf/accounts/fields.py:176
+msgid "Pitcairn"
+msgstr "皮特凯恩"
+
+#: eomf/accounts/fields.py:177
+msgid "Poland"
+msgstr "波兰"
+
+#: eomf/accounts/fields.py:178
+msgid "Portugal"
+msgstr "葡萄牙"
+
+#: eomf/accounts/fields.py:179
+msgid "Puerto Rico"
+msgstr "波多黎各"
+
+#: eomf/accounts/fields.py:180
+msgid "Qatar"
+msgstr "卡塔尔"
+
+#: eomf/accounts/fields.py:181
+msgid "Republic of Korea"
+msgstr "韩国"
+
+#: eomf/accounts/fields.py:182
+msgid "Republic of Moldova"
+msgstr "摩尔多瓦共和国"
+
+#: eomf/accounts/fields.py:183
+msgid "Reunion"
+msgstr "团圆"
+
+#: eomf/accounts/fields.py:184
+msgid "Romania"
+msgstr "罗马尼亚"
+
+#: eomf/accounts/fields.py:185
+msgid "Russian Federation"
+msgstr "俄罗斯联邦"
+
+#: eomf/accounts/fields.py:186
+msgid "Rwanda"
+msgstr "卢旺达"
+
+#: eomf/accounts/fields.py:187
+msgid "Saint-Barthelemy"
+msgstr "圣巴泰勒米"
+
+#: eomf/accounts/fields.py:188
+msgid "Saint Helena"
+msgstr "圣赫勒拿"
+
+#: eomf/accounts/fields.py:189
+msgid "Saint Kitts and Nevis"
+msgstr "圣基茨和尼维斯"
+
+#: eomf/accounts/fields.py:190
+msgid "Saint Lucia"
+msgstr "圣卢西亚"
+
+#: eomf/accounts/fields.py:191
+msgid "Saint-Martin (French part)"
+msgstr "圣马丁（法国部分）"
+
+#: eomf/accounts/fields.py:192
+msgid "Saint Pierre and Miquelon"
+msgstr "圣皮埃尔和密克隆"
+
+#: eomf/accounts/fields.py:193
+msgid "Saint Vincent and the Grenadines"
+msgstr "圣文森特和格林纳丁斯"
+
+#: eomf/accounts/fields.py:194
+msgid "Samoa"
+msgstr "萨摩亚"
+
+#: eomf/accounts/fields.py:195
+msgid "San Marino"
+msgstr "圣马力诺"
+
+#: eomf/accounts/fields.py:196
+msgid "Sao Tome and Principe"
+msgstr "圣多美和普林西比"
+
+#: eomf/accounts/fields.py:197
+msgid "Saudi Arabia"
+msgstr "沙特阿拉伯"
+
+#: eomf/accounts/fields.py:198
+msgid "Senegal"
+msgstr "塞内加尔"
+
+#: eomf/accounts/fields.py:199
+msgid "Serbia"
+msgstr "塞尔维亚"
+
+#: eomf/accounts/fields.py:200
+msgid "Seychelles"
+msgstr "塞舌尔"
+
+#: eomf/accounts/fields.py:201
+msgid "Sierra Leone"
+msgstr "塞拉利昂"
+
+#: eomf/accounts/fields.py:202
+msgid "Singapore"
+msgstr "新加坡"
+
+#: eomf/accounts/fields.py:203
+msgid "Slovakia"
+msgstr "斯洛伐克"
+
+#: eomf/accounts/fields.py:204
+msgid "Slovenia"
+msgstr "斯洛文尼亚"
+
+#: eomf/accounts/fields.py:205
+msgid "Solomon Islands"
+msgstr "所罗门群岛"
+
+#: eomf/accounts/fields.py:206
+msgid "Somalia"
+msgstr "索马里"
+
+#: eomf/accounts/fields.py:207
+msgid "South Africa"
+msgstr "南非"
+
+#: eomf/accounts/fields.py:208
+msgid "Spain"
+msgstr "西班牙"
+
+#: eomf/accounts/fields.py:209
+msgid "Sri Lanka"
+msgstr "斯里兰卡"
+
+#: eomf/accounts/fields.py:210
+msgid "Sudan"
+msgstr "苏丹"
+
+#: eomf/accounts/fields.py:211
+msgid "Suriname"
+msgstr "苏里南"
+
+#: eomf/accounts/fields.py:212
+msgid "Svalbard and Jan Mayen Islands"
+msgstr "斯瓦尔巴群岛和扬马延岛"
+
+#: eomf/accounts/fields.py:213
+msgid "Swaziland"
+msgstr "斯威士兰"
+
+#: eomf/accounts/fields.py:214
+msgid "Sweden"
+msgstr "瑞典"
+
+#: eomf/accounts/fields.py:215
+msgid "Switzerland"
+msgstr "瑞士"
+
+#: eomf/accounts/fields.py:216
+msgid "Syrian Arab Republic"
+msgstr "阿拉伯叙利亚共和国"
+
+#: eomf/accounts/fields.py:217
+msgid "Tajikistan"
+msgstr "塔吉克斯坦"
+
+#: eomf/accounts/fields.py:218
+msgid "Thailand"
+msgstr "泰国"
+
+#: eomf/accounts/fields.py:219
+msgid "Timor-Leste"
+msgstr "东帝汶"
+
+#: eomf/accounts/fields.py:220
+msgid "Togo"
+msgstr "多哥"
+
+#: eomf/accounts/fields.py:221
+msgid "Tokelau"
+msgstr "托克劳"
+
+#: eomf/accounts/fields.py:222
+msgid "Tonga"
+msgstr "汤加"
+
+#: eomf/accounts/fields.py:223
+msgid "Trinidad and Tobago"
+msgstr "特立尼达和多巴哥"
+
+#: eomf/accounts/fields.py:224
+msgid "Tunisia"
+msgstr "突尼斯"
+
+#: eomf/accounts/fields.py:225
+msgid "Turkey"
+msgstr "火鸡"
+
+#: eomf/accounts/fields.py:226
+msgid "Turkmenistan"
+msgstr "土库曼斯坦"
+
+#: eomf/accounts/fields.py:227
+msgid "Turks and Caicos Islands"
+msgstr "特克斯和凯科斯群岛"
+
+#: eomf/accounts/fields.py:228
+msgid "Tuvalu"
+msgstr "图瓦卢"
+
+#: eomf/accounts/fields.py:229
+msgid "Uganda"
+msgstr "乌干达"
+
+#: eomf/accounts/fields.py:230
+msgid "Ukraine"
+msgstr "乌克兰"
+
+#: eomf/accounts/fields.py:231
+msgid "United Arab Emirates"
+msgstr "阿拉伯联合酋长国"
+
+#: eomf/accounts/fields.py:232
+msgid "United Kingdom"
+msgstr "英国"
+
+#: eomf/accounts/fields.py:233
+msgid "United Republic of Tanzania"
+msgstr "坦桑尼亚联合共和国"
+
+#: eomf/accounts/fields.py:234
+msgid "United States of America"
+msgstr "美国"
+
+#: eomf/accounts/fields.py:235
+msgid "United States Virgin Islands"
+msgstr "美属维尔京群岛"
+
+#: eomf/accounts/fields.py:236
+msgid "Uruguay"
+msgstr "乌拉圭"
+
+#: eomf/accounts/fields.py:237
+msgid "Uzbekistan"
+msgstr "乌兹别克斯坦"
+
+#: eomf/accounts/fields.py:238
+msgid "Vanuatu"
+msgstr "瓦努阿图"
+
+#: eomf/accounts/fields.py:239
+msgid "Venezuela (Bolivarian Republic of)"
+msgstr "委内瑞拉（玻利瓦尔共和国）"
+
+#: eomf/accounts/fields.py:240
+msgid "Viet Nam"
+msgstr "越南"
+
+#: eomf/accounts/fields.py:241
+msgid "Wallis and Futuna Islands"
+msgstr "瓦利斯和富图纳群岛"
+
+#: eomf/accounts/fields.py:242
+msgid "Western Sahara"
+msgstr "西撒哈拉"
+
+#: eomf/accounts/fields.py:243
+msgid "Yemen"
+msgstr "也门"
+
+#: eomf/accounts/fields.py:244
+msgid "Zambia"
+msgstr "赞比亚"
+
+#: eomf/accounts/fields.py:245
+msgid "Zimbabwe"
+msgstr "津巴布韦"
+
+#: eomf/accounts/forms.py:76 eomf/accounts/templates/accounts/register.html:22
+msgid "Username"
+msgstr "用户名"
+
+#: eomf/accounts/forms.py:77
+msgid "This value must contain only letters, numbers and underscores."
+msgstr "此值只能包含字母，数字和下划线。"
+
+#: eomf/accounts/forms.py:120
+msgid "A user with that username already exists."
+msgstr "使用该用户名的用户已存在。"
+
+#: eomf/accounts/forms.py:129
+msgid ""
+"This email address is already in use. Please supply a different email "
+"address."
+msgstr "此电子邮件地址已被使用。请提供不同的电子邮件地址。"
+
+#: eomf/accounts/forms.py:142
+msgid "The two password fields didn't match."
+msgstr "两个密码字段不匹配。"
+
+#: eomf/accounts/models.py:10 eomf/accounts/templates/accounts/register.html:45
+#: eomf/photos/models.py:69 eomf/photos/models.py:100
+msgid "Country"
+msgstr "国家"
+
+#: eomf/accounts/models.py:11 eomf/accounts/templates/accounts/register.html:48
+msgid "Affiliation"
+msgstr "联系"
+
+#: eomf/accounts/models.py:12
+msgid "Telephone"
+msgstr "电话"
+
+#: eomf/accounts/models.py:13
+msgid "Address1"
+msgstr "地址1"
+
+#: eomf/accounts/models.py:14
+msgid "Address2"
+msgstr "地址2"
+
+#: eomf/accounts/models.py:15
+msgid "City"
+msgstr "城市"
+
+#: eomf/accounts/models.py:16
+#: eomf/visualization/templates/visualization/multiple.html:53
+msgid "State"
+msgstr "状态"
+
+#: eomf/accounts/models.py:17
+msgid "Postal code"
+msgstr "邮政编码"
+
+#: eomf/accounts/models.py:18 eomf/accounts/templates/accounts/register.html:63
+msgid "URL"
+msgstr "网址"
+
+#: eomf/accounts/models.py:19
+msgid "Attending GIS Day"
+msgstr "主治GIS日"
+
+#: eomf/accounts/templates/accounts/edit.html:4
+msgid "EOMF: Edit account"
+msgstr "EOMF：编辑帐户"
+
+#: eomf/accounts/templates/accounts/edit.html:11
+msgid "Edit Account"
+msgstr "编辑帐户"
+
+#: eomf/accounts/templates/accounts/leftmenu.html:22
+#: eomf/templates/mainmenu.html:167 eomf/templates/mainmenu.html:239
+msgid "Account"
+msgstr "帐户"
+
+#: eomf/accounts/templates/accounts/leftmenu.html:28
+msgid "View Profile"
+msgstr "查看资料"
+
+#: eomf/accounts/templates/accounts/leftmenu.html:33
+msgid "Edit Profile"
+msgstr "编辑个人资料"
+
+#: eomf/accounts/templates/accounts/leftmenu.html:38
+msgid "Change Password"
+msgstr "更改密码"
+
+#: eomf/accounts/templates/accounts/leftmenu.html:43
+#: eomf/photos/templates/photos/leftmenu.html:61
+msgid "Log out"
+msgstr "注销"
+
+#: eomf/accounts/templates/accounts/leftmenu.html:49
+#: eomf/accounts/templates/accounts/login.html:6
+#: eomf/accounts/templates/accounts/password_reset_complete.html:14
+#: eomf/photos/templates/photos/leftmenu.html:69
+msgid "Log in"
+msgstr "登录"
+
+#: eomf/accounts/templates/accounts/leftmenu.html:54
+#: eomf/photos/templates/photos/leftmenu.html:74
+msgid "Register"
+msgstr "注册"
+
+#: eomf/accounts/templates/accounts/leftmenu.html:59
+msgid "Reset Password"
+msgstr "重设密码"
+
+#: eomf/accounts/templates/accounts/leftmenu.html:66
+#: eomf/photos/templates/photos/leftmenu.html:82
+msgid "Admin Site"
+msgstr "网站管理员"
+
+#: eomf/accounts/templates/accounts/login.html:3
+msgid "EOMF: Log in"
+msgstr "EOMF：登录"
+
+#: eomf/accounts/templates/accounts/logout.html:5
+msgid "Logged out"
+msgstr "注销"
+
+#: eomf/accounts/templates/accounts/password_change_done.html:4
+#: eomf/accounts/templates/accounts/password_change_done.html:8
+msgid "Password change successful"
+msgstr "密码修改成功"
+
+#: eomf/accounts/templates/accounts/password_change_done.html:10
+msgid "Your password was changed."
+msgstr "您的密码已被更改。"
+
+#: eomf/accounts/templates/accounts/password_change_form.html:4
+#: eomf/accounts/templates/accounts/password_change_form.html:8
+msgid "Password change"
+msgstr "密码更改"
+
+#: eomf/accounts/templates/accounts/password_change_form.html:10
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+"请输入您的旧密码，为了安全起见，然后输入两次新密码，以便我们确认您的输入正确"
+"无误。"
+
+#: eomf/accounts/templates/accounts/password_change_form.html:15
+msgid "Old password:"
+msgstr "旧密码："
+
+#: eomf/accounts/templates/accounts/password_change_form.html:17
+#: eomf/accounts/templates/accounts/password_reset_confirm.html:19
+msgid "New password:"
+msgstr "新密码："
+
+#: eomf/accounts/templates/accounts/password_change_form.html:19
+#: eomf/accounts/templates/accounts/password_reset_confirm.html:21
+msgid "Confirm password:"
+msgstr "确认密码："
+
+#: eomf/accounts/templates/accounts/password_change_form.html:21
+#: eomf/accounts/templates/accounts/password_reset_confirm.html:22
+msgid "Change my password"
+msgstr "更改我的密码"
+
+#: eomf/accounts/templates/accounts/password_reset_complete.html:4
+#: eomf/accounts/templates/accounts/password_reset_confirm.html:4
+#: eomf/accounts/templates/accounts/password_reset_done.html:4
+#: eomf/accounts/templates/accounts/password_reset_form.html:4
+#: eomf/templates/mainmenu.html:118 eomf/templates/mainmenu.html:190
+msgid "Home"
+msgstr "主页"
+
+#: eomf/accounts/templates/accounts/password_reset_complete.html:4
+#: eomf/accounts/templates/accounts/password_reset_confirm.html:6
+#: eomf/accounts/templates/accounts/password_reset_done.html:4
+#: eomf/accounts/templates/accounts/password_reset_form.html:4
+#: eomf/accounts/templates/accounts/password_reset_form.html:6
+#: eomf/accounts/templates/accounts/password_reset_form.html:10
+msgid "Password reset"
+msgstr "密码重置"
+
+#: eomf/accounts/templates/accounts/password_reset_complete.html:6
+#: eomf/accounts/templates/accounts/password_reset_complete.html:10
+msgid "Password reset complete"
+msgstr "密码重置完成"
+
+#: eomf/accounts/templates/accounts/password_reset_complete.html:12
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr "您的密码已设置，您可以继续前进并登录。"
+
+#: eomf/accounts/templates/accounts/password_reset_confirm.html:4
+msgid "Password reset confirmation"
+msgstr "密码重置确认"
+
+#: eomf/accounts/templates/accounts/password_reset_confirm.html:12
+msgid "Enter new password"
+msgstr "输入新密码"
+
+#: eomf/accounts/templates/accounts/password_reset_confirm.html:14
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr "请输入两次新密码，以便我们确认您的输入正确无误。"
+
+#: eomf/accounts/templates/accounts/password_reset_confirm.html:27
+msgid "Password reset unsuccessful"
+msgstr "密码重置失败"
+
+#: eomf/accounts/templates/accounts/password_reset_confirm.html:29
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr "密码重置链接无效，可能是因为它已被使用。请申请一个新的密码重置。"
+
+#: eomf/accounts/templates/accounts/password_reset_done.html:6
+#: eomf/accounts/templates/accounts/password_reset_done.html:10
+msgid "Password reset successful"
+msgstr "密码重置成功"
+
+#: eomf/accounts/templates/accounts/password_reset_done.html:12
+msgid ""
+"We've e-mailed you instructions for setting your password to the e-mail "
+"address you submitted. You should be receiving it shortly."
+msgstr ""
+"我们已经通过电子邮件发送您说明您的密码设置为您所提交的电子邮件地址。你应该很"
+"快接受它。"
+
+#: eomf/accounts/templates/accounts/password_reset_email.html:2
+msgid "You're receiving this e-mail because you requested a password reset"
+msgstr "你收到这封电子邮件，因为你要求密码重置"
+
+#: eomf/accounts/templates/accounts/password_reset_email.html:3
+#, python-format
+msgid "for your user account at %(site_name)s"
+msgstr "您的账户 %(site_name)s"
+
+#: eomf/accounts/templates/accounts/password_reset_email.html:5
+msgid "Please go to the following page and choose a new password:"
+msgstr "请到访问一下页面，并选择一个新的密码："
+
+#: eomf/accounts/templates/accounts/password_reset_email.html:9
+msgid "Your username, in case you've forgotten: "
+msgstr "您的用户名，如果您忘记了："
+
+#: eomf/accounts/templates/accounts/password_reset_email.html:11
+msgid "Thanks for using our site!"
+msgstr "感谢您使用我们的网站！"
+
+#: eomf/accounts/templates/accounts/password_reset_email.html:13
+msgid "The EOMF team"
+msgstr "EOMF团队"
+
+#: eomf/accounts/templates/accounts/password_reset_form.html:12
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and well e-mail "
+"instructions for setting a new one."
+msgstr ""
+"忘记密码？在下面输入您的电子邮件地址，您将会受到一封电子邮件帮助您修改密码。"
+
+#: eomf/accounts/templates/accounts/password_reset_form.html:17
+msgid "E-mail address:"
+msgstr "电子邮件地址："
+
+#: eomf/accounts/templates/accounts/password_reset_form.html:18
+msgid "Reset my password"
+msgstr "重设密码"
+
+#: eomf/accounts/templates/accounts/register.html:4
+#: eomf/accounts/templates/accounts/register.html:15
+msgid "Create an account"
+msgstr "创建一个帐户"
+
+#: eomf/accounts/templates/accounts/register.html:19
+#, fuzzy
+#| msgid "Required User Information"
+msgid "Required Information"
+msgstr "需要的用户信息"
+
+#: eomf/accounts/templates/accounts/register.html:25
+msgid "Email address"
+msgstr "电子邮件地址"
+
+#: eomf/accounts/templates/accounts/register.html:28
+msgid "Password"
+msgstr "密码"
+
+#: eomf/accounts/templates/accounts/register.html:31
+msgid "Password (again)"
+msgstr "请再次输入密码"
+
+#: eomf/accounts/templates/accounts/register.html:36
+msgid "Extended Profile"
+msgstr "扩展简介"
+
+#: eomf/accounts/templates/accounts/register.html:39
+msgid "First name"
+msgstr "名字"
+
+#: eomf/accounts/templates/accounts/register.html:42
+msgid "Last name"
+msgstr "姓"
+
+#: eomf/accounts/templates/accounts/register.html:51
+#, fuzzy
+#| msgid "Address1"
+msgid "Address 1"
+msgstr "地址1"
+
+#: eomf/accounts/templates/accounts/register.html:54
+#, fuzzy
+#| msgid "Address2"
+msgid "Address 2"
+msgstr "地址2"
+
+#: eomf/accounts/templates/accounts/register.html:57
+msgid "Phone Number"
+msgstr ""
+
+#: eomf/accounts/templates/accounts/register.html:60
+#, fuzzy
+#| msgid "Postal code"
+msgid "Postal Code"
+msgstr "邮政编码"
+
+#: eomf/accounts/templates/accounts/register.html:69
+msgid "Create Account"
+msgstr "创建账户"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/group/Group_1/name.py:2
+msgid "Professors"
+msgstr "教授"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/group/Group_10/name.py:2
+msgid "Information Technology Support Group"
+msgstr "信息技术支持小组"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/group/Group_4/name.py:2
+msgid "Post-doctoral Researchers"
+msgstr "博士后研究人员"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/group/Group_5/name.py:2
+msgid "Graduate  and Undergraduate students"
+msgstr "研究生和本科生"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/group/Group_6/name.py:2
+msgid "Research scientists, post-doctoral research associates, and staff"
+msgstr "研究科学家，博士后研究助理，工作人员"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/group/Group_8/name.py:2
+msgid "Visiting Scholars"
+msgstr "访问学者"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_1/title.py:2
+msgid "Professor"
+msgstr "教授"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_10/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_17/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_18/title.py:2
+msgid "Associate Professor"
+msgstr "副教授"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_11/title.py:2
+msgid "Ph.D student "
+msgstr "博士生"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_12/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_13/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_15/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_38/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_44/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_51/title.py:2
+msgid "Ph.D student"
+msgstr "博士生"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_14/title.py:2
+msgid "Info Tech Specialist "
+msgstr "信息技术专家"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_16/title.py:2
+msgid "M.S student"
+msgstr "研究生"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_19/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_20/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_23/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_24/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_36/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_37/title.py:2
+msgid "PostDoc Research Associate "
+msgstr "博士后研究助理"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_2/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_22/title.py:2
+msgid "Research Scientist"
+msgstr "科学家研究"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_21/title.py:2
+msgid "Graduate Student"
+msgstr "研究生"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_25/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_30/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_31/title.py:2
+msgid "Visiting Scholar"
+msgstr "访问学者"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_26/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_8/title.py:2
+msgid "PostDoc Research Associate"
+msgstr "博士后研究助理"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_27/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_7/title.py:2
+msgid "Master student"
+msgstr "硕士生"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_28/title.py:2
+msgid "Undergraduate Student"
+msgstr "本科生"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_29/title.py:2
+msgid "Visiting Scholar "
+msgstr "访问学者"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_3/title.py:2
+msgid "Ph.D.in Resources science"
+msgstr "资源科学博士"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_32/title.py:2
+msgid "Research Campus Tech. Developer"
+msgstr "研究园科技开发人员"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_33/title.py:2
+msgid "Director of Research Computing Services"
+msgstr "研究计算服务总监"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_34/title.py:2
+msgid "Director of Data Center Operations"
+msgstr "数据中心运营总监"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_35/title.py:2
+msgid "Info Tech Specialist"
+msgstr "信息技术专家"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_4/title.py:2
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_43/title.py:2
+msgid "Research Assistant Professor"
+msgstr "研究助理教授"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_45/title.py:2
+msgid "Research Informatics"
+msgstr "信息学研究"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_46/title.py:2
+msgid "B.S. Student"
+msgstr "本科生"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_47/title.py:2
+msgid "M. S. Student"
+msgstr "硕士生"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_49/title.py:2
+msgid "Ph.D. Student"
+msgstr "博士生"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_5/title.py:2
+msgid "Graduate research assistant"
+msgstr "研究生研究助理"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_50/title.py:2
+msgid "Ph. D student"
+msgstr "博士生"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_6/title.py:2
+msgid "Assistant Professor"
+msgstr "助理教授"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/person/Person_9/title.py:2
+msgid "M.S student "
+msgstr "研究生"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_1/content.py:2
+msgid ""
+"In an effort to support citizen science and community remote sensing, EOM "
+"developed and released the first iPhone App \"Field Photo\", it is freely "
+"available to the public. See http://www.eomf.ou.edu/photos/ for more "
+"information and download it from Apple Store https://itunes.apple.com/us/app/"
+"field-photo/id717945301. The Field Photo App allows students, researchers "
+"and citizens to take photos during field trips, geotag them and add metadata "
+"and field notes to the photos. The field photos are then uploaded to the "
+"Global Geo-Referenced Field Photo Library at the University of Oklahoma, "
+"where people share, visualize and archive field photos that document land "
+"use and land cover change, flood, drought, fire, and so on. These photos and "
+"associated thematic databases are also used to support satellite image "
+"analyses for monitoring the dynamics of Planet Earth, where now more than "
+"seven billions of people live. The integration of mobile phone, Geo-"
+"Referenced Field Photo Library and satellite images allows us to socialize "
+"the pixels in the images."
+msgstr ""
+"在努力支持公民科学和社区遥感，EOM开发并发布了第一款iPhone应用程序“现场照片”，"
+"它是免费提供给公众。见http://www.eomf.ou.edu/photos/更多的信息和从苹果商店"
+"https://itunes.apple.com/us/app/field-photo/id717945301下载。在现场的照片应用"
+"程序让学生，研究人员和市民在实地考察拍照，地理标记并添加元数据和现场记录到的"
+"照片。本场照片，然后上传到全球地理参考现场图片库在俄克拉何马，人们可以分享的"
+"大学，可视化和记录的土地利用和土地覆盖变化，洪水，干旱，火灾等领域的存档照"
+"片。这些照片和相关的专题数据库也被用于支持卫星图像分析监测地球，那里现在七个"
+"多亿人生活的动力。手机集成，地理参考现场照片库和卫星图像使我们能够在社交图像"
+"的像素。"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_1/title.py:2
+msgid ""
+"The iPhone App \"Field Photo\" is now available for citizen science and "
+"community remote sensing"
+msgstr "iPhone应用程序“现场照片”现在可用于公民科学和社区遥感"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_10/content.py:2
+msgid ""
+"Dr. Xiao travelled to Hanoi, Vietnam and co-chaired the 5th workshop with "
+"Dr. Scott Newman from the Food and Agriculture Organization (FAO) of the "
+"United Nations. This workshop was co-sponsored by the National Institutes of "
+"Health (NIH) Fogarty International Center (FIC), the Food and Agriculture "
+"Organization (FAO) of the United Nations, the University of Oklahoma (OU) "
+"and the Department of Animal Health (DAH) of the Vietnamese Ministry of "
+"Agriculture and Rural Development. The FAO Country Office in Vietnam and the "
+"Department of Animal Production and Health provided local logistical support "
+"for the workshop. It was composed of a 2-day scientific meeting in Hanoi, "
+"Vietnam and a 3-day field trip in the Red River Delta, Vietnam, where H5N1 "
+"outbreaks have persisted over years and where there are frequent trade "
+"movements in poultry and wildlife between northern Vietnam and Southern "
+"China."
+msgstr ""
+"肖医生前往河内，越南和联合国粮食和农业组织（FAO）共同主持第五车间斯科特博士纽"
+"曼。本次研讨会共同主办的美国国立卫生研究院（NIH）Fogarty国际中心（FIC），联合"
+"国粮食和农业组织（FAO），俄克拉​​何马大学（OU）和动物健康部（DAH ）越南农业和农"
+"村发展的。越南粮农组织国别办公室和动物生产部和健康为研讨会提供当​​地后勤支持。"
+"它是由在越南河内为期2天的学术会议和3天的实地考察，在红河三角洲，越南，H5N1禽"
+"流感疫情已经持续了多年，那里有频繁的贸易往来运动在越南北部家禽之间和野生动物"
+"和中国南方。"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_10/title.py:2
+msgid ""
+"The 5th International Workshop on Community-based Data Synthesis, Analysis "
+"and Modeling of Highly Pathogenic Avian Influenza (May 27 - 31, 2013, Hanoi, "
+"Vietnam)"
+msgstr ""
+"第五届国际研讨会社区为基础的数据综合，分析和高致病性禽流感的造型（5月27日至31"
+"日，2013年，越南河内）"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_11/content.py:2
+msgid ""
+"The EOMF is part of a multi-institution team that received US$9.6 million "
+"from the USDA for an interdisciplinary project “Resilience and vulnerability "
+"of beef cattle production in the Southern Great Plains under changing "
+"climate, land use and markets” (2/15/2013 – 2/14/2018). Other partners of "
+"the project team include Oklahoma State University, Kansas State University, "
+"Texas Tarleton State University, the Samuel R. Noble Foundation, and two "
+"USDA ARS laboratories."
+msgstr ""
+"该EOMF是，“在气候变化，土地使用和市场弹性和肉牛生产的脆弱性在南部大平原”获得"
+"了960万美元，从美国农业部的一个跨学科项目多机构团队的一部分（2013年2月15日 "
+"-  2018年2月14日）。项目组的其他合作伙伴包括俄克拉荷马州立大学，堪萨斯州立大"
+"学，得克萨斯塔尔顿州立大学的塞缪尔·诺贝尔基金会，以及两个美国农业部ARS实验"
+"室。"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_11/title.py:2
+msgid ""
+"The EOMF received USDA fund to study of the effect of weather and climate "
+"variability on beef cattle production systems in the Southern Great Plains, "
+"USA"
+msgstr ""
+"该EOMF获得美国农业部基金天气和气候变化对肉牛生产体系南部大平原，美国的影响研"
+"究"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_2/content.py:2
+msgid ""
+"The EOMF is one member of a multi-institution and international team for an "
+"interdisciplinary project \"Effects of anthropogenic habitat perturbation on "
+"rodent population dynamics and risk of rodent-borne diseases\". This 5-year "
+"project (2013-2018) will be carried out in Peru, Bolivia and Paraguay "
+"through close collaboration with a number of local institutions and "
+"researchers in these three countries. Institutional partners in USA are (1) "
+"Tulane School of Public Health and Tropical Medicine, (2) University of "
+"Kansas, and (3) University of Oklahoma. The EOMF team will use geospatial "
+"technologies to characterize land use and land cover changes, and provide "
+"the resultant geospatial data to support spatial models in the project. The "
+"project is funded by the Inter-American Institute for Global Change Research "
+"(IAI) Collaborative Research Network (CRN3) program."
+msgstr ""
+"该EOMF是一个多机构和国际团队的跨学科项目“对啮齿动物的种群动态和鼠传疾病风险的"
+"人为扰动的栖息地的影响”中的一员。这5年的项目（2013年至2018年）将开展在秘鲁，"
+"玻利维亚和巴拉圭通过密切合作与一些地方机构和研究人员在这三个国家。机构合作伙"
+"伴在美国是（1）公共卫生与热带医学，堪萨斯（2）大学和俄克拉荷马州（3）大学的杜"
+"兰学校。该EOMF团队将利用地理空间技术来表征的土地​​利用和土地覆盖变化，使所得地"
+"理空间数据支持空间模型的项目。该项目由美洲研究所全球变化研究（IAI）合作研究网"
+"络（CRN3）计划资助。"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_2/title.py:2
+msgid ""
+"EOMF participated in a 5-year project that studies deforestation and rodent-"
+"borne diseases in South America"
+msgstr "EOMF参加了5年的项目，该项目研究在南美洲森林砍伐和鼠传疾病"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_3/content.py:2
+msgid ""
+"With the supports from the USDA interdisciplinary project “Resilience and "
+"vulnerability of beef cattle production in the Southern Great Plains under "
+"changing climate, land use and markets” and the NASA LCLUC project "
+"“Quantifying changes in agricultural intensification, expansion and gross "
+"primary production in monsoon Asia during 2000-2010”, eight EOMF members "
+"(Pradeep Wagle, Yuanwei Qin, Nyambayar Batbayar, Michael Angelo Menarguez, "
+"Cui Jin, Jie Wang, Yuting Zhou, and Jinwei Dong) attended the AGU 2013 "
+"meeting in San Francisco from December 8-13, 2013. Three posters were "
+"presented from the EOMF in the meeting, showing the recent progress in the "
+"LCLUC and water quality remote sensing fields in the EOMF. Dr. Jinwei Dong "
+"gave the poster presentation titled “Improved estimation of forest area in "
+"tropical Africa through ALOS/PALSAR 50-m orthorectified mosaic "
+"images” (B23D-0580). Ms. Cui Jin presented the poster titled “Mapping paddy "
+"rice using multi-temporal Landsat imagery in the Sanjiang Plain, Northeast "
+"China” (B41A-0389); and Ms. Jie Wang talked about “Detecting Chlorophyll and "
+"Phycocyanin in Lake Texoma Using in Situ Photo from GPS Digital Camera and "
+"Landsat 8 OLI Imagery” (H43G-1546) on behalf of Dr. Jinheng Zhang."
+msgstr ""
+"从美国农业部的跨学科项目“韧性和肉牛生产的脆弱性在南部大平原下的气候变化，土地"
+"使用和市场”的支持和美国航天局的项目LCLUC“量化改变农业集约化，扩建和季风亚洲的"
+"初级生产总值（GDP） 2000-2010“，八EOMF成员（普拉迪普Wagle，李元伟秦，"
+"Nyambayar Batbayar，米开朗琪罗Menarguez，崔进，汪杰，周毓婷和董金伟）参加了在"
+"旧金山AGU 2013会议从12月8日至13日， 2013年三张海报被提出从会议EOMF，显示在"
+"EOMF的LCLUC和水质遥感领域的最新进展。董金伟博士给了海报介绍题为“森林面积的热"
+"带非洲通过ALOS / PALSAR 50米正射影像镶嵌改进估计”（B23D-0580）。医学萃精女士"
+"介绍题为海报“映射水稻利用三江平原多时相陆地卫星影像，中国东北”（B41A-0389）;"
+"和杰王女士谈到“检测叶绿素和藻蓝蛋白TEXOMA湖在使用GPS，从数码相机和陆地卫星8 "
+"OLI影像司徒照片”（H43G-1546）代表锦恒张博士。"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_3/content.py:4
+msgid ""
+"For detailed information about the presentations, please check the column "
+"\"About US\"/\"Publication\"/\"Presentations\" in this website later."
+msgstr "有关演示的详细信息，请稍后在本网站查询栏“关于我们”/“出版”/“演讲”。"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_3/title.py:2
+msgid "Eight EOMF members attended the AGU 2013 meeting in San Francisco"
+msgstr "八位EOMF成员参加了在旧金山举行的AGU 2013会议"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_4/content.py:2
+msgid ""
+"In an effort to support citizen science and community remote sensing, EOMF "
+"developed and released the first android App \"Field Photo\", it is freely "
+"available to the public. See http://www.eomf.ou.edu/photos/ for more "
+"information and download it from Google Play Store https://play.google.com/"
+"store/apps/details?id=com.eomf . The Field Photo App allows students, "
+"researchers and citizens to take photos during field trips, geotag them and "
+"add metadata and field notes to the photos. The field photos are then "
+"uploaded to the Global Geo-Referenced Field Photo Library at the University "
+"of Oklahoma, where people share, visualize and archive field photos that "
+"document land use and land cover change, flood, drought, fire, and so on. "
+"These photos and associated thematic databases are also used to support "
+"satellite image analyses for monitoring the dynamics of Planet Earth, where "
+"now more than seven billions of people live. The integration of mobile "
+"phone, Geo-Referenced Field Photo Library and satellite images allows us to "
+"socialize the pixels in the images."
+msgstr ""
+"在努力支持公民科学和社区遥感，EOMF开发并发布了第一款Android应用“现场照片”，它"
+"是免费提供给公众。见http://www.eomf.ou.edu/photos/以获取更多信息，并从谷歌"
+"Play商店https://play.google.com/store/apps/details?id=com.eomf下载。在现场的"
+"照片应用程序让学生，研究人员和市民在实地考察拍照，地理标记并添加元数据和现场"
+"记录到的照片。本场照片，然后上传到全球地理参考现场图片库在俄克拉何马，人们可"
+"以分享的大学，可视化和记录的土地利用和土地覆盖变化，洪水，干旱，火灾等领域的"
+"存档照片。这些照片和相关的专题数据库也被用于支持卫星图像分析监测地球，那里现"
+"在七个多亿人生活的动力。手机集成，地理参考现场照片库和卫星图像使我们能够在社"
+"交图像的像素。"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_4/title.py:2
+msgid ""
+"The Android App \"Field Photo\" is now available for citizen science and "
+"community remote sensing"
+msgstr "Android应用程序“Field Photo”现在可用于公民科学和社区遥感"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_5/content.py:2
+msgid ""
+"As part of the EOMF’s effort to study the highly pathogenic avian influenza "
+"H5N1 virus circulation in migratory wild bird populations across flyways, we "
+"use a number of new technologies to study bird migration and connectivity "
+"between wintering and breeding sites. In summer of 2013, Nyambayar Batbayar, "
+"a PhD student, conducted field studies in Mongolia and deployed a number of "
+"geo-light loggers on Barn Swallows and White-throated Bushchats, and "
+"cellular tracking and satellite transmitters on White-naped Cranes. On these "
+"projects, he is collaborating with Oklahoma Biological Survey, Oriental Bird "
+"Club, International Crane Foundation, US Forest Service, Poyang Lake Nature "
+"Reserve in China, Mongolian Academy of Sciences, and Wildlife Science and "
+"Conservation Center of Mongolia."
+msgstr ""
+"由于EOMF的精力去研究整个迁徙路线的高致病性禽流感H5N1病毒的传播在迁徙的野​​生鸟"
+"类种群的组成部分，我们使用了多项新技术，研究鸟类迁徙和越冬的连接和繁殖场所之"
+"间。在2013年夏天，Nyambayar Batbayar，博士研究生，在蒙古进行了实地研究和部署"
+"了一些关于家燕和白胸Bushchats和蜂窝跟踪和卫星发射的地缘光记录仪上的白枕鹤。在"
+"这些项目中，他正在与俄克拉何马州生物调查，东方鸟类俱乐部，国际鹤类基金会，美"
+"国林务局，鄱阳湖自然保护区在中国，蒙古科学院和野生动物科学与蒙古保护中心。"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_5/title.py:2
+msgid "New technologies help to track wild bird migrations from Mongolia"
+msgstr "新技术有助于追踪来自蒙古的野鸟迁徙"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_6/content.py:2
+msgid ""
+"As part of a collaborative effort between OU Department of Microbiology and "
+"Plant Biology (DMPB), OU School of Meteorology (SoM), the Oklahoma "
+"Climatological Survey (OCS), and the USDA ARS Grazinglands Research "
+"Laboratory (GRL), two integrated grassland observation sites (iGOS) have "
+"recently been established at the USDA ARS Grazinglands Research Laboratory, "
+"EL Reno, Oklahoma. One iGOS site sits on native grasslands, which has never "
+"been cultivated, and the other iGOS site sits on improved pasturelands. Each "
+"site is equipped with an advanced eddy covariance tower system for measuring "
+"energy, carbon, water and methane fluxes between the land surface and the "
+"atmosphere, a Phenocam to track plant phenology, and a COSMOS instrument to "
+"measure soil moisture at the landscape scale. In addition, hyperspectral, "
+"multispectral and thermal remote sensing measurements are routinely carried "
+"out at the sites. The iGOS sites are also co-located with the Oklahoma "
+"Mesonet El Reno site. This collaborative project has been supported by the "
+"NSF EPSCoR projects and USDA NIFA project and will carry out multiple year "
+"observations at the iGOS sites (up to 5 years with current NSF and USDA "
+"grants, and subsequently as part of the Southern Plains Long-term "
+"Agroecosystem Research Network)."
+msgstr ""
+"由于微生物的欧司和植物生物学（DMPB），气象（SOM），俄克拉​​何马州气候调查"
+"（OCS），和美国农业部ARS Grazinglands研究实验室（GRL）的OU学校，两个集成的草"
+"原观测站点之间的协作努力的一部分（政府间组织）最近已成立在美国农业部ARS "
+"Grazinglands研究实验室，EL里诺，俄克拉荷马州。一个政府间组织现场坐在天然草"
+"地，从未被种植，以及其他政府间组织现场坐镇改进牧场。每个站点都配备了先进的涡"
+"度相关塔式系统对地表和大气，一个Phenocam跟踪植物物候和COSMOS仪器测量土壤水分"
+"的景观尺度之间测量能源，碳，水和甲烷通量。此外，高光谱，多光谱和热遥感测量常"
+"规进行在站点。政府间组织网站也共同位于俄克拉何马中尺度站埃尔里诺网站。这一合"
+"作项目提供了支持由NSF EPSCoR项目和USDA NIFA项目，将开展的政府间组织站点的多个"
+"年度观察（最多5年当前NSF和美国农业部资助，并且随后作为南部平原长期农业生态系"
+"统的一部分，研究网络）。"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_6/content.py:4
+msgid ""
+"For more information about the iGOS sites, please contact Dr. Jeffrey Basara "
+"(jbasara@ou.edu), Dr. Jean Steiner (jean.steiner@ars.usda.gov), and Dr. "
+"Xiangming Xiao (xiangming.xiao@ou.edu)."
+msgstr ""
+"获取更多有关iGOSsn网站的信息，请联系杰弗里·巴萨拉博士（jbasara@ou.edu），让·"
+"斯坦纳博士（jean.steine​​r@ars.usda.gov），和肖向明博士（xiangming.xiao@ou. "
+"edu）。"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_6/title.py:2
+msgid ""
+"Two Integrated Grassland Observation Sites (iGOS) started to operate at El "
+"Reno, Oklahoma"
+msgstr "两个集成的草原观测站点（政府间组织）开始在厄尔尼诺里诺，俄克拉荷马操作"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_7/content.py:2
+msgid ""
+"The EOMF is part of a multi-institution and international team that received "
+"$1.9 million from the National Institute of Allergy and Infectious Diseases "
+"(NIAID), National Institutes of Health for an interdisciplinary project "
+"\"Transmission dynamics and spillover of avian influenza under changing "
+"agriculture intensification and landscape\" (7/23/2013 – 6/30/2017). Major "
+"institutional partners of the project are (1) Free University of Brussels, "
+"Belgium, (2) University of Warwick, UK, (3) Chinese Center for Disease "
+"Control and Prevention, Beijing, China, (4) US Geological Survey, "
+"California, USA, and (5) Food and Agriculture Organization of the United "
+"Nations, Rome, Italy. The project will carry out field work in Poyang Lake, "
+"Chin and Thailand.[PDF]"
+msgstr ""
+"该EOMF是一个多机构和国际团队，在不断变化的农业集约化和接受了$ 190万国家过敏和"
+"传染病研究所（NIAID），国立卫生研究院的一个跨学科项目“传播动力学和禽流感蔓延"
+"的一部分风景“（2013年7月23日 -  2017年6月30日）。该项目的主要合作机构是："
+"（1）比利时布鲁塞尔自由大学（2）英国华威，大学（3）中国疾病预防控制中心和预"
+"防，北京，中国，（4）美国地质调查局，加利福尼亚州，美国和（5）食品和联合国，"
+"罗马，意大利的农业组织。该项目将开展实地工作鄱阳湖，下巴和泰国。[PDF]"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_7/title.py:2
+msgid ""
+"The EOMF received NIH fund to study highly pathogenic avian influenza H5N1 "
+"subtype in China and Thailand"
+msgstr ""
+"EOMF收到美国国立卫生研究院基会的资金用于研究在中国和泰国的H5N1亚型高致病性禽"
+"流感"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_9/content.py:2
+msgid ""
+"The EOMF is part of a multi-institution team that received $20 millions from "
+"National Science Foundation for an interdisciplinary project “Adapting socio-"
+"ecological systems to increased climate variability” (6/1/2013 – 5/31/2018). "
+"Major institutional partners of the project are Oklahoma State University, "
+"the University of Oklahoma, the Samuel R. Noble Foundation, and the "
+"University of Tulsa."
+msgstr ""
+"该EOMF是那接受了$ 2000万从美国国家科学基金会的一个跨学科项目“适应社会生态系"
+"统，以提高气候变化”（2013年6月1日 -  2018年5月31日）一个多机构团队的一部分。"
+"该项目的主要机构合作伙伴是俄克拉荷马州立大学，俄克拉荷马大学的塞缪尔·诺贝尔基"
+"金会，和塔尔萨大学。"
+
+#: eomf/dbgettext_files/dbgettext/aboutus/post/Post_9/title.py:2
+msgid ""
+"The EOMF received NSF fund to study socio-ecological systems in Oklahoma, "
+"USA    "
+msgstr "该EOMF获得美国国家科学基金会基金研究社会生态系统在俄克拉荷马州，美国"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_1/name.py:2
+msgid "Unclassified"
+msgstr "未分类"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_10/name.py:2
+msgid "Savannas"
+msgstr "稀树草原"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_11/name.py:2
+msgid "Grasslands"
+msgstr "草原"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_12/name.py:2
+msgid "Permanent Wetlands"
+msgstr "永久湿地"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_13/name.py:2
+msgid "Croplands"
+msgstr "农田"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_14/name.py:2
+msgid "Urban and Built-Up"
+msgstr "城市和建成"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_15/name.py:2
+msgid "Cropland/Natural Vegetation Mosaic"
+msgstr "田/自然植被马赛克"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_16/name.py:2
+msgid "Permanent Snow and Ice"
+msgstr "永久积雪和冰"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_17/name.py:2
+msgid "Barren or Sparsely Vegetated"
+msgstr "贫瘠或植被稀疏"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_18/name.py:2
+msgid "Water Bodies"
+msgstr "水体"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_19/name.py:2
+msgid "Plantations"
+msgstr "种植园"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_2/name.py:2
+msgid "Evergreen Needleleaf Forest"
+msgstr "常绿针叶林"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_20/name.py:2
+msgid "Orchards"
+msgstr "果园"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_3/name.py:2
+msgid "Deciduous Needleleaf Forest"
+msgstr "落叶针叶林"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_4/name.py:2
+msgid "Evergreen Broadleaf Forest"
+msgstr "常绿阔叶林"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_5/name.py:2
+msgid "Deciduous Broadleaf Forest"
+msgstr "落叶阔叶林"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_6/name.py:2
+msgid "Mixed Forest"
+msgstr "混交林"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_7/name.py:2
+msgid "Closed Shrublands"
+msgstr "封闭式灌丛"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_8/name.py:2
+msgid "Open Shrublands"
+msgstr "开放灌丛"
+
+#: eomf/dbgettext_files/dbgettext/photos/category/Category_9/name.py:2
+msgid "Woody Savannas"
+msgstr "伍迪稀树草原"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshop/Workshop_1/description.py:2
+msgid ""
+"This workshop builds upon the 4 previous community-based data synthesis, "
+"analysis and modeling of Highly Pathogenic Avian Influenza workshops, which "
+"were coordinated by NIH, FAO and the University of Oklahoma; held in "
+"Bangkok, Thailand (2009), Beijing, China (2010, 2011), and Rome, Italy "
+"(2012). At the conclusion of the 4th workshop (November 2102) participants "
+"suggested that the broad scale, regional risk assessments and models "
+"developed to date may have limited applicability to national, provincial or "
+"local level issues related to influenza introduction, transmission and "
+"persistence. THe objective of the workshop to be held in May 2013 is to "
+"bring together multi-disciplinary international experts, national government "
+"representatives and experts, technical staff and other partners to explore "
+"disease risk factors at local levels. The desired outcome is to determine "
+"how influenza risk assessment and modeling should be pursued in order to "
+"capitalize on multi-disciplinary expertise and benefit national priority-"
+"setting for the prevention, response and control of HPAI."
+msgstr ""
+"本次研讨会建立在以前的4社区为基础的数据综合，分析和高致病性禽流感研讨会，这是"
+"由美国国立卫生研究院，粮农组织和俄克拉何马大学协同建模;在曼谷，泰国（2009"
+"年），北京，中国（2010，2011），和罗马，意大利（2012）举行。在第4研讨会结束"
+"（2102年11月），与会者建议，大范围，区域性风险评估和模型开发日期可能具有有限"
+"的适用性与流感的介绍，传播和持久性国家，省或地方层面的问题。研讨会的目标是"
+"2013年5月举行是汇集多学科的国际专家，国家政府代表和专家，技术人员和其他合作伙"
+"伴，探讨疾病的危险因素，在当地的水平。理想的结果是确定流感风险评估和建模应以"
+"利用多学科的专业知识和对高致病性禽流感的预防，应对和控制中受益的国家优先事项"
+"的确定来进行。"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshop/Workshop_1/name.py:2
+msgid ""
+"The 5th International Workshop on Highly Pathogenic Influenza Risk "
+"Assessment and Risk Modling: Transitioning from Global to Local Assessments"
+msgstr "第五届国际研讨会高致病性流感风险评估和风险莫德林：从全球过渡到当地评估"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshop/Workshop_2/description.py:2
+msgid ""
+"This workshop builds upon the three previous community-based data synthesis, "
+"analysis and modeling of Highly \n"
+"Pathogenic Avian Influenza workshops, which were coordinated by NIH, FAO and "
+"University of Oklahoma since 2009. \n"
+"The focus of the workshop in November 2012 will bring together the "
+"experience and expertise arising from four \n"
+"different projects or initiatives, namely NIH, EPT+, CDC and FLURISK and it "
+"results from the interest shared by \n"
+"partners to better assess and model the potential risk of evolution and "
+"spread of pandemic influenza.   "
+msgstr ""
+"本次研讨会是建立在高度评价了前三个社区为基础的数据综合，分析和建模\n"
+"高致病性禽流感研讨会，这是由美国国立卫生研究院，粮农组织和俄克拉荷马大学自"
+"2009年以来协调。\n"
+"研讨会2012年11月的焦点将汇集来自四个所带来的经验和专业知识\n"
+"不同的项目或举措，即美国国立卫生研究院，EPT +，CDC和FLURISK，它由共同的利益结"
+"果\n"
+"合作伙伴更好地评估和模拟进化的潜在风险和传播流感大流行。"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshop/Workshop_2/name.py:2
+msgid ""
+"The 4th International Workshop on Community-based Data Synthesis, Analysis "
+"and Modeling of Highly Pathogenic Avian Influenza H5N1 in Asia "
+msgstr "第四届国际研讨会社区为基础的数据综合，分析和高致病性禽流感H5N1建模亚洲"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshop/Workshop_3/description.py:2
+msgid ""
+"The 3rd international workshop on “community-based data synthesis, analysis "
+"and modeling of Highly Pathogenic Avian Influenza (HPAI, H5N1 subtype) in "
+"Asia” will be held on November 14-15, 2011, Beijing, China. This 3rd "
+"workshop is a follow-up of the 2nd workshop (Beijing, China, May 31 – June "
+"4, 2010) and the 1st workshop (Bangkok, Thailand, June 15-17, 2009). The "
+"overall objectives of this workshop series are twofold: (1) to identify and "
+"assemble available geospatial datasets relevant to HPAI (H5N1), and identify "
+"major gaps in data and models, which would assist prioritization of future "
+"research in data collection and models; and (2) to facilitate capacity "
+"building for a network of researchers and institutions, and infrastructure "
+"for data synthesis, analysis and modeling. "
+msgstr ""
+"在“以社区为基础的数据综合，分析和高致病性禽流感（HPAI，H5N1亚型）在亚洲的造"
+"型”第三届国际研讨会将于11月14日至15日，2011年，北京，中国。这第三个车间是一个"
+"后续的第二次研讨会（中国北京，5月31日至6月4日，2010年）和第一次研讨会（曼谷，"
+"泰国，6月15日至17日，2009年）。这一系列研讨会的总体目标是双重的：（1）识别和"
+"组装有关高致病性禽流感（H5N1）提供地理空间数据集，并确定在数据和模型的主要差"
+"距，这将有助于未来研究的数据收集和模型的优先; （2）促进能力建设为研究人员和机"
+"构网络和基础设施的数据综合，分析和建模。"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshop/Workshop_3/name.py:2
+msgid ""
+"The 3rd International Workshop on Community-based Data Synthesis, Analysis "
+"and Modeling of Highly Pathogenic Avian Influenza H5N1 in Asia"
+msgstr "第三届国际研讨会社区为基础的数据综合，分析和高致病性禽流感H5N1建模亚洲"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshop/Workshop_4/description.py:2
+msgid ""
+"The objectives of the planned two workshops are twofold: (1) identify and "
+"assemble available geospatial datasets relevant to HPAI (H5N1) spread, and "
+"identify any major gaps in knowledge and data, which would inform and allow "
+"prioritization of future research and data collection activities; (2) "
+"facilitate capacity building for a network of researchers and institutions, "
+"and infrastructure for data synthesis, analysis and modeling."
+msgstr ""
+"计划中的两个研讨会的目标有两个：（1）识别和组装有关高致病性禽流感（H5N1）蔓延"
+"提供地理空间数据集，并确定在知识和数据的主要差距，这将告知并允许未来的研究和"
+"数据收集活动的优先顺序; （2）促进能力建设为研究人员和机构网络和基础设施的数据"
+"综合，分析和建模。"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshop/Workshop_4/name.py:2
+msgid ""
+"The 2nd International Workshop on Community-based Data Synthesis, Analysis "
+"and Modeling of Highly Pathogenic Avian Influenza H5N1 in Asia"
+msgstr ""
+"第二届国际研讨会以社区为基础的数据综合，分析和高致病性禽流感H5N1建模亚洲"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshop/Workshop_6/description.py:2
+msgid ""
+"Remote sensing technology at various platforms (in-situ, airborne and "
+"satellite) has made substantial progress over the past few decades and has "
+"been playing an increasing important role in observation and monitoring of "
+"the Planet Earth. This one-day workshop aims to provide a platform for "
+"researchers and users in Oklahoma to communicate their research and "
+"application activities, discuss collaboration, and develop networks among "
+"researchers, users and students as well as institutions. Participants are "
+"also welcome to participate in the Geospatial Information Science Day "
+"(GISday) at the University of Oklahoma on November 13, 2014 (http://www.eomf."
+"ou.edu/gisday/). Institutions are encouraged to register a booth at the "
+"GISday Expo event and showcase their research activities and/or needs in the "
+"area of remote sensing technology and applications."
+msgstr ""
+"遥感技术在各种平台（原位，空中和卫星）有了长足的进步，在过去的几十年，并一直"
+"扮演着观测地球和监控越来越重要的作用。这个为期一天的研讨会旨在为研究人员和用"
+"户在俄克拉荷马传达他们的研究和应用活动的一个平台，讨论协作，并制定当中研究"
+"者，用户和学生以及机构网络。与会者也欢迎参加地球空间信息科学日（GISday）在俄"
+"克拉何马大学在2014年11月13日（http://www.eomf.ou.edu/gisday/）。机构踊跃报名"
+"展位在GISday世博盛会，并展示在遥感技术和应用领域的研究活动和/或需求。"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshop/Workshop_6/name.py:2
+msgid "2014 Oklahoma Workshop on Remote Sensing Technology and Application"
+msgstr "2014年俄克拉何马研讨会遥感技术与应用"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshopclass/WorkshopClass_1/name.py:2
+msgid "Remote sensing"
+msgstr "遥感"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshopclass/WorkshopClass_2/name.py:2
+msgid "Disease ecology"
+msgstr "疫病生态"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshopclass/WorkshopClass_3/name.py:2
+msgid "Carbon cycle"
+msgstr "碳循环"
+
+#: eomf/dbgettext_files/dbgettext/workshops/workshopclass/WorkshopClass_4/name.py:2
+msgid "Climate change"
+msgstr "气候变化"
+
+#: eomf/geohealth/templates/geohealth/base.html:3
+#: eomf/geohealth/templates/geohealth/gemap.html:3
+#: eomf/geohealth/templates/geohealth/leftmenu.html:23
+#: eomf/templates/mainmenu.html:143 eomf/templates/mainmenu.html:215
+msgid "GeoHealth"
+msgstr "GeoHealth"
+
+#: eomf/geohealth/templates/geohealth/base.html:7
+#: eomf/geohealth/templates/geohealth/gemap.html:7
+msgid "This 3D global view shows three diffrent datasets:"
+msgstr "这种3D全局视图显示了三个不同势数据集："
+
+#: eomf/geohealth/templates/geohealth/base.html:9
+#: eomf/geohealth/templates/geohealth/gemap.html:9
+msgid "Ecohealth Paper Data"
+msgstr "生态健康论文数据"
+
+#: eomf/geohealth/templates/geohealth/base.html:10
+#: eomf/geohealth/templates/geohealth/gemap.html:10
+msgid ""
+"Avian Influenza H5N1 is represented using Geese, Chicken, Human icons "
+"respectively for Wild birds, Domesticated birds and Human cases."
+msgstr "禽流感H5N1型分别采用鹅，鸡，人类的图标野生鸟类，家禽和人类病例表示。"
+
+#: eomf/geohealth/templates/geohealth/base.html:17
+#: eomf/geohealth/templates/geohealth/gemap.html:15
+msgid "Data Disclaimer"
+msgstr "数据免责声明"
+
+#: eomf/geohealth/templates/geohealth/base.html:19
+msgid ""
+"Wild bird migration data are provided by FAO and USGS, <a href='http://www."
+"werc.usgs.gov/ResearchTopicPage.aspx?id=12'>http://www.werc.usgs.gov/"
+"ResearchTopicPage.aspx?id=12"
+msgstr ""
+"野生鸟类迁徙的数据是由联合国粮农组织和美国地质调查局，<一个提供href='http://"
+"www.werc.usgs.gov/ResearchTopicPage.aspx?id=12'>http://www.werc.usgs.gov/"
+"ResearchTopicPage.aspx?id=12"
+
+#: eomf/geohealth/templates/geohealth/base.html:20
+msgid ""
+"HPAI H5N1 disease outbreak data are provided by the FAO, <a href='http://www."
+"fao.org/ag/againfo/programmes/en/empres/home.asp'> http://www.fao.org/ag/"
+"againfo/programmes/en/empres/home.asp"
+msgstr ""
+"H5N1高致病性禽流感疫情数据由粮农组织提供，<a href='http://www.fao.org/ag/"
+"againfo/programmes/en/empres/home.asp'> http://www.fao.org /ag/againfo/"
+"programmes/en/empres/home.asp"
+
+#: eomf/geohealth/templates/geohealth/earth-tree.html:3
+#: eomf/geohealth/templates/geohealth/earth-tree.html:100
+msgid "Data Integration and Visualization over Google Earth"
+msgstr "数据集成和可视化在谷歌地球"
+
+#: eomf/geohealth/templates/geohealth/earth-tree.html:37
+msgid "Data Tree"
+msgstr "数据树"
+
+#: eomf/geohealth/templates/geohealth/earth-tree.html:53
+#: eomf/workshops/templates/workshops/workshop_extra_menu.html:6
+msgid "Description"
+msgstr "描述"
+
+#: eomf/geohealth/templates/geohealth/earth-tree.html:60
+msgid "Legend"
+msgstr "传说"
+
+#: eomf/geohealth/templates/geohealth/earth-tree.html:70
+msgid "Opacity"
+msgstr "不透明度"
+
+#: eomf/geohealth/templates/geohealth/gemap.html:17
+msgid "Wild bird migration data are provided by FAO and USGS"
+msgstr "野生鸟类迁徙的数据是由联合国粮农组织和美国地质勘探局提供"
+
+#: eomf/geohealth/templates/geohealth/gemap.html:18
+msgid "HPAI H5N1 disease outbreak data are provided by the FAO"
+msgstr "H5N1高致病性禽流感疫情数据由粮农组织提供"
+
+#: eomf/geohealth/templates/geohealth/leftmenu.html:27
+msgid "Google Earth browser"
+msgstr "谷歌地球浏览器"
+
+#: eomf/geohealth/templates/geohealth/leftmenu.html:31
+msgid "Wild birds"
+msgstr "野生鸟类"
+
+#: eomf/geohealth/templates/geohealth/leftmenu.html:35
+msgid "Wild bird tracking data"
+msgstr "野生鸟类跟踪数据"
+
+#: eomf/geohealth/templates/geohealth/leftmenu.html:39
+msgid "Avian Influenza"
+msgstr "禽流感"
+
+#: eomf/geohealth/templates/geohealth/leftmenu.html:43
+msgid "Avian Influenza tracking data"
+msgstr "禽流感跟踪数据"
+
+#: eomf/inventory/templates/inventory/leftmenu.html:2
+#: eomf/visualization/templates/visualization/leftmenu.html:22
+#: eomf/visualization/templates/visualization/overview.html:10
+msgid "MODIS data"
+msgstr "MODIS数据"
+
+#: eomf/inventory/templates/inventory/leftmenu.html:6
+#: eomf/visualization/templates/visualization/leftmenu.html:30
+#, fuzzy
+#| msgid "Inventory as of"
+msgid "Inventory"
+msgstr "库存作为"
+
+#: eomf/inventory/templates/inventory/leftmenu.html:8
+#: eomf/visualization/templates/visualization/leftmenu.html:34
+#, fuzzy
+#| msgid "MODIS data"
+msgid "NASA data"
+msgstr "MODIS数据"
+
+#: eomf/inventory/templates/inventory/leftmenu.html:9
+#: eomf/visualization/templates/visualization/leftmenu.html:39
+#, fuzzy
+#| msgid "The EOMF team"
+msgid "EOMF data"
+msgstr "EOMF团队"
+
+#: eomf/inventory/templates/inventory/leftmenu.html:11
+#: eomf/visualization/templates/visualization/leftmenu.html:43
+#: eomf/water/templates/water/leftmenu.html:44
+msgid "Visualization"
+msgstr "可视化"
+
+#: eomf/inventory/templates/inventory/leftmenu.html:13
+#: eomf/visualization/templates/visualization/leftmenu.html:47
+#, fuzzy
+#| msgid "MODIS composite image"
+msgid "Composite Image"
+msgstr "MODIS合成图像"
+
+#: eomf/inventory/templates/inventory/leftmenu.html:14
+#: eomf/visualization/templates/visualization/leftmenu.html:52
+#, fuzzy
+#| msgid "MODIS vegetation index map"
+msgid "Vegetation Index Map"
+msgstr "MODIS植被指数地图"
+
+#: eomf/inventory/templates/inventory/leftmenu.html:16
+#: eomf/visualization/templates/visualization/leftmenu.html:56
+#: eomf/water/templates/water/leftmenu.html:62
+msgid "Delivery"
+msgstr ""
+
+#: eomf/inventory/templates/inventory/leftmenu.html:18
+#: eomf/visualization/templates/visualization/leftmenu.html:60
+#: eomf/water/templates/water/leftmenu.html:66
+#, fuzzy
+#| msgid "MODIS single-site time series"
+msgid "Single Site Time-Series"
+msgstr "MODIS单点时间序列"
+
+#: eomf/inventory/templates/inventory/leftmenu.html:19
+#: eomf/visualization/templates/visualization/leftmenu.html:65
+#: eomf/water/templates/water/leftmenu.html:71
+#, fuzzy
+#| msgid "MODIS multiple site time series"
+msgid "Multiple Site Time-Series"
+msgstr "MODIS多个站点的时间序列"
+
+#: eomf/inventory/templates/inventory/leftmenu.html:21
+#: eomf/visualization/templates/visualization/leftmenu.html:69
+#: eomf/water/templates/water/leftmenu.html:75
+msgid "Request history"
+msgstr ""
+
+#: eomf/inventory/templates/inventory/leftmenu.html:23
+#: eomf/visualization/templates/visualization/leftmenu.html:73
+#: eomf/water/templates/water/leftmenu.html:79
+#, fuzzy
+#| msgid "MODIS single-site history"
+msgid "Single Site history"
+msgstr "MODIS单点历史"
+
+#: eomf/inventory/templates/inventory/map.html:4
+msgid "EOMF Map availability for "
+msgstr "EOMF地图可用性"
+
+#: eomf/inventory/templates/inventory/map.html:42
+msgid "Horizontal"
+msgstr "横"
+
+#: eomf/inventory/templates/inventory/map.html:43
+msgid "Vertical"
+msgstr "垂直"
+
+#: eomf/inventory/templates/inventory/map.html:44
+msgid "Lon min"
+msgstr "经度最小"
+
+#: eomf/inventory/templates/inventory/map.html:45
+msgid "Lon max"
+msgstr "经度最大"
+
+#: eomf/inventory/templates/inventory/map.html:46
+msgid "Lat min"
+msgstr "纬度最低"
+
+#: eomf/inventory/templates/inventory/map.html:47
+msgid "Lat max"
+msgstr "纬度最高"
+
+#: eomf/inventory/templates/inventory/map.html:105
+#: eomf/visualization/templates/visualization/gmap.html:608
+#: eomf/water/templates/water/33-year-wbfm.html:540
+#: eomf/water/templates/water/map.html:612
+msgid "Dataset"
+msgstr "数据集"
+
+#: eomf/inventory/templates/inventory/map.html:124
+#, fuzzy
+#| msgid "MODIS Global Datasets"
+msgid "MODIS Global Datasets "
+msgstr "MODIS全球数据"
+
+#: eomf/inventory/templates/inventory/map.html:124
+#, fuzzy
+#| msgid "(via Sinusoidal Grid)"
+msgid "(via Sinusoidal Grid )"
+msgstr "（通过正弦网格）"
+
+#: eomf/inventory/templates/inventory/map.html:146
+msgid "Viewing"
+msgstr "查看"
+
+#: eomf/inventory/templates/inventory/map.html:151
+#: eomf/inventory/templates/inventory/tile.html:57
+#: eomf/visualization/templates/visualization/composite.html:174
+#: eomf/visualization/templates/visualization/gmap.html:619
+#: eomf/water/templates/water/33-year-wbfm.html:551
+#: eomf/water/templates/water/map.html:623
+msgid "Year"
+msgstr "年"
+
+#: eomf/inventory/templates/inventory/map.html:160
+msgid "Tiles are 10 degrees by 10 degrees at the equator."
+msgstr "砖是10度10度在赤道。"
+
+#: eomf/inventory/templates/inventory/map.html:162
+msgid ""
+"The tile coordinate system starts at (0,0) (horizontal tile number,vertical "
+"tile number) in the upper left corner and proceeds right (horizontal) and "
+"downward (vertical). The tile in the bottom right corner is (35,17)."
+msgstr ""
+"瓷砖坐标系统开始在（0,0）（水平房瓦数，垂直房瓦数）在左上角，并进入右（水平）"
+"和向下（垂直）。在右下角的瓷砖（35,17）。"
+
+#: eomf/inventory/templates/inventory/remote_sensing_datasets.html:4
+msgid "EOMF Data Inventory"
+msgstr "EOMF库存数据"
+
+#: eomf/inventory/templates/inventory/remote_sensing_datasets.html:68
+msgid "Remote Sensing datasets"
+msgstr "遥感数据集"
+
+#: eomf/inventory/templates/inventory/remote_sensing_datasets.html:74
+msgid "Datasets from MODIS"
+msgstr "从MODIS数据集"
+
+#: eomf/inventory/templates/inventory/remote_sensing_datasets.html:87
+msgid "Products from MODIS (MOD09A1)"
+msgstr "从MODIS产品（MOD09A1）"
+
+#: eomf/inventory/templates/inventory/remote_sensing_datasets.html:101
+msgid "No datasets are available."
+msgstr "没有数据集都可用。"
+
+#: eomf/inventory/templates/inventory/tile.html:4
+msgid "EOMF Data Inventory for Tile"
+msgstr "EOMF数据库存的瓷砖"
+
+#: eomf/inventory/templates/inventory/tile.html:40
+msgid "Data Inventory for Tile"
+msgstr "瓷砖库存数据"
+
+#: eomf/inventory/templates/inventory/tile.html:44
+msgid "Tile Code"
+msgstr "瓷砖码"
+
+#: eomf/inventory/templates/inventory/tile.html:56
+#: eomf/visualization/templates/visualization/multiple.html:41
+msgid "Product"
+msgstr "产品"
+
+#: eomf/inventory/templates/inventory/tile.html:58
+msgid "Days"
+msgstr "天"
+
+#: eomf/inventory/templates/inventory/tile.html:59
+msgid "Missing"
+msgstr "失踪"
+
+#: eomf/inventory/templates/inventory/tile.html:60
+msgid "Total"
+msgstr "总"
+
+#: eomf/inventory/templates/inventory/tile.html:79
+msgid "Files Total"
+msgstr "总的文件"
+
+#: eomf/inventory/templates/inventory/tile.html:84
+msgid "Inventory as of"
+msgstr "库存作为"
+
+#: eomf/inventory/templates/inventory/tile.html:86
+msgid "Close this window"
+msgstr "关闭此窗口"
+
+#: eomf/maps/templates/maps/add_maps.html:4
+#: eomf/maps/templates/maps/detail_map.html:4
+#, fuzzy
+#| msgid "Upload"
+msgid "Upload Maps"
+msgstr "上传"
+
+#: eomf/maps/templates/maps/filter_rois.html:4
+#: eomf/maps/templates/maps/viewroi.html:4
+#, fuzzy
+#| msgid "Download"
+msgid "Download ROIs"
+msgstr "下载"
+
+#: eomf/maps/templates/maps/filter_rois.html:38
+#: eomf/maps/templates/maps/roi.html:717
+#: eomf/visualization/templates/visualization/composite.html:184
+#: eomf/visualization/templates/visualization/composite.html:194
+#: eomf/visualization/templates/visualization/gmap.html:629
+#: eomf/water/templates/water/33-year-wbfm.html:561
+#: eomf/water/templates/water/map.html:633
+msgid "Submit"
+msgstr "提交"
+
+#: eomf/maps/templates/maps/filter_rois.html:39
+#: eomf/maps/templates/maps/roi.html:718
+#: eomf/visualization/templates/visualization/gmap.html:630
+#: eomf/water/templates/water/33-year-wbfm.html:562
+#: eomf/water/templates/water/map.html:634
+msgid "Reset"
+msgstr "重置"
+
+#: eomf/maps/templates/maps/leftmenu.html:5
+msgid "POIs"
+msgstr ""
+
+#: eomf/maps/templates/maps/leftmenu.html:6
+msgid "ROIs"
+msgstr ""
+
+#: eomf/maps/templates/maps/leftmenu.html:7
+#, fuzzy
+#| msgid "Download"
+msgid "View/Download POIs"
+msgstr "下载"
+
+#: eomf/maps/templates/maps/leftmenu.html:8
+#, fuzzy
+#| msgid "Download"
+msgid "View/Download ROIs"
+msgstr "下载"
+
+#: eomf/maps/templates/maps/leftmenu.html:12
+msgid "Map gallery"
+msgstr ""
+
+#: eomf/maps/templates/maps/leftmenu.html:13
+msgid "Upload your map"
+msgstr ""
+
+#: eomf/maps/templates/maps/map_gallery.html:4
+#, fuzzy
+#| msgid "EOMF Map availability for "
+msgid "EOMF Map Gallery"
+msgstr "EOMF地图可用性"
+
+#: eomf/maps/templates/maps/poi.html:7 eomf/maps/templates/maps/roi.html:4
+msgid "EOMF MAP Module"
+msgstr ""
+
+#: eomf/maps/templates/maps/poi.html:1104 eomf/maps/templates/maps/roi.html:588
+#: eomf/visualization/templates/visualization/gmap.html:520
+#: eomf/water/templates/water/map.html:524
+msgid "Instructions"
+msgstr "说明"
+
+#: eomf/maps/templates/maps/poi.html:1108 eomf/maps/templates/maps/roi.html:590
+#: eomf/visualization/templates/visualization/gmap.html:522
+#: eomf/water/templates/water/map.html:526
+msgid ""
+"Here you can retrieve time series MODIS data for a single study site, in "
+"other words, the time series MODIS data from one MODIS pixel that contains "
+"your study site. The data you get are in ASCII text file and Microsoft Excel "
+"*.csv file."
+msgstr ""
+"在这里，您可以检索的时间序列MODIS数据的单一研究地点，换句话说，从包含您的研究"
+"站点一个MODIS像素时间序列MODIS资料。你得到的数据是ASCII文本文件和Microsoft "
+"Excel * .csv文件。"
+
+#: eomf/maps/templates/maps/poi.html:1112 eomf/maps/templates/maps/roi.html:592
+#: eomf/visualization/templates/visualization/gmap.html:524
+#: eomf/water/templates/water/map.html:528
+msgid "<strong>Define the location </strong> of your study site"
+msgstr "<STRONG>定义位置</ STRONG>你的学习网站"
+
+#: eomf/maps/templates/maps/poi.html:1116 eomf/maps/templates/maps/roi.html:594
+#: eomf/visualization/templates/visualization/gmap.html:526
+#: eomf/water/templates/water/map.html:530
+msgid "Enter an address (e.g., street address, or city, or state)"
+msgstr "输入地址（例如，街道地址，或城市，或状态）"
+
+#: eomf/maps/templates/maps/poi.html:1118 eomf/maps/templates/maps/roi.html:595
+#: eomf/visualization/templates/visualization/gmap.html:527
+#: eomf/water/templates/water/map.html:531
+msgid ""
+"Enter latitude and longitude of your study using Degree, Minute and Second "
+"Units"
+msgstr "输入纬度和您的学习经度使用度，分，秒为单位"
+
+#: eomf/maps/templates/maps/poi.html:1120 eomf/maps/templates/maps/roi.html:596
+#: eomf/visualization/templates/visualization/gmap.html:528
+#: eomf/water/templates/water/map.html:532
+msgid "Enter latitude and longitude of your study using Decimal degree Unit"
+msgstr "使用十进制度单位输入纬度和您的学习经度"
+
+#: eomf/maps/templates/maps/poi.html:1126 eomf/maps/templates/maps/roi.html:599
+#: eomf/visualization/templates/visualization/gmap.html:531
+#: eomf/water/templates/water/map.html:535
+msgid ""
+"Zoom-in the Google map</strong> and then <strong>click on a point</strong> "
+"of interest to adjust the location if required."
+msgstr ""
+"变焦在谷歌地图</ strong>，然后<strong>点击感兴趣的点</ strong>如果需要调整的"
+"位置。"
+
+#: eomf/maps/templates/maps/poi.html:1128 eomf/maps/templates/maps/roi.html:600
+#: eomf/visualization/templates/visualization/gmap.html:532
+#: eomf/water/templates/water/map.html:536
+msgid ""
+"Note: The rectangle in Google Map is the boundary of one MODIS pixel, and "
+"the red dot is the location of your study site within the MODIS pixel."
+msgstr ""
+"注：在谷歌地图矩形是MODIS像素的边界，红点是MODIS像素内的研究站点的位置。"
+
+#: eomf/maps/templates/maps/poi.html:1136 eomf/maps/templates/maps/roi.html:604
+#: eomf/visualization/templates/visualization/gmap.html:536
+#: eomf/water/templates/water/map.html:540
+msgid "Select product and year(s)"
+msgstr "选择产品和年（S）"
+
+#: eomf/maps/templates/maps/poi.html:1138 eomf/maps/templates/maps/roi.html:605
+#: eomf/visualization/templates/visualization/gmap.html:537
+#: eomf/water/templates/water/map.html:541
+msgid "You may choose one MODIS product over one year or several years."
+msgstr "你可以选择一个MODIS产品超过一年或数年。"
+
+#: eomf/maps/templates/maps/poi.html:1144 eomf/maps/templates/maps/roi.html:608
+#: eomf/visualization/templates/visualization/gmap.html:540
+#: eomf/water/templates/water/map.html:544
+msgid ""
+"<strong> Submit</strong> your request. <small> Note: Upon submitting make "
+"sure you have done all previous steps or an error message will appear </"
+"small>"
+msgstr ""
+"<strong>提交</strong>你的要求。 <small>注：在提交确保你已经做了所有以前的步骤"
+"或将出现一个错误信息</small>"
+
+#: eomf/maps/templates/maps/poi.html:1154
+msgid "Points of interest"
+msgstr ""
+
+#: eomf/maps/templates/maps/poi.html:1156 eomf/maps/templates/maps/roi.html:614
+#: eomf/visualization/templates/visualization/gmap.html:547
+#: eomf/water/templates/water/map.html:551
+#, fuzzy
+#| msgid "1.Select an address or a Point on the Map"
+msgid ""
+"1a.Select an address or a Point on the Map / 1b.Enter the latitude & "
+"longitude information"
+msgstr "1.在地图上选择一个坐标或者地址"
+
+#: eomf/maps/templates/maps/poi.html:1160 eomf/maps/templates/maps/roi.html:616
+#: eomf/visualization/templates/visualization/gmap.html:550
+#: eomf/water/templates/water/map.html:554
+msgid "Enter the address"
+msgstr "输入地址"
+
+#: eomf/maps/templates/maps/poi.html:1164
+#: eomf/maps/templates/maps/poi.html:1214
+#: eomf/maps/templates/maps/poi.html:1226 eomf/maps/templates/maps/roi.html:618
+#: eomf/maps/templates/maps/roi.html:643 eomf/maps/templates/maps/roi.html:649
+#: eomf/visualization/templates/visualization/gmap.html:552
+#: eomf/visualization/templates/visualization/gmap.html:577
+#: eomf/visualization/templates/visualization/gmap.html:583
+#: eomf/water/templates/water/map.html:556
+#: eomf/water/templates/water/map.html:581
+#: eomf/water/templates/water/map.html:587
+msgid "Go"
+msgstr "搜索"
+
+#: eomf/maps/templates/maps/poi.html:1186 eomf/maps/templates/maps/roi.html:629
+#: eomf/photos/templates/photos/edit.html:74
+#: eomf/photos/templates/photos/viewDetails.html:69
+#: eomf/visualization/templates/visualization/gmap.html:563
+#: eomf/water/templates/water/map.html:567
+msgid "Latitude"
+msgstr "纬度"
+
+#: eomf/maps/templates/maps/poi.html:1190 eomf/maps/templates/maps/roi.html:631
+#: eomf/photos/templates/photos/edit.html:79
+#: eomf/photos/templates/photos/viewDetails.html:73
+#: eomf/visualization/templates/visualization/gmap.html:565
+#: eomf/water/templates/water/map.html:569
+msgid "Longitude"
+msgstr "经度"
+
+#: eomf/maps/templates/maps/poi.html:1220 eomf/maps/templates/maps/roi.html:646
+#: eomf/visualization/templates/visualization/gmap.html:580
+#: eomf/water/templates/water/map.html:584
+msgid "or enter <strong>Decimal degrees</strong> below:"
+msgstr "或输入回车"
+
+#: eomf/maps/templates/maps/poi.html:1238 eomf/maps/templates/maps/roi.html:655
+#: eomf/visualization/templates/visualization/gmap.html:590
+#: eomf/water/templates/water/map.html:594
+#, fuzzy
+#| msgid "2. Zoom-in the map and then click on a point of interest"
+msgid "1c. Zoom-in the map and then click on a point of interest"
+msgstr "2.放大地图并点击兴趣点"
+
+#: eomf/maps/templates/maps/poi.html:1268
+msgid "2. Provide information about the point (EX:' factory 'etc..)"
+msgstr ""
+
+#: eomf/maps/templates/maps/roi.html:613
+msgid "Regions/ Areas of interest"
+msgstr ""
+
+#: eomf/maps/templates/maps/roi.html:669
+msgid "2. Select a pixel size and classify"
+msgstr ""
+
+#: eomf/maps/templates/maps/viewpoi.html:4
+#, fuzzy
+#| msgid "Download"
+msgid "Download POIs"
+msgstr "下载"
+
+#: eomf/photos/forms.py:68 eomf/photos/forms.py:91 eomf/photos/forms.py:103
+msgid "All"
+msgstr "所有"
+
+#: eomf/photos/models.py:28
+msgid "Continent"
+msgstr "大陆"
+
+#: eomf/photos/models.py:29
+msgid "Continents"
+msgstr "大陆"
+
+#: eomf/photos/models.py:41 eomf/photos/templates/photos/edit.html:105
+#: eomf/photos/templates/photos/viewDetails.html:94
+msgid "Category"
+msgstr "类别"
+
+#: eomf/photos/models.py:42
+#: eomf/workshops/templates/workshops/categories_legend.html:3
+msgid "Categories"
+msgstr "分类"
+
+#: eomf/photos/models.py:70 eomf/photos/models.py:101
+msgid "Countries"
+msgstr "国家"
+
+#: eomf/photos/models.py:84
+msgid "Region"
+msgstr "区域"
+
+#: eomf/photos/models.py:85
+msgid "Regions"
+msgstr "地区"
+
+#: eomf/photos/models.py:109
+msgid "Researches"
+msgstr "研究"
+
+#: eomf/photos/models.py:135
+msgid "Photo User"
+msgstr "用户照片"
+
+#: eomf/photos/models.py:136
+msgid "Photo Users"
+msgstr "用户照片"
+
+#: eomf/photos/models.py:143
+msgid "Theme"
+msgstr "主题"
+
+#: eomf/photos/models.py:148
+msgid "Deleted"
+msgstr "已删除"
+
+#: eomf/photos/models.py:149
+msgid "Public"
+msgstr "公开"
+
+#: eomf/photos/models.py:150
+msgid "Private"
+msgstr "私人"
+
+#: eomf/photos/models.py:154
+msgid "North"
+msgstr "北"
+
+#: eomf/photos/models.py:155
+msgid "NNE"
+msgstr "NNE"
+
+#: eomf/photos/models.py:156
+msgid "NE"
+msgstr "NE"
+
+#: eomf/photos/models.py:157
+msgid "ENE"
+msgstr "ENE"
+
+#: eomf/photos/models.py:158
+msgid "East"
+msgstr "东方"
+
+#: eomf/photos/models.py:159
+msgid "ESE"
+msgstr "ESE"
+
+#: eomf/photos/models.py:160
+msgid "SE"
+msgstr "SE"
+
+#: eomf/photos/models.py:161
+msgid "SSE"
+msgstr "SSE"
+
+#: eomf/photos/models.py:162
+msgid "South"
+msgstr "南"
+
+#: eomf/photos/models.py:163
+msgid "SSW"
+msgstr "SSW"
+
+#: eomf/photos/models.py:164
+msgid "SW"
+msgstr "SW"
+
+#: eomf/photos/models.py:165
+msgid "WSW"
+msgstr "WSW"
+
+#: eomf/photos/models.py:166
+msgid "West"
+msgstr "西方"
+
+#: eomf/photos/models.py:167
+msgid "WNW"
+msgstr "WNW"
+
+#: eomf/photos/models.py:168
+msgid "NW"
+msgstr "NW"
+
+#: eomf/photos/models.py:169
+msgid "NNW"
+msgstr "北北西"
+
+#: eomf/photos/models.py:419 eomf/photos/templates/photos/edit.html:55
+#: eomf/photos/templates/photos/viewDetails.html:57
+#: eomf/templates/mainmenu.html:130 eomf/templates/mainmenu.html:202
+msgid "Photo"
+msgstr "照片"
+
+#: eomf/photos/models.py:420
+msgid "Photos"
+msgstr "照片"
+
+#: eomf/photos/templates/photos/Field_photo_weekend.html:4
+#: eomf/photos/templates/photos/overview.html:4
+msgid "EOMF Field Photo overview"
+msgstr "EOMF现场照片概述"
+
+#: eomf/photos/templates/photos/browse.html:26
+#: eomf/photos/templates/photos/map.html:47
+#: eomf/photos/templates/photos/overview.html:33
+msgid "Global Geo-Referenced Field Photo Library"
+msgstr "环球地理参考场图片库"
+
+#: eomf/photos/templates/photos/browse.html:30
+#, fuzzy
+#| msgid "Search"
+msgid "Search Results"
+msgstr "搜索"
+
+#: eomf/photos/templates/photos/browse.html:56
+msgid "Photos per page"
+msgstr "照片每页"
+
+#: eomf/photos/templates/photos/browse.html:84
+msgid " Image Format."
+msgstr ""
+
+#: eomf/photos/templates/photos/browse.html:85
+#: eomf/photos/templates/photos/browse_gallery_map.html:64
+#: eomf/photos/templates/photos/user.html:74
+msgid "CSV file and images."
+msgstr "CSV文件和图像。"
+
+#: eomf/photos/templates/photos/browse.html:86
+#, fuzzy
+#| msgid "KMZ: KML and images."
+msgid "KML: KML and images."
+msgstr "KMZ：KML和图像。"
+
+#: eomf/photos/templates/photos/browse.html:91
+msgid " Image Size."
+msgstr ""
+
+#: eomf/photos/templates/photos/browse.html:92
+#: eomf/photos/templates/photos/browse_gallery_map.html:70
+#: eomf/photos/templates/photos/user.html:80
+msgid "Original images."
+msgstr "原始图像。"
+
+#: eomf/photos/templates/photos/browse.html:93
+#: eomf/photos/templates/photos/browse_gallery_map.html:71
+#: eomf/photos/templates/photos/user.html:81
+msgid "Downsized images."
+msgstr "缩小图像。"
+
+#: eomf/photos/templates/photos/browse.html:96
+#: eomf/photos/templates/photos/browse_gallery_map.html:74
+#: eomf/photos/templates/photos/upload.html:262
+#: eomf/photos/templates/photos/user.html:84
+msgid "Download"
+msgstr "下载"
+
+#: eomf/photos/templates/photos/browse_gallery_map.html:6
+#: eomf/photos/templates/photos/user.html:14
+msgid "photos"
+msgstr "照片"
+
+#: eomf/photos/templates/photos/browse_gallery_map.html:33
+#: eomf/photos/templates/photos/user.html:41
+msgid "Per page"
+msgstr "每页"
+
+#: eomf/photos/templates/photos/browse_gallery_map.html:57
+#: eomf/photos/templates/photos/user.html:68
+msgid "Select All"
+msgstr "全选"
+
+#: eomf/photos/templates/photos/browse_gallery_map.html:65
+#: eomf/photos/templates/photos/user.html:75
+msgid "KMZ: KML and images."
+msgstr "KMZ：KML和图像。"
+
+#: eomf/photos/templates/photos/browse_gallery_map.html:77
+msgid "Click Here to Batch Edit Selected Photos"
+msgstr "点击这里批量编辑所选照片"
+
+#: eomf/photos/templates/photos/browse_gallery_map.html:83
+msgid "batchedit"
+msgstr "batchedit"
+
+#: eomf/photos/templates/photos/edit.html:49
+#: eomf/photos/templates/photos/viewDetails.html:52
+msgid "Edit Photo"
+msgstr "编辑照片"
+
+#: eomf/photos/templates/photos/edit.html:69
+#: eomf/photos/templates/photos/viewDetails.html:65
+msgid "Location"
+msgstr "地点"
+
+#: eomf/photos/templates/photos/edit.html:72
+msgid "In Latitude and Longitude"
+msgstr "在纬度和经度"
+
+#: eomf/photos/templates/photos/edit.html:75
+#: eomf/photos/templates/photos/edit.html:80
+msgid "Decimal degrees"
+msgstr "十进制度"
+
+#: eomf/photos/templates/photos/edit.html:85
+#: eomf/photos/templates/photos/viewDetails.html:78
+msgid "Altitude"
+msgstr "海拔"
+
+#: eomf/photos/templates/photos/edit.html:86
+msgid "Meters"
+msgstr "米"
+
+#: eomf/photos/templates/photos/edit.html:90
+#: eomf/photos/templates/photos/viewDetails.html:82
+msgid "Taken Date"
+msgstr "拍摄日期"
+
+#: eomf/photos/templates/photos/edit.html:95
+#: eomf/photos/templates/photos/viewDetails.html:86
+msgid "Direction"
+msgstr "方向"
+
+#: eomf/photos/templates/photos/edit.html:96
+msgid "Cardinal direction"
+msgstr "红衣主教方向"
+
+#: eomf/photos/templates/photos/edit.html:100
+#: eomf/photos/templates/photos/viewDetails.html:90
+msgid "Status"
+msgstr "状态"
+
+#: eomf/photos/templates/photos/edit.html:110
+#: eomf/photos/templates/photos/view.html:26
+#: eomf/photos/templates/photos/viewDetails.html:98
+msgid "Field Notes"
+msgstr "现场注意事项"
+
+#: eomf/photos/templates/photos/edit.html:117
+msgid "Save & go Previous"
+msgstr "储存并去上一页"
+
+#: eomf/photos/templates/photos/edit.html:119
+msgid "Save"
+msgstr "保存"
+
+#: eomf/photos/templates/photos/edit.html:121
+msgid "Save & go next"
+msgstr "储存并去旁边"
+
+#: eomf/photos/templates/photos/exif.html:5
+msgid "EOMF EXIF photo"
+msgstr "EOMF照片的EXIF"
+
+#: eomf/photos/templates/photos/exif.html:8
+msgid "View EXIF"
+msgstr "查看EXIF"
+
+#: eomf/photos/templates/photos/leftmenu.html:22
+msgid "Photos Actions"
+msgstr "照片行动"
+
+#: eomf/photos/templates/photos/leftmenu.html:31
+msgid "Browse"
+msgstr "浏览"
+
+#: eomf/photos/templates/photos/leftmenu.html:36
+msgid "Map"
+msgstr "地图"
+
+#: eomf/photos/templates/photos/leftmenu.html:42
+msgid "My Photos"
+msgstr "我的照片"
+
+#: eomf/photos/templates/photos/leftmenu.html:47
+#: eomf/photos/templates/photos/upload.html:147
+msgid "Upload"
+msgstr "上传"
+
+#: eomf/photos/templates/photos/leftmenu.html:54
+msgid "Working Photos"
+msgstr "工作照片"
+
+#: eomf/photos/templates/photos/leftmenu_crowdsourcing.html:24
+msgid "Crowdsourcing and Citizen Science Projects"
+msgstr ""
+
+#: eomf/photos/templates/photos/leftmenu_crowdsourcing.html:29
+msgid "PicturePost"
+msgstr ""
+
+#: eomf/photos/templates/photos/leftmenu_crowdsourcing.html:34
+#, fuzzy
+#| msgid "Field Photo Weekends"
+msgid "Field Photo Weekend"
+msgstr "现场照片周末"
+
+#: eomf/photos/templates/photos/leftmenu_crowdsourcing.html:39
+#, fuzzy
+#| msgid "In-situ Observation Sites"
+msgid "Earth Observation Day"
+msgstr "原位观测站点"
+
+#: eomf/photos/templates/photos/map.html:4
+msgid "EOMF Field Photo Map"
+msgstr "EOMF现场照片地图"
+
+#: eomf/photos/templates/photos/map.html:49
+#, fuzzy
+#| msgid "Loading photos..."
+msgid "Loading Photos..."
+msgstr "加载的照片..."
+
+#: eomf/photos/templates/photos/map.html:52
+#, fuzzy
+#| msgid "Total photos"
+msgid "Total Photos: "
+msgstr "共有照片"
+
+#: eomf/photos/templates/photos/overview.html:36
+#, fuzzy
+#| msgid ""
+#| "A picture is worth a thousand words, and a geo-referenced (geo-tagged) "
+#| "field photo is even better. Everyday, researchers, students and citizens "
+#| "use GPS cameras and smartphones to take photos in the fields, as part of "
+#| "their efforts to document their observations of landscapes, agriculture, "
+#| "forests, natural disasters, and wildlife. This Geo-Referenced Field Photo "
+#| "Library is a community- and citizen- science data portal for people to "
+#| "share, visualize and archive geo-referenced photos from the fields in the "
+#| "world. Users can upload, edit, query and download geo-referenced field "
+#| "photos in the library, and use the photo-based thematic geospatial "
+#| "datasets for the studies of land use and land cover change, the impacts "
+#| "of extreme weather events, and wildlife conservation, etc. Users who "
+#| "provide photos can decide whether individual photos are to be shared or "
+#| "not. A registered user can upload photos into the library and has access "
+#| "to more field photos in the library than a guest user."
+msgid ""
+"A picture is worth a thousand words, and a geo-referenced (geo-tagged) field "
+"photo is even better. Everyday, researchers, students and citizens use GPS "
+"cameras and smartphones to take photos in the fields, as part of their "
+"efforts to document their observations of landscapes, agriculture, forests, "
+"natural disasters, and wildlife. This Geo-Referenced Field Photo Library is "
+"a community- and citizen- science data portal for people to share, visualize "
+"and archive geo-referenced photos from the fields in the world. Users can "
+"upload, edit, query and download geo-referenced field photos in the library, "
+"and use the photo-based thematic geospatial datasets for the studies of land "
+"use and land cover change, the impacts of extreme weather events, and "
+"wildlife conservation, etc. Users who provide photos can decide whether "
+"individual photos are to be shared or not. A registered user can upload "
+"photos into the library and has access to more field photos in the library "
+"than a guest user. "
+msgstr ""
+"一张图片胜过千言万语，以及地理参考（地理标记）的照片领域，甚至更好。每天，研"
+"究人员，学生和市民使用GPS相机和智能手机拍照的领域，因为他们的努力，记录景观，"
+"农业，林业，自然灾害，野生动物和它们的意见的一部分。这种地理参考现场照片库是"
+"一个社区和公民身份的科学数据门户的人分享，可视化和在世界领域的归档地理参考的"
+"照片。用户可以上传，编辑，查询和下载地理参照场的照片库，并使用基于照片专题地"
+"理空间数据集土地利用和土地覆盖变化，极端天气事件的影响，以及野生动物保护等方"
+"面的研究。谁的用户提供的照片可以决定个人照片是否被共享与否。注册的用户可以上"
+"传照片到库中，并已获得更多的现场照片不是一个guest用户库。"
+
+#: eomf/photos/templates/photos/overview.html:38
+msgid "Share your field photos"
+msgstr "分享您的照片领域"
+
+#: eomf/photos/templates/photos/overview.html:39
+msgid "Show your footprint of travel, and"
+msgstr "显示你的旅行足迹，和"
+
+#: eomf/photos/templates/photos/overview.html:40
+msgid "Support monitoring of our Planet Earth!"
+msgstr "支持我们的监测地球的！"
+
+#: eomf/photos/templates/photos/overview.html:43
+msgid ""
+"Please read this article 'A Library of Georeferenced Photos From the Field'"
+msgstr "请阅读这篇文章“地理参考的照片库从字段”"
+
+#: eomf/photos/templates/photos/overview.html:44
+msgid ""
+"Please invite other people to participate in this community and citizen "
+"science effort and distribute this one-page flyer"
+msgstr "请邀请其他人参与到这个社会和公民科学精力和分发本单页传单"
+
+#: eomf/photos/templates/photos/overview.html:46
+#, fuzzy
+#| msgid "Field Photo Weekends"
+msgid "Field Photo Demo"
+msgstr "现场照片周末"
+
+#: eomf/photos/templates/photos/overview.html:52
+msgid "User's Guide"
+msgstr "用户指南"
+
+#: eomf/photos/templates/photos/overview.html:54
+msgid "About your GPS camera and smartphone"
+msgstr "关于您的GPS相机和智能手机"
+
+#: eomf/photos/templates/photos/overview.html:55
+msgid "How to use Field Photo Library (upload, edit, query, download)"
+msgstr "如何利用现场的照片库（上传，编辑，查询，下载）"
+
+#: eomf/photos/templates/photos/overview.html:56
+msgid "IGBP classification system"
+msgstr ""
+
+#: eomf/photos/templates/photos/overview.html:57
+msgid "How to take field photos for monitoring land use and land cover changes"
+msgstr "如何采取现场照片监测土地利用和土地覆盖变化"
+
+#: eomf/photos/templates/photos/overview.html:58
+msgid ""
+"How to take field photos for monitoring water quality and harmful algae "
+"blooms"
+msgstr "如何采取现场照片用于监测水质，有害藻类"
+
+#: eomf/photos/templates/photos/overview.html:62
+msgid "Smartphone Apps"
+msgstr "智能手机应用程序"
+
+#: eomf/photos/templates/photos/overview.html:66
+msgid "IOS"
+msgstr "IOS"
+
+#: eomf/photos/templates/photos/overview.html:71
+msgid ""
+"Iphone app is now available in Apple Store, please <a href=\"https://itunes."
+"apple.com/us/app/field-photo/id717945301\">download</a> and install it. It "
+"is FREE!!"
+msgstr ""
+"iPhone应用程序现已在苹果商店可用，请<a href=\"https://itunes.apple.com/us/"
+"app/field-photo/id717945301\">下载</a>并安装它。它是免费的！"
+
+#: eomf/photos/templates/photos/overview.html:76
+msgid "Android:"
+msgstr "Android的："
+
+#: eomf/photos/templates/photos/overview.html:78
+msgid ""
+"Android app is now available in Google Play Store, please <a href=\"https://"
+"play.google.com/store/apps/details?id=com.eomf\">download</a> and install "
+"it. It is FREE!!"
+msgstr ""
+"Android应用程序现在可以在谷歌Play商店，请<a href=\"https://play.google.com/"
+"store/apps/details?id=com.eomf\">下载</a>并安装它。它是免费的！"
+
+#: eomf/photos/templates/photos/overview.html:86
+msgid "Field Photos Projects"
+msgstr "现场照片项目"
+
+#: eomf/photos/templates/photos/overview.html:90
+#: eomf/photos/templates/photos/overview.html:129
+#: eomf/photos/templates/photos/overview.html:161
+#: eomf/photos/templates/photos/overview.html:188
+#: eomf/photos/templates/photos/overview.html:204
+msgid "Field Photo Weekends"
+msgstr "现场照片周末"
+
+#: eomf/photos/templates/photos/overview.html:91
+#, fuzzy
+#| msgid "Field Photo Weekends"
+msgid "Latest Field Photo Weekend"
+msgstr "现场照片周末"
+
+#: eomf/photos/templates/photos/overview.html:205
+msgid ""
+"This is a citizen science effort through collaboration among the <a href="
+"\"http://www.cocorahs.org/Content.aspx?page=mod&mod=1\">CoCoRaHS</a>, <a "
+"href='http://www.southernclimate.org/fieldphotos/'>SCIPP</a> and <a "
+"href='eomf.ou.edu'>EOMF</a>.  For additional information, please visit <a "
+"href=\"http://www.cocorahs.org/Content.aspx?page=mod&mod=1\">CoCoRaHS</a> "
+"and <a href='http://www.southernclimate.org/fieldphotos/'>SCIPP</a> websites."
+"It was first launched for the Labor Day Weekend in 2012."
+msgstr ""
+"这是通过协作公民科学努力<a href=\"http://www.cocorahs.org/Content.aspx?"
+"page=mod&amp;mod=1\"> CoCoRaHS </A>中，的<a href =“HTTP ：//www."
+"southernclimate.org/fieldphotos/'> SCIPP </a>和<a href='eomf.ou.edu'> EOMF </"
+"A>。有关更多信息，请访问<a href=\"http://www.cocorahs.org/Content.aspx?"
+"page=mod&amp;mod=1\"> CoCoRaHS </A>和的<a href =“HTTP：// WWW ."
+"southernclimate.org / fieldphotos /'> SCIPP </A> websites.It最早在2012年推出"
+"的劳动节周末。"
+
+#: eomf/photos/templates/photos/overview.html:227
+msgid "Acknowledgements"
+msgstr "致谢"
+
+#: eomf/photos/templates/photos/overview.html:229
+msgid ""
+"The Geo-Referenced Field photos in this Field Photo library come from many "
+"people and projects. Their contributions make this library possible and grow "
+"over time. Thanks."
+msgstr ""
+"地缘基准场的照片在该领域的照片库来自许多人员和项目。他们的贡献使这个库可能，"
+"随着时间的推移。谢谢。"
+
+#: eomf/photos/templates/photos/photo_tile.html:15
+msgid "Image file missing"
+msgstr "丢失的图像文件"
+
+#: eomf/photos/templates/photos/photo_tile.html:18
+#: eomf/photos/templates/photos/photo_tile_for_userPhotos.html:12
+#: eomf/photos/templates/photos/photo_tile_reduced.html:15
+msgid "Image not available"
+msgstr "无法显示图片"
+
+#: eomf/photos/templates/photos/photo_tile.html:38
+#: eomf/photos/templates/photos/photo_tile_for_userPhotos.html:32
+#: eomf/photos/templates/photos/photo_tile_reduced.html:30
+msgid "Category not set"
+msgstr "类别未设置"
+
+#: eomf/photos/templates/photos/photo_tile.html:42
+#: eomf/photos/templates/photos/photo_tile_for_userPhotos.html:36
+#: eomf/photos/templates/photos/view.html:46
+msgid "Edit"
+msgstr "编辑"
+
+#: eomf/photos/templates/photos/photo_tile.html:43
+#: eomf/photos/templates/photos/photo_tile_for_userPhotos.html:37
+#: eomf/photos/templates/photos/upload.html:187
+#: eomf/photos/templates/photos/view.html:47
+#: eomf/visualization/templates/visualization/multiple.html:56
+msgid "Delete"
+msgstr "删除"
+
+#: eomf/photos/templates/photos/photo_tile.html:47
+#: eomf/photos/templates/photos/photo_tile_for_userPhotos.html:41
+#: eomf/photos/templates/photos/view.html:49
+msgid ""
+"View MODIS data for this photo. Click on this button and scroll down to the "
+"bottom of the page and to select appropriate dataset and year"
+msgstr ""
+"查看MODIS数据的这张照片。单击此按钮，然后向下滚动到页面的底部，并选择合适的数"
+"据集和年份"
+
+#: eomf/photos/templates/photos/search_form.html:127
+#, fuzzy
+#| msgid "Search"
+msgid "Search By:"
+msgstr "搜索"
+
+#: eomf/photos/templates/photos/search_form.html:131
+msgid "1. Land Cover Type"
+msgstr ""
+
+#: eomf/photos/templates/photos/search_form.html:143
+msgid "2. Keywords In Metadata"
+msgstr ""
+
+#: eomf/photos/templates/photos/search_form.html:155
+msgid "3. Time Period"
+msgstr ""
+
+#: eomf/photos/templates/photos/search_form.html:159
+msgid "Date from"
+msgstr "从日期"
+
+#: eomf/photos/templates/photos/search_form.html:162
+msgid "Date to"
+msgstr "日期"
+
+#: eomf/photos/templates/photos/search_form.html:169
+#, fuzzy
+#| msgid "Geographical"
+msgid "4. Geographic Location"
+msgstr "地理"
+
+#: eomf/photos/templates/photos/search_form.html:176
+#: eomf/photos/templates/photos/search_form.html:186
+#: eomf/photos/templates/photos/search_form.html:197
+msgid "(OR)"
+msgstr ""
+
+#: eomf/photos/templates/photos/search_form.html:180
+#, fuzzy
+#| msgid "Latitude"
+msgid "Enter Latitude"
+msgstr "纬度"
+
+#: eomf/photos/templates/photos/search_form.html:191
+#, fuzzy
+#| msgid "Longitude"
+msgid "Enter Longitude"
+msgstr "经度"
+
+#: eomf/photos/templates/photos/search_form.html:201
+#, fuzzy
+#| msgid "Enter the address"
+msgid "Enter Nearness"
+msgstr "输入地址"
+
+#: eomf/photos/templates/photos/search_form.html:210
+#, fuzzy
+#| msgid "Region"
+msgid "5. Region"
+msgstr "区域"
+
+#: eomf/photos/templates/photos/search_form.html:216
+msgid "Min-Lon"
+msgstr ""
+
+#: eomf/photos/templates/photos/search_form.html:218
+msgid "Max-Lon"
+msgstr ""
+
+#: eomf/photos/templates/photos/search_form.html:222
+msgid "Min-Lat"
+msgstr ""
+
+#: eomf/photos/templates/photos/search_form.html:224
+msgid "Max-Lat"
+msgstr ""
+
+#: eomf/photos/templates/photos/search_form.html:231
+#, fuzzy
+#| msgid "Country"
+msgid "6. Country"
+msgstr "国家"
+
+#: eomf/photos/templates/photos/search_form.html:242
+#, fuzzy
+#| msgid "Continent"
+msgid "7. Continent"
+msgstr "大陆"
+
+#: eomf/photos/templates/photos/search_form.html:253
+#, fuzzy
+#| msgid "Username"
+msgid "8. Username"
+msgstr "用户名"
+
+#: eomf/photos/templates/photos/upload.html:4
+msgid "EOMF photo upload"
+msgstr "EOMF照片上传"
+
+#: eomf/photos/templates/photos/upload.html:151
+msgid ""
+"You can select multiple files, drag&amp;drop files into the window with "
+"Firefox, Safari, Chrome"
+msgstr "您可以选择多个文件，拖动文件拖放到与火狐，Safari，Chrome浏览器的窗口"
+
+#: eomf/photos/templates/photos/upload.html:152
+msgid "Don't forget to click"
+msgstr ""
+
+#: eomf/photos/templates/photos/upload.html:152
+msgid "'Save Uploaded Images'"
+msgstr ""
+
+#: eomf/photos/templates/photos/upload.html:152
+msgid "after uploading all the images"
+msgstr ""
+
+#: eomf/photos/templates/photos/upload.html:153
+#, fuzzy
+#| msgid ""
+#| "The default setting for photos is public, do you want to change it to "
+#| "private?"
+msgid ""
+"The default setting for photos is public, if you want to change it to "
+"private, then check the 'private box'"
+msgstr "默认设置为照片是公开的，你要不要将其更改为私有？"
+
+#: eomf/photos/templates/photos/upload.html:174
+msgid "Add files..."
+msgstr "添加文件..."
+
+#: eomf/photos/templates/photos/upload.html:179
+msgid "Start upload"
+msgstr "开始上传"
+
+#: eomf/photos/templates/photos/upload.html:183
+msgid "Cancel upload"
+msgstr "取消上传"
+
+#: eomf/photos/templates/photos/upload.html:192
+#, fuzzy
+#| msgid "Select All"
+msgid "Select All/None"
+msgstr "全选"
+
+#: eomf/photos/templates/photos/upload.html:230
+msgid ""
+"The default setting for photos is public, do you want to change it to "
+"private?"
+msgstr "默认设置为照片是公开的，你要不要将其更改为私有？"
+
+#: eomf/photos/templates/photos/upload.html:241
+msgid "Notes"
+msgstr "笔记"
+
+#: eomf/photos/templates/photos/upload.html:243
+msgid "Please upload individual images (<strong>JPEG, PNG, GIF</strong>)"
+msgstr "请上传个人照片 (<strong>JPEG, PNG, GIF</strong>)"
+
+#: eomf/photos/templates/photos/upload.html:244
+msgid ""
+"Total upload limit is set at 650MB, but it is recommended you do not upload "
+"files bigger than <strong>25MB</strong>."
+msgstr ""
+"总的上传限制设置为650MB，但是建议你不要上传超过<strong>25MB</strong>更大的文"
+"件。"
+
+#: eomf/photos/templates/photos/upload.html:245
+msgid ""
+"If you are having trouble uploading big files (over 25M) select multiple "
+"smaller files in the file browse window."
+msgstr "如果您有麻烦上传大文件（超过25M）选择在文件浏览窗口多个较小的文件。"
+
+#: eomf/photos/templates/photos/upload.html:246
+msgid ""
+"You can <strong>drag &amp; drop</strong> files from your desktop on this "
+"webpage with Google Chrome, Mozilla Firefox and Apple Safari."
+msgstr ""
+"您可以拖动 文件到到网页使用chrome，Mozilla Firefox浏览器和Apple Safari从桌面"
+"文件。"
+
+#: eomf/photos/templates/photos/upload.html:260
+msgid "Next"
+msgstr "下一个"
+
+#: eomf/photos/templates/photos/upload.html:261
+msgid "Previous"
+msgstr "前"
+
+#: eomf/photos/templates/photos/upload.html:267
+msgid "File is too big"
+msgstr "文件过大"
+
+#: eomf/photos/templates/photos/upload.html:268
+msgid "File is too small"
+msgstr "文件太小"
+
+#: eomf/photos/templates/photos/upload.html:269
+msgid "Filetype not allowed"
+msgstr "文件类型不允许"
+
+#: eomf/photos/templates/photos/upload.html:270
+msgid "Max number of files exceeded"
+msgstr "超过文件的最大数量"
+
+#: eomf/photos/templates/photos/upload.html:271
+msgid "Uploaded bytes exceed file size"
+msgstr "上传字节数超过文件大小"
+
+#: eomf/photos/templates/photos/upload.html:272
+msgid "Empty file upload result"
+msgstr "空文件上传结果"
+
+#: eomf/photos/templates/photos/upload.html:296
+msgid "Please Log in to upload photos."
+msgstr "请登录上传照片。"
+
+#: eomf/photos/templates/photos/user.html:5
+msgid "EOMF user photos"
+msgstr "EOMF用户照片"
+
+#: eomf/photos/templates/photos/user.html:93
+msgid "Submit Batch Edits"
+msgstr "提交批量编辑"
+
+#: eomf/photos/templates/photos/user.html:102
+#: eomf/photos/templates/photos/user.html:106
+msgid "By date of Photo upload"
+msgstr "通过照片上传日期"
+
+#: eomf/photos/templates/photos/user.html:102
+#: eomf/photos/templates/photos/user.html:106
+msgid "By date of Photo Taken"
+msgstr "通过照片的拍摄日期"
+
+#: eomf/photos/templates/photos/user.html:151
+msgid "You don't seem to have any photos yet."
+msgstr "你似乎没有任何照片呢。"
+
+#: eomf/photos/templates/photos/user.html:152
+msgid "Upload</a> some photos, and they will show up on this page."
+msgstr "上传一些照片，他们会显示此页面上。"
+
+#: eomf/photos/templates/photos/view.html:5
+msgid "EOMF Photo view"
+msgstr "EOMF图片浏览"
+
+#: eomf/photos/templates/photos/view.html:10
+msgid "View Photo"
+msgstr "查看图片"
+
+#: eomf/photos/templates/photos/view.html:23
+msgid "User"
+msgstr "用户"
+
+#: eomf/photos/templates/photos/view.html:24
+msgid "Filename"
+msgstr "文件名"
+
+#: eomf/photos/templates/photos/view.html:25
+msgid "Landcover"
+msgstr "土地覆盖"
+
+#: eomf/photos/templates/photos/view.html:25
+msgid "Not set"
+msgstr "没有设置"
+
+#: eomf/photos/templates/photos/view.html:26
+msgid "No notes"
+msgstr "没有票据"
+
+#: eomf/photos/templates/photos/view.html:28
+msgid "Exif"
+msgstr "EXIF"
+
+#: eomf/photos/templates/photos/view.html:47
+msgid "Are you sure, you want to delete?"
+msgstr "你确定，你要删除吗？"
+
+#: eomf/photos/templates/photos/viewDetails.html:5
+msgid "EOMF Photo details"
+msgstr "EOMF照片信息"
+
+#: eomf/publications/templates/publications/publication_list.html:3
+msgid "EOMF Publications"
+msgstr "EOMF出版物"
+
+#: eomf/publications/templates/publications/publication_list.html:22
+msgid "No publications are available."
+msgstr "无出版物都可以。"
+
+#: eomf/publications/templates/publications/section_list.html:46
+msgid "No Journals are available."
+msgstr "无期刊可供选择。"
+
+#: eomf/publications/templates/publications/section_list.html:47
+msgid "No Books and Book Chapters are available."
+msgstr "没有书籍和书籍章节都可用。"
+
+#: eomf/publications/templates/publications/section_list.html:48
+msgid "No Presentations are available"
+msgstr "没有演示文稿可用"
+
+#: eomf/settings.py:48
+msgid "English"
+msgstr "英语"
+
+#: eomf/settings.py:49
+msgid "Chinese"
+msgstr "中国"
+
+#: eomf/settings.py:50
+msgid "Spanish"
+msgstr "西班牙语"
+
+#: eomf/settings.py:51
+msgid "Nepali"
+msgstr "尼泊尔"
+
+#: eomf/settings.py:52
+msgid "French"
+msgstr "法国"
+
+#: eomf/stats/templates/stats/leftmenu.html:8
+#, fuzzy
+#| msgid "Registration"
+msgid "New User Registrations"
+msgstr "注册"
+
+#: eomf/stats/templates/stats/leftmenu.html:10
+msgid "New User Registrations in an Year Range"
+msgstr ""
+
+#: eomf/stats/templates/stats/leftmenu.html:12
+msgid "Cummulative Users"
+msgstr ""
+
+#: eomf/stats/templates/stats/leftmenu.html:14
+msgid "Users By Month"
+msgstr ""
+
+#: eomf/stats/templates/stats/leftmenu.html:19
+#, fuzzy
+#| msgid "Photos Actions"
+msgid "Photos By Month"
+msgstr "照片行动"
+
+#: eomf/stats/templates/stats/leftmenu.html:21
+#, fuzzy
+#| msgid "Photos"
+msgid "Photos Total"
+msgstr "照片"
+
+#: eomf/stats/templates/stats/leftmenu.html:27
+#, fuzzy
+#| msgid "Search"
+msgid "Search Form"
+msgstr "搜索"
+
+#: eomf/templates/admin/base_site.html:4
+msgid "Django site admin"
+msgstr "Django的站点管理员"
+
+#: eomf/templates/admin/base_site.html:7
+msgid "EOMF administration"
+msgstr "EOMF管理"
+
+#: eomf/templates/base.html:7
+msgid "EOMF: Earth Observation and Modeling Facility"
+msgstr "EOMF：地球观测与模拟研究中心"
+
+#: eomf/templates/base.html:246
+#, fuzzy
+#| msgid ""
+#| "Copyright &copy; 2013 Earth Observation and Modeling Facility, the "
+#| "University of Oklahoma<br>\n"
+#| "\t\t     101 David L. Boren Blvd, Norman, OK 73019, USA. Phone: (405) "
+#| "325-8941 <br>\n"
+#| "\t\t     All rights reserved."
+msgid ""
+"Copyright &copy; 2013 Earth Observation and Modeling Facility, the "
+"University of Oklahoma<br>\n"
+"        \t     101 David L. Boren Blvd, Norman, OK 73019, USA. Phone: (405) "
+"325-8941 <br>\n"
+"        \t     All rights reserved."
+msgstr ""
+"版权： 2013EOMF，俄克拉何马大学<br>\n"
+"101大卫L博伦大道，诺曼，OK 73019，USA。电话：（405）325-8941 <br>\n"
+"版权所有。"
+
+#: eomf/templates/home.html:64
+msgid " Welcome to the Earth Observation and Modeling Facility "
+msgstr "欢迎光地球观测与模拟研究中心"
+
+#: eomf/templates/home.html:66
+msgid ""
+"The EOMF is a TOASTY TOAST member of both (1) <a href='http://mpbio.ou."
+"edu/'> Department of Microbiology and Plant Biology, College of Arts and "
+"Sciences</a>, and (2) <a href='http://www.csa.ou.edu/'> Center for Spatial "
+"Analysis, College of Atmospheric and Geographic Sciences</a> at the <a "
+"href='http://www.ou.edu/web.html'> University of Oklahoma</a>. It is located "
+"at the Stephenson Research and Technology Center, Norman, Oklahoma. The EOMF "
+"focuses on geospatial science, technologies and applications in bio-, geo- "
+"and health- sciences, specifically in the areas of agriculture, forestry, "
+"ecology, biodiversity, land use and land cover changes, water quality, "
+"climate, infectious diseases and public health. It promotes community remote "
+"sensing and citizen science to address the grand challenges in our dynamic "
+"and rapidly changing planet Earth and the society."
+msgstr ""
+"EOMF是由（1）\n"
+" <a href='http://mpbio.ou.edu/'>微生物学和植物生物学系，空间分析中心和大气与"
+"地理科学学院</A>的，和（2）\n"
+" <a href='http://www.csa.ou.edu/'>中心空间分析，大气与地理科学学院</a>的处\n"
+" 俄克拉何马州的</A> <a href='http://www.ou.edu/web.html'>大学</A>。\n"
+" 它位于斯蒂芬森研究与技术中心，诺曼，俄克拉何马州。\n"
+" 该EOMF侧重于地理空间科学，技术和应用在生物，地质和卫生科学，特别是在农业，林"
+"业，生态，生物多样性，土地利用和土地覆盖变化的区域，\n"
+" 水质，气候，传染病和公众健康。它促进了社区遥感和公民科学应对重大挑战在我们的"
+"动态和快速变化的地球和社会。"
+
+#: eomf/templates/home.html:143
+msgid ""
+"Research, education and outreach activities at the EOMF have been generously "
+"supported by a number of funding agencies."
+msgstr "EOMF的科研，教育和推广活动获得多个资金机构的慷慨支持。"
+
+#: eomf/templates/mainmenu.html:133 eomf/templates/mainmenu.html:205
+msgid "Datasets"
+msgstr "数据集"
+
+#: eomf/templates/mainmenu.html:137 eomf/templates/mainmenu.html:209
+msgid "MODIS"
+msgstr "MODIS"
+
+#: eomf/templates/mainmenu.html:155 eomf/templates/mainmenu.html:227
+#: eomf/workshops/templates/workshops/overview.html:7
+msgid "Workshops"
+msgstr "研讨会"
+
+#: eomf/templates/mainmenu.html:161 eomf/templates/mainmenu.html:233
+msgid "Water"
+msgstr ""
+
+#: eomf/towers/templates/towers/leftmenu.html:3
+#, fuzzy
+#| msgid "Field Notes"
+msgid "Field Data"
+msgstr "现场注意事项"
+
+#: eomf/visualization/templates/visualization/base.html:3
+msgid "Data Visualization"
+msgstr "数据可视化"
+
+#: eomf/visualization/templates/visualization/composite.html:4
+msgid "EOMF MODIS Composite Image Visualization"
+msgstr "EOMF MODIS合成图像可视化"
+
+#: eomf/visualization/templates/visualization/composite.html:154
+msgid "MODIS TERRA composite map"
+msgstr "MODIS TERRA合成图"
+
+#: eomf/visualization/templates/visualization/composite.html:166
+msgid "50 km"
+msgstr "50公里"
+
+#: eomf/visualization/templates/visualization/composite.html:167
+msgid "20 km"
+msgstr "20公里"
+
+#: eomf/visualization/templates/visualization/composite.html:168
+msgid "5 km"
+msgstr "5公里"
+
+#: eomf/visualization/templates/visualization/composite.html:179
+#: eomf/workshops/templates/workshops/registration.html:18
+msgid "Date"
+msgstr "日期"
+
+#: eomf/visualization/templates/visualization/composite.html:202
+msgid "Julian calendar Leap years"
+msgstr "儒略历闰年"
+
+#: eomf/visualization/templates/visualization/composite.html:206
+msgid "Julian calendar Regular years"
+msgstr "儒略历定期年"
+
+#: eomf/visualization/templates/visualization/gmap.html:3
+#: eomf/water/templates/water/33-year-wbfm.html:3
+#: eomf/water/templates/water/map.html:3
+msgid "EOMF MODIS timeseries Single Site"
+msgstr "EOMF MODIS时间序列单站点"
+
+#: eomf/visualization/templates/visualization/gmap.html:545
+msgid "Retrieve time series MODIS data for a single study site"
+msgstr "检索时间序列MODIS数据的单一研究网站"
+
+#: eomf/visualization/templates/visualization/gmap.html:604
+#: eomf/water/templates/water/33-year-wbfm.html:536
+#: eomf/water/templates/water/map.html:608
+#, fuzzy
+#| msgid "3. Select a product and year(s)"
+msgid "2. Select a product and year(s)"
+msgstr "3.选择产品和年份"
+
+#: eomf/visualization/templates/visualization/gmap.html:626
+#: eomf/water/templates/water/33-year-wbfm.html:558
+#: eomf/water/templates/water/map.html:630
+#, fuzzy
+#| msgid "4. Submit your request"
+msgid "3. Submit your request"
+msgstr "4.提交您的申请"
+
+#: eomf/visualization/templates/visualization/multiple.html:5
+msgid "EOMF MODIS timeseries Multiple Site"
+msgstr "EOMF MODIS时间序列多个站点"
+
+#: eomf/visualization/templates/visualization/multiple.html:9
+msgid "MODIS time series request history for multiple sites"
+msgstr "MODIS时间序列请求历史的多个站点"
+
+#: eomf/visualization/templates/visualization/multiple.html:13
+msgid "Warning!"
+msgstr "警告！"
+
+#: eomf/visualization/templates/visualization/multiple.html:16
+msgid "Add request"
+msgstr "添加请求"
+
+#: eomf/visualization/templates/visualization/multiple.html:38
+msgid "Timestamp"
+msgstr "时间戳"
+
+#: eomf/visualization/templates/visualization/multiple.html:47
+msgid "Input file"
+msgstr "输入文件"
+
+#: eomf/visualization/templates/visualization/multiple.html:50
+msgid "Output file"
+msgstr "输出文件"
+
+#: eomf/visualization/templates/visualization/overview.html:4
+#: eomf/water/templates/water/overview.html:4
+msgid "EOMF Visualization overview"
+msgstr "EOMF可视化概述"
+
+#: eomf/visualization/templates/visualization/overview.html:11
+msgid ""
+"The EOMF Data Center hosts several hundreds of terabytes of MODIS data and "
+"products for the globe over the period of 2/2000 to present. Here you can "
+"visualize and download those MODIS data in several ways. Our web service is "
+"complementary to the web service provided by the USGS EDC (http://www.usgs."
+"gov/), where you can download large volume of MODIS data by tile and year."
+msgstr ""
+"EOMF数据中心承载数百TB的MODIS数据和产品，为全球超过2/2000期间提出。在这里，您"
+"可以查看和下载这些MODIS资料在几个方面。我们的网络服务是互补的美国地质调查局"
+"EDC（http://www.usgs.gov/），在那里你可以通过瓷砖和一年下载大量的MODIS资料所"
+"提供的Web服务。"
+
+#: eomf/visualization/templates/visualization/overview.html:14
+#: eomf/water/templates/water/overview.html:26
+msgid "Wild bird data"
+msgstr "野鸟数据"
+
+#: eomf/visualization/templates/visualization/overview.html:15
+#: eomf/water/templates/water/overview.html:27
+msgid ""
+"Satellite telemetry of wild birds provides useful information on local "
+"movement and seasonal migration of migratory wild birds. Here you can "
+"visualize wild bird movement data from satellite telemetry."
+msgstr ""
+"野生鸟类的卫星遥测提供当地运动和迁徙的野生鸟类的季节性迁徙的有用信息。在这"
+"里，你可以想像从卫星遥测野生鸟类的运动数据。"
+
+#: eomf/visualization/templates/visualization/overview.html:18
+#: eomf/water/templates/water/overview.html:30
+msgid "Avian influenza data"
+msgstr "禽流感数据"
+
+#: eomf/visualization/templates/visualization/overview.html:19
+#: eomf/water/templates/water/overview.html:31
+msgid ""
+"Transmission and spillover of avian influenza, specifically highly "
+"pathogenic avian influenza (e.g., influenza A subtype H5N1, H7N9) is a major "
+"concern of public health. Here you can visualize spatial patterns and "
+"temporal dynamics of HPAI H5N1outbreaks in the world."
+msgstr ""
+"传输和禽流感的蔓延，特别是高致病性禽流感（例如，甲型H5N1亚型，H7N9）是公众健"
+"康的一个主要问题。在这里，你可以想像的空间格局和高致病性禽流感H5N1outbreaks世"
+"界的时空动态。"
+
+#: eomf/water/templates/water/33-year-wbfm.html:519
+msgid "33 Year Water Body Frequency Map"
+msgstr ""
+
+#: eomf/water/templates/water/33-year-wbfm.html:521
+#, fuzzy
+#| msgid "2. Zoom-in the map and then click on a point of interest"
+msgid "Zoom-in the map and then click on a point of interest"
+msgstr "2.放大地图并点击兴趣点"
+
+#: eomf/water/templates/water/CONUS-Water.html:4
+#: eomf/water/templates/water/CONUS-Water.html:8
+msgid "CONUS-Water Datasets"
+msgstr ""
+
+#: eomf/water/templates/water/CONUS-Water.html:36
+msgid ""
+"Datasets of Annual and 33-year water body frequency maps of the contiguous "
+"US from 1984 to 2016"
+msgstr ""
+
+#: eomf/water/templates/water/CONUS-Water.html:39
+#: eomf/water/templates/water/overview.html:11
+msgid ""
+"There are 50 5-by-5 degree tiles covering the entire CONUS. In each zipped "
+"tile folder, there are 33 annual water body frequency images (e.g. "
+"freq_2016_-070_040.tif), one 33-year water body frequency image (e.g. "
+"33YearFreq_1984_2016_-070_040.tif), and one 33-year good observation image "
+"(e.g. 33YearGoodObs_1984_2016_-070_040.tif)."
+msgstr ""
+
+#: eomf/water/templates/water/CONUS-Water.html:45
+msgid ""
+" To use this data, please cite our articles: Zou, Z., Xiao, X., Dong, J., "
+"Qin, Y., Doughty, R.B., Menarguez, M.A., Zhang, G., Wang, J. Divergent "
+"Trends of Open Surface Water Body Area in the Contiguous United States from "
+"1984 to 2016, PNAS, doi: 10.1073/pnas.1719275115 Zou, Z., J. Dong, M. A. "
+"Menarguez, X. Xiao, Y. Qin, R. B. Doughty, K. V. Hooker, and K. David "
+"Hambright (2017), Continued decrease of open surface water body area in "
+"Oklahoma during 1984-2015, Sci Total Environ, 595, 451-460, doi: 10.1016/j."
+"scitotenv.2017.03.259."
+msgstr ""
+
+#: eomf/water/templates/water/leftmenu.html:23
+msgid "Surface Water Body Data Product"
+msgstr ""
+
+#: eomf/water/templates/water/leftmenu.html:31
+#, fuzzy
+#| msgid "Inventory as of"
+msgid "Inventory (Data Products)"
+msgstr "库存作为"
+
+#: eomf/water/templates/water/leftmenu.html:35
+msgid "CONUS-Water"
+msgstr ""
+
+#: eomf/water/templates/water/leftmenu.html:40
+msgid "GLOBAL-Water"
+msgstr ""
+
+#: eomf/water/templates/water/leftmenu.html:48
+msgid "33-year Water Body Frequency Map"
+msgstr ""
+
+#: eomf/water/templates/water/leftmenu.html:53
+msgid "Annual Water Body Frequency Map"
+msgstr ""
+
+#: eomf/water/templates/water/leftmenu.html:58
+msgid "33-year Good Observation Map"
+msgstr ""
+
+#: eomf/water/templates/water/map.html:549
+msgid "Global Water Body Mapping"
+msgstr ""
+
+#: eomf/water/templates/water/overview.html:10
+msgid ""
+"Annual and 33-year water body frequency maps of the contiguous US from 1984 "
+"to 2016"
+msgstr ""
+
+#: eomf/water/templates/water/overview.html:13
+msgid "Water body frequency images:"
+msgstr ""
+
+#: eomf/water/templates/water/overview.html:14
+msgid ""
+"Annual and 33-year water body frequency are defined as the ratio of water "
+"observations to total good observations in a year and in 1984-2016, "
+"respectively. The frequency stored in these image is compressed in 8 bits "
+"(1-255). To get the frequency in floating point (0-1.0), use the equation: f "
+"= (F-1)/254.0, where F is in 8 bits while f is in floating point. "
+msgstr ""
+
+#: eomf/water/templates/water/overview.html:16
+msgid "33-year good observation images:"
+msgstr ""
+
+#: eomf/water/templates/water/overview.html:17
+msgid ""
+"For each Landsat image, the CFmask band was used as a quality control band "
+"to remove the cloud, cloud shadow, and snow pixels. The solar azimuth and "
+"zenith angles of each image were used along with the Shuttle Radar "
+"Topography Mission (SRTM) digital elevation model (DEM) to simulate terrain "
+"shadows and remove them. The remaining pixels were considered as good "
+"observations that can be used for water body detection. The total good "
+"observation number during 1984-2016 is stored in the 33-year good "
+"observation images."
+msgstr ""
+
+#: eomf/workshops/templates/workshops/leftmenu.html:31
+#: eomf/workshops/templates/workshops/workshop_list_current.html:5
+msgid "Current Workshops"
+msgstr "当前研讨会"
+
+#: eomf/workshops/templates/workshops/leftmenu.html:36
+msgid "Past Workshops"
+msgstr "过去的研讨会"
+
+#: eomf/workshops/templates/workshops/overview.html:4
+msgid "EOMF: Workshops overview"
+msgstr "EOMF：工作室概况"
+
+#: eomf/workshops/templates/workshops/overview.html:11
+msgid ""
+"The EOMF has hosted or co-hosted a number of workshops and project\n"
+"                meetings in a variety of research areas, including disease "
+"ecology, remote\n"
+"                sensing, land use and land cover change, terrestrial carbon "
+"cycle and\n"
+"                climate change. Here you can read and download the materials "
+"related to\n"
+"                the workshops and project meetings. "
+msgstr ""
+"该EOMF主办或联合主办了一些研讨会和项目\n"
+"                会议在各种研究领域，包括疾病生态学，远程\n"
+"                遥感，土地利用和土地覆盖变化，陆地碳循环和\n"
+"                气候变化。在这里，您可以阅读和下载相关材料\n"
+"                研讨会和项目会议。"
+
+#: eomf/workshops/templates/workshops/registration.html:14
+msgid "Registration"
+msgstr "注册"
+
+#: eomf/workshops/templates/workshops/registration.html:23
+msgid ""
+"You have successfuly registered for this workshop. Please check your email "
+"for confirmation."
+msgstr "您已经注册successfuly本次研讨会。请检查您的电子邮件确认。"
+
+#: eomf/workshops/templates/workshops/registration.html:31
+#: eomf/workshops/templates/workshops/workshop.html:11
+msgid "Registered participants"
+msgstr "注册参会"
+
+#: eomf/workshops/templates/workshops/registration.html:39
+#: eomf/workshops/templates/workshops/workshop.html:19
+msgid "Name"
+msgstr "名字"
+
+#: eomf/workshops/templates/workshops/registration.html:40
+#: eomf/workshops/templates/workshops/workshop.html:20
+#: eomf/workshops/templates/workshops/workshop_presentations.html:25
+msgid "Institution"
+msgstr "机构"
+
+#: eomf/workshops/templates/workshops/sponsors.html:3
+msgid "Sponsors"
+msgstr "赞助商"
+
+#: eomf/workshops/templates/workshops/workshop.html:13
+#, fuzzy
+#| msgid "Affiliation"
+msgid "Awaiting validation"
+msgstr "联系"
+
+#: eomf/workshops/templates/workshops/workshop_extra_menu.html:4
+msgid "Content"
+msgstr "内容"
+
+#: eomf/workshops/templates/workshops/workshop_extra_menu.html:10
+msgid "Register now here"
+msgstr "现在注册"
+
+#: eomf/workshops/templates/workshops/workshop_extra_menu.html:12
+msgid "Registration closed"
+msgstr "注册关闭"
+
+#: eomf/workshops/templates/workshops/workshop_extra_menu.html:17
+#: eomf/workshops/templates/workshops/workshop_presentations_menu.html:3
+msgid "Agenda"
+msgstr "议程"
+
+#: eomf/workshops/templates/workshops/workshop_extra_menu.html:19
+msgid "Agenda not available"
+msgstr "不可议程"
+
+#: eomf/workshops/templates/workshops/workshop_extra_menu.html:26
+msgid "Photo Gallery"
+msgstr "照相馆"
+
+#: eomf/workshops/templates/workshops/workshop_list_past.html:6
+msgid "Previous Workshops"
+msgstr "上一页研讨会"
+
+#: eomf/workshops/templates/workshops/workshop_presentations.html:22
+msgid "Time"
+msgstr "时间"
+
+#: eomf/workshops/templates/workshops/workshop_presentations.html:23
+msgid "title"
+msgstr "称号"
+
+#: eomf/workshops/templates/workshops/workshop_presentations.html:24
+msgid "Presenter"
+msgstr "主持人"
+
+#: eomf/workshops/templates/workshops/workshop_presentations.html:26
+msgid "Link"
+msgstr "链接"
+
+#: eomf/workshops/templates/workshops/workshop_presentations_menu.html:7
+msgid "View agenda"
+msgstr "查看日程"
+
+#: eomf/workshops/templates/workshops/workshop_presentations_menu.html:9
+msgid "Not yet available"
+msgstr "尚未公布"
+
+#~ msgid "Please Login"
+#~ msgstr "请登录"
+
+#~ msgid "Remote Sensing Datasets"
+#~ msgstr "遥感数据集"
+
+#~ msgid ""
+#~ "Example: '/about/contact/'. Make sure to have leading and trailing "
+#~ "slashes."
+#~ msgstr "例如：'/约/触点/'。确保有开头和结尾的斜杠。"
+
+#~ msgid ""
+#~ "This value must contain only letters, numbers, underscores, dashes or "
+#~ "slashes."
+#~ msgstr "此值只能包含字母，数字，下划线，破折号或斜线。"
+
+#~ msgid "Advanced options"
+#~ msgstr "高级选项"
+
+#~ msgid "content"
+#~ msgstr "内容"
+
+#~ msgid "enable comments"
+#~ msgstr "启用评论"
+
+#~ msgid "template name"
+#~ msgstr "模板名称"
+
+#~ msgid ""
+#~ "Example: 'flatpages/contact_page.html'. If this isn't provided, the "
+#~ "system will use 'flatpages/default.html'."
+#~ msgstr ""
+#~ "例如：'flatpages / contact_page.html'。如果没有提供，系统将使用'flatpages/"
+#~ "default.html'。"
+
+#~ msgid "registration required"
+#~ msgstr "需要注册"
+
+#~ msgid ""
+#~ "If this is checked, only logged-in users will be able to view the page."
+#~ msgstr "如果被选中，仅登录的用户将能够查看该页面。"
+
+#~ msgid "content page"
+#~ msgstr "内容页"
+
+#~ msgid "content pages"
+#~ msgstr "内容页"
+
+#~ msgid "Min"
+#~ msgstr "敏"
+
+#~ msgid "Max"
+#~ msgstr "马克斯"
+
+#~ msgid "Search by keywords "
+#~ msgstr "按关键字搜索"
+
+#~ msgid ""
+#~ "Don't forget to click 'Save Uploaded Images' after uploading all the "
+#~ "images"
+#~ msgstr "不要忘记点击“保存上传的图片”上传的所有图片后，"
+
+#~ msgid "Additional sender"
+#~ msgstr "其他发件人"
+
+#~ msgid "Workshop"
+#~ msgstr "工作室"
