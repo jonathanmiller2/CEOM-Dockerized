@@ -80,7 +80,8 @@
           zoom: 3,
           center: startLocation,
           gestureHandling: 'cooperative',
-          mapTypeId: 'satellite'
+          mapTypeId: 'satellite',
+          draggableCursor: 'crosshair',
         });
     	
     	map.addListener('click', deselectCircles);
@@ -150,7 +151,7 @@
 
                     picTotal += count;
 
-					var rad = xsize * (12000 + 400 * Math.sqrt(count));
+					var rad = xsize * (15000 + 400 * Math.sqrt(count));
 
 					var coords = placemarks[i].getElementsByTagName('Point')[0].getElementsByTagName('coordinates')[0].textContent.split(',');
 					coords = {lat: parseFloat(coords[1]), lng: parseFloat(coords[0])};

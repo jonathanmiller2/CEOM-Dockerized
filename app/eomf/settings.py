@@ -48,9 +48,9 @@ LANGUAGES = (
     ('en', format_lazy('{}{}{}', 'English (', _('English'), ')')),
     ('zh-cn',format_lazy('{}{}{}', '中国简化 (',_('Chinese'),')')),
     ('es', format_lazy('{}{}{}', 'Español (',_('Spanish'),')')),
-    ('ne', format_lazy('{}{}{}', 'नेपाली (',_('Nepali'),')')),
     ('fr', format_lazy('{}{}{}', 'Français(',_('French'),')')),
 )
+#('ne', format_lazy('{}{}{}', 'नेपाली (',_('Nepali'),')')),
 
 LOCALE_PATHS = (
      os.path.join(BASE_DIR,'locale'),

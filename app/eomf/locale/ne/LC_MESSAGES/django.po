@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-06 02:26-0600\n"
+"POT-Creation-Date: 2020-11-10 01:01-0600\n"
 "PO-Revision-Date: 2015-06-09 13:19-0551\n"
 "Last-Translator: Michael Menarguez <mamenarguez@ou.edu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3726,7 +3726,7 @@ msgid ""
 "wildlife conservation, etc. Users who provide photos can decide whether "
 "individual photos are to be shared or not. A registered user can upload "
 "photos into the library and has access to more field photos in the library "
-"than a guest user. "
+"than a guest user."
 msgstr ""
 "एक तस्वीर एक हजार शब्द लायक छ, र एक भू-referenced (भू-ट्याग) क्षेत्र फोटो पनि राम्रो "
 "छ। दैनिक शोधकर्ताहरु विद्यार्थी र नागरिक परिदृश्य, कृषि, वन, प्राकृतिक प्रकोप, र वन्य "
@@ -4238,10 +4238,6 @@ msgid "Spanish"
 msgstr "स्पेनी"
 
 #: eomf/settings.py:51
-msgid "Nepali"
-msgstr "नेपाली"
-
-#: eomf/settings.py:52
 msgid "French"
 msgstr "फ्रान्सेली"
 
@@ -4340,20 +4336,17 @@ msgstr "पृथ्वी अवलोकन र मोडलिङ सुव�
 #| "        "
 msgid ""
 "The EOMF is a member of both (1) <a href='http://mpbio.ou.edu/'> Department "
-"of Microbiology and\n"
-"                Plant Biology, College of Arts and Sciences</a>, and (2) <a "
-"href='http://www.csa.ou.edu/'> Center for Spatial Analysis, College of\n"
-"                Atmospheric and Geographic Sciences</a> at the <a "
-"href='http://www.ou.edu/web.html'> University of Oklahoma</a>. It is located "
-"at the\n"
-"            Stephenson Research and Technology Center, Norman, Oklahoma. The "
-"EOMF focuses on geospatial science, technologies and applications in\n"
-"            bio-, geo- and health- sciences, specifically in the areas of "
-"agriculture, forestry, ecology, biodiversity, land use and land cover\n"
-"            changes, water quality, climate, infectious diseases and public "
-"health. It promotes community remote sensing and citizen science to\n"
-"            address the grand challenges in our dynamic and rapidly changing "
-"planet Earth and the society. "
+"of Microbiology and Plant Biology, College of Arts and Sciences</a>, and (2) "
+"<a href='http://www.csa.ou.edu/'> Center for Spatial Analysis, College of "
+"Atmospheric and Geographic Sciences</a> at the <a href='http://www.ou.edu/"
+"web.html'> University of Oklahoma</a>. It is located at the Stephenson "
+"Research and Technology Center, Norman, Oklahoma. The EOMF focuses on "
+"geospatial science, technologies and applications in bio-, geo- and health- "
+"sciences, specifically in the areas of agriculture, forestry, ecology, "
+"biodiversity, land use and land cover changes, water quality, climate, "
+"infectious diseases and public health. It promotes community remote sensing "
+"and citizen science to address the grand challenges in our dynamic and "
+"rapidly changing planet Earth and the society."
 msgstr ""
 "यो EOMF दुवै को एक सदस्य हो (1)\n"
 "<a href='http://mpbio.ou.edu/'> सूक्ष्म जीव र प्लान्ट जीवविज्ञान, कला को कलेज र "
@@ -4369,7 +4362,36 @@ msgstr ""
 "परिवर्तन ग्रह पृथ्वी र समाजमा भव्य चुनौतीहरूको सम्बोधन गर्न समुदाय टाढाको संवेदन र "
 "नागरिक विज्ञान बढावा।"
 
-#: eomf/templates/home.html:149
+#: eomf/templates/home.html:106
+msgid ""
+" In effort to participate in crowdsourcing and citizen science, we have "
+"developed the <a href='http://www.eomf.ou.edu/photos'>Global Geo-Referenced "
+"Field Photo Library,</a> for participants to <li> share, visualize, and "
+"analyze geo-referenced photos from various locations around the world,</"
+"li><li>download, visualize and analyze time series satellite observations "
+"since 2000 for specific landscapes of interest.</li> "
+msgstr ""
+
+#: eomf/templates/home.html:108
+msgid "You can download the field photo app from:"
+msgstr ""
+
+#: eomf/templates/home.html:116
+#, python-format
+msgid ""
+"Follow this <a style=\"display: inline\" href=\"http://www.eomf.ou.edu/"
+"static/Field%%20Photo%%20Animation%%20Draft%%2003.mp4\">video</a> on how to "
+"use the app.<br> Please join thousands of people to share your field photos, "
+"show your footprint of travel, and support monitoring of our Planet Earth."
+msgstr ""
+
+#: eomf/templates/home.html:120
+msgid ""
+"Featured Activity – Gross Primary Productivity of global terrestrial "
+"ecosystems"
+msgstr ""
+
+#: eomf/templates/home.html:140
 msgid ""
 "Research, education and outreach activities at the EOMF have been generously "
 "supported by a number of funding agencies."
@@ -4778,6 +4800,9 @@ msgstr "हेर्नुहोस् एजेन्डा"
 #: eomf/workshops/templates/workshops/workshop_presentations_menu.html:9
 msgid "Not yet available"
 msgstr "अहिले उपलब्ध छैन"
+
+#~ msgid "Nepali"
+#~ msgstr "नेपाली"
 
 #~ msgid "Please Login"
 #~ msgstr "लग कृपया"

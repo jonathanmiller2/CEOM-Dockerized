@@ -11,7 +11,7 @@ services:
                       echo MIGRATE_FIN &&
                       python manage.py check &&
                       echo CHECK_FIN &&
-                      python manage.py makemessages --locale=zh_CN &&
+                      python manage.py makemessages --all &&
                       echo MAKE_MESSAGE_FIN &&
                       python manage.py compilemessages &&
                       echo COMPILE_MESSAGE_FIN &&
