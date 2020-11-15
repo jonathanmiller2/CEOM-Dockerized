@@ -309,6 +309,3 @@ CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
 
 #TODO: Change the http to https
-#CORS_ALLOWED_ORIGINS = ["http://"+x for x in os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")]
-CORS_ALLOW_ALL_ORIGINS=True
-CORS_ALLOWED_ORIGINS = ["http://eomf-dev1.sooner.net.ou.edu"]
