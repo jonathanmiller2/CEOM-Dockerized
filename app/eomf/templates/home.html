@@ -63,13 +63,7 @@
     <div class="col-10 animate__animated animate__fadeIn">
         <h2 class="animate__animated animate__bounceInRight text-center"> {% blocktrans %} Welcome to the Earth Observation and Modeling Facility {% endblocktrans %}(EOMF)
         </h2>
-        <p style="padding:30px"> {% blocktrans %}The EOMF is a member of both (1) <a href='http://mpbio.ou.edu/'> Department of Microbiology and
-                Plant Biology, College of Arts and Sciences</a>, and (2) <a href='http://www.csa.ou.edu/'> Center for Spatial Analysis, College of
-                Atmospheric and Geographic Sciences</a> at the <a href='http://www.ou.edu/web.html'> University of Oklahoma</a>. It is located at the
-            Stephenson Research and Technology Center, Norman, Oklahoma. The EOMF focuses on geospatial science, technologies and applications in
-            bio-, geo- and health- sciences, specifically in the areas of agriculture, forestry, ecology, biodiversity, land use and land cover
-            changes, water quality, climate, infectious diseases and public health. It promotes community remote sensing and citizen science to
-            address the grand challenges in our dynamic and rapidly changing planet Earth and the society. {% endblocktrans %} </p>
+        <p style="padding:30px"> {% blocktrans %}The EOMF is a member of both (1) <a href='http://mpbio.ou.edu/'> Department of Microbiology and Plant Biology, College of Arts and Sciences</a>, and (2) <a href='http://www.csa.ou.edu/'> Center for Spatial Analysis, College of Atmospheric and Geographic Sciences</a> at the <a href='http://www.ou.edu/web.html'> University of Oklahoma</a>. It is located at the Stephenson Research and Technology Center, Norman, Oklahoma. The EOMF focuses on geospatial science, technologies and applications in bio-, geo- and health- sciences, specifically in the areas of agriculture, forestry, ecology, biodiversity, land use and land cover changes, water quality, climate, infectious diseases and public health. It promotes community remote sensing and citizen science to address the grand challenges in our dynamic and rapidly changing planet Earth and the society.{% endblocktrans %} </p>
         <div class="row">
             <div id="box1" class="col mx-auto gridCard">
                 <div id="box1-carousel" class="carousel slide" data-ride="carousel">
@@ -109,24 +103,21 @@
             </div>
             <div id="box2" class="col mx-auto gridCard">
                 <div>
-                    In effort to participate in crowdsourcing and citizen science, we have developed the 
-                    <a href='http://www.eomf.ou.edu/photos'>Global Geo-Referenced Field Photo Library,</a> for participants to 
-                    <li> share, visualize, and analyze geo-referenced photos from various locations around the world,</li>
-                    <li>download, visualize and analyze time series satellite observations since 2000 for specific landscapes of interest.</li>
+                    {% blocktrans %} In effort to participate in crowdsourcing and citizen science, we have developed the <a href='http://www.eomf.ou.edu/photos'>Global Geo-Referenced Field Photo Library,</a> for participants to <li> share, visualize, and analyze geo-referenced photos from various locations around the world,</li><li>download, visualize and analyze time series satellite observations since 2000 for specific landscapes of interest.</li> {% endblocktrans %}
                 </div>
-                <h6>You can download the field photo app from:</h6>
+                <h6>{% trans "You can download the field photo app from:" %}</h6>
                 <div align="center">
                     <a href='https://apps.apple.com/us/app/id1515049617'><img style='height: 50px;width: 150px;'
                             src="/static/img/AppDwnldImage/AppStoreButton.jpg" /> </a>
                     <a href='https://play.google.com/store/apps/details?id=edu.self.FieldPhoto&hl=en'><img style='height: 50px;width: 150px;'
                             src="/static/img/AppDwnldImage/PlayStoreButton.gif" /></a><br>
-                </div><br> Follow this <a style="display: inline"
-                    href="http://www.eomf.ou.edu/static/Field%20Photo%20Animation%20Draft%2003.mp4">video</a> on how to use the app.<br> Please join
-                thousands of people to share your field photos, show your footprint of travel, and support monitoring of our Planet Earth.
+                </div>
+                <br> 
+                {% blocktrans %}Follow this <a style="display: inline" href="http://www.eomf.ou.edu/static/Field%20Photo%20Animation%20Draft%2003.mp4">video</a> on how to use the app.<br> Please join thousands of people to share your field photos, show your footprint of travel, and support monitoring of our Planet Earth.{% endblocktrans %}
             </div>
             <div id="box3" class="col mx-auto gridCard">
                 <img class="gridCardImg" src="/static/img/Animation/GPP_2010.gif" />
-                <h5>Featured Activity – Gross Primary Productivity of global terrestrial ecosystems</h5>
+                <h5>{% trans "Featured Activity – Gross Primary Productivity of global terrestrial ecosystems" %}</h5>
             </div>
         </div>
         <div class="row mt-4">

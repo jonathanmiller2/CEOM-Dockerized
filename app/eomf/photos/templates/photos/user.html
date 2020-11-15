@@ -57,7 +57,7 @@
     <br/>
     <div class='row-fluid'>
     {% if checkbox %}
-        <form method='post' name="downloadORbatchedit" onSubmit="return ActionOnSubmit();">
+        <form method='post' id="downloadORbatchedit" name="downloadORbatchedit" onSubmit="return ActionOnSubmit();">
     {% endif %}
             <div class='row-fluid'>
                 {% for photo in photos %}
@@ -191,7 +191,7 @@ $("#hideshow").hide();  //hide button on first page load
 
 //below code is for hideshow button
 jQuery(document).ready(function(){
-    jQuery('#hideshow').live('click', function(event) {        
+    jQuery('#downloadORbatchedit').on('click', '#hideshow', function(event) {        
          jQuery('#batchedit-fade').toggle('show');
          $("#hideshow").hide();
     });

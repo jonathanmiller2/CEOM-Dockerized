@@ -150,6 +150,7 @@ def search_for_photos(request):
 def user_photos(request):
     if request.user.is_authenticated:
         base = Photo.objects.exclude(status=0)
+
         if 'sort' in request.GET: #Sorts by Takendate
             dates = base.distinct('takendate').filter(user=request.user).order_by('-takendate')
         else:                     #Sorts by UploadDate
@@ -199,9 +200,14 @@ def user_photos(request):
                 page_range = list(range(10))
             
             data['photos'] = photos
+        
+        
         data['checkbox'] = True
         form_f = BatchEditForm()
-        return render(request, 'photos/user.html', context={'form':form_f, 'modis_timeseries':True})
+
+        data.update({'form':form_f, 'modis_timeseries':True})
+
+        return render(request, 'photos/user.html', context=data)
     else:
         return HttpResponseRedirect("/accounts/login/")
 
@@ -220,7 +226,7 @@ def workset_photos(request):
             data['photos'] = photos
             data['gallerytitle'] = "Working set of photos"
             
-            return render(request, 'photos/user.html')
+            return render(request, 'photos/user.html', context=data)
         else:
             return HttpResponseRedirect("/photos/browse/")
     else:
