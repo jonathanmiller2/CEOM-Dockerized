@@ -44,7 +44,7 @@
 {% endblock %}
 {% block content_with_span10 %}
 <div id='content' class="span10">
-    <h2 class="legend" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
+    <h2 class="legend" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library!!" %}</h2>
     <div class='row-fluid'>
     	<div id="loading">{% trans "Loading Photos..."%}</div>
 
@@ -80,7 +80,8 @@
           zoom: 3,
           center: startLocation,
           gestureHandling: 'cooperative',
-          mapTypeId: 'satellite'
+          mapTypeId: 'satellite',
+          draggableCursor: 'crosshair',
         });
     	
     	map.addListener('click', deselectCircles);
@@ -150,7 +151,7 @@
 
                     picTotal += count;
 
-					var rad = xsize * (12000 + 400 * Math.sqrt(count));
+					var rad = xsize * (15000 + 400 * Math.sqrt(count));
 
 					var coords = placemarks[i].getElementsByTagName('Point')[0].getElementsByTagName('coordinates')[0].textContent.split(',');
 					coords = {lat: parseFloat(coords[1]), lng: parseFloat(coords[0])};
