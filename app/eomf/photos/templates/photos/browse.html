@@ -74,26 +74,26 @@
 {% if checkbox %}
 <form method='post' name="download" action="/photos/download/">
 {% endif %}
-<div class="span12" style="height:50px; margin-left:0px !important;">
+<div class="span12" style="height:50px; margin-left:0px !important; display: inline-flex">
 {% if checkbox %}
     <span class='span2 offset0'>
-    <div>Select All: <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);"></div>
+    <div style="font-size:large">Select All: <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);"></div>
     </span>
     <!--Image Format: --> 
-    <select name="format" class='span3' >
+    <select name="format" class='span3'style="margin-right: 10px; height: 35px">
         <option value="option1" disabled>{% trans " Image Format." %}</option>
         <option value="csv">{% trans "CSV file and images." %}</option>
         <option value="kmz">{% trans "KML: KML and images." %}</option>
         <!--<option value="shp">ESRI Shapefile/DBF.</option>-->
     </select>
     <!-- Image Size: --> 
-    <select name="img" class='span3 offset1' >
+    <select name="img" class='span3 offset1' style="margin-right: 10px; height: 35px">
         <option value="option1" disabled>{% trans " Image Size." %}</option>
         <option value="big">{% trans "Original images." %}</option>
         <option value="small">{% trans "Downsized images." %}</option>
     </select>
     
-    <input type="submit" class='btn btn-primary span2' value="{% trans 'Download' %}" style="margin-bottom: 10px;  width:initial">
+    <input type="submit" class='btn btn-primary span2' value="{% trans 'Download' %}" style="margin-bottom: 10px; height: 35px">
 
 </div>
 <!-- </div>
