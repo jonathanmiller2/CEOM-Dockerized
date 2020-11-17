@@ -26,10 +26,11 @@
     <h2 class="legend" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
     <div class="container-fluid" style="padding-left:0px;">
     <div class="span12" style="height:50px; margin-left:0px !important;">
-        <div class='span4 text-left'>
+        <div class="row">
+        <div class='span4 text-left' style="padding-left: 18px; margin-top: 5px">
             <label><b>{% trans "Search Results" %}:</b> <span class="badge">{{paginator.count}}</span></label>
         </div>
-        <div class='span4 text-center'>
+        <div class='span4 text-center' style="padding-left: 300px">
             <div class="pagination pagination-small pagination-centered" style="margin:0px !important; padding:0px;">
                 <ul>
                     {% if photos.has_previous %}
@@ -50,7 +51,7 @@
                 </ul>
             </div>
         </div>
-        <div class='span2 text-right'>
+        <div class='span2 text-right' style="padding-left: 500px">
             <form class="form-horizontal"> 
                 <div class="control-group">
                     <label class="control-label" style='padding-left: 0px;' for='ppp'><b>{% trans "Photos per page" %}</b></label>
@@ -67,7 +68,7 @@
                 </div>
             </form>
         </div>
-   
+    </div>
 </div>
 
 
