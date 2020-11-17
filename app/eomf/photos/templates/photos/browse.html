@@ -28,11 +28,12 @@
     <div class="span12" style="height:50px; margin-left:0px !important;">
         <div class="row">
         <div class='span4 text-left' style="padding-left: 18px; margin-top: 5px">
-            <label><b>{% trans "Search Results" %}:</b> <span class="badge">{{paginator.count}}</span></label>
+            <label><b>{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
         </div>
         <div class='span4 text-center' style="padding-left: 300px">
             <div class="pagination pagination-small pagination-centered" style="margin:0px !important; padding:0px;">
-                <ul>
+                <nav aria-label="Page navigation example">
+                <ul class="pagination">
                     {% if photos.has_previous %}
                         <li><a href="?page=1&amp;ppp={{ppp}}">&laquo;&laquo;</a></li>
                         <li><a href="?page={{ photos.previous_page_number }}&amp;ppp={{ppp}}">&laquo;</a></li>
@@ -49,6 +50,7 @@
                         <li><a href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}"> &raquo;&raquo; </a></li>
                     {% endif %}
                 </ul>
+            </nav>
             </div>
         </div>
         <div class='span2 text-right' style="padding-left: 500px">
@@ -75,7 +77,7 @@
 {% if checkbox %}
 <form method='post' name="download" action="/photos/download/">
 {% endif %}
-<div class="span12" style="height:50px; margin-left:0px !important; display: inline-flex">
+<div class="span12" style="height:50px; margin-left:0px !important; display: inline-flex; padding-right: 150px">
 {% if checkbox %}
     <span class='span2 offset0'>
     <div style="font-size:large">Select All: <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);"></div>
