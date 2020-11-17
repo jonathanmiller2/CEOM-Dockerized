@@ -93,7 +93,7 @@
         <option value="small">{% trans "Downsized images." %}</option>
     </select>
     
-    <input type="submit" class='btn btn-primary span2' value="{% trans 'Download' %}" style="margin-bottom: 10px">
+    <input type="submit" class='btn btn-primary span2' value="{% trans 'Download' %}" style="margin-bottom: 10px; width:initial">
 
 </div>
 <!-- </div>
@@ -103,7 +103,7 @@
 
 
 
-<input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos'>
+<input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos' style="width:initial">
     
     <div class="span4" id="batchedit-fade">
         {% csrf_token %}
