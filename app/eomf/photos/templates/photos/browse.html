@@ -27,10 +27,10 @@
     <div class="container-fluid" style="padding-left:0px;">
     <div class="span12" style="height:50px; margin-left:0px !important;">
         <div class="row">
-        <div class='span4 text-left' style="padding-left: 18px; margin-top: 5px">
+        <div class='span4 text-left col-sm' style="padding-left: 18px; margin-top: 5px">
             <label><b>{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
         </div>
-        <div class='span4 text-center' style="padding-left: 300px">
+        <div class='span4 text-center col-sm' >
             <div class="pagination pagination-small pagination-centered" style="margin:0px !important; padding:0px;">
                 <nav aria-label="Page navigation example">
                 <ul class="pagination">
@@ -53,7 +53,7 @@
             </nav>
             </div>
         </div>
-        <div class='span2 text-right' style="padding-left: 500px">
+        <div class='span2 text-right' >
             <form class="form-horizontal"> 
                 <div class="control-group">
                     <label class="control-label" style='padding-left: 0px;' for='ppp'><b>{% trans "Photos per page" %}</b></label>
@@ -77,20 +77,20 @@
 {% if checkbox %}
 <form method='post' name="download" action="/photos/download/">
 {% endif %}
-<div class="span12" style="height:50px; margin-left:0px !important; display: inline-flex; padding-right: 150px">
+<div class="span12 continer" style="height:50px; margin-left:0px !important; display: inline-flex; padding-right:150px">
 {% if checkbox %}
-    <span class='span2 offset0'>
-    <div style="font-size:large">Select All: <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);"></div>
+    <span class='span2 offset0 row'>
+    <div style=" margin-right: -15px; margin-left: 10px; display: flex;">Select All: <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);"></div>
     </span>
     <!--Image Format: --> 
-    <select name="format" class='span3'style="margin-right: 10px; height: 35px">
+    <select name="format" class='span3 col-sm'style="margin-right: 10px; height: 35px">
         <option value="option1" disabled>{% trans " Image Format." %}</option>
         <option value="csv">{% trans "CSV file and images." %}</option>
         <option value="kmz">{% trans "KML: KML and images." %}</option>
         <!--<option value="shp">ESRI Shapefile/DBF.</option>-->
     </select>
     <!-- Image Size: --> 
-    <select name="img" class='span3 offset1' style="margin-right: 10px; height: 35px">
+    <select name="img" class='span3 offset1 col-sm' style="margin-right: 10px; height: 35px">
         <option value="option1" disabled>{% trans " Image Size." %}</option>
         <option value="big">{% trans "Original images." %}</option>
         <option value="small">{% trans "Downsized images." %}</option>
