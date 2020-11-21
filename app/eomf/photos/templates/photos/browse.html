@@ -31,12 +31,17 @@
             <label><b>{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
         </div>
         <div class='span4 text-center col-sm' >
-            <div class="pagination pagination-small pagination-centered" style="margin:0px !important; padding:0px;">
+            <div class="pagination" style="margin:0px !important; padding:0px;">
                 <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     {% if photos.has_previous %}
-                        <li><a href="?page=1&amp;ppp={{ppp}}">&laquo;&laquo;</a></li>
-                        <li><a href="?page={{ photos.previous_page_number }}&amp;ppp={{ppp}}">&laquo;</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" area-label="Previous">
+                            <span aria-hidden="true"> &laquo;</span>
+                            <span class="sr-only">&laquo;</span>
+                           </a>
+                        </li>
+                        <li><a href="?page={{ photos.previous_page_number }}&amp;ppp={{ppp}}">&laquo;Previous</a></li>
                     {% endif %}
                     {% for n in page_range %}
                         {% if photos.number != n %}
@@ -45,8 +50,10 @@
                             <li class="active"><a href='#'>{{n}}</a></li>
                         {% endif %}
                     {% endfor %}
-                    {% if photos.has_next %}
-                        <li><a href="?page={{ photos.next_page_number }}&amp;ppp={{ppp}}">&raquo;</a></li>
+                    {% if photos.has_next %}<
+                        <li><a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span></a></li>
                         <li><a href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}"> &raquo;&raquo; </a></li>
                     {% endif %}
                 </ul>
@@ -80,7 +87,7 @@
 <div class="span12 continer" style="height:50px; margin-left:0px !important; display: inline-flex; padding-right:150px">
 {% if checkbox %}
     <span class='span2 offset0 row'>
-    <div style=" margin-right: -15px; margin-left: 10px; display: flex;">Select All: <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);"></div>
+    <div style=" margin-right: -15px; margin-left: 30px; display: flex;">Select All: <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);"></div>
     </span>
     <!--Image Format: --> 
     <select name="format" class='span3 col-sm'style="margin-right: 10px; height: 35px">
@@ -106,7 +113,7 @@
 
 
 
-<input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos' style="width:initial">
+<input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos' style="width:initial; display: block">
     
     <div class="span4" id="batchedit-fade">
         {% csrf_token %}
