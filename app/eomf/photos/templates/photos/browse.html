@@ -54,6 +54,10 @@
                                     <span aria-hidden="true">{{n}}</span>
                                     <span class="sr-only">{{n}}</span></a> 
                                 </li>
+                            {% elif photos.number == n %}
+                                <li class="page-item active"><a class="page-link" href='#'>{{n}}
+                                    <span class="sr-only">{{n}}</span></a>
+                                </li>
                             {% else %}
                                 <li class="page-item"><a class="page-link" href='#'>{{n}}
                                     <!-- <span aria-hidden="true">{{n}}</span> -->
