@@ -10,7 +10,7 @@
 
                 {% if photo.file|photoexists %}
                     {% thumbnail photo.file "150x150" as im %} 
-                    <img src='{{im.url}}' alt='{{photo.basename}}'/>
+                    <img src='{{im.url}}' alt='{{photo.basename}}' class="img-thumbnail"/>
                     {% empty %}
                     {% trans "Image file missing" %}
                     {% endthumbnail %}

@@ -32,32 +32,49 @@
         </div>
         <div class='span4 text-center col-sm' >
             <div class="pagination" style="margin:0px !important; padding:0px;">
-                <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    {% if photos.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="#" area-label="Previous">
-                            <span aria-hidden="true"> &laquo;</span>
-                            <span class="sr-only">&laquo;</span>
-                           </a>
-                        </li>
-                        <li><a href="?page={{ photos.previous_page_number }}&amp;ppp={{ppp}}">&laquo;Previous</a></li>
-                    {% endif %}
-                    {% for n in page_range %}
-                        {% if photos.number != n %}
-                            <li><a href="?page={{n}}&amp;ppp={{ppp}}">{{n}}</a></li>
-                        {% else %}
-                            <li class="active"><a href='#'>{{n}}</a></li>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        {% if photos.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1&amp;ppp={{ppp}}" area-label="Previous">
+                                <span aria-hidden="true"> &laquo;&laquo;</span>
+                                <span class="sr-only">PreviousX2</span>
+                            </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ photos.previous_page_number }}&amp;ppp={{ppp}}">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
                         {% endif %}
-                    {% endfor %}
-                    {% if photos.has_next %}<
-                        <li><a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span></a></li>
-                        <li><a href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}"> &raquo;&raquo; </a></li>
-                    {% endif %}
-                </ul>
-            </nav>
+                        {% for n in page_range %}
+                            {% if photos.number != n %}
+                                <li class="page-item"><a class="page-link" href="?page={{n}}&amp;ppp={{ppp}}">
+                                    <span aria-hidden="true">{{n}}</span>
+                                    <span class="sr-only">{{n}}</span></a> 
+                                </li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href='#'>{{n}}
+                                    <!-- <span aria-hidden="true">{{n}}</span> -->
+                                    <span class="sr-only">{{n}}</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if photos.has_next %}
+                            <li><a class="page-link" href="?page={{ photos.next_page_number }}&amp;ppp={{ppp}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span></a>
+                            </li>
+                            <li><a class="page-link" href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}"> 
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                                <span class="sr-only">NextX2</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
             </div>
         </div>
         <div class='span2 text-right' >
