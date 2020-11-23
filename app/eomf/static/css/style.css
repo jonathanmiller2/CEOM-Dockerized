@@ -332,7 +332,7 @@ table, caption {
 	border-top: 1px solid #ddd;
 	border-left: 1px solid #ddd;
 	border-bottom: 1px solid #c0c0c0;
-	border-right: 1px solid #c0c0c0;
+    border-right: 1px solid #c0c0c0;
 } 
 
 .photo-tile .thumb{
