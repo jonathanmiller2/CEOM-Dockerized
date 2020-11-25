@@ -217,7 +217,7 @@
             {% block container %}
             <div id="outer-layout">
                 {% block sidebar_span %}
-                <div id="sidebar-col">
+                <div id="sidebar-col" style="min-width: 20%">
                     {% block sidebar %}
                     <nav class="card bg-light ml-5 shadow-sm">
                         <ul class="p-0" style="list-style: none;">
@@ -233,7 +233,7 @@
                 </div>
                 {%endblock%}
                 {% block content_with_span10 %}
-                <div id='content'>
+                <div id='content' style="max-width: 80%">
                     {% block content %}{% endblock %}
                 </div>
                 {% endblock %}
