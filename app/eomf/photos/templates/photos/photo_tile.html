@@ -1,3 +1,10 @@
+<style>
+    .img-thumbnail:hover {
+        border-color: #0088cc;
+        
+    }
+</style>
+
 {% load photos_tags %}
 
 {% load i18n %}
@@ -5,7 +12,7 @@
 {% load thumbnail %}
 <div class='photo-tile'>
     <div class='row-fluid'>
-        <div class='pull-left'>
+        <div class='pull-left' style="padding-bottom: 2px;">
             <a href='/photos/view/{{photo.pk}}/' {% if '/photos/photos.html' in request.path %} target="_blank" {%endif%} class="thumbnail">
 
                 {% if photo.file|photoexists %}

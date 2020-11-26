@@ -30,7 +30,7 @@
         <div class='span4 text-left col-sm' style="padding-left: 18px; margin-top: 5px">
             <label><b>{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
         </div>
-        <div class='span4 text-center col-sm' style="margin-left:-180px" >
+        <div class='span4 text-center col-sm' >
             <div class="pagination" style="margin:0px !important; padding:0px;">
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
@@ -104,9 +104,9 @@
                 </nav>
             </div>
         </div>
-        <div class='span2 text-right' >
+        <div class='span2 text-right col-sm col-lg-2' >
             <form class="form-horizontal"> 
-                <div class="control-group">
+                <div class="control-group row justify-content-around">
                     <label class="control-label" style='padding-left: 0px;' for='ppp'><b>{% trans "Photos per page" %}</b></label>
                     <div class='controls'>
                         <select class="input-mini" id='ppp' onChange="location.assign('/photos/browse/?ppp='+this.options[selectedIndex].text);">
