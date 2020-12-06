@@ -164,9 +164,12 @@
                     flex: 0 0 83.333333%;
                     max-width: 83.333333%;
                 }
+                /* #span12 {
+                    display:none;
+                } */
         	}
         
-        	@media screen and (max-width: 1250px) {
+        	/* @media screen and (max-width: 1250px) {
                 #outer-layout {
                     display: flex;
                     flex-direction: column;
@@ -179,7 +182,36 @@
                 #content {
                     margin: 0 3em 0 3em;
                 }
-        	}
+            } */
+            
+            @media screen and (max-width: 980px) and (min-width:500px) {
+                #outer-layout {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                #sidebar-col {
+                    margin: 0 3em 1.5em 0;
+                }
+
+            }
+
+            @media screen and (max-width:500px) {
+
+                /* #legend {
+                    font-size: 30px;
+                } */
+                #outer-layout {
+                    display: inline-flex;
+                    flex-direction: column;
+                }
+
+                #sidebar-col {
+                    margin: 0 3em 1.5em 0;
+                }
+
+
+            }
         </style>
 
         {% block head_extra %}{% endblock %}
@@ -204,6 +236,7 @@
 
         <!-- in body block -->
         {% include "feedback/button.html" %}
+        
         <div id="logo-title" >
             <div id="logo-rice"></div>
             <div id="logo-title-right"></div>
@@ -217,7 +250,7 @@
             {% block container %}
             <div id="outer-layout">
                 {% block sidebar_span %}
-                <div id="sidebar-col" style="min-width: 20%">
+                <div id="sidebar-col">
                     {% block sidebar %}
                     <nav class="card bg-light ml-5 shadow-sm">
                         <ul class="p-0" style="list-style: none;">
@@ -233,7 +266,7 @@
                 </div>
                 {%endblock%}
                 {% block content_with_span10 %}
-                <div id='content' style="max-width: 80%; padding-left: 60px;">
+                <div id='content' style="padding-left: 60px;">
                     {% block content %}{% endblock %}
                 </div>
                 {% endblock %}
