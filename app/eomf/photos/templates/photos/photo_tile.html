@@ -1,3 +1,10 @@
+<style>
+    .img-thumbnail:hover {
+        border-color: #0088cc;
+        
+    }
+</style>
+
 {% load photos_tags %}
 
 {% load i18n %}
@@ -5,12 +12,12 @@
 {% load thumbnail %}
 <div class='photo-tile'>
     <div class='row-fluid'>
-        <div class='pull-left'>
+        <div class='pull-left' style="padding-bottom: 2px;">
             <a href='/photos/view/{{photo.pk}}/' {% if '/photos/photos.html' in request.path %} target="_blank" {%endif%} class="thumbnail">
 
                 {% if photo.file|photoexists %}
                     {% thumbnail photo.file "150x150" as im %} 
-                    <img src='{{im.url}}' alt='{{photo.basename}}'/>
+                    <img src='{{im.url}}' alt='{{photo.basename}}' class="img-thumbnail"/>
                     {% empty %}
                     {% trans "Image file missing" %}
                     {% endthumbnail %}
@@ -20,7 +27,7 @@
             </a>
         </div>
         {% if checkbox %}
-        <div class='photo-checkbox'>
+        <div class='photo-checkbox' style="margin-left:-105px">
             <input  type="checkbox" id="{{photo.pk}}" name="ids" value="{{photo.pk}}" onClick="check(event)"/>
         </div>
         {% endif %}
@@ -37,13 +44,13 @@
                 {% else %}
                 <li>{% trans "Category not set" %}</li>
                 {% endif %}
-                <li>
+                <li style="padding-top:4px">
                 {% if photo.user == request.user or request.user.is_superuser %}
-                <a class='btn btn-small' href="/photos/edit/{{photo.id}}">{% trans "Edit" %}</a>
+                <a class='btn btn-light btn-outline-secondary btn-small' href="/photos/edit/{{photo.id}}">{% trans "Edit" %}</a>
                 <a class='btn btn-danger btn-small' onclick="return confirm('Are you sure, you want to delete?');" href="/photos/delete/{{photo.id}}/?next={{request.get_full_path|urlencode}}">{% trans "Delete" %}</a>
                 {% endif %}
                 {% if modis_timeseries %}
-                    <a class='btn btn-small' href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
+                    <a class="btn btn-light btn-small btn-outline-dark btn3d" style="padding-top:1px; margin-top:4px" href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
                         <abbr title="{% trans 'View MODIS data for this photo. Click on this button and scroll down to the bottom of the page and to select appropriate dataset and year' %}">MODIS</abbr>
                     </a>
                 {% endif %}
