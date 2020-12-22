@@ -113,8 +113,6 @@
                                 <option {% if ppp == "50" %}selected{%endif%}>50</option>
                                 <option {% if ppp == "100" %}selected{%endif%}>100</option>
                                 <option {% if ppp == "500" %}selected{%endif%}>500</option>
-                                <!--<option {% if ppp == "192" %}selected{%endif%}>192</option>-->
-                                <!--<option {% if ppp == "all" %}selected{%endif%}>All</option>-->
                             </select>
                         </div>
                     </div>
@@ -126,7 +124,7 @@
         {% if checkbox %}
         <form method='post' name="download" action="/photos/download/">
         {% endif %}
-            <div class="row" style=" margin-left:0px !important; display: inline-flex; padding-right:150px">
+            <div class="row" style=" margin-left:0px !important; display: inline-flex;">
             {% if checkbox %}
                 <span class='span2 offset0 '>
                     <div class='col-sm' id="select-all" style=" margin-right: -15px; width: 400px; display: inline-block; font-size: min(max(3vw, 13px),20px)">Select All: <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);"></div>
@@ -145,7 +143,7 @@
                     <option value="small">{% trans "Downsized images." %}</option>
                 </select>
                 
-                <input id="row2-3" type="submit" class='btn btn-primary span2' value="{% trans 'Download' %}" style="margin-bottom: 10px; height: 35px">
+                <input id="row2-3" type="submit" class='btn btn-primary span2' value="{% trans 'Download' %}" style="margin-bottom: 10px; margin-right: 10px; height: 35px">
 
             </div>
             <input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos' style="width:initial; display: block">
