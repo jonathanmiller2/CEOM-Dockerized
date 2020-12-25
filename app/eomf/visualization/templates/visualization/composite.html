@@ -20,10 +20,8 @@
             new OpenLayers.Bounds(-180, -90, 180, 90),
             new OpenLayers.Size(1350, 675),
             {numZoomLevels: 3}
-        );
-        //900x450.jpg
-        //7208x3604.jpg
-        //.jpg
+		);
+		
         graphic.events.on({
             loadstart: function() {
                 OpenLayers.Console.log("loadstart");
@@ -122,19 +120,6 @@
 		 map.addLayers([graphic]);
         map.zoomToMaxExtent();
 	}
-	function set20km(){
-		map.removeLayer(graphic,false);
-		 graphic = new OpenLayers.Layer.Image(
-            'Mymap',
-            'http://landweb.nascom.nasa.gov/browse/images/{{version}}/{{sat_name}}/{{prod}}/{{year}}/A{{year}}{{julian_day}}/MOD09.A{{year}}{{julian_day}}.{{version}}.png',
-            //'http://landweb.nascom.nasa.gov/browse/images/{{prod}}/{{sat_ver}}/{{year}}/A{{year}}{{julian_day}}/HAM/HAM.A{{year}}{{julian_day}}.{{prod}}.{{version}}.jpg',
-            new OpenLayers.Bounds(-180, -90, 180, 90),
-            new OpenLayers.Size(1350, 675),
-            {numZoomLevels: 6}
-        );
-		 map.addLayers([graphic]);
-        map.zoomToMaxExtent();
-	}
 	function set5km(){
 		map.removeLayer(graphic,false);
 		 graphic = new OpenLayers.Layer.Image(
@@ -154,30 +139,58 @@
 <h4 style="color:rgb(17,34,215); float:left;">{{prod}}/{{sat_name}}_{{sat_ver}}({{version}}):<b>{{year}}-{{julian_day}}</b></h4>
 
 <div id="map" style="height: 675px;"></div>
-<div style="margin-top: 50px;">
-	<a href="#" class="btn btn-primary" role="button">
-		<span class="fas fa-chevron-left"></span> 8
-	</a>
+<div class="row justify-content-around" style="margin: 60px 0px 10px 0px;">
+	<div>
+		<a href="/visualization/composite/{{previous8_year}}/{{previous8_day}}/" class="btn btn-primary mx-1" role="button">
+			<span class="fas fa-chevron-left"></span> 8
+		</a>
 
-	<a href="#" class="btn btn-primary" role="button">
-		8 <span class="fas fa-chevron-right"></span>
-	</a>
-
-	<button type="button" class="btn btn-primary" onclick="set50km()"> {% trans "50 km" %} <span class="fas fa-globe-americas"></span></button> 
-	<button type="button" class="btn btn-primary" onclick="set20km()">  {% trans "20 km" %} <span class="fas fa-search-plus"></span></button>
-	<button type="button" class="btn btn-primary" onclick="set5km()">  {% trans "5 km" %} <span class="fas fa-search-plus"></span><span class="fas fa-search-plus"></span></button>
+		<a href="/visualization/composite/{{next8_year}}/{{next8_day}}/" class="btn btn-primary mx-1" role="button">
+			8 <span class="fas fa-chevron-right"></span>
+		</a>
+	</div>
+	
+	<div>
+		<button type="button" class="btn btn-primary mx-1" onclick="set50km()"> {% trans "50 km" %} <span class="fas fa-globe-americas"></span></button> 
+		<button type="button" class="btn btn-primary mx-1" onclick="set5km()">  {% trans "5 km" %} <span class="fas fa-search-plus"></span></button>
+	</div>
 </div>
-<p>{% trans "Year" %}:</p>
-<input id="JUL_YEAR" type="number" min="2000" max="{%now "Y"%}" step="1" placeholder="Year" value="{{year}}">
 
-<p>{% trans "Date" %}:</p>
-<input id="JUL_DAY"type="number" min="1" max="365" step="1" placeholder="Julian day" value="{{julian_day}}">
-
-<button class="btn btn-primary" onclick="julianSubmit()">{% trans "Submit" %}</button>
-
-<p>{% trans "Calendar" %}:</p>
-<input id="CAL_DATE" type="text" style="position: relative; z-index: 100000;"  placeholder="click to choose the date" readonly="readonly">
-<button class=" btn btn-primary" onclick="calendarSubmit()">{% trans "Submit" %}</button>
+<div class="row justify-content-around mb-5">
+	<div class="col-lg-5 m-2 card bg-light shadow-sm">
+		<div class="row justify-content-around mt-3">
+			<div class="form-group row mx-2">
+				<label class="col col-form-label">{% trans "Year" %}:</label>
+				<div style="width: 80px">
+					<input class="form-control" id="JUL_YEAR" type="number" min="2000" max="{%now "Y"%}" step="1" placeholder="Year" value="{{year}}">
+				</div>
+			</div>
+			<div class="form-group row mx-2">
+				<label class="col col-form-label">{% trans "Date" %}:</label>
+				<div style="width: 80px">
+					<input class="form-control" id="JUL_DAY" type="number" min="1" max="365" step="1" placeholder="Julian day" value="{{julian_day}}">
+				</div>
+			</div>
+			<div class="form-group row mx-3">
+				<button class="btn btn-primary" onclick="julianSubmit()">{% trans "Submit" %}</button>
+			</div>
+		</div>
+		
+	</div>
+	<div class="col-lg-5 m-2 card bg-light shadow-sm">
+		<div class="row justify-content-around mt-3">
+			<div class="form-group row mx-2">
+				<label class="col col-form-label">{% trans "Calendar" %}:</label>
+				<div style="width: 200px">
+					<input class="form-control" id="CAL_DATE" type="text" style="position: relative; z-index: 100000;"  placeholder="click to choose the date" readonly="readonly">
+				</div>
+			</div>
+			<div class="form-group row mx-3">
+				<button class="btn btn-primary" onclick="calendarSubmit()">{% trans "Submit" %}</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div id="accordion"> <!--What the heck? Why is the accordion functionality tied to the id??-->
 	<h3> {% trans "Julian calendar Leap years" %} </h3>
