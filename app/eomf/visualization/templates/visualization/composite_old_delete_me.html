@@ -9,7 +9,7 @@
     var map;
     var graphic;
     function init(){
-        map = new OpenLayers.Map('map');
+        map = new OpenLayers.Map('map2');
 
         graphic = new OpenLayers.Layer.Image(
             'City Lights',
@@ -150,109 +150,67 @@
 	}
 
 </script>
+<div class="span12 card">
 <h2 style="color:rgb(61,147,56); float:left"> {% trans "MODIS TERRA composite map" %}</h2><br /><br /><br />
 <h4 style="color:rgb(17,34,215); float:left;">{{prod}}/{{sat_name}}_{{sat_ver}}({{version}}):<b>{{year}}-{{julian_day}}</b></h4>
-
-<div id="map" style="height: 675px;"></div>
-<div style="margin-top: 50px;">
-	<a href="#" class="btn btn-primary" role="button">
-		<span class="fas fa-chevron-left"></span> 8
-	</a>
-
-	<a href="#" class="btn btn-primary" role="button">
-		8 <span class="fas fa-chevron-right"></span>
-	</a>
-
-	<button type="button" class="btn btn-primary" onclick="set50km()"> {% trans "50 km" %} <span class="fas fa-globe-americas"></span></button> 
-	<button type="button" class="btn btn-primary" onclick="set20km()">  {% trans "20 km" %} <span class="fas fa-search-plus"></span></button>
-	<button type="button" class="btn btn-primary" onclick="set5km()">  {% trans "5 km" %} <span class="fas fa-search-plus"></span><span class="fas fa-search-plus"></span></button>
-</div>
-<p>{% trans "Year" %}:</p>
-<input id="JUL_YEAR" type="number" min="2000" max="{%now "Y"%}" step="1" placeholder="Year" value="{{year}}">
-
-<p>{% trans "Date" %}:</p>
-<input id="JUL_DAY"type="number" min="1" max="365" step="1" placeholder="Julian day" value="{{julian_day}}">
-
-<button class="btn btn-primary" onclick="julianSubmit()">{% trans "Submit" %}</button>
-
-<p>{% trans "Calendar" %}:</p>
-<input id="CAL_DATE" type="text" style="position: relative; z-index: 100000;"  placeholder="click to choose the date" readonly="readonly">
-<button class=" btn btn-primary" onclick="calendarSubmit()">{% trans "Submit" %}</button>
-
-<div id="accordion"> <!--What the heck? Why is the accordion functionality tied to the id??-->
-	<h3> {% trans "Julian calendar Leap years" %} </h3>
-	<div>
-		{% include "visualization/julianCalendarLeap.html" %}
+	
+<div class="span12">
+<div id="map2" style="margin-left:auto;margin-right:auto;width: 90%; height: 675px"></div>
+		<br>
+		<a href="/visualization/composite/{{previous8_year}}/{{previous8_day}}/" >
+      <button type="button" class="btn btn-primary span2"> <i class="icon-chevron-left"></i><i class="icon-chevron-left"></i> 8</button>
+    </a>
+    <a href="/visualization/composite/{{next8_year}}/{{next8_day}}/" >
+    <button type="button" class="btn btn-primary span2">8 <i class="icon-chevron-right"></i><i class="icon-chevron-right"></i></button>
+    </a>
+    <button type="button" class="btn btn-primary span2" onclick="set50km()"> {% trans "50 km" %} <i class="icon-globe"></i></button> 
+    <button type="button" class="btn btn-primary span2" onclick="set20km()">  {% trans "20 km" %} <i class="icon-zoom-in"></i></button>
+    <button type="button" class="btn btn-primary span2" onclick="set5km()">  {% trans "5 km" %} <i class="icon-zoom-in"></i><i class="icon-zoom-in"></i></button>
+  
 	</div>
-	<h3> {% trans "Julian calendar Regular years" %} </h3>
-	<div>
-		{% include "visualization/julianCalendarRegular.html" %}
+
+	<div class="span6 well">
+		<div class="span6 text-left">
+		<p class="span3">{% trans "Year" %}:</p>
+		<p class="span1"></p>
+		<input class="span8" id="JUL_YEAR" type="number" min="2000" max="{%now "Y"%}" step="1" placeholder="Year" value="{{year}}">
+		</div>
+		<div class="span6 text-left">
+		<p class="span3">{% trans "Date" %}:</p>
+		<p class="span1"></p>
+		<input class="span8 " id="JUL_DAY"type="number" min="1" max="365" step="1" placeholder="Julian day" value="{{julian_day}}">
+		</div>
+		<div class="clearfix"></div>
+		<button class="btn btn-primary offset4 span4" onclick="julianSubmit()">{% trans "Submit" %}</button>
 	</div>
+
+	<div class="span5 well">
+		<div class="span12">
+			<p class="span3">{% trans "Calendar" %}:</p>
+			<p class="span1"></p>
+			<input class="span8 " id="CAL_DATE" type="text" style="position: relative; z-index: 100000;"  placeholder="click to choose the date" readonly="readonly">
+		</div>
+		<div class="span12">
+			<button class=" btn btn-primary offset4 span4" onclick="calendarSubmit()">{% trans "Submit" %}</button>
+		</div>
+		<div></div>
+	</div>
+	<div class="clearfix"></div> 
+
+	<div class="clearfix"></div>
+	<div id="accordion" class="span12">
+		<h3> {% trans "Julian calendar Leap years" %} </h3>
+		<div>
+			{% include "visualization/julianCalendarLeap.html" %}
+		</div>
+		<h3> {% trans "Julian calendar Regular years" %} </h3>
+		<div>
+			{% include "visualization/julianCalendarRegular.html" %}
+		</div>
+	</div>
+	<img src='http://landweb.nascom.nasa.gov/browse/images/{{prod}}/{{sat_ver}}/{{next8_year}}/A{{next8_year}}{{next8_day}}/HAM/HAM.A{{next8_year}}{{next8_day}}.{{prod}}.{{version}}.900x450.jpg' style="display:none">
+	<img src='http://landweb.nascom.nasa.gov/browse/images/{{prod}}/{{sat_ver}}/{{previous8_year}}/A{{previous8_year}}{{previous8_day}}/HAM/HAM.A{{previous8_year}}{{previous8_day}}.{{prod}}.{{version}}.900x450.jpg' style="display:none">
 </div>
 
 
-<!-- This is a fix for the scroll issue on the openlayer map. Taken from: https://stackoverflow.com/questions/55955171/preventing-unable-to-preventdefault-inside-passive-event-listener-error-within -->
-<script>
-	const eventListenerOptionsSupported = () => {
-	  let supported = false;
-
-	  try {
-	    const opts = Object.defineProperty({}, 'passive', {
-	      get() {
-	        supported = true;
-	      }
-	    });
-
-	    window.addEventListener('test', null, opts);
-	    window.removeEventListener('test', null, opts);
-	  } catch (e) {}
-
-	  return supported;
-	}
-
-	const defaultOptions = {
-	  passive: false,
-	  capture: false
-	};
-	const supportedPassiveTypes = [
-	  'scroll', 'wheel',
-	  'touchstart', 'touchmove', 'touchenter', 'touchend', 'touchleave',
-	  'mouseout', 'mouseleave', 'mouseup', 'mousedown', 'mousemove', 'mouseenter', 'mousewheel', 'mouseover'
-	];
-	const getDefaultPassiveOption = (passive, eventName) => {
-	  if (passive !== undefined) return passive;
-
-	  return supportedPassiveTypes.indexOf(eventName) === -1 ? false : defaultOptions.passive;
-	};
-
-	const getWritableOptions = (options) => {
-	  const passiveDescriptor = Object.getOwnPropertyDescriptor(options, 'passive');
-
-	  return passiveDescriptor && passiveDescriptor.writable !== true && passiveDescriptor.set === undefined
-	    ? Object.assign({}, options)
-	    : options;
-	};
-
-	const overwriteAddEvent = (superMethod) => {
-	  EventTarget.prototype.addEventListener = function (type, listener, options) {
-	    const usesListenerOptions = typeof options === 'object' && options !== null;
-	    const useCapture          = usesListenerOptions ? options.capture : options;
-
-	    options         = usesListenerOptions ? getWritableOptions(options) : {};
-	    options.passive = getDefaultPassiveOption(options.passive, type);
-	    options.capture = useCapture === undefined ? defaultOptions.capture : useCapture;
-
-	    superMethod.call(this, type, listener, options);
-	  };
-
-	  EventTarget.prototype.addEventListener._original = superMethod;
-	};
-
-	const supportsPassive = eventListenerOptionsSupported();
-
-	if (supportsPassive) {
-	  const addEvent = EventTarget.prototype.addEventListener;
-	  overwriteAddEvent(addEvent);
-	}
-</script>
 {% endblock %}
