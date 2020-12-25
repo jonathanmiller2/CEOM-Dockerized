@@ -4,7 +4,14 @@
 {% block title %} {% trans "EOMF Visualization overview" %}{% endblock %}
 
 {% block content %}
-<div class="well">
+<style>
+	#modis {
+		padding-right: 60px;
+		overflow-wrap: break-word;
+		word-wrap: break-word;
+	}
+</style>
+<div id="modis" class="well">
 	<h2 style="color: #dc143c;">{% trans "Overview" %}</h2>
 
 	<legend> {% trans "MODIS data" %} </legend>
