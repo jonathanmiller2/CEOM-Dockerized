@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class='well sidebar-nav span12'>
+<nav class="card bg-light ml-5 shadow-sm">
     <ul class="nav nav-list sidebar-list">
         <li class='nav-header'>{% trans "Content" %}</li>
              <li {% if  '/workshops/content/' in request.path  %}class='active' {% endif %}>
@@ -26,4 +26,4 @@
                 <a href="/workshops/photos/{{workshop.id}}"><i class="icon-picture"></i> {% trans "Photo Gallery" %} <span class="badge badge-success">{{ num_photos }}</span></a>
             </li>
     </ul>    
-</div>
+</nav>
