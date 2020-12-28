@@ -3,6 +3,32 @@
 {% load i18n%}
 {% block title %}{% trans "EOMF: Workshops overview" %}{% endblock %}
 {% block content %}
+<style>
+  .carouselArrow {
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        background: #555;
+        border: 2px solid #fff;
+        color: #fff;
+        text-align: center;
+    }
+
+    .carouselArrowInterior {
+        position: relative;
+        color: white;
+        font-size: 36pt;
+        line-height: 41%;
+    }
+
+    .carousel-img {
+        height: 300px;
+    }
+
+    .carousel-item {
+        transition: transform 1s ease, opacity .5s ease-out;
+    }
+</style>
 	<div class="well" style="padding-right: 60px; text-align: center;">
 		<h1 class="text-center"> {% trans "Workshops" %}</h1>
 		<div class="hr"></div>
@@ -32,11 +58,15 @@
           </div>
           <!-- Carousel nav -->
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true">&laquo;</span>
+            <div class="carouselArrow" aria-hidden="true">
+                <div class="carouselArrowInterior">&lsaquo;</div>
+            </div>
             <span class="sr-only">Previous</span>
           </a>
           <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true">&raquo;</span>
+            <div class="carouselArrow" aria-hidden="true">
+                <div class="carouselArrowInterior">&rsaquo;</div>
+            </div>
             <span class="sr-only">Next</span>
           </a>
         </div>
