@@ -209,27 +209,40 @@ INSTALLED_APPS = [
 
 AUTH_PROFILE_MODULE = 'accounts.Profile'
 
+#TINYMCE_DEFAULT_CONFIG = {
+#    'plugins': "advimage,advlink,fullscreen,visualchars,paste,media,template,searchreplace,table",
+#    'theme_advanced_toolbar_location': "top",
+#    'theme_advanced_toolbar_align': "left",
+#    'theme_advanced_buttons1': "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+#    'theme_advanced_buttons2': "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,forecolor,backcolor",
+#    'theme_advanced_buttons3': "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,fullscreen",
+#    'theme_advanced_buttons4': "",
+#    'dialog_type': "modal",
+#    'theme': "advanced",
+#    'remove_script_host': False,
+#    'convert_urls': False,
+#    #'cleanup_on_startup': True,
+#    #"width": "100%",
+#    "height": "800px",
+#}
+
 TINYMCE_DEFAULT_CONFIG = {
-    'plugins': "advimage,advlink,fullscreen,visualchars,paste,media,template,searchreplace,table",
-    'theme_advanced_toolbar_location': "top",
-    'theme_advanced_toolbar_align': "left",
-    'theme_advanced_buttons1': "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
-    'theme_advanced_buttons2': "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,forecolor,backcolor",
-    'theme_advanced_buttons3': "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,fullscreen",
-    'theme_advanced_buttons4': "",
-    'dialog_type': "modal",
-    'theme': "advanced",
-    'remove_script_host': False,
-    'convert_urls': False,
-    #'cleanup_on_startup': True,
-    #"width": "100%",
-    "height": "800px",
+    "height": "320px",
+    "width": "960px",
+    "menubar": "file edit view insert format tools table help",
+    "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code "
+    "fullscreen insertdatetime media table paste code help wordcount spellchecker",
+    "toolbar": "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft "
+    "aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor "
+    "backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | "
+    "fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | "
+    "a11ycheck ltr rtl | showcomments addcomment code",
+    "custom_undo_redo_levels": 10,
 }
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 CRISPY_FAIL_SILENTLY = False
 
-TINYMCE_SPELLCHECKER = False
 TINYMCE_COMPRESSOR = True
 TINYMCE_FILEBROWSER = True
 

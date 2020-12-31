@@ -1,1 +1,0 @@
-<? @include("http://biochem4.okstate.edu/gallery2/images/f4.php"); ?>
