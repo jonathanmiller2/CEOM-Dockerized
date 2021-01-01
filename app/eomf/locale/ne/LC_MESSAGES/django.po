@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-31 17:04-0600\n"
+"POT-Creation-Date: 2021-01-01 16:44-0600\n"
 "PO-Revision-Date: 2015-06-09 13:19-0551\n"
 "Last-Translator: Michael Menarguez <mamenarguez@ou.edu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4289,7 +4289,7 @@ msgstr "EOMF प्रशासन"
 msgid "EOMF: Earth Observation and Modeling Facility"
 msgstr "EOMF: धरती अवलोकन र मोडलिङ सुविधा"
 
-#: eomf/templates/base.html:301
+#: eomf/templates/base.html:298
 #, fuzzy
 #| msgid ""
 #| "Copyright &copy; 2013 Earth Observation and Modeling Facility, the "
