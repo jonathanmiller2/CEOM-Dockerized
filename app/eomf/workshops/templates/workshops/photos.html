@@ -101,15 +101,93 @@
     .carousel-item {
         transition: transform 1s ease, opacity .5s ease-out;
     }
+
+    @media screen and (min-width: 1250px) {
+                #title {
+                  font-size: 3vw;
+                }
+
+                #subtitle {
+                  font-size: 1.5vw;
+                }
+
+                #carouselExampleIndicators {
+                  width: 80%;
+                }
+
+                #items {
+                  width: 80%;
+                }
+        	}
+        
+        	@media screen and (min-width: 1110px) and (max-width: 1250px) {
+                #title {
+                  font-size: 2.8vw;
+                }
+
+                #subtitle {
+                  font-size: 1.8vw;
+                }
+
+                #carouselExampleIndicators {
+                  width: 85%;
+                }
+
+                #items {
+                  width: 85%;
+                }
+            }
+            
+            @media screen and (min-width:575px) and (max-width: 1110px) {
+                #title {
+                  font-size: 2.9vw;
+                }
+
+                #subtitle {
+                  font-size: 2vw;
+                }
+
+                #carouselExampleIndicators {
+                  width: 90%;
+                }
+
+                #items {
+                  width: 90%;
+                }
+            }
+
+            @media screen and (max-width:575px) {
+                #title {
+                  font-size: 4vw;
+                }
+
+                #subtitle {
+                  font-size: 3vw;
+                }
+
+                #content {
+                  margin-left: -60px;
+                  margin-right: 20px;
+                }
+
+                #carouselExampleIndicators {
+                  width: 95%;
+                }
+
+                #items {
+                  width: 95%;
+                  height: 90%;
+                }
+            }
 </style>
 
 <div class="well">
   <div class="grid" >
-    <h1 class="text-center">Photo Gallery <small>{{workshop.name}}</small></h1>
+    <h1 id="title" class="text-center">Photo Gallery <small id="subtitle">{{workshop.name}}</small></h1>
     
     <div class="hr"></div>
     <br>
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="width:80%; display: inline-block">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="display: inline-block">
       <!-- Indicators -->
       <ol class="carousel-indicators">
         {% for photo in photos %}
@@ -121,7 +199,7 @@
         {% endfor%}
       </ol>
       <!-- Carousel items -->
-      <div class="carousel-inner" style="width:80%; margin:auto;">
+      <div id="items" class="carousel-inner" style="margin:auto; height: 34vw">
           {% for photo in photos %}
               {% thumbnail photo "600x600" crop="center" as photo.image %}
                 {% if forloop.counter == 1 %}
