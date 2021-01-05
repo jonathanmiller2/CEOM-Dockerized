@@ -109,7 +109,7 @@
     
     <div class="hr"></div>
     <br>
-    <div id="carouselExampleIndicators" class="carousel slide" style="width:80%; display: inline-block">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="width:80%; display: inline-block">
       <!-- Indicators -->
       <ol class="carousel-indicators">
         {% for photo in photos %}
@@ -125,7 +125,7 @@
           {% for photo in photos %}
               {% thumbnail photo "600x600" crop="center" as photo.image %}
                 {% if forloop.counter == 1 %}
-                <div class="active item"><div class="pagination-centered"><img class="d-block w-100" src="{{photo.image.url}}"></div></div>
+                <div class="carousel-item active"><div class="pagination-centered"><img class="d-block w-100" src="{{photo.image.url}}"></div></div>
                 {% else %}
                 <div class="carousel-item"><div class="pagination-centered"><img class="d-block w-100" src="{{photo.image.url}}"></div></div>
                 {% endif %}
@@ -145,7 +145,7 @@
         </div>
         <span class="sr-only">Next</span>
       </a>
-  </div> 
+    </div> 
     <!-- Photos after carousel -->
     <div class="row-fluid">
           
