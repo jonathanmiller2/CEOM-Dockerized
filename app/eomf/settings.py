@@ -192,7 +192,6 @@ INSTALLED_APPS = [
     'eomf.stats',
     'eomf.feedback',
     'eomf.towers',
-    'eomf.eomfshare',
     'eomf.maps',
     'eomf.water',
     #'aoitest',
