@@ -26,7 +26,7 @@
 		font-weight:bold;
 		transition:all 0.2s;
 	}
-	#menu-gis > a:hover {
+	#menu-outreach > a:hover {
 		color: #19D1A3;
 		font-weight:bold;
 		transition:all 0.2s;
@@ -48,11 +48,6 @@
 	}
 	#menu-water > a:hover {
 		color: #006994;
-		font-weight:bold;
-		transition:all 0.2s;
-	}
-	#menu-workshops > a:hover {
-		color: #282a2b;
 		font-weight:bold;
 		transition:all 0.2s;
 	}
@@ -143,16 +138,10 @@
 				 {% trans "GeoHealth" %}
 			</a>
 		</li>
-		<li id="menu-gis" class="nav-item{% if '/gisday/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/gisday/">
+		<li id="menu-outreach" class="nav-item{% if '/outreach/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/outreach/">
 				<span class="fas fa-rss"></span> 
-				{% trans "GIS Day" %}
-			</a>
-		</li>
-		<li id="menu-workshops" class="nav-item{% if '/workshops/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/workshops/">
-				<span class="fas fa-briefcase"></span> 
-				{% trans "Workshops" %}
+				{% trans "Outreach" %}
 			</a>
 		</li>
 		<li id="menu-water" class="nav-item{% if '/water/' in request.path %} active{% endif %}">

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-03 16:58-0600\n"
+"POT-Creation-Date: 2021-01-08 16:28-0600\n"
 "PO-Revision-Date: 2015-06-09 15:12-0551\n"
 "Last-Translator: Michael Menarguez <mamenarguez@ou.edu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -582,7 +582,7 @@ msgid "Group photos"
 msgstr "Fotos de grupo"
 
 #: eomf/aboutus/templates/aboutus/leftmenu.html:22
-#: eomf/templates/mainmenu.html:124 eomf/templates/mainmenu.html:196
+#: eomf/templates/mainmenu.html:119 eomf/templates/mainmenu.html:185
 msgid "About Us"
 msgstr "Sobre Nosotros"
 
@@ -606,9 +606,9 @@ msgid "Books and Book Chapters"
 msgstr "Libros y capítulos de libros"
 
 #: eomf/aboutus/templates/aboutus/leftmenu.html:43
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:54
+#: eomf/outreach/templates/outreach/workshop_presentations.html:65
 #: eomf/publications/templates/publications/section_list.html:11
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:23
-#: eomf/workshops/templates/workshops/workshop_presentations.html:8
 msgid "Presentations"
 msgstr "Presentaciones"
 
@@ -621,13 +621,13 @@ msgstr "Investigación"
 #: eomf/aboutus/templates/aboutus/leftmenu.html:51
 #: eomf/aboutus/templates/aboutus/leftmenu.html:61
 #: eomf/aboutus/templates/aboutus/leftmenu.html:72
-#: eomf/inventory/templates/inventory/leftmenu.html:26
+#: eomf/inventory/templates/inventory/leftmenu.html:4
+#: eomf/outreach/templates/outreach/leftmenu.html:96
 #: eomf/photos/templates/photos/leftmenu.html:26
 #: eomf/visualization/templates/visualization/leftmenu.html:26
-#: eomf/visualization/templates/visualization/overview.html:8
+#: eomf/visualization/templates/visualization/overview.html:15
 #: eomf/water/templates/water/leftmenu.html:27
 #: eomf/water/templates/water/overview.html:8
-#: eomf/workshops/templates/workshops/leftmenu.html:26
 msgid "Overview"
 msgstr "Descripción"
 
@@ -641,7 +641,7 @@ msgid "Themes"
 msgstr "Temas"
 
 #: eomf/aboutus/templates/aboutus/leftmenu.html:64
-#: eomf/templates/mainmenu.html:149 eomf/templates/mainmenu.html:221
+#: eomf/templates/mainmenu.html:210
 msgid "GIS Day"
 msgstr "GIS Day"
 
@@ -1819,7 +1819,7 @@ msgid "Edit Account"
 msgstr "Editar Cuenta"
 
 #: eomf/accounts/templates/accounts/leftmenu.html:22
-#: eomf/templates/mainmenu.html:167 eomf/templates/mainmenu.html:239
+#: eomf/templates/mainmenu.html:156 eomf/templates/mainmenu.html:228
 msgid "Account"
 msgstr "Cuenta"
 
@@ -1915,7 +1915,7 @@ msgstr "Cambiar mi contraseña"
 #: eomf/accounts/templates/accounts/password_reset_confirm.html:4
 #: eomf/accounts/templates/accounts/password_reset_done.html:4
 #: eomf/accounts/templates/accounts/password_reset_form.html:4
-#: eomf/templates/mainmenu.html:118 eomf/templates/mainmenu.html:190
+#: eomf/templates/mainmenu.html:113 eomf/templates/mainmenu.html:179
 msgid "Home"
 msgstr "Inicio"
 
@@ -2922,7 +2922,7 @@ msgstr "Cambio climático"
 #: eomf/geohealth/templates/geohealth/base.html:3
 #: eomf/geohealth/templates/geohealth/gemap.html:3
 #: eomf/geohealth/templates/geohealth/leftmenu.html:23
-#: eomf/templates/mainmenu.html:143 eomf/templates/mainmenu.html:215
+#: eomf/templates/mainmenu.html:138 eomf/templates/mainmenu.html:204
 msgid "GeoHealth"
 msgstr "GeoHealth"
 
@@ -2981,7 +2981,7 @@ msgid "Data Tree"
 msgstr "Árbol de datos"
 
 #: eomf/geohealth/templates/geohealth/earth-tree.html:53
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:6
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:27
 msgid "Description"
 msgstr "Descripción"
 
@@ -3025,7 +3025,7 @@ msgstr "Influenza Aviar datos de seguimiento"
 
 #: eomf/inventory/templates/inventory/leftmenu.html:22
 #: eomf/visualization/templates/visualization/leftmenu.html:22
-#: eomf/visualization/templates/visualization/overview.html:10
+#: eomf/visualization/templates/visualization/overview.html:17
 msgid "MODIS data"
 msgstr "Datos MODIS"
 
@@ -3489,6 +3489,109 @@ msgstr ""
 msgid "Download POIs"
 msgstr "Descargar"
 
+#: eomf/outreach/templates/outreach/categories_legend.html:3
+#: eomf/photos/models.py:42
+msgid "Categories"
+msgstr "Categorías"
+
+#: eomf/outreach/templates/outreach/leftmenu.html:101
+#: eomf/outreach/templates/outreach/workshop_list_past.html:13
+#: eomf/templates/mainmenu.html:216
+msgid "Workshops"
+msgstr "Talleres"
+
+#: eomf/outreach/templates/outreach/registration.html:14
+msgid "Registration"
+msgstr "Registro"
+
+#: eomf/outreach/templates/outreach/registration.html:18
+#: eomf/visualization/templates/visualization/composite.html:179
+msgid "Date"
+msgstr "Fecha"
+
+#: eomf/outreach/templates/outreach/registration.html:23
+msgid ""
+"You have successfuly registered for this workshop. Please check your email "
+"for confirmation."
+msgstr ""
+"Usted exitosamente registrado para este taller. Por favor revise su correo "
+"electrónico para la confirmación."
+
+#: eomf/outreach/templates/outreach/registration.html:31
+#: eomf/outreach/templates/outreach/workshop.html:11
+msgid "Registered participants"
+msgstr "Participantes inscritos"
+
+#: eomf/outreach/templates/outreach/registration.html:39
+#: eomf/outreach/templates/outreach/workshop.html:19
+msgid "Name"
+msgstr "Nombre"
+
+#: eomf/outreach/templates/outreach/registration.html:40
+#: eomf/outreach/templates/outreach/workshop.html:20
+#: eomf/outreach/templates/outreach/workshop_presentations.html:82
+msgid "Institution"
+msgstr "Institución"
+
+#: eomf/outreach/templates/outreach/sponsors.html:3
+msgid "Sponsors"
+msgstr "Patrocinadores"
+
+#: eomf/outreach/templates/outreach/workshop.html:13
+#, fuzzy
+#| msgid "Affiliation"
+msgid "Awaiting validation"
+msgstr "Afiliación"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:24
+msgid "Content"
+msgstr "Contenido"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:33
+msgid "Register now here"
+msgstr "Regístrate aquí"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:37
+msgid "Registration closed"
+msgstr "Inscripción cerrada"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:44
+#: eomf/outreach/templates/outreach/workshop_presentations_menu.html:3
+msgid "Agenda"
+msgstr "Agenda"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:48
+msgid "Agenda not available"
+msgstr "Agenda No disponible"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:59
+msgid "Photo Gallery"
+msgstr "Galería De Fotos"
+
+#: eomf/outreach/templates/outreach/workshop_presentations.html:79
+msgid "Time"
+msgstr "Tiempo"
+
+#: eomf/outreach/templates/outreach/workshop_presentations.html:80
+msgid "title"
+msgstr "título"
+
+#: eomf/outreach/templates/outreach/workshop_presentations.html:81
+msgid "Presenter"
+msgstr "Presentador"
+
+#: eomf/outreach/templates/outreach/workshop_presentations.html:83
+msgid "Link"
+msgstr "Enlace"
+
+#: eomf/outreach/templates/outreach/workshop_presentations_menu.html:7
+msgid "View agenda"
+msgstr "Ver programa"
+
+#: eomf/outreach/templates/outreach/workshop_presentations_menu.html:9
+msgid "Not yet available"
+msgstr "No disponible aún"
+
 #: eomf/photos/forms.py:68 eomf/photos/forms.py:91 eomf/photos/forms.py:103
 msgid "All"
 msgstr "Todos"
@@ -3505,11 +3608,6 @@ msgstr "Continentes"
 #: eomf/photos/templates/photos/viewDetails.html:94
 msgid "Category"
 msgstr "Categoría"
-
-#: eomf/photos/models.py:42
-#: eomf/workshops/templates/workshops/categories_legend.html:3
-msgid "Categories"
-msgstr "Categorías"
 
 #: eomf/photos/models.py:70 eomf/photos/models.py:101
 msgid "Countries"
@@ -3617,7 +3715,7 @@ msgstr "NNW"
 
 #: eomf/photos/models.py:419 eomf/photos/templates/photos/edit.html:55
 #: eomf/photos/templates/photos/viewDetails.html:57
-#: eomf/templates/mainmenu.html:130 eomf/templates/mainmenu.html:202
+#: eomf/templates/mainmenu.html:125 eomf/templates/mainmenu.html:191
 msgid "Photo"
 msgstr "Foto"
 
@@ -3632,7 +3730,7 @@ msgstr "EOMF Resumen Fotos de Campo"
 
 #: eomf/photos/templates/photos/browse.html:26
 #: eomf/photos/templates/photos/map.html:47
-#: eomf/photos/templates/photos/overview.html:33
+#: eomf/photos/templates/photos/overview.html:143
 msgid "Global Geo-Referenced Field Photo Library"
 msgstr "Libreria Global Georeferenciada Field Photo"
 
@@ -3646,39 +3744,39 @@ msgstr "Búsqueda"
 msgid "Photos per page"
 msgstr "Fotos por página"
 
-#: eomf/photos/templates/photos/browse.html:136
+#: eomf/photos/templates/photos/browse.html:134
 msgid " Image Format."
 msgstr ""
 
-#: eomf/photos/templates/photos/browse.html:137
+#: eomf/photos/templates/photos/browse.html:135
 #: eomf/photos/templates/photos/browse_gallery_map.html:64
 #: eomf/photos/templates/photos/user.html:74
 msgid "CSV file and images."
 msgstr "Archivo e imágenes CSV."
 
-#: eomf/photos/templates/photos/browse.html:138
+#: eomf/photos/templates/photos/browse.html:136
 #, fuzzy
 #| msgid "KMZ: KML and images."
 msgid "KML: KML and images."
 msgstr "KMZ: KML e imágenes."
 
-#: eomf/photos/templates/photos/browse.html:143
+#: eomf/photos/templates/photos/browse.html:141
 msgid " Image Size."
 msgstr ""
 
-#: eomf/photos/templates/photos/browse.html:144
+#: eomf/photos/templates/photos/browse.html:142
 #: eomf/photos/templates/photos/browse_gallery_map.html:70
 #: eomf/photos/templates/photos/user.html:80
 msgid "Original images."
 msgstr "Las imágenes originales."
 
-#: eomf/photos/templates/photos/browse.html:145
+#: eomf/photos/templates/photos/browse.html:143
 #: eomf/photos/templates/photos/browse_gallery_map.html:71
 #: eomf/photos/templates/photos/user.html:81
 msgid "Downsized images."
 msgstr "Imágenes reducido."
 
-#: eomf/photos/templates/photos/browse.html:148
+#: eomf/photos/templates/photos/browse.html:146
 #: eomf/photos/templates/photos/browse_gallery_map.html:74
 #: eomf/photos/templates/photos/upload.html:262
 #: eomf/photos/templates/photos/user.html:84
@@ -3847,7 +3945,7 @@ msgstr "Cargando fotos ..."
 msgid "Total Photos: "
 msgstr "Total photos"
 
-#: eomf/photos/templates/photos/overview.html:36
+#: eomf/photos/templates/photos/overview.html:146
 msgid ""
 "A picture is worth a thousand words, and a geo-referenced (geo-tagged) field "
 "photo is even better. Everyday, researchers, students and citizens use GPS "
@@ -3882,26 +3980,26 @@ msgstr ""
 "subir fotos a la biblioteca y tendrá acceso a más fotos de campo en la "
 "biblioteca que un usuario invitado."
 
-#: eomf/photos/templates/photos/overview.html:38
+#: eomf/photos/templates/photos/overview.html:148
 msgid "Share your field photos"
 msgstr "Comparte tus fotos de campo"
 
-#: eomf/photos/templates/photos/overview.html:39
+#: eomf/photos/templates/photos/overview.html:149
 msgid "Show your footprint of travel, and"
 msgstr "Muestre la huella de sus viajes, y"
 
-#: eomf/photos/templates/photos/overview.html:40
+#: eomf/photos/templates/photos/overview.html:150
 msgid "Support monitoring of our Planet Earth!"
 msgstr "ayude a monitorizar nuestro Planeta Tierra!"
 
-#: eomf/photos/templates/photos/overview.html:43
+#: eomf/photos/templates/photos/overview.html:153
 msgid ""
 "Please read this article 'A Library of Georeferenced Photos From the Field'"
 msgstr ""
 "Por favor, lea este artículo 'A Library of Georeferenced Photos From the "
 "Field'"
 
-#: eomf/photos/templates/photos/overview.html:44
+#: eomf/photos/templates/photos/overview.html:154
 msgid ""
 "Please invite other people to participate in this community and citizen "
 "science effort and distribute this one-page flyer"
@@ -3909,36 +4007,36 @@ msgstr ""
 "Por favor invitar a otras personas a participar en este esfuerzo de la "
 "comunidad y la ciencia ciudadana y distribuya este folleto de una página"
 
-#: eomf/photos/templates/photos/overview.html:46
+#: eomf/photos/templates/photos/overview.html:156
 #, fuzzy
 #| msgid "Field Photo Weekends"
 msgid "Field Photo Demo"
 msgstr "Los fines de semana Field Photo"
 
-#: eomf/photos/templates/photos/overview.html:52
+#: eomf/photos/templates/photos/overview.html:162
 msgid "User's Guide"
 msgstr "Guía del usuario"
 
-#: eomf/photos/templates/photos/overview.html:54
+#: eomf/photos/templates/photos/overview.html:164
 msgid "About your GPS camera and smartphone"
 msgstr "Acerca de la cámara del GPS y el teléfono inteligente"
 
-#: eomf/photos/templates/photos/overview.html:55
+#: eomf/photos/templates/photos/overview.html:165
 msgid "How to use Field Photo Library (upload, edit, query, download)"
 msgstr ""
 "Modo de empleo El campo Photo Library (cargar, editar, consultar, descargar)"
 
-#: eomf/photos/templates/photos/overview.html:56
+#: eomf/photos/templates/photos/overview.html:166
 msgid "IGBP classification system"
 msgstr ""
 
-#: eomf/photos/templates/photos/overview.html:57
+#: eomf/photos/templates/photos/overview.html:167
 msgid "How to take field photos for monitoring land use and land cover changes"
 msgstr ""
 "Cómo tomar fotos de campo para el uso del suelo de monitoreo y los cambios "
 "de la cubierta terrestre"
 
-#: eomf/photos/templates/photos/overview.html:58
+#: eomf/photos/templates/photos/overview.html:168
 msgid ""
 "How to take field photos for monitoring water quality and harmful algae "
 "blooms"
@@ -3946,15 +4044,15 @@ msgstr ""
 "Cómo tomar fotos de campo para el monitoreo de calidad de agua y la "
 "proliferación de algas nocivas"
 
-#: eomf/photos/templates/photos/overview.html:62
+#: eomf/photos/templates/photos/overview.html:172
 msgid "Smartphone Apps"
 msgstr "Aplicaciones Smartphone"
 
-#: eomf/photos/templates/photos/overview.html:66
+#: eomf/photos/templates/photos/overview.html:176
 msgid "IOS"
 msgstr "IOS"
 
-#: eomf/photos/templates/photos/overview.html:71
+#: eomf/photos/templates/photos/overview.html:181
 msgid ""
 "Iphone app is now available in Apple Store, please <a href=\"https://itunes."
 "apple.com/us/app/field-photo/id717945301\">download</a> and install it. It "
@@ -3964,11 +4062,11 @@ msgstr ""
 "itunes.apple.com/us/app/field-photo/id717945301\"> </a> e instalarlo. Es "
 "gratis !!"
 
-#: eomf/photos/templates/photos/overview.html:76
+#: eomf/photos/templates/photos/overview.html:186
 msgid "Android:"
 msgstr "Android:"
 
-#: eomf/photos/templates/photos/overview.html:78
+#: eomf/photos/templates/photos/overview.html:188
 msgid ""
 "Android app is now available in Google Play Store, please <a href=\"https://"
 "play.google.com/store/apps/details?id=com.eomf\">download</a> and install "
@@ -3978,25 +4076,25 @@ msgstr ""
 "favor <a href=\"https://play.google.com/store/apps/details?id=com.eomf\"> "
 "descargar </a> e instalarlo. Es gratis !!"
 
-#: eomf/photos/templates/photos/overview.html:86
+#: eomf/photos/templates/photos/overview.html:196
 msgid "Field Photos Projects"
 msgstr "Proyectos de Field Photo"
 
-#: eomf/photos/templates/photos/overview.html:90
-#: eomf/photos/templates/photos/overview.html:129
-#: eomf/photos/templates/photos/overview.html:161
-#: eomf/photos/templates/photos/overview.html:188
-#: eomf/photos/templates/photos/overview.html:204
+#: eomf/photos/templates/photos/overview.html:200
+#: eomf/photos/templates/photos/overview.html:239
+#: eomf/photos/templates/photos/overview.html:271
+#: eomf/photos/templates/photos/overview.html:298
+#: eomf/photos/templates/photos/overview.html:314
 msgid "Field Photo Weekends"
 msgstr "Los fines de semana Field Photo"
 
-#: eomf/photos/templates/photos/overview.html:91
+#: eomf/photos/templates/photos/overview.html:201
 #, fuzzy
 #| msgid "Field Photo Weekends"
 msgid "Latest Field Photo Weekend"
 msgstr "Los fines de semana Field Photo"
 
-#: eomf/photos/templates/photos/overview.html:205
+#: eomf/photos/templates/photos/overview.html:315
 msgid ""
 "This is a citizen science effort through collaboration among the <a href="
 "\"http://www.cocorahs.org/Content.aspx?page=mod&mod=1\">CoCoRaHS</a>, <a "
@@ -4015,11 +4113,11 @@ msgstr ""
 "southernclimate.org / fieldphotos /> websites.It SCIPP </a> fue lanzado por "
 "primera vez para el fin de semana del Día del Trabajo en 2012."
 
-#: eomf/photos/templates/photos/overview.html:227
+#: eomf/photos/templates/photos/overview.html:337
 msgid "Acknowledgements"
 msgstr "Agradecimientos"
 
-#: eomf/photos/templates/photos/overview.html:229
+#: eomf/photos/templates/photos/overview.html:339
 msgid ""
 "The Geo-Referenced Field photos in this Field Photo library come from many "
 "people and projects. Their contributions make this library possible and grow "
@@ -4449,7 +4547,7 @@ msgstr "Administración EOMF"
 msgid "EOMF: Earth Observation and Modeling Facility"
 msgstr "EOMF: Instalación de Observación y Modelado Terrestre"
 
-#: eomf/templates/base.html:298
+#: eomf/templates/base.html:297
 #, fuzzy
 #| msgid ""
 #| "Copyright &copy; 2013 Earth Observation and Modeling Facility, the "
@@ -4563,20 +4661,19 @@ msgstr ""
 "el grupo EOMF han sido generosamente apoyadas por una serie de organismos de "
 "financiación."
 
-#: eomf/templates/mainmenu.html:133 eomf/templates/mainmenu.html:205
+#: eomf/templates/mainmenu.html:128 eomf/templates/mainmenu.html:194
 msgid "Datasets"
 msgstr "Inventario"
 
-#: eomf/templates/mainmenu.html:137 eomf/templates/mainmenu.html:209
+#: eomf/templates/mainmenu.html:132 eomf/templates/mainmenu.html:198
 msgid "MODIS"
 msgstr "MODIS"
 
-#: eomf/templates/mainmenu.html:155 eomf/templates/mainmenu.html:227
-#: eomf/workshops/templates/workshops/overview.html:7
-msgid "Workshops"
-msgstr "Talleres"
+#: eomf/templates/mainmenu.html:144
+msgid "Outreach"
+msgstr ""
 
-#: eomf/templates/mainmenu.html:161 eomf/templates/mainmenu.html:233
+#: eomf/templates/mainmenu.html:150 eomf/templates/mainmenu.html:222
 msgid "Water"
 msgstr ""
 
@@ -4679,7 +4776,7 @@ msgstr "Archivo de salida"
 msgid "EOMF Visualization overview"
 msgstr "Resumen Visualización EOMF"
 
-#: eomf/visualization/templates/visualization/overview.html:11
+#: eomf/visualization/templates/visualization/overview.html:18
 msgid ""
 "The EOMF Data Center hosts several hundreds of terabytes of MODIS data and "
 "products for the globe over the period of 2/2000 to present. Here you can "
@@ -4694,12 +4791,12 @@ msgstr ""
 "(http://www.usgs.gov/), donde se puede descargar gran volumen de datos MODIS "
 "de baldosas y año."
 
-#: eomf/visualization/templates/visualization/overview.html:14
+#: eomf/visualization/templates/visualization/overview.html:21
 #: eomf/water/templates/water/overview.html:26
 msgid "Wild bird data"
 msgstr "Datos de aves silvestres"
 
-#: eomf/visualization/templates/visualization/overview.html:15
+#: eomf/visualization/templates/visualization/overview.html:22
 #: eomf/water/templates/water/overview.html:27
 msgid ""
 "Satellite telemetry of wild birds provides useful information on local "
@@ -4711,12 +4808,12 @@ msgstr ""
 "migratorias. Aquí puede visualizar los datos de movimiento de aves "
 "silvestres de la telemetría por satélite."
 
-#: eomf/visualization/templates/visualization/overview.html:18
+#: eomf/visualization/templates/visualization/overview.html:25
 #: eomf/water/templates/water/overview.html:30
 msgid "Avian influenza data"
 msgstr "Datos de la gripe aviar"
 
-#: eomf/visualization/templates/visualization/overview.html:19
+#: eomf/visualization/templates/visualization/overview.html:26
 #: eomf/water/templates/water/overview.html:31
 msgid ""
 "Transmission and spillover of avian influenza, specifically highly "
@@ -4841,129 +4938,37 @@ msgid ""
 "observation images."
 msgstr ""
 
-#: eomf/workshops/templates/workshops/leftmenu.html:31
-#: eomf/workshops/templates/workshops/workshop_list_current.html:5
-msgid "Current Workshops"
-msgstr "Talleres actuales"
+#~ msgid "Current Workshops"
+#~ msgstr "Talleres actuales"
 
-#: eomf/workshops/templates/workshops/leftmenu.html:36
-msgid "Past Workshops"
-msgstr "Los talleres anteriores"
+#~ msgid "Past Workshops"
+#~ msgstr "Los talleres anteriores"
 
-#: eomf/workshops/templates/workshops/overview.html:4
-msgid "EOMF: Workshops overview"
-msgstr "EOMF: Talleres visión general"
+#~ msgid "EOMF: Workshops overview"
+#~ msgstr "EOMF: Talleres visión general"
 
-#: eomf/workshops/templates/workshops/overview.html:11
-msgid ""
-"The EOMF has hosted or co-hosted a number of workshops and project\n"
-"                meetings in a variety of research areas, including disease "
-"ecology, remote\n"
-"                sensing, land use and land cover change, terrestrial carbon "
-"cycle and\n"
-"                climate change. Here you can read and download the materials "
-"related to\n"
-"                the workshops and project meetings. "
-msgstr ""
-"El EOMF ha sido anfitrión o co-organizado una serie de talleres y proyectos\n"
-"                reuniones en una variedad de áreas de investigación, "
-"incluyendo ecología de las enfermedades, a distancia\n"
-"                detección, uso de la tierra y el cambio de cobertura "
-"terrestre, ciclo del carbono terrestre y\n"
-"                cambio climático. Aquí puede leer y descargar los materiales "
-"relacionados con\n"
-"                los talleres y reuniones del proyecto."
+#~ msgid ""
+#~ "The EOMF has hosted or co-hosted a number of workshops and project\n"
+#~ "                meetings in a variety of research areas, including "
+#~ "disease ecology, remote\n"
+#~ "                sensing, land use and land cover change, terrestrial "
+#~ "carbon cycle and\n"
+#~ "                climate change. Here you can read and download the "
+#~ "materials related to\n"
+#~ "                the workshops and project meetings. "
+#~ msgstr ""
+#~ "El EOMF ha sido anfitrión o co-organizado una serie de talleres y "
+#~ "proyectos\n"
+#~ "                reuniones en una variedad de áreas de investigación, "
+#~ "incluyendo ecología de las enfermedades, a distancia\n"
+#~ "                detección, uso de la tierra y el cambio de cobertura "
+#~ "terrestre, ciclo del carbono terrestre y\n"
+#~ "                cambio climático. Aquí puede leer y descargar los "
+#~ "materiales relacionados con\n"
+#~ "                los talleres y reuniones del proyecto."
 
-#: eomf/workshops/templates/workshops/registration.html:14
-msgid "Registration"
-msgstr "Registro"
-
-#: eomf/workshops/templates/workshops/registration.html:23
-msgid ""
-"You have successfuly registered for this workshop. Please check your email "
-"for confirmation."
-msgstr ""
-"Usted exitosamente registrado para este taller. Por favor revise su correo "
-"electrónico para la confirmación."
-
-#: eomf/workshops/templates/workshops/registration.html:31
-#: eomf/workshops/templates/workshops/workshop.html:11
-msgid "Registered participants"
-msgstr "Participantes inscritos"
-
-#: eomf/workshops/templates/workshops/registration.html:39
-#: eomf/workshops/templates/workshops/workshop.html:19
-msgid "Name"
-msgstr "Nombre"
-
-#: eomf/workshops/templates/workshops/registration.html:40
-#: eomf/workshops/templates/workshops/workshop.html:20
-#: eomf/workshops/templates/workshops/workshop_presentations.html:25
-msgid "Institution"
-msgstr "Institución"
-
-#: eomf/workshops/templates/workshops/sponsors.html:3
-msgid "Sponsors"
-msgstr "Patrocinadores"
-
-#: eomf/workshops/templates/workshops/workshop.html:13
-#, fuzzy
-#| msgid "Affiliation"
-msgid "Awaiting validation"
-msgstr "Afiliación"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:4
-msgid "Content"
-msgstr "Contenido"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:10
-msgid "Register now here"
-msgstr "Regístrate aquí"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:12
-msgid "Registration closed"
-msgstr "Inscripción cerrada"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:17
-#: eomf/workshops/templates/workshops/workshop_presentations_menu.html:3
-msgid "Agenda"
-msgstr "Agenda"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:19
-msgid "Agenda not available"
-msgstr "Agenda No disponible"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:26
-msgid "Photo Gallery"
-msgstr "Galería De Fotos"
-
-#: eomf/workshops/templates/workshops/workshop_list_past.html:6
-msgid "Previous Workshops"
-msgstr "Talleres anteriores"
-
-#: eomf/workshops/templates/workshops/workshop_presentations.html:22
-msgid "Time"
-msgstr "Tiempo"
-
-#: eomf/workshops/templates/workshops/workshop_presentations.html:23
-msgid "title"
-msgstr "título"
-
-#: eomf/workshops/templates/workshops/workshop_presentations.html:24
-msgid "Presenter"
-msgstr "Presentador"
-
-#: eomf/workshops/templates/workshops/workshop_presentations.html:26
-msgid "Link"
-msgstr "Enlace"
-
-#: eomf/workshops/templates/workshops/workshop_presentations_menu.html:7
-msgid "View agenda"
-msgstr "Ver programa"
-
-#: eomf/workshops/templates/workshops/workshop_presentations_menu.html:9
-msgid "Not yet available"
-msgstr "No disponible aún"
+#~ msgid "Previous Workshops"
+#~ msgstr "Talleres anteriores"
 
 #~ msgid "20 km"
 #~ msgstr "20 km"

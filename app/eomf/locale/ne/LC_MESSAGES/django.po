@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-03 16:58-0600\n"
+"POT-Creation-Date: 2021-01-08 16:28-0600\n
 "PO-Revision-Date: 2015-06-09 13:19-0551\n"
 "Last-Translator: Michael Menarguez <mamenarguez@ou.edu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -532,7 +532,7 @@ msgid "Group photos"
 msgstr "समूह फोटो"
 
 #: eomf/aboutus/templates/aboutus/leftmenu.html:22
-#: eomf/templates/mainmenu.html:124 eomf/templates/mainmenu.html:196
+#: eomf/templates/mainmenu.html:119 eomf/templates/mainmenu.html:185
 msgid "About Us"
 msgstr "हाम्रो बारे"
 
@@ -556,9 +556,9 @@ msgid "Books and Book Chapters"
 msgstr "पुस्तक र बुक अध्याय"
 
 #: eomf/aboutus/templates/aboutus/leftmenu.html:43
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:54
+#: eomf/outreach/templates/outreach/workshop_presentations.html:65
 #: eomf/publications/templates/publications/section_list.html:11
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:23
-#: eomf/workshops/templates/workshops/workshop_presentations.html:8
 msgid "Presentations"
 msgstr "प्रस्तुतिहरु"
 
@@ -571,13 +571,13 @@ msgstr "अनुसन्धान"
 #: eomf/aboutus/templates/aboutus/leftmenu.html:51
 #: eomf/aboutus/templates/aboutus/leftmenu.html:61
 #: eomf/aboutus/templates/aboutus/leftmenu.html:72
-#: eomf/inventory/templates/inventory/leftmenu.html:26
+#: eomf/inventory/templates/inventory/leftmenu.html:4
+#: eomf/outreach/templates/outreach/leftmenu.html:9
 #: eomf/photos/templates/photos/leftmenu.html:26
 #: eomf/visualization/templates/visualization/leftmenu.html:26
-#: eomf/visualization/templates/visualization/overview.html:8
+#: eomf/visualization/templates/visualization/overview.html:15
 #: eomf/water/templates/water/leftmenu.html:27
 #: eomf/water/templates/water/overview.html:8
-#: eomf/workshops/templates/workshops/leftmenu.html:26
 msgid "Overview"
 msgstr "अवलोकन"
 
@@ -591,7 +591,7 @@ msgid "Themes"
 msgstr "वस्तु"
 
 #: eomf/aboutus/templates/aboutus/leftmenu.html:64
-#: eomf/templates/mainmenu.html:149 eomf/templates/mainmenu.html:221
+#: eomf/templates/mainmenu.html:210
 msgid "GIS Day"
 msgstr "जीआईएस दिन"
 
@@ -1760,7 +1760,7 @@ msgid "Edit Account"
 msgstr "खाता सम्पादन"
 
 #: eomf/accounts/templates/accounts/leftmenu.html:22
-#: eomf/templates/mainmenu.html:167 eomf/templates/mainmenu.html:239
+#: eomf/templates/mainmenu.html:156 eomf/templates/mainmenu.html:228
 msgid "Account"
 msgstr "खाता"
 
@@ -1855,7 +1855,7 @@ msgstr "मेरो पासवर्ड परिवर्तन"
 #: eomf/accounts/templates/accounts/password_reset_confirm.html:4
 #: eomf/accounts/templates/accounts/password_reset_done.html:4
 #: eomf/accounts/templates/accounts/password_reset_form.html:4
-#: eomf/templates/mainmenu.html:118 eomf/templates/mainmenu.html:190
+#: eomf/templates/mainmenu.html:113 eomf/templates/mainmenu.html:179
 msgid "Home"
 msgstr "घर"
 
@@ -2783,7 +2783,7 @@ msgstr "जलवायु परिवर्तन"
 #: eomf/geohealth/templates/geohealth/base.html:3
 #: eomf/geohealth/templates/geohealth/gemap.html:3
 #: eomf/geohealth/templates/geohealth/leftmenu.html:23
-#: eomf/templates/mainmenu.html:143 eomf/templates/mainmenu.html:215
+#: eomf/templates/mainmenu.html:138 eomf/templates/mainmenu.html:204
 msgid "GeoHealth"
 msgstr "GeoHealth"
 
@@ -2841,7 +2841,7 @@ msgid "Data Tree"
 msgstr "डाटा ट्री"
 
 #: eomf/geohealth/templates/geohealth/earth-tree.html:53
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:6
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:27
 msgid "Description"
 msgstr "विवरण"
 
@@ -2883,7 +2883,7 @@ msgstr "चरा इन्फ्लुएन्जा ट्रयाक डा
 
 #: eomf/inventory/templates/inventory/leftmenu.html:22
 #: eomf/visualization/templates/visualization/leftmenu.html:22
-#: eomf/visualization/templates/visualization/overview.html:10
+#: eomf/visualization/templates/visualization/overview.html:17
 msgid "MODIS data"
 msgstr "MODIS डाटा"
 
@@ -3337,6 +3337,109 @@ msgstr ""
 msgid "Download POIs"
 msgstr "डाउनलोड"
 
+#: eomf/outreach/templates/outreach/categories_legend.html:3
+#: eomf/photos/models.py:42
+msgid "Categories"
+msgstr "विभाग"
+
+#: eomf/outreach/templates/outreach/leftmenu.html:101
+#: eomf/outreach/templates/outreach/workshop_list_past.html:13
+#: eomf/templates/mainmenu.html:216
+msgid "Workshops"
+msgstr "कार्यशाला"
+
+#: eomf/outreach/templates/outreach/registration.html:14
+msgid "Registration"
+msgstr "दर्ता"
+
+#: eomf/outreach/templates/outreach/registration.html:18
+#: eomf/visualization/templates/visualization/composite.html:179
+msgid "Date"
+msgstr "तिथि"
+
+#: eomf/outreach/templates/outreach/registration.html:23
+msgid ""
+"You have successfuly registered for this workshop. Please check your email "
+"for confirmation."
+msgstr ""
+"तपाईं successfuly यो कार्यशाला लागि दर्ता गरेका छन्। पुष्टि लागि आफ्नो इमेल जाँच "
+"गर्नुहोस्।"
+
+#: eomf/outreach/templates/outreach/registration.html:31
+#: eomf/outreach/templates/outreach/workshop.html:11
+msgid "Registered participants"
+msgstr "दर्ता सहभागीहरू"
+
+#: eomf/outreach/templates/outreach/registration.html:39
+#: eomf/outreach/templates/outreach/workshop.html:19
+msgid "Name"
+msgstr "नाम"
+
+#: eomf/outreach/templates/outreach/registration.html:40
+#: eomf/outreach/templates/outreach/workshop.html:20
+#: eomf/outreach/templates/outreach/workshop_presentations.html:82
+msgid "Institution"
+msgstr "संस्था"
+
+#: eomf/outreach/templates/outreach/sponsors.html:3
+msgid "Sponsors"
+msgstr "Sponsors"
+
+#: eomf/outreach/templates/outreach/workshop.html:13
+#, fuzzy
+#| msgid "Affiliation"
+msgid "Awaiting validation"
+msgstr "मान्य"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:24
+msgid "Content"
+msgstr "सामग्री"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:33
+msgid "Register now here"
+msgstr "अब यहाँ दर्ता"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:37
+msgid "Registration closed"
+msgstr "दर्ता बन्द"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:44
+#: eomf/outreach/templates/outreach/workshop_presentations_menu.html:3
+msgid "Agenda"
+msgstr "एजेन्डा"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:48
+msgid "Agenda not available"
+msgstr "उपलब्ध छैन एजेन्डा"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:59
+msgid "Photo Gallery"
+msgstr "फोटो ग्यालरी"
+
+#: eomf/outreach/templates/outreach/workshop_presentations.html:79
+msgid "Time"
+msgstr "समय"
+
+#: eomf/outreach/templates/outreach/workshop_presentations.html:80
+msgid "title"
+msgstr "शीर्षक"
+
+#: eomf/outreach/templates/outreach/workshop_presentations.html:81
+msgid "Presenter"
+msgstr "प्रस्तुतकर्ता"
+
+#: eomf/outreach/templates/outreach/workshop_presentations.html:83
+msgid "Link"
+msgstr "लिंक"
+
+#: eomf/outreach/templates/outreach/workshop_presentations_menu.html:7
+msgid "View agenda"
+msgstr "हेर्नुहोस् एजेन्डा"
+
+#: eomf/outreach/templates/outreach/workshop_presentations_menu.html:9
+msgid "Not yet available"
+msgstr "अहिले उपलब्ध छैन"
+
 #: eomf/photos/forms.py:68 eomf/photos/forms.py:91 eomf/photos/forms.py:103
 msgid "All"
 msgstr "सबै"
@@ -3353,11 +3456,6 @@ msgstr "महादेशहरू"
 #: eomf/photos/templates/photos/viewDetails.html:94
 msgid "Category"
 msgstr "श्रेणी"
-
-#: eomf/photos/models.py:42
-#: eomf/workshops/templates/workshops/categories_legend.html:3
-msgid "Categories"
-msgstr "विभाग"
 
 #: eomf/photos/models.py:70 eomf/photos/models.py:101
 msgid "Countries"
@@ -3465,7 +3563,7 @@ msgstr "उ.उ.प."
 
 #: eomf/photos/models.py:419 eomf/photos/templates/photos/edit.html:55
 #: eomf/photos/templates/photos/viewDetails.html:57
-#: eomf/templates/mainmenu.html:130 eomf/templates/mainmenu.html:202
+#: eomf/templates/mainmenu.html:125 eomf/templates/mainmenu.html:191
 msgid "Photo"
 msgstr "फोटो"
 
@@ -3480,7 +3578,7 @@ msgstr "EOMF फील्ड फोटो सिंहावलोकन"
 
 #: eomf/photos/templates/photos/browse.html:26
 #: eomf/photos/templates/photos/map.html:47
-#: eomf/photos/templates/photos/overview.html:33
+#: eomf/photos/templates/photos/overview.html:143
 msgid "Global Geo-Referenced Field Photo Library"
 msgstr "ग्लोबल फील्ड फोटो लाइब्रेरी भू-संदर्भित"
 
@@ -3494,39 +3592,39 @@ msgstr "खोज"
 msgid "Photos per page"
 msgstr "प्रति पृष्ठ तस्वीरहरु"
 
-#: eomf/photos/templates/photos/browse.html:136
+#: eomf/photos/templates/photos/browse.html:134
 msgid " Image Format."
 msgstr ""
 
-#: eomf/photos/templates/photos/browse.html:137
+#: eomf/photos/templates/photos/browse.html:135
 #: eomf/photos/templates/photos/browse_gallery_map.html:64
 #: eomf/photos/templates/photos/user.html:74
 msgid "CSV file and images."
 msgstr "CSV फाइल र तस्बिरहरू।"
 
-#: eomf/photos/templates/photos/browse.html:138
+#: eomf/photos/templates/photos/browse.html:136
 #, fuzzy
 #| msgid "KMZ: KML and images."
 msgid "KML: KML and images."
 msgstr "केएमजेड: KML र तस्बिरहरू।"
 
-#: eomf/photos/templates/photos/browse.html:143
+#: eomf/photos/templates/photos/browse.html:141
 msgid " Image Size."
 msgstr ""
 
-#: eomf/photos/templates/photos/browse.html:144
+#: eomf/photos/templates/photos/browse.html:142
 #: eomf/photos/templates/photos/browse_gallery_map.html:70
 #: eomf/photos/templates/photos/user.html:80
 msgid "Original images."
 msgstr "मूल चित्रहरु।"
 
-#: eomf/photos/templates/photos/browse.html:145
+#: eomf/photos/templates/photos/browse.html:143
 #: eomf/photos/templates/photos/browse_gallery_map.html:71
 #: eomf/photos/templates/photos/user.html:81
 msgid "Downsized images."
 msgstr "आकार तस्बिरहरू।"
 
-#: eomf/photos/templates/photos/browse.html:148
+#: eomf/photos/templates/photos/browse.html:146
 #: eomf/photos/templates/photos/browse_gallery_map.html:74
 #: eomf/photos/templates/photos/upload.html:262
 #: eomf/photos/templates/photos/user.html:84
@@ -3695,7 +3793,7 @@ msgstr "फोटो लोड हुँदै ..."
 msgid "Total Photos: "
 msgstr "कुल फोटो"
 
-#: eomf/photos/templates/photos/overview.html:36
+#: eomf/photos/templates/photos/overview.html:146
 #, fuzzy
 #| msgid ""
 #| "A picture is worth a thousand words, and a geo-referenced (geo-tagged) "
@@ -3740,24 +3838,24 @@ msgstr ""
 "प्रयोगकर्ताहरूले। दर्ता प्रयोगकर्ता पुस्तकालयको मा फोटो अपलोड र एक अतिथि प्रयोगकर्ता "
 "भन्दा पुस्तकालयमा अधिक क्षेत्र फोटो पहुँच छ सक्छन्।"
 
-#: eomf/photos/templates/photos/overview.html:38
+#: eomf/photos/templates/photos/overview.html:148
 msgid "Share your field photos"
 msgstr "आफ्नो क्षेत्र फोटो साझेदारी"
 
-#: eomf/photos/templates/photos/overview.html:39
+#: eomf/photos/templates/photos/overview.html:149
 msgid "Show your footprint of travel, and"
 msgstr "यात्रा को आफ्नो फुटप्रिन्ट देखाउन, र"
 
-#: eomf/photos/templates/photos/overview.html:40
+#: eomf/photos/templates/photos/overview.html:150
 msgid "Support monitoring of our Planet Earth!"
 msgstr "हाम्रो ग्रह पृथ्वीको समर्थन निगरानी!"
 
-#: eomf/photos/templates/photos/overview.html:43
+#: eomf/photos/templates/photos/overview.html:153
 msgid ""
 "Please read this article 'A Library of Georeferenced Photos From the Field'"
 msgstr "यस लेखमा 'फिल्ड देखि Georeferenced तस्वीरहरु को एक पुस्तकालय' पढ्न कृपया"
 
-#: eomf/photos/templates/photos/overview.html:44
+#: eomf/photos/templates/photos/overview.html:154
 msgid ""
 "Please invite other people to participate in this community and citizen "
 "science effort and distribute this one-page flyer"
@@ -3765,47 +3863,47 @@ msgstr ""
 "यो समुदाय र नागरिक विज्ञान प्रयास भाग लिन अन्य मानिसहरूलाई निमन्त्रणा र यो एक-पृष्ठ "
 "उड्ने वितरण कृपया"
 
-#: eomf/photos/templates/photos/overview.html:46
+#: eomf/photos/templates/photos/overview.html:156
 #, fuzzy
 #| msgid "Field Photo Weekends"
 msgid "Field Photo Demo"
 msgstr "क्षेत्र फोटो सप्ताहांत"
 
-#: eomf/photos/templates/photos/overview.html:52
+#: eomf/photos/templates/photos/overview.html:162
 msgid "User's Guide"
 msgstr "प्रयोगकर्ताको गाइड"
 
-#: eomf/photos/templates/photos/overview.html:54
+#: eomf/photos/templates/photos/overview.html:164
 msgid "About your GPS camera and smartphone"
 msgstr "आफ्नो जीपीएस क्यामेरा र स्मार्टफोनको बारे"
 
-#: eomf/photos/templates/photos/overview.html:55
+#: eomf/photos/templates/photos/overview.html:165
 msgid "How to use Field Photo Library (upload, edit, query, download)"
 msgstr "फील्ड फोटो लाइब्रेरी प्रयोग गर्न कसरी (अपलोड, सम्पादन, क्वेरी, डाउनलोड)"
 
-#: eomf/photos/templates/photos/overview.html:56
+#: eomf/photos/templates/photos/overview.html:166
 msgid "IGBP classification system"
 msgstr ""
 
-#: eomf/photos/templates/photos/overview.html:57
+#: eomf/photos/templates/photos/overview.html:167
 msgid "How to take field photos for monitoring land use and land cover changes"
 msgstr "अनुगमन भूमि प्रयोग गर्नका लागि क्षेत्र फोटो र भूमि कवर परिवर्तन लिन कसरी"
 
-#: eomf/photos/templates/photos/overview.html:58
+#: eomf/photos/templates/photos/overview.html:168
 msgid ""
 "How to take field photos for monitoring water quality and harmful algae "
 "blooms"
 msgstr "अनुगमन पानी गुणवत्ता र हानिकारक algae blooms लागि क्षेत्र फोटो लिन कसरी"
 
-#: eomf/photos/templates/photos/overview.html:62
+#: eomf/photos/templates/photos/overview.html:172
 msgid "Smartphone Apps"
 msgstr "स्मार्टफोन अनुप्रयोग"
 
-#: eomf/photos/templates/photos/overview.html:66
+#: eomf/photos/templates/photos/overview.html:176
 msgid "IOS"
 msgstr "IOS"
 
-#: eomf/photos/templates/photos/overview.html:71
+#: eomf/photos/templates/photos/overview.html:181
 msgid ""
 "Iphone app is now available in Apple Store, please <a href=\"https://itunes."
 "apple.com/us/app/field-photo/id717945301\">download</a> and install it. It "
@@ -3814,11 +3912,11 @@ msgstr ""
 "अधिकांश अनुप्रयोग एप्पल स्टोर उपलब्ध छ, href=\"https://itunes.apple.com/us/app/"
 "field-photo/id717945301\"> डाउनलोड </a> <a र यसलाई स्थापना गर्नुहोस्। यो मुक्त छ !!"
 
-#: eomf/photos/templates/photos/overview.html:76
+#: eomf/photos/templates/photos/overview.html:186
 msgid "Android:"
 msgstr "एन्ड्रोइड:"
 
-#: eomf/photos/templates/photos/overview.html:78
+#: eomf/photos/templates/photos/overview.html:188
 msgid ""
 "Android app is now available in Google Play Store, please <a href=\"https://"
 "play.google.com/store/apps/details?id=com.eomf\">download</a> and install "
@@ -3828,25 +3926,25 @@ msgstr ""
 "apps/details?id=com.eomf\"> </a> डाउनलोड र यसलाई स्थापना <a गर्नुहोस्। यो मुक्त "
 "छ !!"
 
-#: eomf/photos/templates/photos/overview.html:86
+#: eomf/photos/templates/photos/overview.html:196
 msgid "Field Photos Projects"
 msgstr "क्षेत्र तस्वीरहरु परियोजनाहरु"
 
-#: eomf/photos/templates/photos/overview.html:90
-#: eomf/photos/templates/photos/overview.html:129
-#: eomf/photos/templates/photos/overview.html:161
-#: eomf/photos/templates/photos/overview.html:188
-#: eomf/photos/templates/photos/overview.html:204
+#: eomf/photos/templates/photos/overview.html:200
+#: eomf/photos/templates/photos/overview.html:239
+#: eomf/photos/templates/photos/overview.html:271
+#: eomf/photos/templates/photos/overview.html:298
+#: eomf/photos/templates/photos/overview.html:314
 msgid "Field Photo Weekends"
 msgstr "क्षेत्र फोटो सप्ताहांत"
 
-#: eomf/photos/templates/photos/overview.html:91
+#: eomf/photos/templates/photos/overview.html:201
 #, fuzzy
 #| msgid "Field Photo Weekends"
 msgid "Latest Field Photo Weekend"
 msgstr "क्षेत्र फोटो सप्ताहांत"
 
-#: eomf/photos/templates/photos/overview.html:205
+#: eomf/photos/templates/photos/overview.html:315
 msgid ""
 "This is a citizen science effort through collaboration among the <a href="
 "\"http://www.cocorahs.org/Content.aspx?page=mod&mod=1\">CoCoRaHS</a>, <a "
@@ -3864,11 +3962,11 @@ msgstr ""
 "southernclimate.org / fieldphotos / '> SCIPP </a> websites.It पहिलो 2012 मा "
 "श्रम दिवस सप्ताहन्त लागि शुरू भएको थियो।"
 
-#: eomf/photos/templates/photos/overview.html:227
+#: eomf/photos/templates/photos/overview.html:337
 msgid "Acknowledgements"
 msgstr "Acknowledgements"
 
-#: eomf/photos/templates/photos/overview.html:229
+#: eomf/photos/templates/photos/overview.html:339
 msgid ""
 "The Geo-Referenced Field photos in this Field Photo library come from many "
 "people and projects. Their contributions make this library possible and grow "
@@ -4289,7 +4387,7 @@ msgstr "EOMF प्रशासन"
 msgid "EOMF: Earth Observation and Modeling Facility"
 msgstr "EOMF: धरती अवलोकन र मोडलिङ सुविधा"
 
-#: eomf/templates/base.html:298
+#: eomf/templates/base.html:297
 #, fuzzy
 #| msgid ""
 #| "Copyright &copy; 2013 Earth Observation and Modeling Facility, the "
@@ -4399,20 +4497,19 @@ msgstr ""
 "यस EOMF मा अनुसन्धान, शिक्षा र outreach गतिविधिहरु उदार अनुदान एजेंसियों को एक नम्बर "
 "द्वारा समर्थित छ।"
 
-#: eomf/templates/mainmenu.html:133 eomf/templates/mainmenu.html:205
+#: eomf/templates/mainmenu.html:128 eomf/templates/mainmenu.html:194
 msgid "Datasets"
 msgstr "डेटासेट्स"
 
-#: eomf/templates/mainmenu.html:137 eomf/templates/mainmenu.html:209
+#: eomf/templates/mainmenu.html:132 eomf/templates/mainmenu.html:198
 msgid "MODIS"
 msgstr "MODIS"
 
-#: eomf/templates/mainmenu.html:155 eomf/templates/mainmenu.html:227
-#: eomf/workshops/templates/workshops/overview.html:7
-msgid "Workshops"
-msgstr "कार्यशाला"
+#: eomf/templates/mainmenu.html:144
+msgid "Outreach"
+msgstr ""
 
-#: eomf/templates/mainmenu.html:161 eomf/templates/mainmenu.html:233
+#: eomf/templates/mainmenu.html:150 eomf/templates/mainmenu.html:222
 msgid "Water"
 msgstr ""
 
@@ -4514,7 +4611,7 @@ msgstr "निर्गतफाइल"
 msgid "EOMF Visualization overview"
 msgstr "EOMF दृष्टिगोचर सिंहावलोकन"
 
-#: eomf/visualization/templates/visualization/overview.html:11
+#: eomf/visualization/templates/visualization/overview.html:18
 msgid ""
 "The EOMF Data Center hosts several hundreds of terabytes of MODIS data and "
 "products for the globe over the period of 2/2000 to present. Here you can "
@@ -4528,12 +4625,12 @@ msgstr ""
 "डाउनलोड गर्न सक्छन् जहाँ USGS EDC (http://www.usgs.gov/) द्वारा प्रदान वेब सेवा गर्न "
 "पूरक छ।"
 
-#: eomf/visualization/templates/visualization/overview.html:14
+#: eomf/visualization/templates/visualization/overview.html:21
 #: eomf/water/templates/water/overview.html:26
 msgid "Wild bird data"
 msgstr "जंगली बर्ड डाटा"
 
-#: eomf/visualization/templates/visualization/overview.html:15
+#: eomf/visualization/templates/visualization/overview.html:22
 #: eomf/water/templates/water/overview.html:27
 msgid ""
 "Satellite telemetry of wild birds provides useful information on local "
@@ -4544,12 +4641,12 @@ msgstr ""
 "मा उपयोगी जानकारी प्रदान गर्दछ। यहाँ तपाईँले उपग्रह telemetry देखि जंगली बर्ड आन्दोलन "
 "डाटा दृश्यका सक्छन्।"
 
-#: eomf/visualization/templates/visualization/overview.html:18
+#: eomf/visualization/templates/visualization/overview.html:25
 #: eomf/water/templates/water/overview.html:30
 msgid "Avian influenza data"
 msgstr "चरा इन्फ्लुएन्जा डाटा"
 
-#: eomf/visualization/templates/visualization/overview.html:19
+#: eomf/visualization/templates/visualization/overview.html:26
 #: eomf/water/templates/water/overview.html:31
 msgid ""
 "Transmission and spillover of avian influenza, specifically highly "
@@ -4674,128 +4771,35 @@ msgid ""
 "observation images."
 msgstr ""
 
-#: eomf/workshops/templates/workshops/leftmenu.html:31
-#: eomf/workshops/templates/workshops/workshop_list_current.html:5
-msgid "Current Workshops"
-msgstr "वर्तमान कार्यशाला"
+#~ msgid "Current Workshops"
+#~ msgstr "वर्तमान कार्यशाला"
 
-#: eomf/workshops/templates/workshops/leftmenu.html:36
-msgid "Past Workshops"
-msgstr "विगत कार्यशाला"
+#~ msgid "Past Workshops"
+#~ msgstr "विगत कार्यशाला"
 
-#: eomf/workshops/templates/workshops/overview.html:4
-msgid "EOMF: Workshops overview"
-msgstr "EOMF: सिंहावलोकन कार्यशाला"
+#~ msgid "EOMF: Workshops overview"
+#~ msgstr "EOMF: सिंहावलोकन कार्यशाला"
 
-#: eomf/workshops/templates/workshops/overview.html:11
-msgid ""
-"The EOMF has hosted or co-hosted a number of workshops and project\n"
-"                meetings in a variety of research areas, including disease "
-"ecology, remote\n"
-"                sensing, land use and land cover change, terrestrial carbon "
-"cycle and\n"
-"                climate change. Here you can read and download the materials "
-"related to\n"
-"                the workshops and project meetings. "
-msgstr ""
-"यो EOMF होस्ट छ या कार्यशाला र परियोजना को एक नम्बर सह-होस्ट\n"
-"                रोग पारिस्थितिकी सहित अनुसन्धान क्षेत्र को एक किसिम मा सभाहरू, "
-"टाढाको\n"
-"                संवेदन, भूमि प्रयोग र भूमि कवर परिवर्तन, स्थलीय कार्बन चक्र र\n"
-"                जलवायु परिवर्तन। यहाँ तपाईँले सम्बन्धित सामाग्री पढ्न र डाउनलोड गर्न "
-"सक्छन्\n"
-"                यो कार्यशाला र परियोजना सभाहरूमा।"
+#~ msgid ""
+#~ "The EOMF has hosted or co-hosted a number of workshops and project\n"
+#~ "                meetings in a variety of research areas, including "
+#~ "disease ecology, remote\n"
+#~ "                sensing, land use and land cover change, terrestrial "
+#~ "carbon cycle and\n"
+#~ "                climate change. Here you can read and download the "
+#~ "materials related to\n"
+#~ "                the workshops and project meetings. "
+#~ msgstr ""
+#~ "यो EOMF होस्ट छ या कार्यशाला र परियोजना को एक नम्बर सह-होस्ट\n"
+#~ "                रोग पारिस्थितिकी सहित अनुसन्धान क्षेत्र को एक किसिम मा सभाहरू, "
+#~ "टाढाको\n"
+#~ "                संवेदन, भूमि प्रयोग र भूमि कवर परिवर्तन, स्थलीय कार्बन चक्र र\n"
+#~ "                जलवायु परिवर्तन। यहाँ तपाईँले सम्बन्धित सामाग्री पढ्न र डाउनलोड "
+#~ "गर्न सक्छन्\n"
+#~ "                यो कार्यशाला र परियोजना सभाहरूमा।"
 
-#: eomf/workshops/templates/workshops/registration.html:14
-msgid "Registration"
-msgstr "दर्ता"
-
-#: eomf/workshops/templates/workshops/registration.html:23
-msgid ""
-"You have successfuly registered for this workshop. Please check your email "
-"for confirmation."
-msgstr ""
-"तपाईं successfuly यो कार्यशाला लागि दर्ता गरेका छन्। पुष्टि लागि आफ्नो इमेल जाँच "
-"गर्नुहोस्।"
-
-#: eomf/workshops/templates/workshops/registration.html:31
-#: eomf/workshops/templates/workshops/workshop.html:11
-msgid "Registered participants"
-msgstr "दर्ता सहभागीहरू"
-
-#: eomf/workshops/templates/workshops/registration.html:39
-#: eomf/workshops/templates/workshops/workshop.html:19
-msgid "Name"
-msgstr "नाम"
-
-#: eomf/workshops/templates/workshops/registration.html:40
-#: eomf/workshops/templates/workshops/workshop.html:20
-#: eomf/workshops/templates/workshops/workshop_presentations.html:25
-msgid "Institution"
-msgstr "संस्था"
-
-#: eomf/workshops/templates/workshops/sponsors.html:3
-msgid "Sponsors"
-msgstr "Sponsors"
-
-#: eomf/workshops/templates/workshops/workshop.html:13
-#, fuzzy
-#| msgid "Affiliation"
-msgid "Awaiting validation"
-msgstr "मान्य"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:4
-msgid "Content"
-msgstr "सामग्री"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:10
-msgid "Register now here"
-msgstr "अब यहाँ दर्ता"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:12
-msgid "Registration closed"
-msgstr "दर्ता बन्द"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:17
-#: eomf/workshops/templates/workshops/workshop_presentations_menu.html:3
-msgid "Agenda"
-msgstr "एजेन्डा"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:19
-msgid "Agenda not available"
-msgstr "उपलब्ध छैन एजेन्डा"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:26
-msgid "Photo Gallery"
-msgstr "फोटो ग्यालरी"
-
-#: eomf/workshops/templates/workshops/workshop_list_past.html:6
-msgid "Previous Workshops"
-msgstr "पछिल्लो कार्यशाला"
-
-#: eomf/workshops/templates/workshops/workshop_presentations.html:22
-msgid "Time"
-msgstr "समय"
-
-#: eomf/workshops/templates/workshops/workshop_presentations.html:23
-msgid "title"
-msgstr "शीर्षक"
-
-#: eomf/workshops/templates/workshops/workshop_presentations.html:24
-msgid "Presenter"
-msgstr "प्रस्तुतकर्ता"
-
-#: eomf/workshops/templates/workshops/workshop_presentations.html:26
-msgid "Link"
-msgstr "लिंक"
-
-#: eomf/workshops/templates/workshops/workshop_presentations_menu.html:7
-msgid "View agenda"
-msgstr "हेर्नुहोस् एजेन्डा"
-
-#: eomf/workshops/templates/workshops/workshop_presentations_menu.html:9
-msgid "Not yet available"
-msgstr "अहिले उपलब्ध छैन"
+#~ msgid "Previous Workshops"
+#~ msgstr "पछिल्लो कार्यशाला"
 
 #~ msgid "20 km"
 #~ msgstr "20 मी"

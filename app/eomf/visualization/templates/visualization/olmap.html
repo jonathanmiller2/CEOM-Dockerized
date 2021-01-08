@@ -234,14 +234,14 @@
 {% block body_tag %}<body bgcolor="#FFFFFF" onload="init()">{% endblock %}
 {% block sidebar %}
 {{block.super}}
-<div class='well'>
-    <h4>Controls</h4>
-    <p><a href='#' class='btn btn-primary' onClick='addMapWindow();return false'>Add map</a></p>
-    <p><a href='#' class='btn btn-primary' onClick='viewCurrentTS();return false'>View MODIS time series data</a></p>
-    <p>Click within any map window in order to synchronize map windows views to the same center position.</p>
-    <p>To change map view independently drag the map or use select tool.</p>
-    <p>To zoom all maps to the same altitude click the 'Synch Zoom' button.</p>
-</div>
+<nav class="card bg-light ml-5 shadow-sm">
+    <h4 style="margin-left: 15px; padding-bottom: 5px;">Controls</h4>
+    <p><a href='#' class='btn btn-primary btn-sm' onClick='addMapWindow();return false' style="margin-left: 15px;">Add map</a></p>
+    <p><a href='#' class='btn btn-primary btn-sm' onClick='viewCurrentTS();return false' style="margin-left: 15px; margin-right: 15px;">View MODIS time series data</a></p>
+    <p style="margin-left: 15px;">Click within any map window in order to synchronize map windows views to the same center position.</p>
+    <p style="margin-left: 15px;">To change map view independently drag the map or use select tool.</p>
+    <p style="margin-left: 15px;">To zoom all maps to the same altitude click the 'Synch Zoom' button.</p>
+</nav>
 {% endblock %}
 {% block content %}
         <h3>Multi-pane MODIS Browser</h3>

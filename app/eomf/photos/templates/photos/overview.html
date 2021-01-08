@@ -28,9 +28,119 @@ height: 177px;
 background: url(web-storefront/images/mask175.png) 0 0 no-repeat;
 background-size: 175px 175px;
 }
+
+.well {
+    padding-right: 60px;
+}
+/* Biggest screen */
+@media screen and (min-width:1250px) {
+
+    #outer-layout {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        margin-right: -15px;
+        margin-left: -15px;
+    }
+
+    #body {
+        width: 100%;
+    }  
+
+    #well {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+
+    #video {
+        width:60%;
+        height:60%;
+        display: flex;
+        padding-top: 10px;
+        padding-bottom: 15px;
+    }
+
+    #photo-weekend {
+        width:50%;
+        height:50%;
+    }
+}
+/* Middle screen */
+@media screen and (min-width:575px) and (max-width: 1250px) {
+
+    #outer-layout {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #body {
+        width: 100%;
+    }  
+
+    #well {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+
+    #video {
+        width:100%;
+        height:100%;
+    }
+
+    #photo-weekend {
+        width:100%;
+        height:100%;
+    }
+
+    #title {
+        font-size: min(max(3.9vw, 10px),30px);
+    }
+
+    #subtitle {
+        font-size: min(max(3.8vw, 15px),30px);
+    }
+}
+/* Small screen */
+@media screen and (max-width:575px) {
+
+    #outer-layout {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #body {
+        width: 100%;
+    }  
+    
+    #well {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        padding-right: 16px;
+        margin-left: -20px;
+    }
+
+    #video {
+        width:100%;
+        height:100%;
+    }
+
+    #photo-weekend {
+        width:100%;
+        height:100%;
+    }
+
+    #title {
+        font-size: min(max(3.8vw, 23px),30px);
+    }
+
+    #subtitle {
+        font-size: min(max(3.8vw, 20px),30px);
+    }
+}
 </style>
-<div class="well">
-    <h2 style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
+<div id="well" class="well">
+    <h2 id="title" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
     <div class="hr"></div>
     &nbsp;            
     <p> {% blocktrans %}A picture is worth a thousand words, and a geo-referenced (geo-tagged) field photo is even better. Everyday, researchers, students and citizens use GPS cameras and smartphones to take photos in the fields, as part of their efforts to document their observations of landscapes, agriculture, forests, natural disasters, and wildlife. This Geo-Referenced Field Photo Library is a community- and citizen- science data portal for people to share, visualize and archive geo-referenced photos from the fields in the world. Users can upload, edit, query and download geo-referenced field photos in the library, and use the photo-based thematic geospatial datasets for the studies of land use and land cover change, the impacts of extreme weather events, and wildlife conservation, etc. Users who provide photos can decide whether individual photos are to be shared or not. A registered user can upload photos into the library and has access to more field photos in the library than a guest user.{% endblocktrans %} </p>
@@ -45,11 +155,11 @@ background-size: 175px 175px;
 	<p>
         <h3>{% trans "Field Photo Demo" %}</h3>
         <div  style='margin-right: auto; margin-left: auto;text-align: center'>
-            <video width="640" height="360" controls>
+            <video id="video" controls>
             <source src="/static/Field Photo Animation.mp4" type="video/mp4">
             </video>
         </div>
-		<h3>{% trans "User's Guide" %}</h3>
+		<h3 id="subtitle">{% trans "User's Guide" %}</h3>
 		<ul>
 			<li>{% trans "About your GPS camera and smartphone" %} [<a href='/static/docs/UserGuide-CameraPhone.pdf'>pdf</a>]</li>
 			<li>{% trans "How to use Field Photo Library (upload, edit, query, download)" %} [<a href='/static/docs/UserGuide-PhotoLibrary.pdf'>pdf</a>]</li>
@@ -59,11 +169,11 @@ background-size: 175px 175px;
 		</ul>
 	</p>
 	<p>
-		<h3>{% trans "Smartphone Apps" %}</h3> 
+		<h3 id="subtitle">{% trans "Smartphone Apps" %}</h3> 
         <ul style="list-style-type: none;">
         <blockquote>
             <li>
-                <h4 style="color: #dc143c;">{% trans "IOS" %}:</h4>
+                <h4 style="color: #dc143c; font-size: min(max(3.5vw, 20px),25px);">{% trans "IOS" %}:</h4>
                 <!--<img src="/static/images/Field_Photo_app_image.jpg" style="width:30px; height:30px;"><img src="/static/images/alert_new.png">-->
             </li>
                 <p>
@@ -73,7 +183,7 @@ background-size: 175px 175px;
                 </p>
         </blockquote>
         <blockquote>
-            <li><h4 style="color: #dc143c;">{% trans "Android:" %}</h4></li>
+            <li><h4 style="color: #dc143c; font-size: min(max(3.5vw, 20px),25px);">{% trans "Android:" %}</h4></li>
                 <p><img src="/static/images/new.gif" style='width:64px;height:64px'  >"<a href="https://play.google.com/store/apps/details?id=com.eomf"">Field Photo</a>"
                 {% blocktrans %}Android app is now available in Google Play Store, please <a href="https://play.google.com/store/apps/details?id=com.eomf">download</a> and install it. It is FREE!!{% endblocktrans %}
                 </p>
@@ -83,15 +193,15 @@ background-size: 175px 175px;
 		
 	</p>
 		<p>
-		<h3>{% trans "Field Photos Projects" %}</h3>
+		<h3 id="subtitle">{% trans "Field Photos Projects" %}</h3>
 		  <ol>
             <b>
             <!-- Sept field photo event -->
             <!--<li id="new_Sept_event"> {% trans "Field Photo Weekends" %}</li> --> 
             <li id="new_Sept_event"> {% trans "Latest Field Photo Weekend" %}</li>          
 </b>
-<h3>"Field Photo Weekend" September 1-3 </h3>
-<a href="http://www.southernclimate.org/fieldphotos/" ><img src="/static/images/FieldPhotoSept1.png" width=500 px height=300 px border="0"/></a>
+<h3 style="font-size: min(max(3vw, 10px),25px);">"Field Photo Weekend" September 1-3 </h3>
+<a href="http://www.southernclimate.org/fieldphotos/" ><img id="photo-weekend" src="/static/images/FieldPhotoSept1.png" border="0"/></a>
 <p>Here’s your chance to join hundreds of other CoCoRaHS observers to see what our landscapes look like on Labor Day Weekend. If you have participated before, this is a great chance to go back to your favorite spots and see what has changed.  All you have to do is:</p>  
 
 <ul><li>Take your camera or smartphone </li>

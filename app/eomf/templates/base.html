@@ -161,12 +161,9 @@
                     flex: 0 0 83.333333%;
                     max-width: 83.333333%;
                 }
-                /* #span12 {
-                    display:none;
-                } */
         	}
         
-        	@media screen and (min-width: 980px) and (max-width: 1250px) {
+        	@media screen and (min-width: 1110px) and (max-width: 1250px) {
                 #outer-layout {
                     display: flex;
                     flex-direction: column;
@@ -181,7 +178,7 @@
                 }
             }
             
-            @media screen and (max-width: 980px) and (min-width:580px) {
+            @media screen and (min-width:575px) and (max-width: 1110px) {
                 #outer-layout {
                     display: flex;
                     flex-direction: column;
@@ -191,13 +188,13 @@
                     margin: 0 3em 1.5em 0;
                 }
 
+                #photo-per-page {
+                    padding-bottom: 5px;
+                }
             }
 
-            @media screen and (max-width:580px) {
+            @media screen and (max-width:575px) {
 
-                /* #h2.legend {
-                    font-size: 10px;
-                } */
                 #outer-layout {
                     display: inline-flex;
                     flex-direction: column;
@@ -208,28 +205,27 @@
                 }
 
                 #photo-per-page {
-                    margin-left: -150px;
+                    margin-left: -60px;
                 }
                 
                 #row2-1 {
                     margin-top: 5px;
-                    width: 500px;
+                    width: 85%;
                 }
 
                 #row2-2 {
                     margin-top: 5px;
-                    width: 500px;
+                    width: 85%;
                 }
 
                 #row2-3 {
                     margin-top: 5px;
-                    width: 500px;
+                    width: 85%;
                 }
 
                 #body {
                     width: fit-content;
-                }
-
+                }  
             }
         </style>
 
@@ -285,7 +281,7 @@
                 </div>
                 {%endblock%}
                 {% block content_with_span10 %}
-                <div id='content' style="padding-left: 60px; padding-right: 60px">
+                <div id='content' style="padding-left: 60px; ">
                     {% block content %}{% endblock %}
                 </div>
                 {% endblock %}
