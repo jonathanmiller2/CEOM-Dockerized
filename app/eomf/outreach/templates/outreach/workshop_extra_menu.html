@@ -1,0 +1,63 @@
+{% load i18n %}
+<style>
+	a {
+		font-size: 11pt;
+		color: #4f85d1;
+	}
+
+	a > p {
+		font-size: 11pt;
+		color: #4f85d1;
+	}
+
+	.nav-header {
+        color: #999999;
+		font-weight: bold;
+		font-size: 8pt;
+		text-transform: uppercase;
+		margin: 1.5em 0em 0.25em 1.5em;
+    }
+</style>
+
+<nav class="card bg-light ml-5 shadow-sm" style="margin-top: 15px;">
+    <ul class="p-0" style="list-style: none;">
+        <li class='nav-header'>{% trans "Content" %}</li>
+             <li {% if  '/workshops/content/' in request.path  %} class='active' {% endif %}> 
+                <a href="/workshops/content/{{workshop.id}}" class="btn btn-light btn-block rounded-0 p-0"><i class="icon-list"></i> 
+                    <p class="mx-4 m-0 text-left">{% trans "Description" %}</p>
+                </a>
+             </li>
+            <li {% if  '/workshops/registration/' in request.path  %}class='active' {%endif%}> 
+                {% if workshop.registration_open %}
+                    <a class="btn btn-light btn-block rounded-0 p-0" style="text-align:left" href="/workshops/register/{{workshop.id}}"><i class="icon-pencil"></i> 
+                        <p class="mx-4 m-0 text-left">{% trans "Register now here" %} </p>
+                    </a>
+                {% else %}
+                    <a class="disabled btn btn-light btn-block rounded-0 p-0"><i class="icon-pencil"></i> 
+                        <p class="mx-4 m-0 text-left">{% trans "Registration closed" %} </p>
+                    </a>
+                {% endif %}    
+            </li>
+            <li> 
+                {% if workshop.agenda %}
+                    <a href="{{workshop.agenda.url}}" class="btn btn-light btn-block rounded-0 p-0"><i class="icon-calendar"></i> 
+                        <p class="mx-4 m-0 text-left">{% trans "Agenda" %} </p>
+                    </a>
+                {% else %}
+                    <a class="muted btn btn-light btn-block rounded-0 p-0"><i class="icon-calendar"></i> 
+                        <p class="mx-4 m-0 text-left">{% trans "Agenda not available" %} </p>
+                    </a>
+               {% endif %} 
+            </li>
+            <li {% if  '/workshops/presentations/' in request.path  %}class='active' {% endif %}> 
+                <a href="/workshops/presentations/{{workshop.id}}" class="btn btn-light btn-block rounded-0 p-0"><i class="icon-download-alt"></i> 
+                    <p class="mx-4 m-0 text-left">{% trans "Presentations" %} <span class="badge badge-success">{{ num_presentations }}</span> </p>
+                </a>
+            </li>
+            <li {% if  '/workshops/photos/' in request.path  %}class='active' {% endif %}> 
+                <a href="/workshops/photos/{{workshop.id}}" class="btn btn-light btn-block rounded-0 p-0"><i class="icon-picture"></i> 
+                    <p class="mx-4 m-0 text-left">{% trans "Photo Gallery" %} <span class="badge badge-success">{{ num_photos }}</span></p>
+                </a>
+            </li>
+    </ul>    
+</nav>

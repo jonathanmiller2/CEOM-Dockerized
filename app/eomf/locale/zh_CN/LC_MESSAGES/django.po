@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-13 19:59-0600\n"
+"POT-Creation-Date: 2021-01-08 16:28-0600\n"
 "PO-Revision-Date: 2015-06-12 11:44-0551\n"
 "Last-Translator:   <adamjia0313@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -506,7 +506,7 @@ msgid "Group photos"
 msgstr "合影"
 
 #: eomf/aboutus/templates/aboutus/leftmenu.html:22
-#: eomf/templates/mainmenu.html:124 eomf/templates/mainmenu.html:196
+#: eomf/templates/mainmenu.html:119 eomf/templates/mainmenu.html:185
 msgid "About Us"
 msgstr "关于我们"
 
@@ -530,9 +530,9 @@ msgid "Books and Book Chapters"
 msgstr "书籍和书籍章节"
 
 #: eomf/aboutus/templates/aboutus/leftmenu.html:43
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:54
+#: eomf/outreach/templates/outreach/workshop_presentations.html:65
 #: eomf/publications/templates/publications/section_list.html:11
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:23
-#: eomf/workshops/templates/workshops/workshop_presentations.html:8
 msgid "Presentations"
 msgstr "演讲"
 
@@ -546,12 +546,12 @@ msgstr "研究"
 #: eomf/aboutus/templates/aboutus/leftmenu.html:61
 #: eomf/aboutus/templates/aboutus/leftmenu.html:72
 #: eomf/inventory/templates/inventory/leftmenu.html:4
+#: eomf/outreach/templates/outreach/leftmenu.html:96
 #: eomf/photos/templates/photos/leftmenu.html:26
 #: eomf/visualization/templates/visualization/leftmenu.html:26
-#: eomf/visualization/templates/visualization/overview.html:8
+#: eomf/visualization/templates/visualization/overview.html:15
 #: eomf/water/templates/water/leftmenu.html:27
 #: eomf/water/templates/water/overview.html:8
-#: eomf/workshops/templates/workshops/leftmenu.html:26
 msgid "Overview"
 msgstr "概观"
 
@@ -565,7 +565,7 @@ msgid "Themes"
 msgstr "主题"
 
 #: eomf/aboutus/templates/aboutus/leftmenu.html:64
-#: eomf/templates/mainmenu.html:149 eomf/templates/mainmenu.html:221
+#: eomf/templates/mainmenu.html:210
 msgid "GIS Day"
 msgstr "GIS日"
 
@@ -590,7 +590,7 @@ msgid "Group Photos"
 msgstr "合影"
 
 #: eomf/aboutus/templates/aboutus/leftmenu.html:86
-#: eomf/visualization/templates/visualization/composite.html:189
+#: eomf/visualization/templates/visualization/composite.html:183
 msgid "Calendar"
 msgstr "日历"
 
@@ -1728,7 +1728,7 @@ msgid "Edit Account"
 msgstr "编辑帐户"
 
 #: eomf/accounts/templates/accounts/leftmenu.html:22
-#: eomf/templates/mainmenu.html:167 eomf/templates/mainmenu.html:239
+#: eomf/templates/mainmenu.html:156 eomf/templates/mainmenu.html:228
 msgid "Account"
 msgstr "帐户"
 
@@ -1823,7 +1823,7 @@ msgstr "更改我的密码"
 #: eomf/accounts/templates/accounts/password_reset_confirm.html:4
 #: eomf/accounts/templates/accounts/password_reset_done.html:4
 #: eomf/accounts/templates/accounts/password_reset_form.html:4
-#: eomf/templates/mainmenu.html:118 eomf/templates/mainmenu.html:190
+#: eomf/templates/mainmenu.html:113 eomf/templates/mainmenu.html:179
 msgid "Home"
 msgstr "主页"
 
@@ -2691,7 +2691,7 @@ msgstr "气候变化"
 #: eomf/geohealth/templates/geohealth/base.html:3
 #: eomf/geohealth/templates/geohealth/gemap.html:3
 #: eomf/geohealth/templates/geohealth/leftmenu.html:23
-#: eomf/templates/mainmenu.html:143 eomf/templates/mainmenu.html:215
+#: eomf/templates/mainmenu.html:138 eomf/templates/mainmenu.html:204
 msgid "GeoHealth"
 msgstr "GeoHealth"
 
@@ -2747,7 +2747,7 @@ msgid "Data Tree"
 msgstr "数据树"
 
 #: eomf/geohealth/templates/geohealth/earth-tree.html:53
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:6
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:27
 msgid "Description"
 msgstr "描述"
 
@@ -2787,60 +2787,60 @@ msgstr "禽流感"
 msgid "Avian Influenza tracking data"
 msgstr "禽流感跟踪数据"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:2
+#: eomf/inventory/templates/inventory/leftmenu.html:22
 #: eomf/visualization/templates/visualization/leftmenu.html:22
-#: eomf/visualization/templates/visualization/overview.html:10
+#: eomf/visualization/templates/visualization/overview.html:17
 msgid "MODIS data"
 msgstr "MODIS数据"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:6
+#: eomf/inventory/templates/inventory/leftmenu.html:30
 #: eomf/visualization/templates/visualization/leftmenu.html:30
 #, fuzzy
 #| msgid "Inventory as of"
 msgid "Inventory"
 msgstr "库存作为"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:8
+#: eomf/inventory/templates/inventory/leftmenu.html:34
 #: eomf/visualization/templates/visualization/leftmenu.html:34
 #, fuzzy
 #| msgid "MODIS data"
 msgid "NASA data"
 msgstr "MODIS数据"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:9
+#: eomf/inventory/templates/inventory/leftmenu.html:39
 #: eomf/visualization/templates/visualization/leftmenu.html:39
 #, fuzzy
 #| msgid "The EOMF team"
 msgid "EOMF data"
 msgstr "EOMF团队"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:11
+#: eomf/inventory/templates/inventory/leftmenu.html:43
 #: eomf/visualization/templates/visualization/leftmenu.html:43
 #: eomf/water/templates/water/leftmenu.html:44
 msgid "Visualization"
 msgstr "可视化"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:13
+#: eomf/inventory/templates/inventory/leftmenu.html:47
 #: eomf/visualization/templates/visualization/leftmenu.html:47
 #, fuzzy
 #| msgid "MODIS composite image"
 msgid "Composite Image"
 msgstr "MODIS合成图像"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:14
+#: eomf/inventory/templates/inventory/leftmenu.html:52
 #: eomf/visualization/templates/visualization/leftmenu.html:52
 #, fuzzy
 #| msgid "MODIS vegetation index map"
 msgid "Vegetation Index Map"
 msgstr "MODIS植被指数地图"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:16
+#: eomf/inventory/templates/inventory/leftmenu.html:56
 #: eomf/visualization/templates/visualization/leftmenu.html:56
 #: eomf/water/templates/water/leftmenu.html:62
 msgid "Delivery"
 msgstr ""
 
-#: eomf/inventory/templates/inventory/leftmenu.html:18
+#: eomf/inventory/templates/inventory/leftmenu.html:60
 #: eomf/visualization/templates/visualization/leftmenu.html:60
 #: eomf/water/templates/water/leftmenu.html:66
 #, fuzzy
@@ -2848,7 +2848,7 @@ msgstr ""
 msgid "Single Site Time-Series"
 msgstr "MODIS单点时间序列"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:19
+#: eomf/inventory/templates/inventory/leftmenu.html:65
 #: eomf/visualization/templates/visualization/leftmenu.html:65
 #: eomf/water/templates/water/leftmenu.html:71
 #, fuzzy
@@ -2856,13 +2856,13 @@ msgstr "MODIS单点时间序列"
 msgid "Multiple Site Time-Series"
 msgstr "MODIS多个站点的时间序列"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:21
+#: eomf/inventory/templates/inventory/leftmenu.html:69
 #: eomf/visualization/templates/visualization/leftmenu.html:69
 #: eomf/water/templates/water/leftmenu.html:75
 msgid "Request history"
 msgstr ""
 
-#: eomf/inventory/templates/inventory/leftmenu.html:23
+#: eomf/inventory/templates/inventory/leftmenu.html:73
 #: eomf/visualization/templates/visualization/leftmenu.html:73
 #: eomf/water/templates/water/leftmenu.html:79
 #, fuzzy
@@ -2923,7 +2923,7 @@ msgstr "查看"
 
 #: eomf/inventory/templates/inventory/map.html:151
 #: eomf/inventory/templates/inventory/tile.html:57
-#: eomf/visualization/templates/visualization/composite.html:174
+#: eomf/visualization/templates/visualization/composite.html:163
 #: eomf/visualization/templates/visualization/gmap.html:619
 #: eomf/water/templates/water/33-year-wbfm.html:551
 #: eomf/water/templates/water/map.html:623
@@ -3020,8 +3020,8 @@ msgstr "下载"
 
 #: eomf/maps/templates/maps/filter_rois.html:38
 #: eomf/maps/templates/maps/roi.html:717
-#: eomf/visualization/templates/visualization/composite.html:184
-#: eomf/visualization/templates/visualization/composite.html:194
+#: eomf/visualization/templates/visualization/composite.html:175
+#: eomf/visualization/templates/visualization/composite.html:189
 #: eomf/visualization/templates/visualization/gmap.html:629
 #: eomf/water/templates/water/33-year-wbfm.html:561
 #: eomf/water/templates/water/map.html:633
@@ -3242,6 +3242,107 @@ msgstr ""
 msgid "Download POIs"
 msgstr "下载"
 
+#: eomf/outreach/templates/outreach/categories_legend.html:3
+#: eomf/photos/models.py:42
+msgid "Categories"
+msgstr "分类"
+
+#: eomf/outreach/templates/outreach/leftmenu.html:101
+#: eomf/outreach/templates/outreach/workshop_list_past.html:13
+#: eomf/templates/mainmenu.html:216
+msgid "Workshops"
+msgstr "研讨会"
+
+#: eomf/outreach/templates/outreach/registration.html:14
+msgid "Registration"
+msgstr "注册"
+
+#: eomf/outreach/templates/outreach/registration.html:18
+#: eomf/visualization/templates/visualization/composite.html:179
+msgid "Date"
+msgstr "日期"
+
+#: eomf/outreach/templates/outreach/registration.html:23
+msgid ""
+"You have successfuly registered for this workshop. Please check your email "
+"for confirmation."
+msgstr "您已经注册successfuly本次研讨会。请检查您的电子邮件确认。"
+
+#: eomf/outreach/templates/outreach/registration.html:31
+#: eomf/outreach/templates/outreach/workshop.html:11
+msgid "Registered participants"
+msgstr "注册参会"
+
+#: eomf/outreach/templates/outreach/registration.html:39
+#: eomf/outreach/templates/outreach/workshop.html:19
+msgid "Name"
+msgstr "名字"
+
+#: eomf/outreach/templates/outreach/registration.html:40
+#: eomf/outreach/templates/outreach/workshop.html:20
+#: eomf/outreach/templates/outreach/workshop_presentations.html:82
+msgid "Institution"
+msgstr "机构"
+
+#: eomf/outreach/templates/outreach/sponsors.html:3
+msgid "Sponsors"
+msgstr "赞助商"
+
+#: eomf/outreach/templates/outreach/workshop.html:13
+#, fuzzy
+#| msgid "Affiliation"
+msgid "Awaiting validation"
+msgstr "联系"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:24
+msgid "Content"
+msgstr "内容"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:33
+msgid "Register now here"
+msgstr "现在注册"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:37
+msgid "Registration closed"
+msgstr "注册关闭"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:44
+#: eomf/outreach/templates/outreach/workshop_presentations_menu.html:3
+msgid "Agenda"
+msgstr "议程"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:48
+msgid "Agenda not available"
+msgstr "不可议程"
+
+#: eomf/outreach/templates/outreach/workshop_extra_menu.html:59
+msgid "Photo Gallery"
+msgstr "照相馆"
+
+#: eomf/outreach/templates/outreach/workshop_presentations.html:79
+msgid "Time"
+msgstr "时间"
+
+#: eomf/outreach/templates/outreach/workshop_presentations.html:80
+msgid "title"
+msgstr "称号"
+
+#: eomf/outreach/templates/outreach/workshop_presentations.html:81
+msgid "Presenter"
+msgstr "主持人"
+
+#: eomf/outreach/templates/outreach/workshop_presentations.html:83
+msgid "Link"
+msgstr "链接"
+
+#: eomf/outreach/templates/outreach/workshop_presentations_menu.html:7
+msgid "View agenda"
+msgstr "查看日程"
+
+#: eomf/outreach/templates/outreach/workshop_presentations_menu.html:9
+msgid "Not yet available"
+msgstr "尚未公布"
+
 #: eomf/photos/forms.py:68 eomf/photos/forms.py:91 eomf/photos/forms.py:103
 msgid "All"
 msgstr "所有"
@@ -3258,11 +3359,6 @@ msgstr "大陆"
 #: eomf/photos/templates/photos/viewDetails.html:94
 msgid "Category"
 msgstr "类别"
-
-#: eomf/photos/models.py:42
-#: eomf/workshops/templates/workshops/categories_legend.html:3
-msgid "Categories"
-msgstr "分类"
 
 #: eomf/photos/models.py:70 eomf/photos/models.py:101
 msgid "Countries"
@@ -3370,7 +3466,7 @@ msgstr "北北西"
 
 #: eomf/photos/models.py:419 eomf/photos/templates/photos/edit.html:55
 #: eomf/photos/templates/photos/viewDetails.html:57
-#: eomf/templates/mainmenu.html:130 eomf/templates/mainmenu.html:202
+#: eomf/templates/mainmenu.html:125 eomf/templates/mainmenu.html:191
 msgid "Photo"
 msgstr "照片"
 
@@ -3385,7 +3481,7 @@ msgstr "EOMF现场照片概述"
 
 #: eomf/photos/templates/photos/browse.html:26
 #: eomf/photos/templates/photos/map.html:47
-#: eomf/photos/templates/photos/overview.html:33
+#: eomf/photos/templates/photos/overview.html:143
 msgid "Global Geo-Referenced Field Photo Library"
 msgstr "环球地理参考场图片库"
 
@@ -3395,43 +3491,44 @@ msgstr "环球地理参考场图片库"
 msgid "Search Results"
 msgstr "搜索"
 
-#: eomf/photos/templates/photos/browse.html:56
+#: eomf/photos/templates/photos/browse.html:109
 msgid "Photos per page"
 msgstr "照片每页"
 
-#: eomf/photos/templates/photos/browse.html:84
+#: eomf/photos/templates/photos/browse.html:134
 msgid " Image Format."
 msgstr ""
 
-#: eomf/photos/templates/photos/browse.html:85
+#: eomf/photos/templates/photos/browse.html:135
 #: eomf/photos/templates/photos/browse_gallery_map.html:64
 #: eomf/photos/templates/photos/user.html:74
 msgid "CSV file and images."
 msgstr "CSV文件和图像。"
 
-#: eomf/photos/templates/photos/browse.html:86
+#: eomf/photos/templates/photos/browse.html:136
 #, fuzzy
 #| msgid "KMZ: KML and images."
 msgid "KML: KML and images."
 msgstr "KMZ：KML和图像。"
 
-#: eomf/photos/templates/photos/browse.html:91
+
+#: eomf/photos/templates/photos/browse.html:141
 msgid " Image Size."
 msgstr ""
 
-#: eomf/photos/templates/photos/browse.html:92
+#: eomf/photos/templates/photos/browse.html:142
 #: eomf/photos/templates/photos/browse_gallery_map.html:70
 #: eomf/photos/templates/photos/user.html:80
 msgid "Original images."
 msgstr "原始图像。"
 
-#: eomf/photos/templates/photos/browse.html:93
+#: eomf/photos/templates/photos/browse.html:143
 #: eomf/photos/templates/photos/browse_gallery_map.html:71
 #: eomf/photos/templates/photos/user.html:81
 msgid "Downsized images."
 msgstr "缩小图像。"
 
-#: eomf/photos/templates/photos/browse.html:96
+#: eomf/photos/templates/photos/browse.html:146
 #: eomf/photos/templates/photos/browse_gallery_map.html:74
 #: eomf/photos/templates/photos/upload.html:262
 #: eomf/photos/templates/photos/user.html:84
@@ -3600,7 +3697,7 @@ msgstr "加载的照片..."
 msgid "Total Photos: "
 msgstr "共有照片"
 
-#: eomf/photos/templates/photos/overview.html:36
+#: eomf/photos/templates/photos/overview.html:146
 msgid ""
 "A picture is worth a thousand words, and a geo-referenced (geo-tagged) field "
 "photo is even better. Everyday, researchers, students and citizens use GPS "
@@ -3626,70 +3723,70 @@ msgstr ""
 "面的研究。谁的用户提供的照片可以决定个人照片是否被共享与否。注册的用户可以上"
 "传照片到库中，并已获得更多的现场照片不是一个guest用户库。"
 
-#: eomf/photos/templates/photos/overview.html:38
+#: eomf/photos/templates/photos/overview.html:148
 msgid "Share your field photos"
 msgstr "分享您的照片领域"
 
-#: eomf/photos/templates/photos/overview.html:39
+#: eomf/photos/templates/photos/overview.html:149
 msgid "Show your footprint of travel, and"
 msgstr "显示你的旅行足迹，和"
 
-#: eomf/photos/templates/photos/overview.html:40
+#: eomf/photos/templates/photos/overview.html:150
 msgid "Support monitoring of our Planet Earth!"
 msgstr "支持我们的监测地球的！"
 
-#: eomf/photos/templates/photos/overview.html:43
+#: eomf/photos/templates/photos/overview.html:153
 msgid ""
 "Please read this article 'A Library of Georeferenced Photos From the Field'"
 msgstr "请阅读这篇文章“地理参考的照片库从字段”"
 
-#: eomf/photos/templates/photos/overview.html:44
+#: eomf/photos/templates/photos/overview.html:154
 msgid ""
 "Please invite other people to participate in this community and citizen "
 "science effort and distribute this one-page flyer"
 msgstr "请邀请其他人参与到这个社会和公民科学精力和分发本单页传单"
 
-#: eomf/photos/templates/photos/overview.html:46
+#: eomf/photos/templates/photos/overview.html:156
 #, fuzzy
 #| msgid "Field Photo Weekends"
 msgid "Field Photo Demo"
 msgstr "现场照片周末"
 
-#: eomf/photos/templates/photos/overview.html:52
+#: eomf/photos/templates/photos/overview.html:162
 msgid "User's Guide"
 msgstr "用户指南"
 
-#: eomf/photos/templates/photos/overview.html:54
+#: eomf/photos/templates/photos/overview.html:164
 msgid "About your GPS camera and smartphone"
 msgstr "关于您的GPS相机和智能手机"
 
-#: eomf/photos/templates/photos/overview.html:55
+#: eomf/photos/templates/photos/overview.html:165
 msgid "How to use Field Photo Library (upload, edit, query, download)"
 msgstr "如何利用现场的照片库（上传，编辑，查询，下载）"
 
-#: eomf/photos/templates/photos/overview.html:56
+#: eomf/photos/templates/photos/overview.html:166
 msgid "IGBP classification system"
 msgstr ""
 
-#: eomf/photos/templates/photos/overview.html:57
+#: eomf/photos/templates/photos/overview.html:167
 msgid "How to take field photos for monitoring land use and land cover changes"
 msgstr "如何采取现场照片监测土地利用和土地覆盖变化"
 
-#: eomf/photos/templates/photos/overview.html:58
+#: eomf/photos/templates/photos/overview.html:168
 msgid ""
 "How to take field photos for monitoring water quality and harmful algae "
 "blooms"
 msgstr "如何采取现场照片用于监测水质，有害藻类"
 
-#: eomf/photos/templates/photos/overview.html:62
+#: eomf/photos/templates/photos/overview.html:172
 msgid "Smartphone Apps"
 msgstr "智能手机应用程序"
 
-#: eomf/photos/templates/photos/overview.html:66
+#: eomf/photos/templates/photos/overview.html:176
 msgid "IOS"
 msgstr "IOS"
 
-#: eomf/photos/templates/photos/overview.html:71
+#: eomf/photos/templates/photos/overview.html:181
 msgid ""
 "Iphone app is now available in Apple Store, please <a href=\"https://itunes."
 "apple.com/us/app/field-photo/id717945301\">download</a> and install it. It "
@@ -3698,11 +3795,11 @@ msgstr ""
 "iPhone应用程序现已在苹果商店可用，请<a href=\"https://itunes.apple.com/us/"
 "app/field-photo/id717945301\">下载</a>并安装它。它是免费的！"
 
-#: eomf/photos/templates/photos/overview.html:76
+#: eomf/photos/templates/photos/overview.html:186
 msgid "Android:"
 msgstr "Android的："
 
-#: eomf/photos/templates/photos/overview.html:78
+#: eomf/photos/templates/photos/overview.html:188
 msgid ""
 "Android app is now available in Google Play Store, please <a href=\"https://"
 "play.google.com/store/apps/details?id=com.eomf\">download</a> and install "
@@ -3711,25 +3808,25 @@ msgstr ""
 "Android应用程序现在可以在谷歌Play商店，请<a href=\"https://play.google.com/"
 "store/apps/details?id=com.eomf\">下载</a>并安装它。它是免费的！"
 
-#: eomf/photos/templates/photos/overview.html:86
+#: eomf/photos/templates/photos/overview.html:196
 msgid "Field Photos Projects"
 msgstr "现场照片项目"
 
-#: eomf/photos/templates/photos/overview.html:90
-#: eomf/photos/templates/photos/overview.html:129
-#: eomf/photos/templates/photos/overview.html:161
-#: eomf/photos/templates/photos/overview.html:188
-#: eomf/photos/templates/photos/overview.html:204
+#: eomf/photos/templates/photos/overview.html:200
+#: eomf/photos/templates/photos/overview.html:239
+#: eomf/photos/templates/photos/overview.html:271
+#: eomf/photos/templates/photos/overview.html:298
+#: eomf/photos/templates/photos/overview.html:314
 msgid "Field Photo Weekends"
 msgstr "现场照片周末"
 
-#: eomf/photos/templates/photos/overview.html:91
+#: eomf/photos/templates/photos/overview.html:201
 #, fuzzy
 #| msgid "Field Photo Weekends"
 msgid "Latest Field Photo Weekend"
 msgstr "现场照片周末"
 
-#: eomf/photos/templates/photos/overview.html:205
+#: eomf/photos/templates/photos/overview.html:315
 msgid ""
 "This is a citizen science effort through collaboration among the <a href="
 "\"http://www.cocorahs.org/Content.aspx?page=mod&mod=1\">CoCoRaHS</a>, <a "
@@ -3747,11 +3844,11 @@ msgstr ""
 "southernclimate.org / fieldphotos /'> SCIPP </A> websites.It最早在2012年推出"
 "的劳动节周末。"
 
-#: eomf/photos/templates/photos/overview.html:227
+#: eomf/photos/templates/photos/overview.html:337
 msgid "Acknowledgements"
 msgstr "致谢"
 
-#: eomf/photos/templates/photos/overview.html:229
+#: eomf/photos/templates/photos/overview.html:339
 msgid ""
 "The Geo-Referenced Field photos in this Field Photo library come from many "
 "people and projects. Their contributions make this library possible and grow "
@@ -3760,29 +3857,29 @@ msgstr ""
 "地缘基准场的照片在该领域的照片库来自许多人员和项目。他们的贡献使这个库可能，"
 "随着时间的推移。谢谢。"
 
-#: eomf/photos/templates/photos/photo_tile.html:15
+#: eomf/photos/templates/photos/photo_tile.html:22
 msgid "Image file missing"
 msgstr "丢失的图像文件"
 
-#: eomf/photos/templates/photos/photo_tile.html:18
+#: eomf/photos/templates/photos/photo_tile.html:25
 #: eomf/photos/templates/photos/photo_tile_for_userPhotos.html:12
 #: eomf/photos/templates/photos/photo_tile_reduced.html:15
 msgid "Image not available"
 msgstr "无法显示图片"
 
-#: eomf/photos/templates/photos/photo_tile.html:38
+#: eomf/photos/templates/photos/photo_tile.html:45
 #: eomf/photos/templates/photos/photo_tile_for_userPhotos.html:32
 #: eomf/photos/templates/photos/photo_tile_reduced.html:30
 msgid "Category not set"
 msgstr "类别未设置"
 
-#: eomf/photos/templates/photos/photo_tile.html:42
+#: eomf/photos/templates/photos/photo_tile.html:49
 #: eomf/photos/templates/photos/photo_tile_for_userPhotos.html:36
 #: eomf/photos/templates/photos/view.html:46
 msgid "Edit"
 msgstr "编辑"
 
-#: eomf/photos/templates/photos/photo_tile.html:43
+#: eomf/photos/templates/photos/photo_tile.html:50
 #: eomf/photos/templates/photos/photo_tile_for_userPhotos.html:37
 #: eomf/photos/templates/photos/upload.html:187
 #: eomf/photos/templates/photos/view.html:47
@@ -3790,7 +3887,7 @@ msgstr "编辑"
 msgid "Delete"
 msgstr "删除"
 
-#: eomf/photos/templates/photos/photo_tile.html:47
+#: eomf/photos/templates/photos/photo_tile.html:54
 #: eomf/photos/templates/photos/photo_tile_for_userPhotos.html:41
 #: eomf/photos/templates/photos/view.html:49
 msgid ""
@@ -4168,7 +4265,7 @@ msgstr "EOMF管理"
 msgid "EOMF: Earth Observation and Modeling Facility"
 msgstr "EOMF：地球观测与模拟研究中心"
 
-#: eomf/templates/base.html:246
+#: eomf/templates/base.html:297
 #, fuzzy
 #| msgid ""
 #| "Copyright &copy; 2013 Earth Observation and Modeling Facility, the "
@@ -4252,20 +4349,19 @@ msgid ""
 "supported by a number of funding agencies."
 msgstr "EOMF的科研，教育和推广活动获得多个资金机构的慷慨支持。"
 
-#: eomf/templates/mainmenu.html:133 eomf/templates/mainmenu.html:205
+#: eomf/templates/mainmenu.html:128 eomf/templates/mainmenu.html:194
 msgid "Datasets"
 msgstr "数据集"
 
-#: eomf/templates/mainmenu.html:137 eomf/templates/mainmenu.html:209
+#: eomf/templates/mainmenu.html:132 eomf/templates/mainmenu.html:198
 msgid "MODIS"
 msgstr "MODIS"
 
-#: eomf/templates/mainmenu.html:155 eomf/templates/mainmenu.html:227
-#: eomf/workshops/templates/workshops/overview.html:7
-msgid "Workshops"
-msgstr "研讨会"
+#: eomf/templates/mainmenu.html:144
+msgid "Outreach"
+msgstr ""
 
-#: eomf/templates/mainmenu.html:161 eomf/templates/mainmenu.html:233
+#: eomf/templates/mainmenu.html:150 eomf/templates/mainmenu.html:222
 msgid "Water"
 msgstr ""
 
@@ -4283,32 +4379,29 @@ msgstr "数据可视化"
 msgid "EOMF MODIS Composite Image Visualization"
 msgstr "EOMF MODIS合成图像可视化"
 
-#: eomf/visualization/templates/visualization/composite.html:154
+#: eomf/visualization/templates/visualization/composite.html:138
 msgid "MODIS TERRA composite map"
 msgstr "MODIS TERRA合成图"
 
-#: eomf/visualization/templates/visualization/composite.html:166
+#: eomf/visualization/templates/visualization/composite.html:154
 msgid "50 km"
 msgstr "50公里"
 
-#: eomf/visualization/templates/visualization/composite.html:167
-msgid "20 km"
-msgstr "20公里"
-
-#: eomf/visualization/templates/visualization/composite.html:168
+#: eomf/visualization/templates/visualization/composite.html:155
 msgid "5 km"
 msgstr "5公里"
 
-#: eomf/visualization/templates/visualization/composite.html:179
+
+#: eomf/visualization/templates/visualization/composite.html:169
 #: eomf/workshops/templates/workshops/registration.html:18
 msgid "Date"
 msgstr "日期"
 
-#: eomf/visualization/templates/visualization/composite.html:202
+#: eomf/visualization/templates/visualization/composite.html:196
 msgid "Julian calendar Leap years"
 msgstr "儒略历闰年"
 
-#: eomf/visualization/templates/visualization/composite.html:206
+#: eomf/visualization/templates/visualization/composite.html:200
 msgid "Julian calendar Regular years"
 msgstr "儒略历定期年"
 
@@ -4371,7 +4464,7 @@ msgstr "输出文件"
 msgid "EOMF Visualization overview"
 msgstr "EOMF可视化概述"
 
-#: eomf/visualization/templates/visualization/overview.html:11
+#: eomf/visualization/templates/visualization/overview.html:18
 msgid ""
 "The EOMF Data Center hosts several hundreds of terabytes of MODIS data and "
 "products for the globe over the period of 2/2000 to present. Here you can "
@@ -4384,12 +4477,12 @@ msgstr ""
 "EDC（http://www.usgs.gov/），在那里你可以通过瓷砖和一年下载大量的MODIS资料所"
 "提供的Web服务。"
 
-#: eomf/visualization/templates/visualization/overview.html:14
+#: eomf/visualization/templates/visualization/overview.html:21
 #: eomf/water/templates/water/overview.html:26
 msgid "Wild bird data"
 msgstr "野鸟数据"
 
-#: eomf/visualization/templates/visualization/overview.html:15
+#: eomf/visualization/templates/visualization/overview.html:22
 #: eomf/water/templates/water/overview.html:27
 msgid ""
 "Satellite telemetry of wild birds provides useful information on local "
@@ -4399,12 +4492,12 @@ msgstr ""
 "野生鸟类的卫星遥测提供当地运动和迁徙的野生鸟类的季节性迁徙的有用信息。在这"
 "里，你可以想像从卫星遥测野生鸟类的运动数据。"
 
-#: eomf/visualization/templates/visualization/overview.html:18
+#: eomf/visualization/templates/visualization/overview.html:25
 #: eomf/water/templates/water/overview.html:30
 msgid "Avian influenza data"
 msgstr "禽流感数据"
 
-#: eomf/visualization/templates/visualization/overview.html:19
+#: eomf/visualization/templates/visualization/overview.html:26
 #: eomf/water/templates/water/overview.html:31
 msgid ""
 "Transmission and spillover of avian influenza, specifically highly "
@@ -4528,124 +4621,36 @@ msgid ""
 "observation images."
 msgstr ""
 
-#: eomf/workshops/templates/workshops/leftmenu.html:31
-#: eomf/workshops/templates/workshops/workshop_list_current.html:5
-msgid "Current Workshops"
-msgstr "当前研讨会"
+#~ msgid "Current Workshops"
+#~ msgstr "当前研讨会"
 
-#: eomf/workshops/templates/workshops/leftmenu.html:36
-msgid "Past Workshops"
-msgstr "过去的研讨会"
+#~ msgid "Past Workshops"
+#~ msgstr "过去的研讨会"
 
-#: eomf/workshops/templates/workshops/overview.html:4
-msgid "EOMF: Workshops overview"
-msgstr "EOMF：工作室概况"
+#~ msgid "EOMF: Workshops overview"
+#~ msgstr "EOMF：工作室概况"
 
-#: eomf/workshops/templates/workshops/overview.html:11
-msgid ""
-"The EOMF has hosted or co-hosted a number of workshops and project\n"
-"                meetings in a variety of research areas, including disease "
-"ecology, remote\n"
-"                sensing, land use and land cover change, terrestrial carbon "
-"cycle and\n"
-"                climate change. Here you can read and download the materials "
-"related to\n"
-"                the workshops and project meetings. "
-msgstr ""
-"该EOMF主办或联合主办了一些研讨会和项目\n"
-"                会议在各种研究领域，包括疾病生态学，远程\n"
-"                遥感，土地利用和土地覆盖变化，陆地碳循环和\n"
-"                气候变化。在这里，您可以阅读和下载相关材料\n"
-"                研讨会和项目会议。"
+#~ msgid ""
+#~ "The EOMF has hosted or co-hosted a number of workshops and project\n"
+#~ "                meetings in a variety of research areas, including "
+#~ "disease ecology, remote\n"
+#~ "                sensing, land use and land cover change, terrestrial "
+#~ "carbon cycle and\n"
+#~ "                climate change. Here you can read and download the "
+#~ "materials related to\n"
+#~ "                the workshops and project meetings. "
+#~ msgstr ""
+#~ "该EOMF主办或联合主办了一些研讨会和项目\n"
+#~ "                会议在各种研究领域，包括疾病生态学，远程\n"
+#~ "                遥感，土地利用和土地覆盖变化，陆地碳循环和\n"
+#~ "                气候变化。在这里，您可以阅读和下载相关材料\n"
+#~ "                研讨会和项目会议。"
 
-#: eomf/workshops/templates/workshops/registration.html:14
-msgid "Registration"
-msgstr "注册"
+#~ msgid "Previous Workshops"
+#~ msgstr "上一页研讨会"
 
-#: eomf/workshops/templates/workshops/registration.html:23
-msgid ""
-"You have successfuly registered for this workshop. Please check your email "
-"for confirmation."
-msgstr "您已经注册successfuly本次研讨会。请检查您的电子邮件确认。"
-
-#: eomf/workshops/templates/workshops/registration.html:31
-#: eomf/workshops/templates/workshops/workshop.html:11
-msgid "Registered participants"
-msgstr "注册参会"
-
-#: eomf/workshops/templates/workshops/registration.html:39
-#: eomf/workshops/templates/workshops/workshop.html:19
-msgid "Name"
-msgstr "名字"
-
-#: eomf/workshops/templates/workshops/registration.html:40
-#: eomf/workshops/templates/workshops/workshop.html:20
-#: eomf/workshops/templates/workshops/workshop_presentations.html:25
-msgid "Institution"
-msgstr "机构"
-
-#: eomf/workshops/templates/workshops/sponsors.html:3
-msgid "Sponsors"
-msgstr "赞助商"
-
-#: eomf/workshops/templates/workshops/workshop.html:13
-#, fuzzy
-#| msgid "Affiliation"
-msgid "Awaiting validation"
-msgstr "联系"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:4
-msgid "Content"
-msgstr "内容"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:10
-msgid "Register now here"
-msgstr "现在注册"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:12
-msgid "Registration closed"
-msgstr "注册关闭"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:17
-#: eomf/workshops/templates/workshops/workshop_presentations_menu.html:3
-msgid "Agenda"
-msgstr "议程"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:19
-msgid "Agenda not available"
-msgstr "不可议程"
-
-#: eomf/workshops/templates/workshops/workshop_extra_menu.html:26
-msgid "Photo Gallery"
-msgstr "照相馆"
-
-#: eomf/workshops/templates/workshops/workshop_list_past.html:6
-msgid "Previous Workshops"
-msgstr "上一页研讨会"
-
-#: eomf/workshops/templates/workshops/workshop_presentations.html:22
-msgid "Time"
-msgstr "时间"
-
-#: eomf/workshops/templates/workshops/workshop_presentations.html:23
-msgid "title"
-msgstr "称号"
-
-#: eomf/workshops/templates/workshops/workshop_presentations.html:24
-msgid "Presenter"
-msgstr "主持人"
-
-#: eomf/workshops/templates/workshops/workshop_presentations.html:26
-msgid "Link"
-msgstr "链接"
-
-#: eomf/workshops/templates/workshops/workshop_presentations_menu.html:7
-msgid "View agenda"
-msgstr "查看日程"
-
-#: eomf/workshops/templates/workshops/workshop_presentations_menu.html:9
-msgid "Not yet available"
-msgstr "尚未公布"
+#~ msgid "20 km"
+#~ msgstr "20公里"
 
 #~ msgid "Nepali"
 #~ msgstr "尼泊尔"

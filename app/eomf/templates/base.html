@@ -20,9 +20,6 @@
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.0/animate.min.css"/>
 
-        <!-- Local Files-->    
-        <script src="/static/js/modis.js"></script>
-
         <style>
             #share-buttons {
                 position: fixed;
@@ -166,7 +163,7 @@
                 }
         	}
         
-        	@media screen and (max-width: 1250px) {
+        	@media screen and (min-width: 1110px) and (max-width: 1250px) {
                 #outer-layout {
                     display: flex;
                     flex-direction: column;
@@ -179,7 +176,57 @@
                 #content {
                     margin: 0 3em 0 3em;
                 }
-        	}
+            }
+            
+            @media screen and (min-width:575px) and (max-width: 1110px) {
+                #outer-layout {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                #sidebar-col {
+                    margin: 0 3em 1.5em 0;
+                }
+
+                #photo-per-page {
+                    padding-bottom: 5px;
+                }
+            }
+
+            @media screen and (max-width:575px) {
+
+                #outer-layout {
+                    display: inline-flex;
+                    flex-direction: column;
+                }
+
+                #sidebar-col {
+                    margin: 0 3em 1.5em 0;
+                }
+
+                #photo-per-page {
+                    margin-left: -60px;
+                }
+                
+                #row2-1 {
+                    margin-top: 5px;
+                    width: 85%;
+                }
+
+                #row2-2 {
+                    margin-top: 5px;
+                    width: 85%;
+                }
+
+                #row2-3 {
+                    margin-top: 5px;
+                    width: 85%;
+                }
+
+                #body {
+                    width: fit-content;
+                }  
+            }
         </style>
 
         {% block head_extra %}{% endblock %}
@@ -199,11 +246,12 @@
     </head>
 
     {% block body_tag %}
-    <body>
+    <body id="body">
     {% endblock %}
 
         <!-- in body block -->
         {% include "feedback/button.html" %}
+        
         <div id="logo-title" >
             <div id="logo-rice"></div>
             <div id="logo-title-right"></div>
@@ -217,7 +265,7 @@
             {% block container %}
             <div id="outer-layout">
                 {% block sidebar_span %}
-                <div id="sidebar-col" style="min-width: 20%">
+                <div id="sidebar-col">
                     {% block sidebar %}
                     <nav class="card bg-light ml-5 shadow-sm">
                         <ul class="p-0" style="list-style: none;">
@@ -233,7 +281,7 @@
                 </div>
                 {%endblock%}
                 {% block content_with_span10 %}
-                <div id='content' style="max-width: 80%; padding-left: 60px;">
+                <div id='content' style="padding-left: 60px; ">
                     {% block content %}{% endblock %}
                 </div>
                 {% endblock %}

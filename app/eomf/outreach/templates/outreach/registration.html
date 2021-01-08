@@ -1,0 +1,51 @@
+{% extends "outreach/base.html" %}
+
+{% load extra_template_tags %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+#submit-id-submit {
+    padding: 15px;
+    font-size: 20px;
+}
+</style>
+	<div class="well">
+    <h1 class="text-center">{% trans "Registration" %}</h1>
+    <div class="hr"></div>
+    <br>
+    <h2 class="text-center">{{workshop_reg.name}}</h2>
+    <h3 class="text-center">{% trans "Date" %}: {{workshop_reg.date_start}} - {{workshop_reg.date_end}}</h3>
+    <div class="hr"></div>
+    <br>
+    <div class="text-center" style="margin-left:auto;margin-right:auto; width:50%;min-width:400px"></div>
+    {% if registration_succesfull%}
+        <h5>{% trans "You have successfuly registered for this workshop. Please check your email for confirmation." %}</h5>
+    {% else %}
+        {% if form %}
+            {% crispy form %}
+        {% endif %}
+ 	{% endif %}
+    </div>
+    <div class="hr"></div>
+    <h2 class="text-center"> {% trans "Registered participants" %}: 
+    {% if validated_registrations %}<span class="badge badge-info">{{validated_registrations|length}} </span>{% endif %}
+    {% if awaiting_validation_registrations %}<small> Awaiting validation:</small><span class="badge badge-error">{{awaiting_validation_registrations|length}} </span>{% endif %}
+    </h2>
+    <br>
+    <div class="span10 offset1">
+        <table class="table table-striped">
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Institution" %}</th>
+            </tr>
+            {% for registration in validated_registrations %}
+            <tr>
+                <td>{{registration.last_name}}, {{registration.first_name}}</td>
+                <td>{{registration.institution}}</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+{% endblock %}
