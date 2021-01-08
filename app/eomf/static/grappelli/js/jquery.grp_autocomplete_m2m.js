@@ -5,7 +5,7 @@
 
 
 (function($){
-    
+
     var methods = {
         init: function(options) {
             options = $.extend({}, $.fn.grp_autocomplete_m2m.defaults, options);
@@ -33,10 +33,14 @@
                 if ($this.parent().find("ul.errorlist")) {
                     $this.parent().find("ul.errorlist").detach().appendTo($this.parent().parent());
                 }
+                // move helptext outside the wrapper
+                if ($this.parent().find("p.grp-help")) {
+                    $this.parent().find("p.grp-help").detach().appendTo($this.parent().parent());
+                }
                 // lookup
                 lookup_id($this, options);  // lookup when loading page
                 lookup_autocomplete($this, options);  // autocomplete-handler
-                $this.bind("change focus keyup", function() { // id-handler
+                $this.on("change focus keyup", function() { // id-handler
                     lookup_id($this, options);
                 });
                 // labels
@@ -44,16 +48,16 @@
                     $(this).attr("for", $this.attr("id")+"-autocomplete");
                 });
                 // click on div > focus input
-                options.wrapper_autocomplete.bind("click", function(e) {
+                options.wrapper_autocomplete.on("click", function(e) {
                     // prevent focus when clicking on remove/select
                     if (!$(e.target).hasClass("related-lookup") && !$(e.target).hasClass("grp-related-remove")) {
-                        options.wrapper_search.find("input:first").focus();
+                        options.wrapper_search.find("input:first").trigger("focus");
                     }
                 });
             });
         }
     };
-    
+
     $.fn.grp_autocomplete_m2m = function(method) {
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -64,7 +68,7 @@
         }
         return false;
     };
-    
+
     var value_add = function(elem, value, options) {
         var values = [];
         if (elem.val()) values = elem.val().split(",");
@@ -73,7 +77,7 @@
         elem.trigger('change');
         return values.join(",");
     };
-    
+
     var value_remove = function(elem, position, options) {
         var values = [];
         if (elem.val()) values = elem.val().split(",");
@@ -82,12 +86,12 @@
         elem.trigger('change');
         return values.join(",");
     };
-    
+
     var loader = function() {
         var loader = $('<div class="grp-loader">loader</div>');
         return loader;
     };
-    
+
     var remove_link = function(id) {
         var removelink = $('<a class="grp-related-remove"></a>');
         removelink.attr('id', 'remove_'+id);
@@ -98,13 +102,13 @@
         });
         return removelink;
     };
-    
+
     var repr_add = function(elem, label, options) {
         var repr = $('<li class="grp-repr"></li>');
-        var removelink = $('<a class="grp-m2m-remove" href="javascript://">' + label + '</a>');
+        var removelink = $('<a class="grp-m2m-remove" href="javascript://"></a>').text(label);
         repr.append(removelink);
         repr.insertBefore(options.wrapper_search);
-        removelink.bind("click", function(e) { // remove-handler
+        removelink.on("click", function(e) { // remove-handler
             var pos = $(this).parent().parent().children("li").index($(this).parent());
             value_remove(elem, pos, options);
             $(this).parent().remove();
@@ -115,22 +119,23 @@
             $(this).parent().toggleClass("grp-autocomplete-preremove");
         });
     };
-    
+
     var lookup_autocomplete = function(elem, options) {
         options.wrapper_search.find("input:first")
-            .bind("keydown", function(event) { // don't navigate away from the field on tab when selecting an item
+            .on("keydown", function(event) { // don't navigate away from the field on tab when selecting an item
                 if (event.keyCode === $.ui.keyCode.TAB && $(this).data("uiAutocomplete").menu.active) {
                     event.preventDefault();
                 }
             })
-            .bind("focus", function() {
+            .on("focus", function() {
                 options.wrapper_autocomplete.addClass("grp-state-focus");
             })
-            .bind("blur", function() {
+            .on("blur", function() {
                 options.wrapper_autocomplete.removeClass("grp-state-focus");
             })
             .autocomplete({
                 minLength: 1,
+                autoFocus: true,
                 delay: 1000,
                 position: {my: "left top", at: "left bottom", of: options.wrapper_autocomplete},
                 open: function(event, ui) {
@@ -161,25 +166,25 @@
                     repr_add(elem, ui.item.label, options);
                     value_add(elem, ui.item.value, options);
                     elem.val() ? $(options.remove_link).show() : $(options.remove_link).hide();
-                    $(this).val("").focus();
+                    $(this).val("").trigger("focus");
                     return false;
                 }
             })
             .data("ui-autocomplete")._renderItem = function(ul,item) {
                 if (!item.value) {
-                    return $("<li></li>")
+                    return $("<li class='ui-state-disabled'></li>")
                         .data( "item.autocomplete", item )
-                        .append( "<span class='error'>" + item.label + "</span>")
+                        .append($("<span class='error'></span>").text(item.label))
                         .appendTo(ul);
                 } else {
                     return $("<li></li>")
                         .data( "item.autocomplete", item )
-                        .append( "<a>" + item.label + "</a>")
+                        .append($("<a></a>").text(item.label))
                         .appendTo(ul);
                 }
             };
     };
-    
+
     var lookup_id = function(elem, options) {
         $.getJSON(options.lookup_url, {
             object_id: elem.val(),

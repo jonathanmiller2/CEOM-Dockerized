@@ -36,7 +36,6 @@ urlpatterns = [
     re_path(r'^stats/', include('eomf.stats.urls')),
     re_path(r'^towers/', include('eomf.towers.urls')),
     re_path(r'^feedback/', include('eomf.feedback.urls')),
-    re_path(r'^share/', include('eomf.eomfshare.urls')),
     re_path(r'^maps/', include('eomf.maps.urls')),
     re_path(r'^water/', include('eomf.water.urls')),
     # (r'^aoitest/', include('eomf.aoitest.urls')),

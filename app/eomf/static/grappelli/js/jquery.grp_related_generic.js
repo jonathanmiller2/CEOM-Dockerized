@@ -4,7 +4,7 @@
  */
 
 (function($){
-    
+
     var methods = {
         init: function(options) {
             options = $.extend({}, $.fn.grp_related_generic.defaults, options);
@@ -21,16 +21,16 @@
                 if (val) {
                     lookup_id($this, options); // lookup when loading page
                 }
-                $this.bind("change focus keyup", function() { // id-handler
+                $this.on("change focus keyup", function() { // id-handler
                     lookup_id($this, options);
                 });
-                $(options.content_type).bind("change", function() { // content-type-handler
+                $(options.content_type).on("change", function() { // content-type-handler
                     update_lookup($(this), options);
                 });
             });
         }
     };
-    
+
     $.fn.grp_related_generic = function(method) {
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -41,15 +41,15 @@
         }
         return false;
     };
-    
+
     var lookup_link = function(id, val) {
         var lookuplink = $('<a class="related-lookup"></a>');
         lookuplink.attr('id', 'lookup_'+id);
-        lookuplink.attr('href', "../../../" + MODEL_URL_ARRAY[val].app + "/" + MODEL_URL_ARRAY[val].model + '/?');
+        lookuplink.attr('href', window.ADMIN_URL + MODEL_URL_ARRAY[val].app + "/" + MODEL_URL_ARRAY[val].model + '/?');
         lookuplink.attr('onClick', 'return showRelatedObjectLookupPopup(this);');
         return lookuplink;
     };
-    
+
     var update_lookup = function(elem, options) {
         var obj = $(options.object_id);
         obj.val('');
@@ -60,7 +60,7 @@
             obj.after(options.placeholder).after(lookup_link(obj.attr('id'),val));
         }
     };
-    
+
     var lookup_id = function(elem, options) {
         var text = elem.next().next();
         $.getJSON(options.lookup_url, {
@@ -74,10 +74,14 @@
             } else {
                 text.show();
             }
-            text.html('<span class="grp-placeholder-label">' + data[0].label + '</span>');
+            if (data[0].safe) {
+                text.html($('<span class="grp-placeholder-label"></span>').html(data[0].label + '\u200E'));
+            } else {
+                text.html($('<span class="grp-placeholder-label"></span>').text(data[0].label + '\u200E'));
+            }
         });
     };
-    
+
     $.fn.grp_related_generic.defaults = {
         placeholder: '<div class="grp-placeholder-related-generic" style="display:none"></div>',
         repr_max_length: 30,
@@ -85,5 +89,5 @@
         content_type: '',
         object_id: ''
     };
-    
+
 })(grp.jQuery);

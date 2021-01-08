@@ -119,10 +119,9 @@
         {
         	var bb = [-55, -120, 55, 120];	
         }
-        
-        //TODO: I can almost certainly get this internally without requesting back to the server. This data should be sent with the original HTTP request
-        //TODO: Change this URL when a flat URL has been created
-        var datasrc = 'http://eomf-dev1.sooner.net.ou.edu/photos/gmapclusters.kml?bbox=' + bb[1] + ',' + bb[0] + ',' + bb[3] + ',' + bb[2];
+
+        //Request data from the current host
+        var datasrc = window.location.protocol + '//' + window.location.host + '/photos/gmapclusters.kml?bbox=' + bb[1] + ',' + bb[0] + ',' + bb[3] + ',' + bb[2];
 
         var xhr = new XMLHttpRequest();
 		xhr.open('GET', datasrc, true);
@@ -131,18 +130,13 @@
 		xhr.onreadystatechange = function () {
 			if(xhr.readyState == 4 && xhr.status == 200)
 			{
-                //console.log(xhr.response)
-
 				parser = new DOMParser();
 				xmlDoc = parser.parseFromString(xhr.response,"text/xml");
 
 				placemarks = xmlDoc.getElementsByTagName('Placemark')
 
-                console.log(placemarks);
 				for(i = 0; i < placemarks.length; i++)
 				{
-					//console.log(placemarks[i].getElementsByTagName('Data'));
-
                     var name = placemarks[i].getElementsByTagName('name')[0].textContent;
                     var ids = parseInt(placemarks[i].getElementsByTagName('Data')[0].getElementsByTagName('value')[0].textContent);
 					var count = parseInt(placemarks[i].getElementsByTagName('Data')[1].getElementsByTagName('value')[0].textContent);
@@ -230,10 +224,6 @@
     	    $("#gallery").html(html).fadeIn();
     	});
 	}
-
-
-
-
 
     </script>
     

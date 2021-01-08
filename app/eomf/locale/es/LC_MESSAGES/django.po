@@ -666,7 +666,7 @@ msgid "Group Photos"
 msgstr "Fotos de Grupo"
 
 #: eomf/aboutus/templates/aboutus/leftmenu.html:86
-#: eomf/visualization/templates/visualization/composite.html:189
+#: eomf/visualization/templates/visualization/composite.html:183
 msgid "Calendar"
 msgstr "Calendario"
 
@@ -3023,60 +3023,60 @@ msgstr "Influenza Aviar"
 msgid "Avian Influenza tracking data"
 msgstr "Influenza Aviar datos de seguimiento"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:2
+#: eomf/inventory/templates/inventory/leftmenu.html:22
 #: eomf/visualization/templates/visualization/leftmenu.html:22
 #: eomf/visualization/templates/visualization/overview.html:17
 msgid "MODIS data"
 msgstr "Datos MODIS"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:6
+#: eomf/inventory/templates/inventory/leftmenu.html:30
 #: eomf/visualization/templates/visualization/leftmenu.html:30
 #, fuzzy
 #| msgid "Inventory as of"
 msgid "Inventory"
 msgstr "Inventario a"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:8
+#: eomf/inventory/templates/inventory/leftmenu.html:34
 #: eomf/visualization/templates/visualization/leftmenu.html:34
 #, fuzzy
 #| msgid "MODIS data"
 msgid "NASA data"
 msgstr "Datos MODIS"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:9
+#: eomf/inventory/templates/inventory/leftmenu.html:39
 #: eomf/visualization/templates/visualization/leftmenu.html:39
 #, fuzzy
 #| msgid "The EOMF team"
 msgid "EOMF data"
 msgstr "El equipo EOMF"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:11
+#: eomf/inventory/templates/inventory/leftmenu.html:43
 #: eomf/visualization/templates/visualization/leftmenu.html:43
 #: eomf/water/templates/water/leftmenu.html:44
 msgid "Visualization"
 msgstr "Visualización"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:13
+#: eomf/inventory/templates/inventory/leftmenu.html:47
 #: eomf/visualization/templates/visualization/leftmenu.html:47
 #, fuzzy
 #| msgid "MODIS composite image"
 msgid "Composite Image"
 msgstr "MODIS imagen compuesta"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:14
+#: eomf/inventory/templates/inventory/leftmenu.html:52
 #: eomf/visualization/templates/visualization/leftmenu.html:52
 #, fuzzy
 #| msgid "MODIS vegetation index map"
 msgid "Vegetation Index Map"
 msgstr "Mapa índice de vegetación MODIS"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:16
+#: eomf/inventory/templates/inventory/leftmenu.html:56
 #: eomf/visualization/templates/visualization/leftmenu.html:56
 #: eomf/water/templates/water/leftmenu.html:62
 msgid "Delivery"
 msgstr ""
 
-#: eomf/inventory/templates/inventory/leftmenu.html:18
+#: eomf/inventory/templates/inventory/leftmenu.html:60
 #: eomf/visualization/templates/visualization/leftmenu.html:60
 #: eomf/water/templates/water/leftmenu.html:66
 #, fuzzy
@@ -3084,7 +3084,7 @@ msgstr ""
 msgid "Single Site Time-Series"
 msgstr "MODIS de un solo sitio de series de tiempo"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:19
+#: eomf/inventory/templates/inventory/leftmenu.html:65
 #: eomf/visualization/templates/visualization/leftmenu.html:65
 #: eomf/water/templates/water/leftmenu.html:71
 #, fuzzy
@@ -3092,13 +3092,13 @@ msgstr "MODIS de un solo sitio de series de tiempo"
 msgid "Multiple Site Time-Series"
 msgstr "MODIS sitio de múltiples series de tiempo"
 
-#: eomf/inventory/templates/inventory/leftmenu.html:21
+#: eomf/inventory/templates/inventory/leftmenu.html:69
 #: eomf/visualization/templates/visualization/leftmenu.html:69
 #: eomf/water/templates/water/leftmenu.html:75
 msgid "Request history"
 msgstr ""
 
-#: eomf/inventory/templates/inventory/leftmenu.html:23
+#: eomf/inventory/templates/inventory/leftmenu.html:73
 #: eomf/visualization/templates/visualization/leftmenu.html:73
 #: eomf/water/templates/water/leftmenu.html:79
 #, fuzzy
@@ -3159,7 +3159,7 @@ msgstr "Viendo"
 
 #: eomf/inventory/templates/inventory/map.html:151
 #: eomf/inventory/templates/inventory/tile.html:57
-#: eomf/visualization/templates/visualization/composite.html:174
+#: eomf/visualization/templates/visualization/composite.html:163
 #: eomf/visualization/templates/visualization/gmap.html:619
 #: eomf/water/templates/water/33-year-wbfm.html:551
 #: eomf/water/templates/water/map.html:623
@@ -3258,8 +3258,8 @@ msgstr "Descargar"
 
 #: eomf/maps/templates/maps/filter_rois.html:38
 #: eomf/maps/templates/maps/roi.html:717
-#: eomf/visualization/templates/visualization/composite.html:184
-#: eomf/visualization/templates/visualization/composite.html:194
+#: eomf/visualization/templates/visualization/composite.html:175
+#: eomf/visualization/templates/visualization/composite.html:189
 #: eomf/visualization/templates/visualization/gmap.html:629
 #: eomf/water/templates/water/33-year-wbfm.html:561
 #: eomf/water/templates/water/map.html:633
@@ -4691,27 +4691,28 @@ msgstr "Visualización de Datos"
 msgid "EOMF MODIS Composite Image Visualization"
 msgstr "EOMF Visualización de Imagen compuesta MODIS"
 
-#: eomf/visualization/templates/visualization/composite.html:154
+#: eomf/visualization/templates/visualization/composite.html:138
 msgid "MODIS TERRA composite map"
 msgstr "MODIS TERRA mapa compuesto"
 
-#: eomf/visualization/templates/visualization/composite.html:166
+#: eomf/visualization/templates/visualization/composite.html:154
 msgid "50 km"
 msgstr "50 km"
 
-#: eomf/visualization/templates/visualization/composite.html:167
-msgid "20 km"
-msgstr "20 km"
-
-#: eomf/visualization/templates/visualization/composite.html:168
+#: eomf/visualization/templates/visualization/composite.html:155
 msgid "5 km"
 msgstr "5 km"
 
-#: eomf/visualization/templates/visualization/composite.html:202
+#: eomf/visualization/templates/visualization/composite.html:169
+#: eomf/workshops/templates/workshops/registration.html:18
+msgid "Date"
+msgstr "Fecha"
+
+#: eomf/visualization/templates/visualization/composite.html:196
 msgid "Julian calendar Leap years"
 msgstr "Calendario juliano años bisiestos"
 
-#: eomf/visualization/templates/visualization/composite.html:206
+#: eomf/visualization/templates/visualization/composite.html:200
 msgid "Julian calendar Regular years"
 msgstr "Calendario juliano años Regulares"
 
@@ -4968,6 +4969,9 @@ msgstr ""
 
 #~ msgid "Previous Workshops"
 #~ msgstr "Talleres anteriores"
+
+#~ msgid "20 km"
+#~ msgstr "20 km"
 
 #~ msgid "Nepali"
 #~ msgstr "Nepalí"
