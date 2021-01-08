@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-
 {% block head_extra %}
     {{block.super}} 
     {{ head_extra|safe }}
@@ -20,17 +19,17 @@
 
 {% block sidebar_extra %}
     {% if categories %}
-         {% include "workshops/categories_legend.html" %}
+         {% include "outreach/categories_legend.html" %}
     {% endif %}
     {% if workshop %}
-        {% include "workshops/workshop_extra_menu.html" %}
+        {% include "outreach/workshop_extra_menu.html" %}
     {% endif %}
     {% if sponsors %}
-         {% include "workshops/sponsors.html" %}
+         {% include "outreach/sponsors.html" %}
     {% endif %}
 {% endblock %}
 
 {% block left_menu %}
-    {% include "workshops/leftmenu.html" %}
+    {% include "outreach/leftmenu.html" %}
 {% endblock %}
 

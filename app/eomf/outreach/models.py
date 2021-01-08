@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from tinymce import models as tinymce_models
+from django.contrib.gis.db import models
+from phonenumber_field.modelfields import PhoneNumberField as InternationalPhone
+
 
 CHOICES = (
     ("U", "University / Non-Profit"),
@@ -15,6 +18,21 @@ SIZES = (
     ("XL", "Extra Large"),
     ("2XL", "Extra Extra Large"),
 )
+
+class Sponsor(models.Model):
+    name = models.CharField(max_length=160, null=True, blank=True)
+    contact_person_name = models.CharField(max_length=160, null=True, blank=True)
+    contact_person_phone = models.CharField(max_length=15, null=True, blank=True)
+    contact_person_mail = models.CharField(max_length=160, null=True, blank=True)
+    link=models.CharField(max_length=300, null=True, blank=True)
+    
+    logo = models.FileField(null=False, max_length=300,upload_to="outreach/sponsors/")
+
+    def __str__(self):
+        return str(self.name)
+    
+    class Meta:
+        unique_together = (('name',),)
 
 class Year(models.Model):
     date = models.DateField(null=False,blank=False)
@@ -129,7 +147,7 @@ class Poster(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     validated = models.BooleanField()
-    preview = models.FileField(null=True, max_length=300,upload_to="gisday/posters/", blank=True)
+    preview = models.FileField(null=True, max_length=300,upload_to="outreach/posters/", blank=True)
 
     def __str__(self):
         return self.first_name + " " + self.last_name
@@ -149,7 +167,7 @@ class AboutUsPerson(models.Model):
     last_name = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=16, null=True, blank=True)
-    headshot = models.ImageField(null=True, upload_to='gisday/aboutus/', default='gisday/aboutus/dummy_headshot222.jpg')
+    headshot = models.ImageField(null=True, upload_to='outreach/aboutus/', default='outreach/aboutus/dummy_headshot222.jpg')
 
     def __str__(self):
         return '%s %s %s' % (self.first_name, self.middle_name, self.last_name)
@@ -164,19 +182,11 @@ class SponsorCategory(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     min_inversion = models.IntegerField(null=False)
     max_inversion = models.IntegerField(null=False)
-    logo = models.ImageField(null=True, upload_to='gisday/sponsors/')
+    logo = models.ImageField(null=True, upload_to='outreach/sponsors/')
     def __str__(self):
        return '%s %s %s' % (self.name, self.min_inversion, self.max_inversion)
 
-class Sponsor(models.Model):
-    name = models.CharField(max_length=160, null=True, blank=True)
-    contact_person_name = models.CharField(max_length=160, null=True, blank=True)
-    contact_person_phone = models.CharField(max_length=15, null=True, blank=True)
-    contact_person_mail = models.CharField(max_length=160, null=True, blank=True)
-    link=models.CharField(max_length=300, null=True, blank=True)
-    
-    def __str__(self):
-        return str(self.name)
+
 
 class SponsorInYear(models.Model):
     sponsor = models.ForeignKey(Sponsor, on_delete=models.CASCADE)
@@ -191,7 +201,7 @@ class SponsorInYear(models.Model):
 class ItemDonor(models.Model):
     name = models.CharField(max_length=160, null=True, blank=True)
     link = models.CharField(max_length=300, null=True, blank=True)
-    logo = models.ImageField(null=True, upload_to='gisday/item_donors/')
+    logo = models.ImageField(null=True, upload_to='outreach/item_donors/')
     def __str__(self):
         return '%s' % (self.name)
 
@@ -205,7 +215,7 @@ class ItemInYear(models.Model):
         return '%s %s' % (self.name, self.value)
 
 class GisDayPhoto(models.Model):
-    picture = models.ImageField(null=True, upload_to='gisday/gallery/')
+    picture = models.ImageField(null=True, upload_to='outreach/gallery/')
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
 
 class Agenda(models.Model):
@@ -226,7 +236,7 @@ class Announcement(models.Model):
     entry_name = models.CharField(max_length=100, null=True, blank=True)
     content = tinymce_models.HTMLField(null=True,blank=True)
     date = models.DateField(null=True,blank=True)
-    image = models.ImageField(null=True,blank=True, upload_to='gisday/announcements/')
+    image = models.ImageField(null=True,blank=True, upload_to='outreach/announcements/')
     
     def __str__(self):
         return '%s %s' % (self.year, self.entry_name)
@@ -286,7 +296,7 @@ class OverviewContent(models.Model):
     content = tinymce_models.HTMLField(null=True,blank=True)
 
 class OverviewImage(models.Model):
-    image = models.ImageField(null=False,blank=False, upload_to='gisday/overview/')
+    image = models.ImageField(null=False,blank=False, upload_to='outreach/overview/')
     order = models.IntegerField(null=False,blank=False)
     title = models.CharField(max_length=300,null=True,blank=True)
     description = models.CharField(max_length=300,null=True,blank=True)
@@ -433,3 +443,122 @@ class SurveyContents(models.Model):
     class Meta:
         unique_together = (("year",),)
 
+
+class Workshop(models.Model):
+    name = models.CharField(max_length=500,null=False,blank=False)
+    category = models.ForeignKey('WorkshopClass', on_delete=models.CASCADE)
+    date_start = models.DateField(null=False,blank=False)
+    date_end = models.DateField(null=False,blank=False)
+    password = models.CharField(max_length=20,null=True, blank=True,help_text="Enter a password if the user needs a password to register (eg: Closed workshops)")
+    content = tinymce_models.HTMLField(null=True,blank=True)
+    address = models.CharField(max_length=300,blank=True,null=True)
+    city = models.CharField(max_length=300,blank=True,null=True)
+    country = models.CharField(max_length=300,blank=True,null=True)
+    registration_open = models.BooleanField(default=False, null=False)
+    description = models.TextField(null=True)
+    admin_emails = models.CharField(max_length=1000,null=False,blank=False, default = 'gisday@ou.edu')
+    registration_message = tinymce_models.HTMLField(null=True,blank=True)
+    agenda = models.FileField(null=True, max_length=300,upload_to="outreach/agendas/", blank=True)
+
+    extra_boolean_field1 = models.CharField(max_length=100, null=True, blank=True)
+    extra_boolean_field2 = models.CharField(max_length=100, null=True, blank=True)
+    extra_boolean_field3 = models.CharField(max_length=100, null=True, blank=True)
+
+    extra_text_field1 = models.CharField(max_length=100, null=True, blank=True)
+    extra_text_field2 = models.CharField(max_length=100, null=True, blank=True)
+    extra_text_field3 = models.CharField(max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return '%s (%d)' % (self.name, self.date_start.year)
+    class Meta:
+        unique_together = (('name',),)
+
+class SponsorInWorkshop(models.Model):
+    workshop = models.ForeignKey('Workshop', on_delete=models.CASCADE)
+    sponsor = models.ForeignKey('Sponsor', on_delete=models.CASCADE)
+    def __str__(self):
+        return '%s' % (self.sponsor)
+    class Meta:
+        unique_together = (('workshop','sponsor'),)
+
+
+    
+class WorkshopClass(models.Model):
+    name = models.CharField(max_length=200,null=False,blank=False)
+    image = models.ImageField(upload_to="outreach/categories", null=False)
+    class Meta:
+        unique_together = (('name',),)
+    def __str__(self):
+        return '%s' % (self.name)
+
+class WorkshopRegistration(models.Model):
+    workshop = models.ForeignKey(Workshop, related_name='workshop', related_query_name='workshop', on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=100,null=False,blank=False)
+    last_name = models.CharField(max_length=100,null=False,blank=False)
+    position = models.CharField(max_length=300,null=False,blank=False)
+    institution = models.CharField(max_length=200,null=False,blank=False)
+    address = models.CharField(max_length=200,null=False,blank=False)
+    email = models.EmailField(null=False,blank=False)
+    phone = InternationalPhone(null=True, blank = True)
+    area_of_expertise = models.CharField(max_length=300,null=False,blank=False)
+    # Migrated to exta_boolean_field1
+    # requests_travel_assistance = models.BooleanField(null=False, default=False)
+    
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    validated = models.BooleanField()
+
+
+    extra_boolean_field1 = models.BooleanField(default=False)
+    extra_boolean_field2 = models.BooleanField(default=False)
+    extra_boolean_field3 = models.BooleanField(default=False)
+
+    extra_text_field1 = models.CharField(max_length=100, null=True, blank=True)
+    extra_text_field2 = models.CharField(max_length=100, null=True, blank=True)
+    extra_text_field3 = models.CharField(max_length=100, null=True, blank=True)
+
+    class Meta:
+        unique_together = (('workshop','email'),)
+    def __str__(self):
+        return '%s, %s (%s)' % (self.last_name,self.first_name,self.workshop)
+
+
+class WorkshopPhoto(models.Model):
+
+    workshop = models.ForeignKey('Workshop',related_name='workshop_images', on_delete=models.CASCADE)
+    image = models.FileField(upload_to="outreach/photos", null=True, blank=True)
+    priority = models.PositiveIntegerField(default=99999)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    class Meta:
+        unique_together = (('workshop','image'),)
+    @property
+    def filename(self):
+        return self.image.name.rsplit('/', 1)[-1]
+class Institution(models.Model):
+    name = models.CharField(max_length=200,null=False,blank=False)
+    link = models.CharField(max_length=300,null=False,blank=False)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    class Meta:
+        unique_together = (('name',),)
+    def __str__(self):
+        return '%s' % (self.name)
+
+
+class Presentation(models.Model):
+    workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200,null=False,blank=False)
+    first_name = models.CharField(max_length=100,null=False,blank=False)
+    last_name = models.CharField(max_length=100,null=False,blank=False)
+    other_presenters = models.CharField(max_length=200,null=False,blank=True)
+    content = models.FileField(null=True, max_length=300,upload_to="outreach/presentations/", blank=True)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+    time_ini = models.DateTimeField(null=False)
+    time_end = models.DateTimeField(null=True) 
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    class Meta:
+        unique_together = (('workshop','time_ini'),)
+    def __str__(self):
+        return '%s (%s)' % (self.title, self.workshop)

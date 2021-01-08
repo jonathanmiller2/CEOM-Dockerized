@@ -4,14 +4,24 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.forms.utils import ErrorList
 from django.core.mail import send_mail
+from django.db.models import Count
+from datetime import datetime
+from django.core.mail import EmailMultiAlternatives
 
-from eomf.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm, SurveyForm, DemographicSurveyForm, volunteerForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
-from eomf.gisday.models import Booth, Year, OverviewImage
+
 import os
 import sys
 import json
+
+from eomf.outreach.forms import VisitorForm, BoothForm, PhotoForm, PosterForm, SurveyForm, DemographicSurveyForm, volunteerForm
+from eomf.outreach.models import Booth, Year, OverviewImage
+from eomf.outreach.models import *
+from eomf.outreach.forms import WorkshopRegistrationForm
+
+
+
 
 #   AUX FUNCTIONS
 def year_available(year):
@@ -31,6 +41,20 @@ def registration_enabled(year):
     return False
 # VIEWS
 
+def overview(request):
+    available_years = Year.objects.filter(hidden=False).order_by('-date')
+    images = OverviewImage.objects.all().order_by('order')
+    try:
+        content = OverviewContent.objects.all()[0].content
+    except:
+        content = 'Error: content is missing in the database for overview.'
+    
+    return render(request, 'outreach/overview.html', context={
+        'available_years': available_years,
+        'content': content,
+        'images': images,
+    })
+
 
 def gallery_2012(request):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
@@ -47,7 +71,7 @@ def gallery_2012(request):
                 '/media/gisday/2012/photo-gallery/', filename))
         except:
             pass
-    return render(request, 'gisday/2012/gallery.html', context={'available_years': available_years, 'photos': photos})
+    return render(request, 'outreach/2012/gallery.html', context={'available_years': available_years, 'photos': photos})
 
 
 def gallery(request, year):
@@ -70,13 +94,13 @@ def gallery(request, year):
                     'gisday/' + str(year) + '/photo-gallery/', filename))
             except:
                 pass
-        return render(request, 'gisday/20XX/photoGallery.html', context={
+        return render(request, 'outreach/20XX/photoGallery.html', context={
             'available_years': available_years,
             'gisdate': date,
             'photos': photos
         })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 
 def images(request, year):
@@ -84,13 +108,13 @@ def images(request, year):
     if year_available(year):
         date = Year.objects.get(date__year=year)
         photos = GisDayPhoto.objects.all().filter(year=date)
-        return render(request, 'gisday/20XX/imageGallery.html', context={
+        return render(request, 'outreach/20XX/imageGallery.html', context={
             'available_years': available_years,
             'gisdate': date,
             'photos': photos,
         })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 
 def sponsors(request, year):
@@ -104,7 +128,7 @@ def sponsors(request, year):
             content = SponsorsContent.objects.get(year=date).content
         except:
             content = "Contents is empty, please contact the administrator"
-        return render(request, 'gisday/20XX/sponsors.html', context={
+        return render(request, 'outreach/20XX/sponsors.html', context={
             'available_years': available_years,
             'gisdate': date,
             'sponsors': sponsors,
@@ -112,7 +136,7 @@ def sponsors(request, year):
             'content': content,
         })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 
 photoMessage = '''
@@ -134,7 +158,7 @@ def photo_contest(request, year):
             if date.photo_contest_hidden:
                 raise "content is hidden!"
         except:
-            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+            return render(request, 'outreach/notfound.html', context={'available_years': available_years})
         form = None
         need_login = False
         already_registered = False
@@ -164,7 +188,7 @@ def photo_contest(request, year):
         else:
             need_login = True
         form = None
-        return render(request, 'gisday/20XX/photoContest.html', context={
+        return render(request, 'outreach/20XX/photoContest.html', context={
             'available_years': available_years,
             'gisdate': date,
             "need_login": need_login,
@@ -173,7 +197,7 @@ def photo_contest(request, year):
             "content": content.content,
         })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 
 def getValidatedPhotoContestCopy(request, form):
@@ -207,7 +231,7 @@ def poster_contest(request, year):
             if date.poster_contest_hidden:
                 raise "content is hidden!"
         except:
-            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+            return render(request, 'outreach/notfound.html', context={'available_years': available_years})
         if registration_enabled(year):
             if request.method == 'POST':
                 # return HttpResponse("I was here!!")
@@ -242,7 +266,7 @@ def poster_contest(request, year):
         posters = Poster.objects.all().filter(
             validated=True, year=date).order_by('category', "created")[:200]
 
-        return render(request, "gisday/20XX/posterContest.html", context={
+        return render(request, "outreach/20XX/posterContest.html", context={
             'available_years': available_years,
             'gisdate': date,
             "posters": posters,
@@ -252,7 +276,7 @@ def poster_contest(request, year):
             "pyear": year,
         })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 np = '''Dear Exhibitor,
 
@@ -284,7 +308,7 @@ def booth(request, year):
         try:
             content = BoothContent.objects.get(year=date)
         except:
-            return render(request, 'gisday/registrationsoon.html', context={'available_years': available_years})
+            return render(request, 'outreach/registrationsoon.html', context={'available_years': available_years})
         registration_successful = False
         if registration_enabled(year):
 
@@ -319,7 +343,7 @@ def booth(request, year):
         booth = Booth.objects.all().filter(validated=True, year=date)[
             :max_number_of_booths]
 
-        return render(request, "gisday/20XX/booth.html", context={
+        return render(request, "outreach/20XX/booth.html", context={
             'available_years': available_years,
             'gisdate': date,
             "booth": booth,
@@ -329,7 +353,7 @@ def booth(request, year):
             "pyear": year,
         })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 
 def visitor_registration(request, year):
@@ -341,7 +365,7 @@ def visitor_registration(request, year):
         try:
             content = VisitorRegistrationContent.objects.get(year=date)
         except:
-            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+            return render(request, 'outreach/notfound.html', context={'available_years': available_years})
         if registration_enabled(year):
             if request.method == 'POST':
                 form = VisitorForm(request.POST)
@@ -371,7 +395,7 @@ def visitor_registration(request, year):
 
         numberOfVisitors = len(Visitor.objects.filter(year=date))
 
-        return render(request, "gisday/20XX/visitor.html", context={
+        return render(request, "outreach/20XX/visitor.html", context={
             'available_years': available_years,
             'gisdate': date,
             "numberOfVisitors": numberOfVisitors,
@@ -380,7 +404,7 @@ def visitor_registration(request, year):
             "content": content.content,
         })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 
 def about_us(request, year):
@@ -393,14 +417,14 @@ def about_us(request, year):
             content = CommitteeContent.objects.get(year=date).content
         except:
             content = "No content in database. Please contact administrator to fix this"
-        return render(request, 'gisday/20XX/aboutus.html', context={
+        return render(request, 'outreach/20XX/aboutus.html', context={
             'available_years': available_years,
             'gisdate': date,
             'people': people,
             'content': content,
         })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 
 def summary(request, year):
@@ -412,14 +436,14 @@ def summary(request, year):
             if date.summary_hidden:
                 raise "content is hidden!"
         except:
-            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
-        return render(request, 'gisday/20XX/summary.html', context={
+            return render(request, 'outreach/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/20XX/summary.html', context={
             'available_years': available_years,
             'gisdate': date,
             'content': content.content,
         })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 
 def agenda(request, year):
@@ -434,14 +458,14 @@ def agenda(request, year):
             if item.speaker:
                 has_speaker = True
                 break
-        return render(request, 'gisday/20XX/agenda.html', context={
+        return render(request, 'outreach/20XX/agenda.html', context={
             'available_years': available_years,
             'gisdate': date,
             'agenda_by_date': agenda_entries_by_date,
             'has_speaker': has_speaker,
         })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 
 def announcements(request, year, position=None):
@@ -454,45 +478,31 @@ def announcements(request, year, position=None):
             position = len(announcements) - 1
         position = max(min(int(position), len(announcements) - 1), 0)
 
-        return render(request, 'gisday/20XX/announcements.html', context={
+        return render(request, 'outreach/20XX/announcements.html', context={
             'available_years': available_years,
             'gisdate': date,
             'announcements': announcements,
             'position': position,
         })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 
 def logistics(request, year, name=None):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
     if year_available(year):
         date = Year.objects.get(date__year=year)
-        return render(request, 'gisday/20XX/logistics.html', context={
+        return render(request, 'outreach/20XX/logistics.html', context={
             'available_years': available_years,
             'gisdate': date,
         })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
-
-
-def overview(request):
-    available_years = Year.objects.filter(hidden=False).order_by('-date')
-    images = OverviewImage.objects.all().order_by('order')
-    try:
-        content = OverviewContent.objects.all()[0].content
-    except:
-        content = 'Error: content is missing in the database for overview.'
-    return render(request, 'gisday/overview.html', context={
-        'available_years': available_years,
-        'content': content,
-        'images': images,
-    })
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 
 def year2012(request):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
-    return render(request, 'gisday/2012/2012.html', context={
+    return render(request, 'outreach/2012/2012.html', context={
         'available_years': available_years,
     })
 
@@ -502,7 +512,7 @@ def survey(request, year):
     if year_available(year):
         date = Year.objects.get(date__year=year)
         if not date.survey_open:
-            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+            return render(request, 'outreach/notfound.html', context={'available_years': available_years})
         try:
             content = SurveyContents.objects.get(year=date).content
         except:
@@ -511,14 +521,14 @@ def survey(request, year):
             form = SurveyForm(request.POST)
             if form.is_valid():
                 data = form.save()
-                return render(request, 'gisday/20XX/survey.html', context={
+                return render(request, 'outreach/20XX/survey.html', context={
                     'available_years': available_years,
                     'gisdate': date,
                     'registration_successful': True,
                     'content': content,
                 })
             else:
-                return render(request, 'gisday/20XX/survey.html', context={
+                return render(request, 'outreach/20XX/survey.html', context={
                     'available_years': available_years,
                     'gisdate': date,
                     'form': form,
@@ -528,14 +538,14 @@ def survey(request, year):
             form = SurveyForm(initial={
                 'year': date
             })
-            return render(request, 'gisday/20XX/survey.html', context={
+            return render(request, 'outreach/20XX/survey.html', context={
                 'available_years': available_years,
                 'gisdate': date,
                 'form': form,
                 'content': content,
             })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 
 def demographic_survey(request, year):
@@ -543,18 +553,18 @@ def demographic_survey(request, year):
     if year_available(year):
         date = Year.objects.get(date__year=year)
         if not date.survey_open:
-            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+            return render(request, 'outreach/notfound.html', context={'available_years': available_years})
         if request.method == "POST":
             form = DemographicSurveyForm(request.POST)
             if form.is_valid():
                 data = form.save()
-                return render(request, 'gisday/20XX/demographic_survey.html', context={
+                return render(request, 'outreach/20XX/demographic_survey.html', context={
                     'available_years': available_years,
                     'gisdate': date,
                     'registration_successful': True,
                 })
             else:
-                return render(request, 'gisday/20XX/demographic_survey.html', context={
+                return render(request, 'outreach/20XX/demographic_survey.html', context={
                     'available_years': available_years,
                     'gisdate': date,
                     'form': form,
@@ -563,13 +573,13 @@ def demographic_survey(request, year):
             form = DemographicSurveyForm(initial={
                 'year': date
             })
-            return render(request, 'gisday/20XX/demographic_survey.html', context={
+            return render(request, 'outreach/20XX/demographic_survey.html', context={
                 'available_years': available_years,
                 'gisdate': date,
                 'form': form,
             })
     else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+        return render(request, 'outreach/notfound.html', context={'available_years': available_years})
 
 def boothvalidation(email, email2):
     if(email2 == email):
@@ -592,7 +602,7 @@ def boothupdate(request, id, year, email):
         try:
             content = BoothContent.objects.get(year=date)
         except:
-            return render(request, 'gisday/registrationsoon.html', context={'available_years': available_years})
+            return render(request, 'outreach/registrationsoon.html', context={'available_years': available_years})
     # available_years = Year.objects.filter(hidden=False).order_by('-date')
     # if year_available(year):
     #     form = None
@@ -653,7 +663,7 @@ def boothupdate(request, id, year, email):
             form = None
             registration_successful = True
             # return HttpResponse("got into post and came till here")
-            return render(request, "gisday/Booth_update_form.html", context={
+            return render(request, "outreach/Booth_update_form.html", context={
                 "booth": booth,
                 "form": form,
                 "registration_successful": registration_successful,
@@ -682,7 +692,7 @@ def boothupdate(request, id, year, email):
             'tshirt_size_2': booth.tshirt_size_2,
         })
 
-        return render(request, 'gisday/Booth_update_form.html', context={'pers': booth, 'form': form, 'get': True})
+        return render(request, 'outreach/Booth_update_form.html', context={'pers': booth, 'form': form, 'get': True})
     return HttpResponse("Some thing went wrong!")
 
 
@@ -708,7 +718,7 @@ def posterupdate(request, id, year, email):
                 if date.poster_contest_hidden:
                     raise "content is hidden!"
             except:
-                return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+                return render(request, 'outreach/notfound.html', context={'available_years': available_years})
         # available_years = Year.objects.filter(hidden=False).order_by('-date')
         # if year_available(year):
         #     form = None
@@ -762,7 +772,7 @@ def posterupdate(request, id, year, email):
                 registration_successful = True
                 posters = Poster.objects.all().filter(
                 validated=True, year=date).order_by('category', "created")[:200]
-                return render(request, "gisday/20XX/posterContest.html", context={
+                return render(request, "outreach/20XX/posterContest.html", context={
                     'available_years': available_years,
                     'gisdate': date,
                     "posters": posters,
@@ -786,7 +796,7 @@ def posterupdate(request, id, year, email):
                 'email' : poster.email,
                 'institution' : poster.institution,
             })
-            t = loader.get_template('gisday/Poster_update_form.html')
+            t = loader.get_template('outreach/Poster_update_form.html')
             c = RequestContext(request, context={'pers': poster, 'form': form, 'get': True})
             return HttpResponse(t.render(c))
         return HttpResponse("Some thing went wrong!")
@@ -809,7 +819,7 @@ def volunteer(request,year):
             with open('volunteerdata','a') as vd:
                 vd.write(v_info + "\n")
                 vd.close()
-            t = loader.get_template('gisday/20XX/Thanks.html')
+            t = loader.get_template('outreach/20XX/Thanks.html')
             c = RequestContext(request,{'available_years': available_years,'data':v_info})    
             return HttpResponse(t.render(c))
 
@@ -822,6 +832,221 @@ def volunteer(request,year):
             newLine = line.split(',')
             volunteer_data.append(newLine)
         vd.close()
-    t = loader.get_template('gisday/20XX/volunteer.html')
+    t = loader.get_template('outreach/20XX/volunteer.html')
     c = RequestContext(request,{'available_years': available_years,'form':form,'data':volunteer_data})    
     return HttpResponse(t.render(c))
+
+
+
+def get_workshop_count_yearly(max_date=None,min_date=None):
+    workshops = None
+    if max_date:
+        workshops = Workshop.objects.extra({'year':"extract(year from date_start)"}).filter(date_end__lt=max_date)
+    elif min_date:
+        workshops = Workshop.objects.extra({'year':"extract(year from date_start)"}).filter(date_end__gte=min_date)
+    else:
+        workshops = Workshop.objects.extra({'year':"extract(year from date_start)"})
+
+    if workshops:
+        return workshops.values("year").annotate(count=Count('id')).order_by('-year')
+    else:
+        return None
+def workshop_current(request):
+    years = get_workshop_count_yearly(min_date=datetime.now())
+    workshops = Workshop.objects.filter(date_end__gte=datetime.now()).order_by('-date_start')
+    categories = WorkshopClass.objects.all()
+    return render(request, 'outreach/workshop_list_current.html', context={
+         'years': years,
+         'workshops':workshops,
+         'total_workshops':  workshops.count,
+         'categories': categories,
+        }, 
+    )
+def workshop_past(request):
+    years = get_workshop_count_yearly(max_date=datetime.now())
+    workshops = Workshop.objects.filter(date_end__lt=datetime.now()).order_by('-date_end')
+    categories = WorkshopClass.objects.all()
+    return render(request, 'outreach/workshop_list_past.html', context={
+         'years': years,
+         'workshops':workshops,
+         'total_workshops': workshops.count,
+         'categories': categories,
+        }
+    )
+
+def workshop_list_by_year_past(request,year):
+    years = get_workshop_count_yearly(max_date=datetime.now())
+    workshops = Workshop.objects.filter(date_start__year=year,date_end__lt=datetime.now()).order_by('-date_start')
+    categories = WorkshopClass.objects.all()
+    return render(request, 'outreach/workshop_list_past.html', context={
+         'years': years,
+         'workshops': workshops,
+         'year_selected': year,
+         'total_workshops': Workshop.objects.filter(date_end__lt=datetime.now()).count,
+         'categories': categories,
+        }, 
+    )
+
+def workshop_list_by_year_current(request,year):
+    years = get_workshop_count_yearly(min_date=datetime.now())
+    workshops = Workshop.objects.filter(date_start__year=year,date_end__gte=datetime.now()).order_by('-date_start')
+    categories = WorkshopClass.objects.all()
+    return render(request, 'outreach/workshop_list_current.html', context={
+         'years': years,
+         'workshops': workshops,
+         'year_selected': year,
+         'total_workshops':  Workshop.objects.filter(date_end__gte=datetime.now()).count,
+         'categories': categories,
+        }
+    )
+
+def workshop(request, workshop_id):
+    try:
+        workshop = Workshop.objects.get(id = workshop_id)
+    except:
+        return render(request, 'outreach/not_found.html')
+    validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('created')
+    awaiting_validation_registrations =  WorkshopRegistration.objects.filter(workshop=workshop,validated=False)
+    sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
+    num_presentations = len(Presentation.objects.filter(workshop=workshop))
+    num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
+    return render(request, 'outreach/workshop.html', context={
+         'title':workshop.name,
+         'content': workshop.content,
+         'registration_enabled': workshop.registration_open,
+         'workshop':workshop,
+         'validated_registrations':validated_registrations,
+         'awaiting_validation_registrations':awaiting_validation_registrations,
+         'sponsors':sponsors,
+         'show_registration':True,
+         'num_presentations':num_presentations,
+         'num_photos':num_photos,
+        }
+    )
+
+def workshop_registration(request, workshop_id):
+    try:
+        workshop = Workshop.objects.get(id = workshop_id)
+    except:
+        return render(request, 'outreach/not_found.html')
+    if not workshop.registration_open:
+        return render(request, 'outreach/not_found.html')
+    validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('created')
+    awaiting_validation_registrations =  WorkshopRegistration.objects.filter(workshop=workshop,validated=False)
+    sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
+    num_presentations = len(Presentation.objects.filter(workshop=workshop))
+    num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
+    if request.method == 'POST':
+        #return HttpResponse(json.dumps({'request':request.POST}))
+        form = WorkshopRegistrationForm(request.POST)
+        #return HttpResponse(json.dumps({'request':request.POST,'form':form}))
+        if form.is_valid():
+            v = form.save(commit=False)
+            v.validated = False
+            v.save()
+            #building message
+            tos = workshop.admin_emails.split(';')
+            tos.append(v.email);
+            subject = "Registration for "+ workshop.name
+            message = workshop.registration_message
+            if not message:
+                message = full_name+", " 
+                message="Thank you for registering for this workshop"
+            from_email = "noreply@eomf.ou.edu"
+            msg = EmailMultiAlternatives(subject, message, from_email, tos)
+            msg.attach_alternative(message, "text/html")
+            msg.send()
+            return render(request, 'outreach/registration.html', context={
+                 'title':workshop.name,
+                 'content': workshop.content,
+                 'workshop_reg':workshop,
+                 'registration_succesfull':True,
+                 'validated_registrations':validated_registrations,
+                 'awaiting_validation_registrations':awaiting_validation_registrations,
+                 'workshop':workshop,
+                 'sponsors':sponsors,
+                 'show_registration':False,
+                 'num_presentations':num_presentations,
+                 'num_photos':num_photos,
+                }
+            )
+        else:
+            return render(request, 'outreach/registration.html', context={
+                 'title':workshop.name,
+                 'content': workshop.content,
+                 'workshop_reg':workshop,
+                 'registration_succesfull':False,
+                 'form':form,
+                 'validated_registrations':validated_registrations,
+                 'awaiting_validation_registrations':awaiting_validation_registrations,
+                 'workshop':workshop,
+                 'sponsors':sponsors,
+                 'show_registration':False,
+                 'num_presentations':num_presentations,
+                 'num_photos':num_photos,
+                }, 
+                
+            )
+    else:
+        form = WorkshopRegistrationForm(data=workshop
+             )
+        # form = WorkshopRegistrationForm(request.POST={
+        #     'full_workshop':workshop
+        #     })
+    return render(request, 'outreach/registration.html', context={
+         'title':workshop.name,
+         'content': workshop.content,
+         'workshop_reg':workshop,
+         'form':form,
+         'validated_registrations':validated_registrations,
+         'awaiting_validation_registrations':awaiting_validation_registrations,
+         'workshop':workshop,
+         'sponsors':sponsors,
+         'show_registration':False,
+         'num_presentations':num_presentations,
+         'num_photos':num_photos,
+        }, 
+        
+    )
+
+def presentations(request, workshop_id):
+    try:
+        workshop = Workshop.objects.get(id = workshop_id)
+    except:
+        return render(request, 'outreach/not_found.html', {})
+    sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
+    presentations = Presentation.objects.filter(workshop=workshop)
+    num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
+    return render(request, 'outreach/workshop_presentations.html', context={
+         'title':workshop.name,
+         'content': workshop.content,
+         'workshop':workshop,
+         'sponsors':sponsors,
+         'show_registration':True,
+         'presentations':presentations,
+         'num_presentations':len(presentations),
+         'num_photos':num_photos,
+        }, 
+        
+    )
+
+def photos(request, workshop_id):
+    try:
+        workshop = Workshop.objects.get(id = workshop_id)
+    except:
+        return render(request, 'outreach/not_found.html', {})
+    sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
+    presentations = len(Presentation.objects.filter(workshop=workshop))
+    photos = WorkshopPhoto.objects.filter(workshop=workshop).order_by("priority")
+    return render(request, 'outreach/photos.html', context={
+         'title':workshop.name,
+         'content': workshop.content,
+         'workshop':workshop,
+         'sponsors':sponsors,
+         'show_registration':True,
+         'num_presentations':presentations,
+         'num_photos':len(photos),
+         'photos':photos,
+        }, 
+        
+    )
