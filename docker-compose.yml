@@ -20,8 +20,9 @@ services:
                       #gunicorn eomf.wsgi:application --bind 0.0.0.0:8000"
                       #python manage.py runserver 0.0.0.0:8000"
 
-#                     python manage.py makemigrations --empty pages &&
-
+                      #python manage.py makemigrations outreach &&
+                      #python manage.py makemigrations --empty pages &&
+                      
                       #python manage.py makemessages --all &&
                       #echo MAKE_MESSAGE_FIN &&
 
