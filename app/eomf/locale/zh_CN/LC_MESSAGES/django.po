@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-08 16:28-0600\n"
+"POT-Creation-Date: 2021-01-08 18:14-0600\n"
 "PO-Revision-Date: 2015-06-12 11:44-0551\n"
 "Last-Translator:   <adamjia0313@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -545,7 +545,7 @@ msgstr "研究"
 #: eomf/aboutus/templates/aboutus/leftmenu.html:51
 #: eomf/aboutus/templates/aboutus/leftmenu.html:61
 #: eomf/aboutus/templates/aboutus/leftmenu.html:72
-#: eomf/inventory/templates/inventory/leftmenu.html:4
+#: eomf/inventory/templates/inventory/leftmenu.html:26
 #: eomf/outreach/templates/outreach/leftmenu.html:96
 #: eomf/photos/templates/photos/leftmenu.html:26
 #: eomf/visualization/templates/visualization/leftmenu.html:26
@@ -3258,7 +3258,7 @@ msgid "Registration"
 msgstr "注册"
 
 #: eomf/outreach/templates/outreach/registration.html:18
-#: eomf/visualization/templates/visualization/composite.html:179
+#: eomf/visualization/templates/visualization/composite.html:169
 msgid "Date"
 msgstr "日期"
 
@@ -3510,7 +3510,6 @@ msgstr "CSV文件和图像。"
 #| msgid "KMZ: KML and images."
 msgid "KML: KML and images."
 msgstr "KMZ：KML和图像。"
-
 
 #: eomf/photos/templates/photos/browse.html:141
 msgid " Image Size."
@@ -4265,7 +4264,7 @@ msgstr "EOMF管理"
 msgid "EOMF: Earth Observation and Modeling Facility"
 msgstr "EOMF：地球观测与模拟研究中心"
 
-#: eomf/templates/base.html:297
+#: eomf/templates/base.html:294
 #, fuzzy
 #| msgid ""
 #| "Copyright &copy; 2013 Earth Observation and Modeling Facility, the "
@@ -4390,12 +4389,6 @@ msgstr "50公里"
 #: eomf/visualization/templates/visualization/composite.html:155
 msgid "5 km"
 msgstr "5公里"
-
-
-#: eomf/visualization/templates/visualization/composite.html:169
-#: eomf/workshops/templates/workshops/registration.html:18
-msgid "Date"
-msgstr "日期"
 
 #: eomf/visualization/templates/visualization/composite.html:196
 msgid "Julian calendar Leap years"

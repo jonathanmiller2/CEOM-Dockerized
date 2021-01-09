@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-08 16:28-0600\n
+"POT-Creation-Date: 2021-01-08 18:14-0600\n"
 "PO-Revision-Date: 2015-06-09 13:19-0551\n"
 "Last-Translator: Michael Menarguez <mamenarguez@ou.edu>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -571,8 +571,8 @@ msgstr "अनुसन्धान"
 #: eomf/aboutus/templates/aboutus/leftmenu.html:51
 #: eomf/aboutus/templates/aboutus/leftmenu.html:61
 #: eomf/aboutus/templates/aboutus/leftmenu.html:72
-#: eomf/inventory/templates/inventory/leftmenu.html:4
-#: eomf/outreach/templates/outreach/leftmenu.html:9
+#: eomf/inventory/templates/inventory/leftmenu.html:26
+#: eomf/outreach/templates/outreach/leftmenu.html:96
 #: eomf/photos/templates/photos/leftmenu.html:26
 #: eomf/visualization/templates/visualization/leftmenu.html:26
 #: eomf/visualization/templates/visualization/overview.html:15
@@ -3353,7 +3353,7 @@ msgid "Registration"
 msgstr "दर्ता"
 
 #: eomf/outreach/templates/outreach/registration.html:18
-#: eomf/visualization/templates/visualization/composite.html:179
+#: eomf/visualization/templates/visualization/composite.html:169
 msgid "Date"
 msgstr "तिथि"
 
@@ -4387,7 +4387,7 @@ msgstr "EOMF प्रशासन"
 msgid "EOMF: Earth Observation and Modeling Facility"
 msgstr "EOMF: धरती अवलोकन र मोडलिङ सुविधा"
 
-#: eomf/templates/base.html:297
+#: eomf/templates/base.html:294
 #, fuzzy
 #| msgid ""
 #| "Copyright &copy; 2013 Earth Observation and Modeling Facility, the "
@@ -4538,11 +4538,6 @@ msgstr "50 मी"
 #: eomf/visualization/templates/visualization/composite.html:155
 msgid "5 km"
 msgstr "5 मी"
-
-#: eomf/visualization/templates/visualization/composite.html:169
-#: eomf/workshops/templates/workshops/registration.html:18
-msgid "Date"
-msgstr "तिथि"
 
 #: eomf/visualization/templates/visualization/composite.html:196
 msgid "Julian calendar Leap years"
