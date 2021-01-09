@@ -11,8 +11,6 @@ services:
                       echo MIGRATE_FIN &&
                       python manage.py check &&
                       echo CHECK_FIN &&
-                      python manage.py makemessages --all &&
-                      echo MAKE_MESSAGE_FIN &&
                       python manage.py collectstatic --noinput &&
                       echo COLLECTSTATIC_FIN &&
                       python manage.py compilemessages &&
@@ -23,6 +21,9 @@ services:
                       #python manage.py runserver 0.0.0.0:8000"
 
 #                     python manage.py makemigrations --empty pages &&
+
+                      #python manage.py makemessages --all &&
+                      #echo MAKE_MESSAGE_FIN &&
 
     #TODO: Remove the volume connection in production. There should be no connection between the container and machine in production to avoid attacks on the base machine.
     volumes:
