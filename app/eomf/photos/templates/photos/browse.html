@@ -103,7 +103,7 @@
                     </nav>
                 </div>
             </div>
-            <div class='span2 text-right col-sm col-lg-2' >
+            <div id="row1-3" class='span2 text-right col-sm col-lg-2' >
                 <form class="form-horizontal" id="photo-per-page"> 
                     <div class="control-group row justify-content-around">
                         <label class="control-label" style='padding-left: 0px;' for='ppp'><b>{% trans "Photos per page" %}</b></label>
@@ -127,17 +127,17 @@
             <div class="row" style=" margin-left:0px !important; display: inline-flex;">
             {% if checkbox %}
                 <span class='span2 offset0 '>
-                    <div class='col-sm' id="select-all" style=" margin-right: -15px; width: 400px; display: inline-block; font-size: min(max(3vw, 13px),20px)">Select All: <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);"></div>
+                    <div class='col-lg' id="select-all" style=" margin-right: -15px; width: 400px; display: inline-block; font-size: min(max(3vw, 13px),20px)">Select All: <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);"></div>
                 </span>
                 <!--Image Format: --> 
-                <select id="row2-1" name="format" class='span3 col-sm'style="margin-right: 10px; height: 35px">
+                <select id="row2-1" name="format" class='span3 col-lg'style="margin-right: 10px; height: 35px">
                     <option value="option1" disabled>{% trans " Image Format." %}</option>
                     <option value="csv">{% trans "CSV file and images." %}</option>
                     <option value="kmz">{% trans "KML: KML and images." %}</option>
                     <!--<option value="shp">ESRI Shapefile/DBF.</option>-->
                 </select>
                 <!-- Image Size: --> 
-                <select id="row2-2" name="img" class='span3 offset1 col-sm' style="margin-right: 10px; height: 35px">
+                <select id="row2-2" name="img" class='span3 offset1 col-lg' style="margin-right: 10px; height: 35px">
                     <option value="option1" disabled>{% trans " Image Size." %}</option>
                     <option value="big">{% trans "Original images." %}</option>
                     <option value="small">{% trans "Downsized images." %}</option>
