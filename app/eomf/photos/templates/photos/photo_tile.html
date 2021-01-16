@@ -75,17 +75,22 @@
                 {% endif %}
                 <li style="padding-top:4px">
                     {% if modis_timeseries %}
-                    <a id="modis" class="btn btn-light btn-small btn-outline-dark btn3d" href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
-                        <abbr title="{% trans 'View MODIS data for this photo. Click on this button and scroll down to the bottom of the page and to select appropriate dataset and year' %}">MODIS</abbr>
-                    </a>
-                {% endif %}
-                {% if photo.user == request.user or request.user.is_superuser %}
-                <!--<div class="container" style="padding-left: 0px; padding-right:0px">-->
-                    <a id="edit" class='btn btn-light btn-outline-secondary btn-small' href="/photos/edit/{{photo.id}}">{% trans "Edit" %}</a>
-                    <a id="remove" class='btn btn-danger btn-small' onclick="return confirm('Are you sure, you want to delete?');" href="/photos/delete/{{photo.id}}/?next={{request.get_full_path|urlencode}}">{% trans "Delete" %}</a>
-                <!-- </div> -->
-                {% endif %}
-                
+                        {% if photo.user == request.user or request.user.is_superuser %}
+                        <a id="modis" class="btn btn-light btn-small btn-outline-dark btn3d" href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
+                            <abbr title="{% trans 'View MODIS data for this photo. Click on this button and scroll down to the bottom of the page and to select appropriate dataset and year' %}">MODIS</abbr>
+                        </a>
+                        <!--<div class="container" style="padding-left: 0px; padding-right:0px">-->
+                        <a id="edit" class='btn btn-light btn-outline-secondary btn-small' href="/photos/edit/{{photo.id}}">{% trans "Edit" %}</a>
+                        <a id="remove" class='btn btn-danger btn-small' onclick="return confirm('Are you sure, you want to delete?');" href="/photos/delete/{{photo.id}}/?next={{request.get_full_path|urlencode}}">{% trans "Delete" %}</a>
+                        <!-- </div> -->
+                        {% else %}
+                            <a id="modis" style=" width:40%; font-size: x-small" class="btn btn-light btn-small btn-outline-dark btn3d" href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
+                                <abbr title="{% trans 'View MODIS data for this photo. Click on this button and scroll down to the bottom of the page and to select appropriate dataset and year' %}">MODIS</abbr>
+                            </a>
+                    {% endif %}
+                    
+
+                    {% endif %}
                 </li>
             </ul>
         </div>
