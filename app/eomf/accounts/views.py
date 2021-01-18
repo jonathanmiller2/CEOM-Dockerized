@@ -19,7 +19,21 @@ from django.contrib import messages
 
 import django
 
+#TODO: REMOVE THIS MAIL STUFF VVV
+from django.core.mail import send_mail
+from django.conf import settings
+
+
 def index(request):
+
+    send_mail(
+    'That’s your subject',
+    'That’s your message body',
+    None,
+    ['jonathanmiller2@hotmail.com'],
+    fail_silently=False,
+    )
+
     if request.user.is_authenticated:
         return HttpResponseRedirect('/accounts/profile/')
     else:
