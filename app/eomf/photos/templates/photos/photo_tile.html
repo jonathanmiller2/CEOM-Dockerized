@@ -34,23 +34,23 @@
 
 {% load thumbnail %}
 <div class='photo-tile' style="position: relative; height: 280px">
-    <div class='row-fluid container' style="position: absolute; bottom: 40%;">
+    <div class='row-fluid container' style="position: absolute; bottom: 42%; display: flex; justify-content: center;">
         <div class="row pull-left" style="padding-bottom: 2px;">
-            <a href='/photos/view/{{photo.pk}}/' {% if '/photos/photos.html' in request.path %} target="_blank" {%endif%} class="thumbnail">
+            <a href='/photos/view/{{photo.pk}}/' {% if '/photos/photos.html' in request.path %} target="_blank" {%endif%} class="thumbnail" >
 
                 {% if photo.file|photoexists %}
                     {% thumbnail photo.file "150x150" as im %} 
                     
                     {% if im.height > im.width %}
-                        <img style="height: 160px; width: 120px" src='{{im.url}}' alt='{{photo.basename}}' class="img-thumbnail"/>
+                        <img style="height: 160px; width: 120px; box-shadow: 0px 1px 3px #d7d7d7;" src='{{im.url}}' alt='{{photo.basename}}' class="img-thumbnail"/>
                     {% else %}
-                        <img style="width: 160px; height: 120px" src='{{im.url}}' alt='{{photo.basename}}' class="img-thumbnail"/>
+                        <img style="width: 160px; height: 120px; box-shadow: 0px 1px 3px #d7d7d7;" src='{{im.url}}' alt='{{photo.basename}}' class="img-thumbnail"/>
                     {%endif%}
                     {% empty %}
                     {% trans "Image file missing" %}
                     {% endthumbnail %}
                 {% else %}
-                    <img src='' alt='{% trans "Image not available" %}' style="width:150px;height:150px;"/>
+                    <img src='' alt='{% trans "Image not available" %}' style="width:150px;height:150px; box-shadow: 0px 3px 3px #bbbbbb;"/>
                 {% endif %}
             </a>
         </div>
