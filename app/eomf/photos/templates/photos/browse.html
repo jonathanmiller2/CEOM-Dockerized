@@ -41,7 +41,7 @@
     <h2 class="legend" id="title" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
     <div class="container-fluid" style="padding-left:0px;">
         <div class="row" style="margin-left:0px !important;">
-            <div class='span4 text-left col-sm' style="padding-left: 18px; margin-top: 5px">
+            <div class='span4 text-left col-sm' style="margin-top: 5px">
                 <label><b>{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
             </div>
             <div class='span4 text-center col-sm' >
@@ -123,7 +123,7 @@
             <div id="row1-3" class='span2 text-right col-sm col-lg-2' >
                 <form class="form-horizontal" id="photo-per-page"> 
                     <div class="control-group row justify-content-around">
-                        <label class="control-label" style='padding-left: 0px;' for='ppp'><b style="font-size:9pt">{% trans "Photos per page" %}</b></label>
+                        <label class="control-label" style='padding-left: 0px;' for='ppp'><b style="font-size:9pt">{% trans "Photos per page:" %}</b></label>
                         <div class='controls' style="margin-left: -35px">
                             <select class="input-mini" id='ppp' onChange="location.assign('/photos/browse/?ppp='+this.options[selectedIndex].text);">
                                 <option {% if ppp == "25" %}selected{%endif%}>25</option>
@@ -144,25 +144,25 @@
             <div class="row" style=" margin-left:0px !important; display: inline-flex;">
             {% if checkbox %}
                 <span class='span2 offset0 '>
-                    <div class='col-lg' id="select-all" style="display: inline; font-size: min(max(3vw, 13px),20px)">
-                        <b style="vertical-align: 1.9px; font-size: 9pt; color: #555;">Select All: </b>
+                    <div class='col-lg' id="select-all" style="display: inline;">
+                        <b style="vertical-align: 2.2px; font-size: 9pt; color: #555;">Select All: </b>
                         <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);" style="margin-left:-100px"></div>
                 </span>
                 <!--Image Format: --> 
-                <select id="row2-1" name="format" class='span3 col-lg'style="margin-right: 10px; height: 30px">
+                <select id="row2-1" name="format" class='span3 col-lg'style="margin-right: 10px; height: 25px">
                     <option value="option1" disabled>{% trans " Image Format." %}</option>
                     <option value="csv">{% trans "CSV file and images." %}</option>
                     <option value="kmz">{% trans "KML: KML and images." %}</option>
                     <!--<option value="shp">ESRI Shapefile/DBF.</option>-->
                 </select>
                 <!-- Image Size: --> 
-                <select id="row2-2" name="img" class='span3 offset1 col-lg' style="margin-right: 10px; height: 30px">
+                <select id="row2-2" name="img" class='span3 offset1 col-lg' style="margin-right: 10px; height: 25px">
                     <option value="option1" disabled>{% trans " Image Size." %}</option>
                     <option value="big">{% trans "Original images." %}</option>
                     <option value="small">{% trans "Downsized images." %}</option>
                 </select>
                 
-                <input id="row2-3" type="submit" class='btn btn-primary span2' value="{% trans 'Download' %}" style="margin-right: 10px; height: 30px; padding: 0px">
+                <input id="row2-3" type="submit" class='btn btn-primary span2' value="{% trans 'Download' %}" style="margin-right: 10px; height: 25px; padding: 0px">
 
             </div>
             <input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos' style="width:initial; display: block">
