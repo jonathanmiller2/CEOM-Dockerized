@@ -287,17 +287,6 @@ def map(request):
         'modis_timeseries':True
     })
 
-def cocorahs(request, date):
-    request.session['query'] = pickle.dumps({
-        'keywords': '#CoCoRaHS' + date.capitalize(),
-        'lon_min': -130,
-        'lat_min': 20,
-        'lon_max': -70,
-        'lat_max': 50
-    })
-
-    return HttpResponseRedirect('/photos/map/')
-
 #TODO: Clusters may be unused, in favor of gmapclusters
 def clusters(request):
     photos, search = search_for_photos(request)
@@ -476,11 +465,10 @@ def gmapclusters(request):
     #Add xml tag
     response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + etree.tostring(doc).decode('utf-8')
 
-    print(response) #TODO: Remove me
-
     return HttpResponse(response)
 
-def get_photos_id_form_cluster_photo_id(request, id,x_size=22.25,y_size=11.125):
+
+def get_photos_id_from_cluster_photo_id(request, id, x_size=22.25,y_size=11.125):
 
     photos, search = search_for_photos(request)
     photos = photos.exclude(Q(point__bboverlaps=Point(0,0))|Q(point__isnull=True))
@@ -514,7 +502,7 @@ def photos_json(request):
     print("Beginning photos_json") #TODO: Remove me
 
     id = request.GET['ids']
-    ids = get_photos_id_form_cluster_photo_id(request, id)
+    ids = get_photos_id_from_cluster_photo_id(request, id)
     photos = Photo.objects.filter(id__in=ids.split(','))
 
     data = []
@@ -546,102 +534,6 @@ def photos_json(request):
         })
 
     return HttpResponse(simplejson.dumps(data))
-
-
-def photos_html(request):
-    print("Beginning photos_html") #TODO: Remove me
-
-    # return HttpResponse(json.dumps({'request':request.GET['ids']}))
-    # return HttpResponse(json.dumps)
-    photos, search = search_for_photos(request)
-    id = request.GET['ids']
-    x_size = float(request.GET['x_size'])
-    page = y_size = float(request.GET['y_size'])
-    ids = get_photos_id_form_cluster_photo_id(request, id,x_size,y_size)
-    photos = Photo.objects.filter(id__in=ids.split(','))
-
-    
-    # t = Template('{% for photo in photos %}{% include "photos/photo_tile.html" %}{% endfor %}')
-    # c = RequestContext(request,{'photos': photos,'checkbox':True,'modis_timeseries':True})
-    # return HttpResponse(t.render(c))
-
-    page = request.GET.get('page',1)
-    ppp = request.GET.get('ppp', 24)
-    ppp = min(int(ppp),192)
-    if page != "all" and ppp != "All":
-        paginator = Paginator(photos, int(ppp))
-
-        try:
-            photos = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            photos = paginator.page(int(page))
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            photos = paginator.page(paginator.num_pages)
-
-        page = int(page)
-        page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
-    else:
-        paginator = None
-        page_range = list(range(10))
-        
-    return render(request, 'photos/browse_gallery_map.html', context={
-        'photos': photos,
-        'paginator' : paginator,
-        'search': search,
-        'ppp': ppp,
-        'page_range': page_range,
-        'checkbox': True,
-        'modis_timeseries': True
-    })
-
-def photos_html2(request):
-    print("Beginning photos_html2") #TODO: Remove me
-
-    photos, search = search_for_photos(request)
-    id = request.GET['ids']
-    x_size = float(request.GET['x_size'])
-    page = y_size = float(request.GET['y_size'])
-    ids = get_photos_id_form_cluster_photo_id(request, id,x_size,y_size)
-    photos = Photo.objects.filter(id__in=ids.split(','))
-
-    
-    # t = Template('{% for photo in photos %}{% include "photos/photo_tile.html" %}{% endfor %}')
-    # c = RequestContext(request,{'photos': photos,'checkbox':True,'modis_timeseries':True})
-    # return HttpResponse(t.render(c))
-
-    page = request.GET.get('page',1)
-    ppp = request.GET.get('ppp', 24)
-    ppp = min(int(ppp),192)
-    if page != "all" and ppp != "All":
-        paginator = Paginator(photos, int(ppp))
-
-        try:
-            photos = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            photos = paginator.page(int(page))
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            photos = paginator.page(paginator.num_pages)
-
-        page = int(page)
-        page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
-    else:
-        paginator = None
-        page_range = list(range(10))
-        
-    return render(request, 'photos/browse_gallery_reduced.html', context={
-        'photos': photos,
-        'paginator' : paginator,
-        'search': search,
-        'ppp': ppp,
-        'page_range': page_range,
-        'checkbox': False,
-        'modis_timeseries': False
-    })
-    
 
 def kml(request):
     return HttpResponse()
@@ -714,19 +606,14 @@ def edit(request, id):
                             uploaddate=photo.uploaddate, user=request.user
                         )
                         if base:
-                            '''try:
-                                nextphoto = base.filter(id__gt=photo.id).order_by('id')[0]
-                                if nextphoto:
-                                    url = "%s?ref=userph" % reverse('photo-edit', args=[nextphoto.id])
-                                    return HttpResponseRedirect(url)
-                            except:
-                                return redirect('/photos/user')'''
                             try:
                                 nextphoto = base.filter(id__gt=photo.id).order_by('id')[0]
                                 url = "%s?ref=userph" % reverse('photo-edit', args=[nextphoto.id])
                                 return HttpResponseRedirect(url)
                             except:
                                 return redirect('/photos/user')
+                        else:
+                            return redirect('/photos/user')
                     else:
                         return HttpResponseRedirect("/accounts/login")
                 if 'Save_and_Goto_Prev_Photo' in request.POST:
@@ -737,13 +624,6 @@ def edit(request, id):
                             uploaddate=photo.uploaddate, user=request.user
                         )
                         if base:
-                            '''try:
-                                nextphoto = base.filter(id__lt=photo.id).order_by('-id')[0]
-                                if nextphoto:
-                                    url = "%s?ref=userph" % reverse('photo-edit', args=[nextphoto.id])
-                                    return HttpResponseRedirect(url)
-                            except:
-                                return redirect('/photos/user')'''
                             try:
                                 nextphoto = base.filter(id__lt=photo.id).order_by('-id')[0]
                                 url = "%s?ref=userph" % reverse('photo-edit', args=[nextphoto.id])
@@ -755,13 +635,11 @@ def edit(request, id):
             else:
                 f = PhotoForm(instance=photo)
 
-            t = loader.get_template('photos/edit.html')
-            c = RequestContext(request, {
+            return render(request, 'photos/edit.html', {
                 'photo': photo,
                 'form': f,
                 'enable_bootstrap': False,
             })
-            return HttpResponse(t.render(c))
 
 def delete(request, id):
     photo = Photo.objects.get(pk=id)
@@ -967,8 +845,6 @@ def upload(request):
     </script>
     '''
     if request.method == 'POST':
-        print("POST to upload view") #TODO: Remove me
-        #breakpoint() #TODO: Remove me
         work_dir = get_work_dir(request)
         files = os.listdir(work_dir)
         ids = []
@@ -1102,110 +978,14 @@ def preload(request):
 
     return HttpResponse(response_data, content_type=mimetype)
 
-
 @csrf_exempt
 def mobile_upload(request):
-    '''
-        Requires POST key 'file' to contain image data
-        returns JSON of photo id or of an error
-    '''
-
-    work_dir = get_work_dir(request)
-
-    if not os.path.exists(work_dir):
-        os.makedirs(work_dir)
-
-    data = {}
-
-    try:
-        tmp_file = request.FILES['file']
-        if 'image' not in tmp_file.content_type.lower():
-            raise Exception("Only Image Files Allowed")
-
-        photo = Photo(user=request.user, file=tmp_file)
-
-        if 'private' in request.POST and request.POST['private'] == 'Yes':
-            photo.status = 2
-
-        photo.save()
-        #Save to move file into place in order to read exif
-        photo.exifPopulate()
-        photo.save()
-
-        data['id'] = int(photo.id)
-
-    except Exception as e:
-        data['error'] = str(e)
-
-    response_data = simplejson.dumps(data)
-
-    try:
-        if "application/json" in request.META['HTTP_ACCEPT_ENCODING']:
-            mimetype = 'application/json'
-        else:
-            mimetype = 'text/plain'
-    except:
-        mimetype = 'text/plain'
-
-    return HttpResponse(response_data, content_type=mimetype)
-
-@csrf_exempt
-def mobile_upload2(request):
-    '''
-        Requires POST key 'file' to contain image data
-        returns JSON of photo id or of an error
-    '''
-
-    work_dir = get_work_dir(request)
-
-    if not os.path.exists(work_dir):
-        os.makedirs(work_dir)
-
-    data = {}
-
-    try:
-        landcover_cat = int(request.POST['landcover_cat'])
-        notes = request.POST['notes']
-        tmp_file = request.FILES['file']
-        if 'image' not in tmp_file.content_type.lower():
-            raise Exception("Only Image Files Allowed")
-        category = Category.objects.get(id=landcover_cat)
-        photo = Photo(user=request.user, file=tmp_file, category = category, notes= notes )
-        if 'private' in request.POST and request.POST['private'] == 'Yes':
-            photo.status = 2
-
-        photo.save()
-        #Save to move file into place in order to read exif
-        photo.exifPopulate()
-        photo.save()
-        
-        data['id'] = int(photo.id)
-        data['success'] = "true"
-
-    except Exception as e:
-        data['success'] = "false"
-        data['error'] = str(e)
-
-    response_data = simplejson.dumps(data)
-
-    try:
-        if "application/json" in request.META['HTTP_ACCEPT_ENCODING']:
-            mimetype = 'application/json'
-        else:
-            mimetype = 'text/plain'
-    except:
-        mimetype = 'text/plain'
-
-    return HttpResponse(response_data, content_type=mimetype)
-
-
-@csrf_exempt
-def mobile_upload3(request):
 	
     '''
         Middleware login doesn't seem to be working for me, so this endpoint is for uploading images when getting user via request.user doesn't work
     '''
-   
+
+    #TODO: Authenticate using Middleware, rather than sending password with request
 
     work_dir = get_work_dir(request)
 

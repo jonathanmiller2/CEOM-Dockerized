@@ -29,12 +29,12 @@ DATABASES = {
 }
 
 #https://support.google.com/a/answer/176600?hl=en
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = '0.0.0.0'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER =
-EMAIL_HOST_PASSWORD = 
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_HOST = '0.0.0.0'
+#EMAIL_USE_TLS = True
+#EMAIL_PORT = 587
+#EMAIL_HOST_USER =
+#EMAIL_HOST_PASSWORD = 
 
 #WARNING: THIS MIGHT NEED TO BE UNCOMMENTED IF GEOS ERRORS OCCUR
 #THIS IS A NOTE TO FUTURE JONATHAN
