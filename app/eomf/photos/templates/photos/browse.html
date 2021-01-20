@@ -41,10 +41,10 @@
     <h2 class="legend" id="title" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
     <div class="container-fluid" style="padding-left:0px;">
         <div class="row" style="margin-left:0px !important;">
-            <div class='span4 text-left col-sm' style="margin-top: 5px">
+            <div class='text-left col-sm' style="margin-top: 5px">
                 <label><b>{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
             </div>
-            <div class='span4 text-center col-sm' >
+            <div class='text-center col-sm' >
                 <div class="pagination" style="margin:0px !important; padding:0px;">
                     <nav aria-label="Page navigation">
                         <ul class="pagination pagination-sm">
@@ -120,11 +120,11 @@
                     </nav>
                 </div>
             </div>
-            <div id="row1-3" class='span2 text-right col-sm col-lg-2' >
+            <div id="row1-3" class='text-right col-sm' >
                 <form class="form-horizontal" id="photo-per-page"> 
-                    <div class="control-group row justify-content-around">
+                    <div class="control-group row justify-content-end" style="display: inline-flex;">
                         <label class="control-label" style='padding-left: 0px;' for='ppp'><b style="font-size:9pt">{% trans "Photos per page:" %}</b></label>
-                        <div class='controls' style="margin-left: -35px">
+                        <div class='controls' style="margin-left: 8px">
                             <select class="input-mini" id='ppp' onChange="location.assign('/photos/browse/?ppp='+this.options[selectedIndex].text);">
                                 <option {% if ppp == "25" %}selected{%endif%}>25</option>
                                 <option {% if ppp == "50" %}selected{%endif%}>50</option>
