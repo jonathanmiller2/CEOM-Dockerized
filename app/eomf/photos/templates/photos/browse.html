@@ -37,12 +37,12 @@
         }
     }
 </style>
-<nav id="span12" style="margin-left:0px;">
+<nav style="margin-left:0px;">
     <h2 class="legend" id="title" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
     <div class="container-fluid" style="padding-left:0px;">
         <div class="row" style="margin-left:0px !important;">
             <div class='text-left col-sm' style="margin-top: 5px">
-                <label><b>{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
+                <label><b style="font-size: 9pt">{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
             </div>
             <div class='text-center col-sm' >
                 <div class="pagination" style="margin:0px !important; padding:0px;">
@@ -120,10 +120,10 @@
                     </nav>
                 </div>
             </div>
-            <div id="row1-3" class='text-right col-sm' >
+            <div id="row1-3" class='text-left col-sm' >
                 <form class="form-horizontal" id="photo-per-page"> 
-                    <div class="control-group row justify-content-end" style="display: inline-flex;">
-                        <label class="control-label" style='padding-left: 0px;' for='ppp'><b style="font-size:9pt">{% trans "Photos per page:" %}</b></label>
+                    <div class="control-group row justify-content-end" style="display: inline-flex; margin: 0px !important;">
+                        <label class="control-label" for='ppp'><b style="font-size:9pt">{% trans "Photos per page:" %}</b></label>
                         <div class='controls' style="margin-left: 8px">
                             <select class="input-mini" id='ppp' onChange="location.assign('/photos/browse/?ppp='+this.options[selectedIndex].text);">
                                 <option {% if ppp == "25" %}selected{%endif%}>25</option>
