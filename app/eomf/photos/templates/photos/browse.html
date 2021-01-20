@@ -45,7 +45,7 @@
                 <label><b style="font-size: 9pt">{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
             </div>
             <div class='text-center col-sm' >
-                <div class="pagination" style="margin:0px !important; padding:0px;">
+                <div class="pagination col-2" style="margin:0px !important; padding:0px;">
                     <nav aria-label="Page navigation">
                         <ul class="pagination pagination-sm">
                             {% if photos.has_previous %}
@@ -118,14 +118,14 @@
                             {% endif %}
                         </ul>
                     </nav>
-                </div>
+                </div> 
             </div>
             <div id="row1-3" class='text-left col-sm' >
                 <form class="form-horizontal" id="photo-per-page"> 
-                    <div class="control-group row justify-content-end" style="display: inline-flex; margin: 0px !important;">
+                    <div class="control-group" style="display: inline-flex; margin: 0px !important;">
                         <label class="control-label" for='ppp'><b style="font-size:9pt">{% trans "Photos per page:" %}</b></label>
                         <div class='controls' style="margin-left: 8px">
-                            <select class="input-mini" id='ppp' onChange="location.assign('/photos/browse/?ppp='+this.options[selectedIndex].text);">
+                            <select class="input-mini" style="font-size: small" id='ppp' onChange="location.assign('/photos/browse/?ppp='+this.options[selectedIndex].text);">
                                 <option {% if ppp == "25" %}selected{%endif%}>25</option>
                                 <option {% if ppp == "50" %}selected{%endif%}>50</option>
                                 <option {% if ppp == "100" %}selected{%endif%}>100</option>
@@ -141,29 +141,31 @@
         {% if checkbox %}
         <form method='post' name="download" action="/photos/download/">
         {% endif %}
-            <div class="row" style=" margin-left:0px !important; display: inline-flex;">
+            <div class="row" style=" margin-left:0px;">
             {% if checkbox %}
                 <span class='span2 offset0 '>
-                    <div class='col-lg' id="select-all" style="display: inline;">
+                    <div class="col-lg" id="select-all" style="display: inline;">
                         <b style="vertical-align: 2.2px; font-size: 9pt; color: #555;">Select All: </b>
                         <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);" style="margin-left:-100px"></div>
                 </span>
+                
+                <div class="col-8 row justify-content-end" style="margin-left: -25px">
                 <!--Image Format: --> 
-                <select id="row2-1" name="format" class='span3 col-lg'style="margin-right: 10px; height: 25px">
+                <select id="row2-1" name="format" style="margin-right: 5px; height: 22px; font-size: small">
                     <option value="option1" disabled>{% trans " Image Format." %}</option>
                     <option value="csv">{% trans "CSV file and images." %}</option>
                     <option value="kmz">{% trans "KML: KML and images." %}</option>
                     <!--<option value="shp">ESRI Shapefile/DBF.</option>-->
                 </select>
                 <!-- Image Size: --> 
-                <select id="row2-2" name="img" class='span3 offset1 col-lg' style="margin-right: 10px; height: 25px">
+                <select id="row2-2" name="img" style="margin-right: 5px; height: 22px; font-size: small">
                     <option value="option1" disabled>{% trans " Image Size." %}</option>
                     <option value="big">{% trans "Original images." %}</option>
                     <option value="small">{% trans "Downsized images." %}</option>
                 </select>
-                
-                <input id="row2-3" type="submit" class='btn btn-primary span2' value="{% trans 'Download' %}" style="margin-right: 10px; height: 25px; padding: 0px">
-
+                <!-- Download -->
+                <button id="row2-3" type="submit" class='btn btn-primary' value="{% trans 'Download' %}" style="margin-right: 5px; height: 22px; font-size: x-small; padding-bottom: 0px; padding-top: 0px">{% trans 'Download' %}</button>
+            </div>
             </div>
             <input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos' style="width:initial; display: block">
             <div class="span4" id="batchedit-fade">
