@@ -41,11 +41,11 @@
     <h2 class="legend" id="title" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
     <div class="container-fluid" style="padding-left:0px;">
         <div class="row" style="margin-left:0px !important;">
-            <div class='text-left col-sm' style="margin-top: 5px">
+            <div class='text-left col-md' style="margin-top: 5px">
                 <label><b style="font-size: 9pt">{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
             </div>
-            <div class='text-center col-sm' >
-                <div class="pagination col-2" style="margin:0px !important; padding:0px;">
+            <div class='text-center col-md' >
+                <div class="pagination" style="margin:0px !important; padding:0px;">
                     <nav aria-label="Page navigation">
                         <ul class="pagination pagination-sm">
                             {% if photos.has_previous %}
@@ -120,7 +120,7 @@
                     </nav>
                 </div> 
             </div>
-            <div id="row1-3" class='text-left col-sm' >
+            <div id="row1-3" class='text-left col-md' >
                 <form class="form-horizontal" id="photo-per-page"> 
                     <div class="control-group" style="display: inline-flex; margin: 0px !important;">
                         <label class="control-label" for='ppp'><b style="font-size:9pt">{% trans "Photos per page:" %}</b></label>
@@ -141,15 +141,15 @@
         {% if checkbox %}
         <form method='post' name="download" action="/photos/download/">
         {% endif %}
-            <div class="row" style=" margin-left:0px;">
+            <div class="row" id="row2" style=" margin-left:0px;">
             {% if checkbox %}
-                <span class='span2 offset0 '>
-                    <div class="col-lg" id="select-all" style="display: inline;">
+                <span>
+                    <div class="col-md" id="select-all" style="display: inline;">
                         <b style="vertical-align: 2.2px; font-size: 9pt; color: #555;">Select All: </b>
                         <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);" style="margin-left:-100px"></div>
                 </span>
                 
-                <div class="col-8 row justify-content-end" style="margin-left: -25px">
+                <div id="row2-dropdown" class="col-8 row justify-content-end">
                 <!--Image Format: --> 
                 <select id="row2-1" name="format" style="margin-right: 5px; height: 22px; font-size: small">
                     <option value="option1" disabled>{% trans " Image Format." %}</option>
@@ -167,8 +167,8 @@
                 <button id="row2-3" type="submit" class='btn btn-primary' value="{% trans 'Download' %}" style="margin-right: 5px; height: 22px; font-size: small; padding-bottom: 0px; padding-top: 0px">{% trans 'Download' %}</button>
             </div>
             </div>
-            <input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos' style="width:initial; display: block">
-            <div class="span4" id="batchedit-fade">
+            <input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos' style="width:initial; display: block; font-size: small">
+            <div id="batchedit-fade">
                 {% csrf_token %}
                 <!--<strong style="padding-bottom:5px;">Batch Edit Selected Photos:</strong><br/>-->
                 <table>{{form.as_table|safe}}</table>
