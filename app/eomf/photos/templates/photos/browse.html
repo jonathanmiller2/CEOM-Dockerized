@@ -36,16 +36,24 @@
             font-size: min(max(3.8vw, 23px),30px);
         }
     }
+
+    .menu-field {
+        font-size: small;
+        height: 22px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
 </style>
-<nav style="margin-left:0px;">
+<nav>
     <h2 class="legend" id="title" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
     <div class="container-fluid" style="padding-left:0px;">
-        <div class="row" style="margin-left:0px !important;">
-            <div class='text-left col-md' style="margin-top: 5px">
+        <div class="row justify-content-between mr-5">
+            <div class="col-md-auto">
                 <label><b style="font-size: 9pt">{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
             </div>
-            <div class='text-center col-md' >
-                <div class="pagination" style="margin:0px !important; padding:0px;">
+            <div class='col-md-auto'>
+                <div class="pagination">
                     <nav aria-label="Page navigation">
                         <ul class="pagination pagination-sm">
                             {% if photos.has_previous %}
@@ -120,12 +128,12 @@
                     </nav>
                 </div> 
             </div>
-            <div id="row1-3" class='text-left col-md' >
+            <div class='col-md-auto'>
                 <form class="form-horizontal" id="photo-per-page"> 
-                    <div class="control-group" style="display: inline-flex; margin: 0px !important;">
+                    <div class="control-group" style="display: inline-flex; margin: 0px">
                         <label class="control-label" for='ppp'><b style="font-size:9pt">{% trans "Photos per page:" %}</b></label>
-                        <div class='controls' style="margin-left: 8px">
-                            <select class="input-mini" style="font-size: small" id='ppp' onChange="location.assign('/photos/browse/?ppp='+this.options[selectedIndex].text);">
+                        <div class='controls ml-2'>
+                            <select class="menu-field" id='ppp' onChange="location.assign('/photos/browse/?ppp='+this.options[selectedIndex].text);">
                                 <option {% if ppp == "25" %}selected{%endif%}>25</option>
                                 <option {% if ppp == "50" %}selected{%endif%}>50</option>
                                 <option {% if ppp == "100" %}selected{%endif%}>100</option>
@@ -141,40 +149,41 @@
         {% if checkbox %}
         <form method='post' name="download" action="/photos/download/">
         {% endif %}
-            <div class="row" id="row2" style=" margin-left:0px;">
+            <div class="row justify-content-between mr-5">
             {% if checkbox %}
-                <span>
-                    <div class="col-md" id="select-all" style="display: inline;">
-                        <b style="vertical-align: 2.2px; font-size: 9pt; color: #555;">Select All: </b>
-                        <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);" style="margin-left:-100px"></div>
-                </span>
-                
-                <div id="row2-dropdown" class="col-8 row justify-content-end">
-                <!--Image Format: --> 
-                <select id="row2-1" name="format" style="margin-right: 5px; height: 22px; font-size: small">
-                    <option value="option1" disabled>{% trans " Image Format." %}</option>
-                    <option value="csv">{% trans "CSV file and images." %}</option>
-                    <option value="kmz">{% trans "KML: KML and images." %}</option>
-                    <!--<option value="shp">ESRI Shapefile/DBF.</option>-->
-                </select>
-                <!-- Image Size: --> 
-                <select id="row2-2" name="img" style="margin-right: 5px; height: 22px; font-size: small">
-                    <option value="option1" disabled>{% trans " Image Size." %}</option>
-                    <option value="big">{% trans "Original images." %}</option>
-                    <option value="small">{% trans "Downsized images." %}</option>
-                </select>
-                <!-- Download -->
-                <button id="row2-3" type="submit" class='btn btn-primary' value="{% trans 'Download' %}" style="margin-right: 5px; height: 22px; font-size: small; padding-bottom: 0px; padding-top: 0px">{% trans 'Download' %}</button>
+
+                <div class="col-md-auto" id="select-all" style="display: inline;">
+                    <b style="vertical-align: 2.2px; font-size: 9pt; color: #555;">Select All: </b>
+                    <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);" style="margin-left:-100px">
+                </div>
+
+                <div class="row mx-2">
+                    <select name="format" class="col-md-auto menu-field m-1">
+                        <option value="option1" disabled>{% trans " Image Format." %}</option>
+                        <option value="csv">{% trans "CSV file and images." %}</option>
+                        <option value="kmz">{% trans "KML: KML and images." %}</option>
+                    </select>
+
+                    <select name="img" class="col-md-auto menu-field m-1">
+                        <option value="option1" disabled>{% trans " Image Size." %}</option>
+                        <option value="big">{% trans "Original images." %}</option>
+                        <option value="small">{% trans "Downsized images." %}</option>
+                    </select>
+
+                    <button type="submit" class='col-md-auto btn btn-primary menu-field m-1' value="{% trans 'Download' %}">{% trans 'Download' %}</button>
+                </div>
+
             </div>
-            </div>
-            <input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos' style="width:initial; display: block; font-size: small">
+            <input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos' style="width:initial; font-size: small">
+
             <div id="batchedit-fade">
                 {% csrf_token %}
-                <!--<strong style="padding-bottom:5px;">Batch Edit Selected Photos:</strong><br/>-->
                 <table>{{form.as_table|safe}}</table>
                 <input class='btn' type="submit" value="batchedit" formaction="/photos/batchedit/?next={{request.get_full_path}}">
             </div>
+
             <hr/>
+
             <div class="container-fluid">
                 {% for photo in photos %}
                     {% include "photos/photo_tile.html" %}
