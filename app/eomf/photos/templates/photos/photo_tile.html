@@ -60,12 +60,11 @@
             </div>
         {% endif %}
     </div>
-    <!-- Get rid of "pull-left"-->
+    
     <div class='row-fluid pull-left' style="position: absolute; bottom: 0;">
-        <div class='span12'>
+        <div class>
             <ul class="list-unstyled">
                 <li>{{photo.takendate}}</li>
-                <li>Extra Line</li>
                 {% if photo.lon and photo.lat %}
                 <li>{{photo.point|point2str}}</li>
                 {% endif %}
