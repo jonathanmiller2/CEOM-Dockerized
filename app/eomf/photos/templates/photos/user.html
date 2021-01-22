@@ -5,97 +5,182 @@
 {% block title %}{% trans "EOMF user photos" %} {% endblock %}
 
 {% block content %}
-{% if photos %}
-    
-    {% if paginator %}
-        <div class='row-fluid'>
-            <div class='span3'>
-                <h3>{{gallerytitle}}</h3>
-                <div class="pull-left">{{paginator.count}} {% trans "photos" %}</div>
-            </div>
-            <div class='span7'>
-                <div class="pagination pagination-small pagination-centered">
-                    <ul>
-                        {% if photos.has_previous %}
-                            <li><a href="?page=1&amp;ppp={{ppp}}&amp;date={{request.GET.date}}">&laquo;&laquo;</a></li>
-                            <li><a href="?page={{ photos.previous_page_number }}&amp;ppp={{ppp}}&amp;date={{request.GET.date}}">&laquo;</a></li>
-                        {% endif %}
-                        {% for n in page_range %}
-                            {% if photos.number != n %}
-                                <li><a href="?page={{n}}&amp;ppp={{ppp}}&amp;date={{request.GET.date}}">{{n}}</a><li>
+<style>
+    @media screen and (min-width:575px) and (max-width: 1250px) {
+
+        #title {
+            font-size: min(max(3.9vw, 10px),30px);
+        }
+    }
+
+    @media screen and (max-width:575px) {
+
+        #title {
+            font-size: min(max(3.8vw, 23px),30px);
+        }
+    }
+
+    .menu-field {
+        font-size: small;
+        height: 22px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+</style>
+<nav>
+        <!-- <div class='row-fluid'> -->
+            <h3>{{gallerytitle}}</h3>
+            <div class="container-fluid" style="padding-left:0px;">
+                <div class="row justify-content-between mr-5">
+                    <div class="col-md-auto">
+                        <label><b style="font-size: 9pt">{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
+                    </div>
+            <div class='col-md-auto'>
+                <div class="pagination">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm">
+                            {% if photos.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1&amp;ppp={{ppp}}" area-label="Previous">
+                                    <span aria-hidden="true"> &laquo;&laquo;</span>
+                                    <span class="sr-only">PreviousX2</span>
+                                </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ photos.previous_page_number }}&amp;ppp={{ppp}}">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
                             {% else %}
-                                <li class="active"><a href='#'>{{n}}</a></li>
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" area-label="Previous">
+                                    <span aria-hidden="true"> &laquo;&laquo;</span>
+                                    <span class="sr-only">PreviousX2</span>
+                                </a>
+                                </li>
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
                             {% endif %}
-                        {% endfor %}
-                        {% if photos.has_next %}
-                            <li><a href="?page={{ photos.next_page_number }}&amp;ppp={{ppp}}&amp;date={{request.GET.date}}">&raquo;</a></li>
-                            <li><a href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}&amp;date={{request.GET.date}}"> &raquo;&raquo; </a></li>
-                        {% endif %}
-                    </ul>
-                </div>
+                            {% for n in page_range %}
+                                {% if photos.number != n %}
+                                    <li class="page-item"><a class="page-link" href="?page={{n}}&amp;ppp={{ppp}}">
+                                        <span aria-hidden="true">{{n}}</span>
+                                        <span class="sr-only">{{n}}</span></a> 
+                                    </li>
+                                {% elif photos.number == n %}
+                                    <li class="page-item active"><a class="page-link" href='#'>{{n}}
+                                        <span class="sr-only">{{n}}</span></a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href='#'>{{n}}
+                                        <!-- <span aria-hidden="true">{{n}}</span> -->
+                                        <span class="sr-only">{{n}}</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if photos.has_next %}
+                                <li class="page-item"><a class="page-link" href="?page={{ photos.next_page_number }}&amp;ppp={{ppp}}">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}" aria-label="Next"> 
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                    <span class="sr-only">NextX2</span>
+                                </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled"><a class="page-link" href="#">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                                </li>
+                                <li class="page-item disabled"><a class="page-link" href="#" aria-label="Next"> 
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                    <span class="sr-only">NextX2</span>
+                                </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div> 
             </div>
-            <div class='span2'>
-                <div class='pull-right'>
+            <div class='col-md-auto'>
                     <form class="form-horizontal"> 
-                        <div class="control-group">
-                            <label class="control-label" style='padding-left: 0px;' for='ppp'>{% trans "Per page" %}</label>
-                            <div class='controls'>
-                                <select class="input-mini" id='ppp' onChange="location.assign('/photos/user/?ppp='+this.options[selectedIndex].text+'&date='+{{request.GET.date}});">
-                                    <option {% if ppp == "24" %}selected{%endif%}>24</option>
-                                    <option {% if ppp == "48" %}selected{%endif%}>48</option>
-                                    <option {% if ppp == "96" %}selected{%endif%}>96</option>
-                                    <option {% if ppp == "192" %}selected{%endif%}>192</option>
+                        <div class="control-group" style="display: inline-flex; margin: 0px">
+                            <label class="control-label" for='ppp'><b style="font-size:9pt">{% trans "Photos per page:" %}</b></label>
+                            <div class='controls ml-2'>
+                                <select class="menu-field" id='ppp' onChange="location.assign('/photos/user/?ppp='+this.options[selectedIndex].text+'&date='+{{request.GET.date}});">
+                                    <option {% if ppp == "25" %}selected{%endif%}>25</option>
+                                    <option {% if ppp == "50" %}selected{%endif%}>50</option>
+                                    <option {% if ppp == "100" %}selected{%endif%}>100</option>
+                                    <option {% if ppp == "500" %}selected{%endif%}>500</option>
                                     <!--<option {% if ppp == "all" %}selected{%endif%}>All</option>-->
                                 </select>
                             </div>
                         </div>
                     </form>
-                </div>
             </div>
         </div>
-    {% endif %}
-    <br/>
-    <div class='row-fluid'>
+    
+   
+    
     {% if checkbox %}
         <form method='post' id="downloadORbatchedit" name="downloadORbatchedit" onSubmit="return ActionOnSubmit();">
     {% endif %}
-            <div class='row-fluid'>
-                {% for photo in photos %}
-                    {% include "photos/photo_tile_for_userPhotos.html" %}
-                {% endfor %}
+    <div class="row justify-content-between mr-5">
+        {% if checkbox %}
+
+            <div class="col-md-auto" id="select-all" style="display: inline;">
+                <b style="vertical-align: 2.2px; font-size: 9pt; color: #555;">Select All: </b>
+                <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);" style="margin-left:-100px">
             </div>
-    {% if checkbox %}
-            {% trans "Select All" %} <input type="checkbox" name="selector" value="Off" onclick="selectAll(event);">
-            <br/>
-            <div style="padding-bottom:5px;"></div>
-            
-            <div class="span3" style="width:300px; padding-bottom:10px;">
-            <select name="format" >
-                <option value="csv">{% trans "CSV file and images." %}</option>
-                <option value="kmz">{% trans "KMZ: KML and images." %}</option>
-                <!--<option value="shp">ESRI Shapefile/DBF.</option>-->
-            </select>
-            <br/>
-            <select name="img" >
-                <option value="big">{% trans "Original images." %}</option>
-                <option value="small">{% trans "Downsized images." %}</option>
-            </select>
-            <br/>
-            <input class='btn' type="submit" value="{% trans 'Download' %}" onClick="document.pressed=this.value">
+
+            <div class="row mx-2">
+                <select name="format" class="col-md-auto menu-field m-1">
+                    <option value="option1" disabled>{% trans " Image Format." %}</option>
+                    <option value="csv">{% trans "CSV file and images." %}</option>
+                    <option value="kmz">{% trans "KML: KML and images." %}</option>
+                </select>
+
+                <select name="img" class="col-md-auto menu-field m-1">
+                    <option value="option1" disabled>{% trans " Image Size." %}</option>
+                    <option value="big">{% trans "Original images." %}</option>
+                    <option value="small">{% trans "Downsized images." %}</option>
+                </select>
+
+                <button type="submit" class='col-md-auto btn btn-primary menu-field m-1' value="{% trans 'Download' %}">{% trans 'Download' %}</button>
             </div>
-            
-            <input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos'>
-            
-            <div class="span4" id="batchedit-fade">
-                {% csrf_token %}
-                <!--<strong style="padding-bottom:5px;">Batch Edit Selected Photos:</strong><br/>-->
-                <table>{{form.as_table|safe}}</table>
-                <input class='btn btn-info' type="submit" value="{% trans 'Submit Batch Edits' %}" onClick="document.pressed=this.value">
-            </div>
-        </form>
+
+        </div>
+        <input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos' style="width:initial; font-size: small">
+
+        <div id="batchedit-fade">
+            {% csrf_token %}
+            <table>{{form.as_table|safe}}</table>
+            <input class='btn' type="submit" value="batchedit" formaction="/photos/batchedit/?next={{request.get_full_path}}">
+        </div>
+
+        <hr/>
+
+        <div class="container-fluid">
+            {% for photo in photos %}
+                {% include "photos/photo_tile.html" %}
+            {% endfor %}
+        </div>
+
+
+    </form>
     {% endif %}
-    </div>
-{% endif %}
+</div>
+
 {% if dates %}
     {% if 'sort' in request.get_full_path %}
 
@@ -151,7 +236,7 @@
 <p>{% trans "You don't seem to have any photos yet." %}</p>
 <p><a href='{% url "upload" %}'>{% blocktrans %}Upload</a> some photos, and they will show up on this page.{% endblocktrans %}</p>
 {% endif %}
-
+</nav>
 <script>
 function ActionOnSubmit()
     {
