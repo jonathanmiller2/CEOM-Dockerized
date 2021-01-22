@@ -3,15 +3,15 @@
 {% load thumbnail %}
 {% load i18n %}
 {% block head_extra %}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#id_date_min').datepicker().on('show',function(){
-                console.log('show');
-            });
-            $('#id_date_max').datepicker();
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#id_date_min').datepicker().on('show', function () {
+            console.log('show');
         });
-    </script>
-    {{block.super}}
+        $('#id_date_max').datepicker();
+    });
+</script>
+{{block.super}}
 {% endblock %}
 {% block sidebar_extra %}
 <nav class="card bg-light ml-5 mt-3 shadow-sm">
@@ -25,15 +25,15 @@
 <style>
     @media screen and (min-width:575px) and (max-width: 1250px) {
 
-        #title {
-            font-size: min(max(3.9vw, 10px),30px);
+        .title {
+            font-size: min(max(3.9vw, 10px), 30px);
         }
     }
 
     @media screen and (max-width:575px) {
 
-        #title {
-            font-size: min(max(3.8vw, 23px),30px);
+        .title {
+            font-size: min(max(3.8vw, 23px), 30px);
         }
     }
 
@@ -44,94 +44,121 @@
         padding-bottom: 0;
     }
 
+    .control-group {
+        display: inline-flex;
+    }
+
+    .font {
+        font-size: 9pt;
+        color: #555;
+    }
+
+    .title {
+        color: #0f4ba4
+    }
+
+    .selectAll {
+        display: inline;
+    }
+
+    .checkbox {
+        margin-left: -100px;
+    }
+
+    .batch {
+        width: initial;
+        font-size: small;
+    }
 </style>
 <nav>
-    <h2 class="legend" id="title" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
-    <div class="container-fluid" style="padding-left:0px;">
+    <h2 class="legend">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
+    <div class="container-fluid pl-0">
         <div class="row justify-content-between mr-5">
             <div class="col-md-auto">
-                <label><b style="font-size: 9pt">{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
+                <label><b class="font">{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
             </div>
             <div class='col-md-auto'>
                 <div class="pagination">
                     <nav aria-label="Page navigation">
                         <ul class="pagination pagination-sm">
                             {% if photos.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page=1&amp;ppp={{ppp}}" area-label="Previous">
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1&amp;ppp={{ppp}}" area-label="Previous">
                                     <span aria-hidden="true"> &laquo;&laquo;</span>
                                     <span class="sr-only">PreviousX2</span>
                                 </a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ photos.previous_page_number }}&amp;ppp={{ppp}}">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ photos.previous_page_number }}&amp;ppp={{ppp}}">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
                             {% else %}
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" area-label="Previous">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" area-label="Previous">
                                     <span aria-hidden="true"> &laquo;&laquo;</span>
                                     <span class="sr-only">PreviousX2</span>
                                 </a>
-                                </li>
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
+                            </li>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
                             {% endif %}
                             {% for n in page_range %}
-                                {% if photos.number != n %}
-                                    <li class="page-item"><a class="page-link" href="?page={{n}}&amp;ppp={{ppp}}">
-                                        <span aria-hidden="true">{{n}}</span>
-                                        <span class="sr-only">{{n}}</span></a> 
-                                    </li>
-                                {% elif photos.number == n %}
-                                    <li class="page-item active"><a class="page-link" href='#'>{{n}}
-                                        <span class="sr-only">{{n}}</span></a>
-                                    </li>
-                                {% else %}
-                                    <li class="page-item"><a class="page-link" href='#'>{{n}}
-                                        <!-- <span aria-hidden="true">{{n}}</span> -->
-                                        <span class="sr-only">{{n}}</span>
-                                    </a>
-                                </li>
-                                {% endif %}
+                            {% if photos.number != n %}
+                            <li class="page-item"><a class="page-link" href="?page={{n}}&amp;ppp={{ppp}}">
+                                    <span aria-hidden="true">{{n}}</span>
+                                    <span class="sr-only">{{n}}</span></a>
+                            </li>
+                            {% elif photos.number == n %}
+                            <li class="page-item active"><a class="page-link" href='#'>{{n}}
+                                    <span class="sr-only">{{n}}</span></a>
+                            </li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href='#'>{{n}}
+                                    <!-- <span aria-hidden="true">{{n}}</span> -->
+                                    <span class="sr-only">{{n}}</span>
+                                </a>
+                            </li>
+                            {% endif %}
                             {% endfor %}
                             {% if photos.has_next %}
-                                <li class="page-item"><a class="page-link" href="?page={{ photos.next_page_number }}&amp;ppp={{ppp}}">
+                            <li class="page-item"><a class="page-link"
+                                    href="?page={{ photos.next_page_number }}&amp;ppp={{ppp}}">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}" aria-label="Next"> 
+                            </li>
+                            <li class="page-item"><a class="page-link"
+                                    href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;&raquo;</span>
                                     <span class="sr-only">NextX2</span>
                                 </a>
-                                </li>
+                            </li>
                             {% else %}
-                                <li class="page-item disabled"><a class="page-link" href="#">
+                            <li class="page-item disabled"><a class="page-link" href="#">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
-                                </li>
-                                <li class="page-item disabled"><a class="page-link" href="#" aria-label="Next"> 
+                            </li>
+                            <li class="page-item disabled"><a class="page-link" href="#" aria-label="Next">
                                     <span aria-hidden="true">&raquo;&raquo;</span>
                                     <span class="sr-only">NextX2</span>
                                 </a>
-                                </li>
+                            </li>
                             {% endif %}
                         </ul>
                     </nav>
-                </div> 
+                </div>
             </div>
             <div class='col-md-auto'>
-                <form class="form-horizontal"> 
-                    <div class="control-group" style="display: inline-flex; margin: 0px">
-                        <label class="control-label" for='ppp'><b style="font-size:9pt">{% trans "Photos per page:" %}</b></label>
+                <form class="form-horizontal">
+                    <div class="control-group">
+                        <label class="control-label" for='ppp'><b class="font">{% trans "Photos per page:" %}</b></label>
                         <div class='controls ml-2'>
                             <select class="menu-field" id='ppp' onChange="location.assign('/photos/browse/?ppp='+this.options[selectedIndex].text);">
                                 <option {% if ppp == "25" %}selected{%endif%}>25</option>
@@ -144,17 +171,16 @@
                 </form>
             </div>
         </div>
-        
 
         {% if checkbox %}
         <form method='post' name="download" action="/photos/download/">
-        {% endif %}
+            {% endif %}
             <div class="row justify-content-between mr-5">
-            {% if checkbox %}
+                {% if checkbox %}
 
-                <div class="col-md-auto" id="select-all" style="display: inline;">
-                    <b style="vertical-align: 2.2px; font-size: 9pt; color: #555;">Select All: </b>
-                    <input type="checkbox" name="selector" value="Off"  onclick="selectAll(event);" style="margin-left:-100px">
+                <div class="col-md-auto selectAll">
+                    <b class="font" style="vertical-align: 2.2px;">Select All: </b>
+                    <input type="checkbox" name="selector" value="Off" onclick="selectAll(event);" class="checkbox">
                 </div>
 
                 <div class="row mx-2">
@@ -174,7 +200,7 @@
                 </div>
 
             </div>
-            <input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos' style="width:initial; font-size: small">
+            <input type='button' class="btn btn-info batch" id='hideshow' value='Click Here to Batch Edit Selected Photos'>
 
             <div id="batchedit-fade">
                 {% csrf_token %}
@@ -186,7 +212,7 @@
 
             <div class="container-fluid">
                 {% for photo in photos %}
-                    {% include "photos/photo_tile.html" %}
+                {% include "photos/photo_tile.html" %}
                 {% endfor %}
             </div>
 
@@ -197,43 +223,42 @@
 </nav>
 
 <script>
-//**************************************************************
-//(BATCHEDITING STUFF)
-//***********************BEGIN**********************************
-//this code is for div showing on hideshow button click
-var countChecked = function() {
-  var n = $( "input:checked" ).length;
-  if(n>1) { 
-    if( $("#batchedit-fade").is(':hidden') ) {
-        $("#hideshow").show(200);
-    }
-  }
-  else { 
-    $("#hideshow").hide(200);
-    $("#batchedit-fade").hide(200);
-  }
-};
+    //**************************************************************
+    //(BATCHEDITING STUFF)
+    //***********************BEGIN**********************************
+    //this code is for div showing on hideshow button click
+    var countChecked = function () {
+        var n = $("input:checked").length;
+        if (n > 1) {
+            if ($("#batchedit-fade").is(':hidden')) {
+                $("#hideshow").show(200);
+            }
+        } else {
+            $("#hideshow").hide(200);
+            $("#batchedit-fade").hide(200);
+        }
+    };
 
-countChecked(); 
-$( "input[type=checkbox]" ).on( "click", countChecked );
-$('#batchedit-fade').hide(); //initially hide div on first page load
-$("#hideshow").hide();  //hide button on first page load
+    countChecked();
+    $("input[type=checkbox]").on("click", countChecked);
+    $('#batchedit-fade').hide(); //initially hide div on first page load
+    $("#hideshow").hide(); //hide button on first page load
 
-//below code is for hideshow button
-jQuery(document).ready(function(){
-    jQuery('#hideshow').live('click', function(event) {        
-         jQuery('#batchedit-fade').toggle('show');
-         $("#hideshow").hide();
+    //below code is for hideshow button
+    jQuery(document).ready(function () {
+        jQuery('#hideshow').live('click', function (event) {
+            jQuery('#batchedit-fade').toggle('show');
+            $("#hideshow").hide();
+        });
     });
-});
-//***************************END**********************************
-//****************************************************************
+    //***************************END**********************************
+    //****************************************************************
 </script>
 <script>
-$(document).ready(function(){
-    // $(":checkbox").wrap("<span style='background-color:green'>");//removed green background
-    $(":checkbox").wrap("<span style='background-color'>");
+    $(document).ready(function () {
+        // $(":checkbox").wrap("<span style='background-color:green'>");//removed green background
+        $(":checkbox").wrap("<span style='background-color'>");
     });
-    </script>
+</script>
 
 {% endblock %}
