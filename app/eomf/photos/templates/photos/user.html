@@ -27,8 +27,39 @@
         padding-bottom: 0;
     }
 
+    .img-thumbnail {
+        height: 150px;
+        width: 150px;
+    }
+
     .img-thumbnail:hover {
         border-color: #0088cc;
+    }
+
+    .control-group {
+        display: inline-flex;
+    }
+
+    .font {
+        font-size: 9pt;
+        color: #555;
+    }
+
+    .checkbox {
+        margin-left: -100px;
+    }
+
+    .batch {
+        width: initial;
+        font-size: small;
+    }
+
+    .selectAll {
+        display: inline;
+    }
+
+    .container {
+        display: inline-grid;
     }
 </style>
 <nav>
@@ -36,10 +67,10 @@
     {% if photos %}
     {% if paginator %}
     <h3>{{gallerytitle}}</h3>
-    <div class="container-fluid" style="padding-left:0px;">
+    <div class="container-fluid pl-0">
         <div class="row justify-content-between mr-5">
             <div class="col-md-auto">
-                <label><b style="font-size: 9pt">{{paginator.count}} {% trans "photos" %}</b></label>
+                <label><b class="font">{{paginator.count}} {% trans "photos" %}</b></label>
             </div>
             <div class='col-md-auto'>
                 <div class="pagination">
@@ -125,9 +156,9 @@
             </div>
             <div class='col-md-auto'>
                 <form class="form-horizontal">
-                    <div class="control-group" style="display: inline-flex; margin: 0px">
-                        <label class="control-label" for='ppp'><b
-                                style="font-size:9pt">{% trans "Photos per page:" %}</b></label>
+                    <div class="control-group">
+                        <label class="control-label" for='ppp'>
+                            <b class="font">{% trans "Photos per page:" %}</b></label>
                         <div class='controls ml-2'>
                             <select class="menu-field" id='ppp'
                                 onChange="location.assign('/photos/user/?ppp='+this.options[selectedIndex].text+'&date='+{{request.GET.date}});">
@@ -151,10 +182,9 @@
             <div class="row justify-content-between mr-5">
                 {% if checkbox %}
 
-                <div class="col-md-auto" id="select-all" style="display: inline;">
-                    <b style="vertical-align: 2.2px; font-size: 9pt; color: #555;">Select All: </b>
-                    <input type="checkbox" name="selector" value="Off" onclick="selectAll(event);"
-                        style="margin-left:-100px">
+                <div class="col-md-auto selectAll">
+                    <b class="font" style="vertical-align: 2.2px;">Select All: </b>
+                    <input type="checkbox" name="selector" value="Off" onclick="selectAll(event);" class="checkbox">
                 </div>
 
                 <div class="row mx-2">
@@ -175,8 +205,7 @@
                 </div>
 
             </div>
-            <input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos'
-                style="width:initial; font-size: small">
+            <input type='button' class="btn btn-info batch" id='hideshow' value='Click Here to Batch Edit Selected Photos'>
 
             <div id="batchedit-fade">
                 {% csrf_token %}
@@ -199,7 +228,7 @@
     </div>
     {% endif %}
     {% if dates %}
-    <div class="justify-content-start container" style="display:inline-grid;">
+    <div class="justify-content-start container">
         {% if 'sort' in request.get_full_path %}
 
         <a href='/photos/user/'>
@@ -222,14 +251,12 @@
                         {% thumbnail p.file "150x150" as im %}
                         <a class='thumbnail'
                             href='/photos/user/?date={% if 'sort' in request.get_full_path %}{{p.takendate|date:"Y-m-d"}}&sort=tk{% else %}{{p.uploaddate|date:"Y-m-d"}}{% endif %}'>
-                            <img class='img-thumbnail' src='{{im.url}}' alt='{{p.file.name}}'
-                                style="width:150px;height:150px;" /></a><br />
+                            <img class='img-thumbnail' src='{{im.url}}' alt='{{p.file.name}}' /></a><br />
                         {% endthumbnail %}
                         {% else %}
                         <a class='thumbnail'
                             href='/photos/user/?date={% if 'sort' in request.get_full_path %}{{p.takendate|date:"Y-m-d"}}&sort=tk{% else %}{{p.uploaddate|date:"Y-m-d"}}{% endif %}'>
-                            <img class='img-thumbnail' src='' alt='Image not available'
-                                style="width:150px;height:150px;" /></a><br />
+                            <img class='img-thumbnail' src='' alt='Image not available' /></a><br />
                         {% endif %}
                         {% if 'sort' in request.GET_full_path %}{{p.takendate}}{% else %}{{p.uploaddate}} {% endif %}
                     </td>
