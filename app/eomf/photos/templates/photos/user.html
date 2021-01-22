@@ -27,14 +27,20 @@
         padding-bottom: 0;
     }
 
+    .img-thumbnail:hover {
+        border-color: #0088cc;
+    }
+
 </style>
 <nav>
         <!-- <div class='row-fluid'> -->
+        {% if photos %}
+            {% if paginator %}
             <h3>{{gallerytitle}}</h3>
             <div class="container-fluid" style="padding-left:0px;">
                 <div class="row justify-content-between mr-5">
                     <div class="col-md-auto">
-                        <label><b style="font-size: 9pt">{% trans "Search Results" %}:</b> <span class="badge badge-pill badge-secondary">{{paginator.count}}</span></label>
+                        <label><b style="font-size: 9pt">{{paginator.count}} {% trans "photos" %}</b></label>
                     </div>
             <div class='col-md-auto'>
                 <div class="pagination">
@@ -131,7 +137,7 @@
         </div>
     
    
-    
+    {% endif %}    
     {% if checkbox %}
         <form method='post' id="downloadORbatchedit" name="downloadORbatchedit" onSubmit="return ActionOnSubmit();">
     {% endif %}
@@ -180,27 +186,31 @@
     </form>
     {% endif %}
 </div>
-
+    {% endif %}
 {% if dates %}
+    <div class="justify-content-start pull-left">
     {% if 'sort' in request.get_full_path %}
 
         <a href='/photos/user/'><h4>{% trans "By date of Photo upload" %} </a> / {% trans "By date of Photo Taken" %}</h4>
     
     {% else %}
     
-        <h4>{% trans "By date of Photo upload" %} / <a href='/photos/user/?sort=tk'>{% trans "By date of Photo Taken" %}</h4></a>
+        <h4 class="pull-left">{% trans "By date of Photo upload" %} / <a href='/photos/user/?sort=tk'>{% trans "By date of Photo Taken" %}</h4></a>
     {% endif %}
-    <table class='gallery'>
+    
+    <table class='gallery col'>
         {% for row in dates|tablecols:6 %}
         <tr>
             {% for p in row %}
             <td>
             {% if p.file|photoexists %}
                 {% thumbnail p.file "150x150" as im %}
-                    <a class='thumbnail' href='/photos/user/?date={% if 'sort' in request.get_full_path %}{{p.takendate|date:"Y-m-d"}}&sort=tk{% else %}{{p.uploaddate|date:"Y-m-d"}}{% endif %}'><img class='gallery-thumb' src='{{im.url}}' alt='{{p.file.name}}' style="width:150px;height:150px;"/></a><br/>
+                    <a class='thumbnail' href='/photos/user/?date={% if 'sort' in request.get_full_path %}{{p.takendate|date:"Y-m-d"}}&sort=tk{% else %}{{p.uploaddate|date:"Y-m-d"}}{% endif %}'>
+                        <img class='img-thumbnail' src='{{im.url}}' alt='{{p.file.name}}' style="width:150px;height:150px;"/></a><br/>
                 {% endthumbnail %}
             {% else %}
-                <a class='thumbnail' href='/photos/user/?date={% if 'sort' in request.get_full_path %}{{p.takendate|date:"Y-m-d"}}&sort=tk{% else %}{{p.uploaddate|date:"Y-m-d"}}{% endif %}'><img class='gallery-thumb' src='' alt='Image not available' style="width:150px;height:150px;" /></a><br/>
+                <a class='thumbnail' href='/photos/user/?date={% if 'sort' in request.get_full_path %}{{p.takendate|date:"Y-m-d"}}&sort=tk{% else %}{{p.uploaddate|date:"Y-m-d"}}{% endif %}'>
+                    <img class='img-thumbnail' src='' alt='Image not available' style="width:150px;height:150px;" /></a><br/>
             {% endif %}
                 {% if 'sort' in request.GET_full_path %}{{p.takendate}}{% else %}{{p.uploaddate}} {% endif %}
             </td>
@@ -210,6 +220,7 @@
         {% endfor %}
     </table>
     {% endif %}
+    </div>
     {% if galleries %}
     <h4>Galleries</h4>
     <table class='gallery'>
