@@ -25,15 +25,6 @@ from django.conf import settings
 
 
 def index(request):
-
-    send_mail(
-    'That’s your subject',
-    'That’s your message body',
-    None,
-    ['jonathanmiller2@hotmail.com'],
-    fail_silently=False,
-    )
-
     if request.user.is_authenticated:
         return HttpResponseRedirect('/accounts/profile/')
     else:

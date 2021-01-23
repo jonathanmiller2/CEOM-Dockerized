@@ -23,23 +23,27 @@ table td {
 	line-height: 13px;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+   -webkit-appearance: none;
+   margin: 0;
+}
+input[type="number"] {
+   -moz-appearance: textfield;
+}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
-	$("form").change(function(e){
-		console.log("this");
-	});
-	var l = olwidget_id_point.getLayersByName("Point");
-	l.onFeatureInsert = function(f){
-		console.log(f);
-	};
+	$('#id_takendate').datepicker();
 });
+
 function wkt(){};
 </script>
 {% endblock %}
 {% block content %}
 <div class="well">
-    <div class="grid" >
+    <div class="grid">
 		<h2 style="color: #dc143c;">{% trans "Edit Photo" %}</h2>
 		<div class="hr"></div>&nbsp;
 
@@ -63,7 +67,7 @@ function wkt(){};
 					<td>{% trans "Location" %}</td>
 					<td>{{form.point}}</td>
 					<td>{{form.point.errors}}</td>
-				<small><tr style="width:100%;"><td></td><td style=" top:-10px; cellpadding-top:none;" class="grp-help">({% trans "In Latitude and Longitude" %} {{form.lat.help_text}})</td></tr></small>
+				<small><tr style="width:100%;"><td></td><td style="top:-10px;" class="grp-help">({% trans "In Latitude and Longitude, " %} {{form.lat.help_text}})</td></tr></small>
 				<tr>
 					<td>{% trans "Latitude" %}</td>
 					<td>{{form.lat}} {% trans "Decimal degrees" %}.</td>

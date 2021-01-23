@@ -144,6 +144,8 @@ class Theme(models.Model):
         verbose_name_plural = _('Themes')
     def __str__(self):
         return str(_(self.name)) 
+
+        
 STATUS_CHOICES = (
     (0, _("Deleted")),
     (1, _("Public")),
