@@ -2,7 +2,7 @@
     .img-thumbnail:hover {
         border-color: #0088cc;
     }
-    #edit {
+    .tileButton {
         height:25px; 
         width:26%; 
         font-size:small; 
@@ -10,14 +10,7 @@
         align-items:center;
         justify-content: center;
     }
-    #remove {
-        height:25px; 
-        width:26%; 
-        font-size:small; 
-        display:inline-flex; 
-        align-items:center;
-        justify-content: center;
-    }
+    
     #modis {
         height:25px; 
         width:26%; 
@@ -26,6 +19,41 @@
         align-items:center;
         justify-content: center 
     }
+
+    .photo-tile {
+        position: relative;
+        height: 280px;
+    }
+
+    #tile-container {
+        position: absolute;
+        bottom: 42%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .portrait {
+        height: 160px;
+        width: 120px;
+        box-shadow: 0px 1px 3px #d7d7d7;
+    }
+
+    .landscape {
+        width: 160px;
+        height: 120px;
+        box-shadow: 0px 1px 3px #d7d7d7;
+    }
+
+    .noImage {
+        width: 150px;
+        height: 150px;
+        box-shadow: 0px 3px 3px #bbbbbb;
+    }
+
+    .description {
+        position: absolute;
+        bottom: 0;
+    }
 </style>
 
 {% load photos_tags %}
@@ -33,8 +61,8 @@
 {% load i18n %}
 
 {% load thumbnail %}
-<div class='photo-tile' style="position: relative; height: 280px">
-    <div class='row-fluid container' style="position: absolute; bottom: 42%; display: flex; justify-content: center;">
+<div class='photo-tile'>
+    <div class='row-fluid container' id="tile-container">
         <div class="row pull-left" style="padding-bottom: 2px;">
             <a href='/photos/view/{{photo.pk}}/' {% if '/photos/photos.html' in request.path %} target="_blank" {%endif%} class="thumbnail" >
 
@@ -42,26 +70,26 @@
                     {% thumbnail photo.file "150x150" as im %} 
                     
                     {% if im.height > im.width %}
-                        <img style="height: 160px; width: 120px; box-shadow: 0px 1px 3px #d7d7d7;" src='{{im.url}}' alt='{{photo.basename}}' class="img-thumbnail"/>
+                        <img src='{{im.url}}' alt='{{photo.basename}}' class="img-thumbnail portrait"/>
                     {% else %}
-                        <img style="width: 160px; height: 120px; box-shadow: 0px 1px 3px #d7d7d7;" src='{{im.url}}' alt='{{photo.basename}}' class="img-thumbnail"/>
+                        <img src='{{im.url}}' alt='{{photo.basename}}' class="img-thumbnail landscape"/>
                     {%endif%}
                     {% empty %}
                     {% trans "Image file missing" %}
                     {% endthumbnail %}
                 {% else %}
-                    <img src='' alt='{% trans "Image not available" %}' style="width:150px;height:150px; box-shadow: 0px 3px 3px #bbbbbb;"/>
+                    <img src='' alt='{% trans "Image not available" %}' class="noImage"/>
                 {% endif %}
             </a>
         </div>
         {% if checkbox %}
             <div class='row photo-checkbox justify-content-start'>
-                <input style="width:15px; margin-left: 15px;" type="checkbox" id="{{photo.pk}}" name="ids" value="{{photo.pk}}" onClick="check(event)"/>
+                <input style="width: 15px; margin-left: 15px;" type="checkbox" id="{{photo.pk}}" name="ids" value="{{photo.pk}}" onClick="check(event)"/>
             </div>
         {% endif %}
     </div>
     
-    <div class='row-fluid pull-left' style="position: absolute; bottom: 0;">
+    <div class='row-fluid pull-left description'>
         <div class>
             <ul class="list-unstyled">
                 <li>{{photo.takendate}}</li>
@@ -79,12 +107,12 @@
                         <a id="modis" class="btn btn-light btn-small btn-outline-dark btn3d" href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
                             <abbr title="{% trans 'View MODIS data for this photo. Click on this button and scroll down to the bottom of the page and to select appropriate dataset and year' %}">MODIS</abbr>
                         </a>
-                        <!--<div class="container" style="padding-left: 0px; padding-right:0px">-->
-                        <a id="edit" class='btn btn-light btn-outline-secondary btn-small' href="/photos/edit/{{photo.id}}">{% trans "Edit" %}</a>
-                        <a id="remove" class='btn btn-danger btn-small' onclick="return confirm('Are you sure, you want to delete?');" href="/photos/delete/{{photo.id}}/?next={{request.get_full_path|urlencode}}">{% trans "Delete" %}</a>
-                        <!-- </div> -->
+                     
+                        <a class='btn btn-light btn-outline-secondary btn-small tileButton' href="/photos/edit/{{photo.id}}">{% trans "Edit" %}</a>
+                        <a class='btn btn-danger btn-small tileButton' onclick="return confirm('Are you sure, you want to delete?');" href="/photos/delete/{{photo.id}}/?next={{request.get_full_path|urlencode}}">{% trans "Delete" %}</a>
+                        
                         {% else %}
-                            <a id="modis" style=" width:40px;" class="btn btn-light btn-small btn-outline-dark btn3d" href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
+                            <a id="modis" class="btn btn-light btn-small btn-outline-dark btn3d" href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
                                 <abbr title="{% trans 'View MODIS data for this photo. Click on this button and scroll down to the bottom of the page and to select appropriate dataset and year' %}">MODIS</abbr>
                             </a>
                         {% endif %}
