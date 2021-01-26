@@ -53,10 +53,6 @@
         box-shadow: 0px 3px 3px #bbbbbb;
     }
 
-    .photo-checkbox {
-        margin-left: 15px;
-    }
-
     .description {
         position: absolute;
         bottom: 0;
@@ -80,7 +76,7 @@
             </a>
         </div>
         {% if checkbox %}
-        <div class='row photo-checkbox justify-content-start'>
+        <div class='row photo-checkbox justify-content-start' style="margin-left: 15px;">
             <input style="width:15px; margin-left: 15px;" type="checkbox" id="{{photo.pk}}" name="ids" value="{{photo.pk}}" onClick="check(event)"/>
         </div>
         {% endif %}

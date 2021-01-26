@@ -57,14 +57,6 @@
         color: #0f4ba4
     }
 
-    .selectAll {
-        display: inline;
-    }
-
-    .checkbox {
-        margin-left: -100px;
-    }
-
     .batch {
         width: initial;
         font-size: small;
@@ -178,9 +170,9 @@
             <div class="row justify-content-between mr-5">
                 {% if checkbox %}
 
-                <div class="col-md-auto selectAll">
+                <div class="col-md-auto selectAll" style="display: inline;">
                     <b class="font" style="vertical-align: 2.2px;">Select All: </b>
-                    <input type="checkbox" name="selector" value="Off" onclick="selectAll(event);" class="checkbox">
+                    <input type="checkbox" name="selector" value="Off" onclick="selectAll(event);" style="margin-left: -100px;">
                 </div>
 
                 <div class="row mx-2">
