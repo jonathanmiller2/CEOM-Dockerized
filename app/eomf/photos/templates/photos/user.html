@@ -62,6 +62,7 @@
     <!-- <div class='row-fluid'> -->
     {% if photos %}
     {% if paginator %}
+    <!-- TODO "Check the font size, url's, references, restructure to get rid of groupings"-->
     <h3>{{gallerytitle}}</h3>
     <div class="container-fluid pl-0">
         <div class="row justify-content-between mr-5">
@@ -238,6 +239,7 @@
         {% endif %}
 
         <div class="row">
+            <!-- TODO "Come back to this part and take a look"-->
             {% for row in dates|tablecols:6 %}
             <table class='gallery col'>
                 <tr>

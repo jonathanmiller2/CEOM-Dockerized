@@ -151,55 +151,55 @@ def user_photos(request):
     if request.user.is_authenticated:
         base = Photo.objects.exclude(status=0)
 
-        if 'sort' in request.GET: #Sorts by Takendate
-            dates = base.distinct('takendate').filter(user=request.user).order_by('-takendate')
-        else:                     #Sorts by UploadDate
-            dates = base.distinct('uploaddate').filter(user=request.user).order_by('-uploaddate')           
+        # if 'sort' in request.GET: #Sorts by Takendate
+        #     dates = base.distinct('takendate').filter(user=request.user).order_by('-takendate')
+        # else:                     #Sorts by UploadDate
+        #     dates = base.distinct('uploaddate').filter(user=request.user).order_by('-uploaddate')           
         
-        data = {"dates": dates}
+        data = {}
 
-        if 'date' in request.GET:
-            if 'sort' in request.GET:
-                photos = base.filter(user=request.user).filter(takendate=request.GET['date']).order_by('id')
-                if len(photos)>0:
-                    if photos[0].takendate:
-                        data['gallerytitle'] = photos[0].takendate
-            else:
-                photos = base.filter(user=request.user).filter(uploaddate=request.GET['date']).order_by('id')
-                if len(photos)>0:
-                    if photos[0].uploaddate:
-                        data['gallerytitle'] = photos[0].uploaddate
-            
-            
-            
-            #Paginator Stuff
-            page = request.GET.get('page',1)
-            ppp = request.GET.get('ppp', 24)
-            ppp = min(int(ppp),192)
-            if page != "all" and ppp != "All":
-                paginator = Paginator(photos, int(ppp))
+        # if 'date' in request.GET:
+        if 'sort' in request.GET:
+            photos = base.filter(user=request.user).order_by('-takendate')
+            if len(photos)>0:
+                if photos[0].takendate:
+                    data['gallerytitle'] = photos[0].takendate
+        else:
+            photos = base.filter(user=request.user).order_by('-uploaddate')
+            if len(photos)>0:
+                if photos[0].uploaddate:
+                    data['gallerytitle'] = photos[0].uploaddate
+        
+        
+        
+        #Paginator Stuff
+        page = request.GET.get('page',1)
+        ppp = request.GET.get('ppp', 24)
+        ppp = min(int(ppp),192)
+        if page != "all" and ppp != "All":
+            paginator = Paginator(photos, int(ppp))
 
-                try:
-                    photos = paginator.page(page)
-                except PageNotAnInteger:
-                    # If page is not an integer, deliver first page.
-                    photos = paginator.page(int(page))
-                except EmptyPage:
-                    # If page is out of range (e.g. 9999), deliver last page of results.
-                    photos = paginator.page(paginator.num_pages)
+            try:
+                photos = paginator.page(page)
+            except PageNotAnInteger:
+                # If page is not an integer, deliver first page.
+                photos = paginator.page(int(page))
+            except EmptyPage:
+                # If page is out of range (e.g. 9999), deliver last page of results.
+                photos = paginator.page(paginator.num_pages)
 
-                page = int(page)
-                page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
-                
-                data['paginator'] = paginator
-                data['ppp']= ppp
-                data['page_range']= page_range
-
-            else:
-                paginator = None
-                page_range = list(range(10))
+            page = int(page)
+            page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
             
-            data['photos'] = photos
+            data['paginator'] = paginator
+            data['ppp']= ppp
+            data['page_range']= page_range
+
+        else:
+            paginator = None
+            page_range = list(range(10))
+        
+        data['photos'] = photos
         
         
         data['checkbox'] = True
