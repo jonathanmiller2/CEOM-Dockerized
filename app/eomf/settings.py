@@ -12,6 +12,7 @@ DEBUG = int(os.environ.get("DJANGO_DEBUG", default=0))
 #TODO: Remove eomf-dev1 if development environment changes off the VM I'm using right now
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
+
 ADMINS = [
     ('Jonathan', 'jonathan.g.miller@ou.edu'),
 ]
@@ -120,16 +121,6 @@ MIDDLEWARE = (
 
     'eomf.middleware.KMLMiddleware',
 )
-#MIDDLEWARE_CLASSES = (
-#   'django.middleware.common.CommonMiddleware',
-#   'django.contrib.sessions.middleware.SessionMiddleware',
-#   'django.middleware.csrf.CsrfViewMiddleware',
-#   'django.contrib.auth.middleware.AuthenticationMiddleware',
-#   'django.middleware.locale.LocaleMiddleware',
-#   'django.contrib.messages.middleware.MessageMiddleware',
-#   'eomf.pages.middleware.ContentpageFallbackMiddleware',
-#   'eomf.middleware.KMLMiddleware',
-#)
 
 ROOT_URLCONF = 'eomf.urls'
 WSGI_APPLICATION = 'eomf.wsgi.application'
