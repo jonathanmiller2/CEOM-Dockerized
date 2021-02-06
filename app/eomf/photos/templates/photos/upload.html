@@ -21,26 +21,17 @@
         <span>{% trans "Add Files..." %}</span>
     </button>
 
-    <button id="file-submit-button" type="submit" class="btn btn-primary">
+    <button id="file-submit-button" type="submit" class="btn btn-info">
         <span>{% trans "Start upload" %}</span>
     </button>
 
-    <button type="reset" class="btn btn-warning">
-        <i class="icon-ban-circle icon-white"></i>
+    <button id="file-reset-button" type="button" class="btn btn-warning">
         <span>{% trans "Cancel upload" %}</span>
-    </button>
-
-    <button type="button" class="btn btn-danger">
-        <span>{% trans "Delete" %}</span>
-    </button>
-
-    <button id="selectall1" type="button" class="btn btn-secondary">
-        <span>{% trans "Select All/None" %}</span>
     </button>
 
     <!-- The global progress bar -->
     <div class="progress">
-        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+        <div id="progress-bar" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
 
     <div id="file-list"></div>
@@ -89,30 +80,163 @@
         let fileSelectInput = $('#file-select-input');
         let fileSelectButton = $('#file-select-button');
         let fileSubmitButton = $('#file-submit-button');
+        let fileResetButton = $('#file-reset-button');
         let fileList = $('#file-list');
         let files = [];
+        let idIncrement = 0;
+
+        function IDSuccessfullyUploaded(givenID) {
+            let intID = parseInt(givenID);
+            let index = files.map(function(e) { return e.id; }).indexOf(intID);
+            files[index].uploaded = true;
+
+            $(`#upload-button-${intID}`).css( "display", "none" );
+            $(`#cancel-button-${intID}`).css( "display", "none" );
+            $(`#delete-button-${intID}`).css( "display", "inline" );
+        }
 
         fileSelectInput.change(function () {
-            let newFiles = [];
-
             for (let index = 0; index < fileSelectInput[0].files.length; index++) {
                 let file = fileSelectInput[0].files[index];
-                newFiles.push(file);
-                files.push(file);
-            }
+                idIncrement++;
+                info = {
+                    "id": idIncrement,
+                    "file": file,
+                    "uploaded": false
+                };
+                files.push(info);
 
-            newFiles.forEach(file => {
-                let fileElement = $(`<p>${file.name}</p>`);
-                fileElement.data('fileData', file);
-                fileList.append(fileElement);
+                let fileElement = $(`
+                    <div id="uploaded-photo-${info.id}" class="card bg-light">
+                        <div class="card-body row">
+                            <p class="card-text">${info.file.name}</p>
+                            <div class="progress col-3 m-0 p-0">
+                                <div id="progress-bar-${info.id}" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <button id="upload-button-${info.id}" type="button" class="btn btn-info">
+                                {% trans "Start upload" %}
+                            </button>
+                            <button id="cancel-button-${info.id}" type="button" class="btn btn-warning">
+                                {% trans "Cancel upload" %}
+                            </button>
+                            <button id="delete-button-${info.id}" type="button" class="btn btn-danger" style="display: none;">
+                                {% trans "Delete" %}
+                            </button>
+                        </div>
+                    </div>
+                `);
 
-                fileElement.click(function (event) {
-                    let fileElement = $(event.target);
-                    let indexToRemove = files.indexOf(fileElement.data('fileData'));
+                fileElement.find(`#cancel-button-${info.id}`).click(function (event) {
+
+                    let buttonName = $(event.target).attr('id');
+                    let ID = buttonName.split('-')[2];
+                    let fileElement = $(`#uploaded-photo-${ID}`);
+                    //Alternatively:
+                    //let fileElement = $(event.target).parent().parent();
+                    
+                    let indexToRemove = files.map(function(e) { return e.file; }).indexOf(fileElement.data('fileData'));
                     fileElement.remove();
                     files.splice(indexToRemove, 1);
                 });
-            });
+
+                fileElement.find(`#upload-button-${info.id}`).click(function (event) {
+
+                    let buttonName = $(event.target).attr('id');
+                    let ID = buttonName.split('-')[2];
+                    let fileElement = $(`#uploaded-photo-${ID}`);
+                    //Alternatively:
+                    //let fileElement = $(event.target).parent().parent();
+
+                    let index = files.map(function(e) { return e.file; }).indexOf(fileElement.data('fileData'));
+
+                    let formData = new FormData();
+                    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                    formData.append('file', files[index].file);
+
+                    $.ajax({
+                        xhr: function () {
+                            var xhr = new window.XMLHttpRequest();
+                        
+                            xhr.upload.addEventListener("progress", function (evt) {
+                                if (evt.lengthComputable) {
+                                    var percentComplete = (evt.loaded / evt.total) * 100;
+                                    $(`#progress-bar-${ID}`).attr('aria-valuenow', percentComplete).css('width', percentComplete+'%');
+                                    console.log(percentComplete);
+                                }
+                            }, false);
+                        
+                            xhr.addEventListener("progress", function (evt) {
+                                if (evt.lengthComputable) {
+                                    var percentComplete = (evt.loaded / evt.total) * 100;
+                                    $(`#progress-bar-${ID}`).attr('aria-valuenow', percentComplete).css('width', percentComplete+'%');
+                                    console.log(percentComplete);
+                                }
+                            }, false);
+                            return xhr;
+                        },
+                        url: './preload/',
+                        data: formData,
+                        type: 'POST',
+                        success: function () {
+                            IDSuccessfullyUploaded(ID);
+                        },
+                        cache: false,
+                        processData: false,
+                        contentType: false
+                    });
+                    
+                    files[index].uploaded = true;
+                });
+
+                fileElement.find(`#delete-button-${info.id}`).click(function (event) {
+                    let buttonName = $(event.target).attr('id');
+                    let ID = buttonName.split('-')[2];
+                    let fileElement = $(`#uploaded-photo-${ID}`);
+                    //Alternatively:
+                    //let fileElement = $(event.target).parent().parent();
+
+                    let index = files.map(function(e) { return e.file; }).indexOf(fileElement.data('fileData'));
+
+                    let formData = new FormData();
+                    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                    $.ajax({
+                        xhr: function () {
+                            var xhr = new window.XMLHttpRequest();
+                        
+                            xhr.upload.addEventListener("progress", function (evt) {
+                                if (evt.lengthComputable) {
+                                    var percentComplete = (evt.loaded / evt.total) * 100;
+                                    $(`#progress-bar-${ID}`).attr('aria-valuenow', percentComplete).css('width', percentComplete+'%');
+                                    console.log(percentComplete);
+                                }
+                            }, false);
+                        
+                            xhr.addEventListener("progress", function (evt) {
+                                if (evt.lengthComputable) {
+                                    var percentComplete = (evt.loaded / evt.total) * 100;
+                                    $(`#progress-bar-${ID}`).attr('aria-valuenow', percentComplete).css('width', percentComplete+'%');
+                                    console.log(percentComplete);
+                                }
+                            }, false);
+                            return xhr;
+                        },
+                        url: `./preload/delete/${files[index].file.name}`,
+                        type: 'POST',
+                        success: function () {
+                            let indexToRemove = files.map(function(e) { return e.file; }).indexOf(fileElement.data('fileData'));
+                            fileElement.remove();
+                            files.splice(indexToRemove, 1);
+                        },
+                        cache: false,
+                        processData: false,
+                        contentType: false
+                    });
+                });
+
+                fileElement.data('fileData', info.file);
+                fileList.append(fileElement);
+            }
         });
 
         fileSelectButton.click(function () {
@@ -123,21 +247,46 @@
             let formData = new FormData();
             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
-            files.forEach(file => {
-                formData.append('file', file);
+            let IDsToUpload = [];
+
+            files.forEach(i => {
+                if(!i.uploaded)
+                {
+                    IDsToUpload.push(i.id);
+                    formData.append('file', i.file);
+                }
             });
 
             console.log('Sending...');
 
             $.ajax({
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = (evt.loaded / evt.total) * 100;
+                            $('#progress-bar').attr('aria-valuenow', percentComplete).css('width', percentComplete+'%');
+                            console.log(percentComplete);
+                        }
+                    }, false);
+
+                    xhr.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = (evt.loaded / evt.total) * 100;
+                            $('#progress-bar').attr('aria-valuenow', percentComplete).css('width', percentComplete+'%');
+                            console.log(percentComplete);
+                        }
+                    }, false);
+                    return xhr;
+                },
                 url: './preload/',
                 data: formData,
                 type: 'POST',
-                success: function (data) {
-                    console.log('SUCCESS !!!');
-                },
-                error: function (data) {
-                    console.log('ERROR !!!');
+                success: function () {
+                    IDsToUpload.forEach(i => {
+                        IDSuccessfullyUploaded(i);
+                    })
                 },
                 cache: false,
                 processData: false,
@@ -145,7 +294,25 @@
             });
         });
 
+        fileResetButton.click(function() {
 
+            keptFiles = [];
+
+            files.forEach(i => {
+                if(!i.uploaded)
+                {
+                    let fileElement = $(`#uploaded-photo-${i.id}`);
+                    let indexToRemove = files.map(function(e) { return e.file; }).indexOf(fileElement.data('fileData'));
+                    fileElement.remove();
+                }
+                else
+                {
+                    keptFiles.push(i);
+                }
+            });
+
+            files = keptFiles;
+        });
 
 
 
