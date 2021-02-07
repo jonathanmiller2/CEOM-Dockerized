@@ -62,19 +62,17 @@
     <!-- <div class='row-fluid'> -->
     {% if photos %}
     {% if paginator %}
-    <!-- TODO "Check the font size, url's, references, restructure to get rid of groupings"-->
     {% if 'sort' in request.get_full_path %}
-        <a href='/photos/user/'>
-            <h4>{% trans "By date of Photo upload" %}
-        </a> / {% trans "By date of Photo Taken" %}</h4>
-
-        {% else %}
-        <div class="row pb-2">
+        <div class="row">
+            <a href='/photos/user/'> <h4 class="pull-left col-md-auto">{% trans "By date of Photo upload" %}</a> / {% trans "By date of Photo Taken" %}</h4>
+        </div>
+    {% else %}
+        <div class="row">
             <h4 class="pull-left col-md-auto">{% trans "By date of Photo upload" %} / <a href='/photos/user/?sort=tk'>{% trans "By date of Photo Taken" %}</h4></a>
         </div>
-        {% endif %}
+    {% endif %}
         
-    <div class="container-fluid pl-0">
+    <div class="container-fluid pt-2 pl-0">
         <div class="row justify-content-between mr-5">
             <div class="col-md-auto">
                 <label><b class="font">{{paginator.count}} {% trans "photos" %}</b></label>
@@ -234,50 +232,8 @@
         {% endif %}
     </div>
     {% endif %}
-    {% if dates %}
-    <div class="justify-content-start container">
-        {% if 'sort' in request.get_full_path %}
 
-        <a href='/photos/user/'>
-            <h4>{% trans "By date of Photo upload" %}
-        </a> / {% trans "By date of Photo Taken" %}</h4>
-
-        {% else %}
-
-        <h4 class="pull-left">{% trans "By date of Photo upload" %} / <a
-                href='/photos/user/?sort=tk'>{% trans "By date of Photo Taken" %}</h4></a>
-        {% endif %}
-
-        <div class="row">
-            <!-- TODO "Come back to this part and take a look"-->
-            {% for row in dates|tablecols:6 %}
-            <table class='gallery col'>
-                <tr>
-                    {% for p in row %}
-                    <td>
-                        {% if p.file|photoexists %}
-                        {% thumbnail p.file "150x150" as im %}
-                        <a class='thumbnail'
-                            href='/photos/user/?date={% if 'sort' in request.get_full_path %}{{p.takendate|date:"Y-m-d"}}&sort=tk{% else %}{{p.uploaddate|date:"Y-m-d"}}{% endif %}'>
-                            <img class='img-thumbnail' src='{{im.url}}' alt='{{p.file.name}}' /></a><br />
-                        {% endthumbnail %}
-                        {% else %}
-                        <a class='thumbnail'
-                            href='/photos/user/?date={% if 'sort' in request.get_full_path %}{{p.takendate|date:"Y-m-d"}}&sort=tk{% else %}{{p.uploaddate|date:"Y-m-d"}}{% endif %}'>
-                            <img class='img-thumbnail' src='' alt='Image not available' /></a><br />
-                        {% endif %}
-                        {% if 'sort' in request.GET_full_path %}{{p.takendate}}{% else %}{{p.uploaddate}} {% endif %}
-                    </td>
-                    {% endfor %}
-
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-        {% endif %}
-    </div>
-
-    {% if not photos and not dates %}
+    {% if not photos %}
     <p>{% trans "You don't seem to have any photos yet." %}</p>
     <p><a href='{% url "upload" %}'>{% blocktrans %}Upload</a> some photos, and they will show up on this
         page.{% endblocktrans %}</p>
