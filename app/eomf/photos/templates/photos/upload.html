@@ -7,15 +7,18 @@
 {% if request.user.is_authenticated %}
 <h4>{% trans "Upload" %}</h4>
 
-<div>
+<div class="mr-5">
     <ul>
-        <li>{% trans "You can select multiple files, drag&amp;drop files into the window with Firefox, Safari, Chrome" %}</li>
+        <li>{% trans "You can select multiple files using the Add Files button, or drag &amp; drop files into the window with Firefox, Safari, Chrome" %}</li>
+        <li>{% trans "Please upload images in <strong>JPEG, PNG, or GIF</strong> format." %}</li>
+        <li>{% trans "Total upload limit is set at 650MB, but it is recommended you do not upload files bigger than <strong>25MB</strong>." %}</li>
+        <li>{% trans "If you are having trouble uploading big files (over 25M) select multiple smaller files in the file browse window." %}</li>
         <li><span style="color:red"><big>{% trans "Don't forget to click"%}<b> {%trans "'Save Uploaded Images'"%} </b> {%trans "after uploading all the images" %}</big></span></li>
-        <li>{% trans "The default setting for photos is public, if you want to change it to private, then check the 'private box'"%}
-            <input id="checkbox2" type="checkbox" class="toggle"></li>
     </ul>
 
-    <input id="file-select-input" type="file" name="files[]" style="display: none;" multiple />
+    <hr />
+
+    <input id="file-select-input" type="file" name="files[]" style="display: none;" accept="image/gif, image/jpeg, image/png" multiple />
 
     <button id="file-select-button" type="button" class="btn btn-success">
         <span>{% trans "Add Files..." %}</span>
@@ -29,7 +32,6 @@
         <span>{% trans "Cancel upload" %}</span>
     </button>
 
-    <!-- The global progress bar -->
     <div class="progress">
         <div id="big-progress-bar" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
@@ -39,36 +41,11 @@
     <form enctype="multipart/form-data" action="." method="POST">
         {% csrf_token %}
         {% trans "The default setting for photos is public, do you want to change it to private?" %}
-        <input id="checkbox1" type='checkbox' class="toggle" name='private' value='Yes'>
-        <input type="hidden" name="subupload" value="1">
-        <input id="submithide" type="submit" class="btn btn-primary" value="Save Uploaded Images">
+        <input type='checkbox' class="" name='private' value='Yes'>
+        <input type="submit" class="btn btn-primary" value="Save Uploaded Images">
     </form>
-</div>
-<hr />
 
-<div>
-    <h3>{% trans "Notes" %}</h3>
-    <ul>
-        <li>{% trans "Please upload images in <strong>JPEG, PNG, or GIF</strong> format." %}</li>
-        <li>{% trans "Total upload limit is set at 650MB, but it is recommended you do not upload files bigger than <strong>25MB</strong>." %}</li>
-        <li>{% trans "If you are having trouble uploading big files (over 25M) select multiple smaller files in the file browse window." %}</li>
-        <li>{% trans "You can <strong>drag &amp; drop</strong> files from your desktop on this webpage with Google Chrome, Mozilla Firefox and Apple Safari." %}</li>
-    </ul>
-</div>
-
-<!-- gallery-modal is the modal dialog used for the image gallery -->
-<div id="gallery-modal" class="modal hide fade">
-    <div class="modal-header">
-        <a href="#" class="close">&times;</a>
-        <h3 class="title"></h3>
-    </div>
-    <div class="modal-body"></div>
-    <div class="modal-footer">
-        <a class="btn primary next">{% trans "Next" %}</a>
-        <a class="btn info prev">{% trans "Previous" %}</a>
-        <a class="btn success download" target="_blank">{% trans "Download" %}</a>
-    </div>
-</div>
+    <hr />
 </div>
 
 {% else %}
@@ -85,6 +62,22 @@
         let fileList = $('#file-list');
         let files = [];
         let idIncrement = 0;
+
+        //Promise wrapper for FileReader so that thumbnail loads can be awaited on
+        function readUploadedImage(givenFile) {
+            let reader = new FileReader();
+
+            return new Promise((resolve, reject) => {
+                reader.onerror = function (e) {
+                    reader.abort();
+                    reject(new DOMException("Problem parsing input file."));
+                }
+                reader.onload = function (e) {
+                    resolve(e.target.result);
+                }
+                reader.readAsDataURL(info.file);
+            });
+        }
 
         function upload(givenFile) {
             let formData = new FormData();
@@ -128,7 +121,7 @@
             });
         }
 
-        function newFiles(givenFiles) {
+        async function newFiles(givenFiles) {
             $(`#big-progress-bar`).attr('aria-valuenow', 0).css('width', 0 + '%');
 
             for (let index = 0; index < givenFiles.length; index++) {
@@ -143,6 +136,7 @@
                 let fileElement = $(`
                     <div id="uploaded-photo-${info.id}" class="card bg-light">
                         <div class="card-body row">
+                            <img id="image-thumbnail-${info.id}" class="img-thumbnail col-2" src="#" />
                             <p class="card-text">${info.file.name}</p>
                             <div class="progress col-3 m-0 p-0">
                                 <div id="progress-bar-${info.id}" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
@@ -159,6 +153,9 @@
                         </div>
                     </div>
                 `);
+
+                let thumb = await readUploadedImage(info.file);
+                fileElement.find(`#image-thumbnail-${info.id}`).attr('src', thumb);
 
                 fileElement.find(`#cancel-button-${info.id}`).click(function (event) {
 
@@ -250,14 +247,14 @@
             e.preventDefault();
             e.stopPropagation();
         });
-        $("#body").on("drop", function (e) {
+        $("#body").on("drop", async function (e) {
             e.preventDefault();
             e.stopPropagation();
-            newFiles(e.originalEvent.dataTransfer.files);
+            await newFiles(e.originalEvent.dataTransfer.files);
         });
 
-        fileSelectInput.change(function () {
-            newFiles(fileSelectInput[0].files);
+        fileSelectInput.change(async function () {
+            await newFiles(fileSelectInput[0].files);
             fileSelectInput.val("");
         });
 
@@ -303,22 +300,6 @@
             files = keptFiles;
         });
 
-
-
-        $("#checkbox1").change(function () {
-            if ($("#checkbox2").is(":checked")) {
-                $("#checkbox2").attr('checked', false);
-            } else {
-                $("#checkbox2").attr('checked', true);
-            }
-        });
-        $("#checkbox2").change(function () {
-            if ($("#checkbox1").is(":checked")) {
-                $("#checkbox1").attr('checked', false);
-            } else {
-                $("#checkbox1").attr('checked', true);
-            }
-        });
     });
 </script>
 {% endblock %}
