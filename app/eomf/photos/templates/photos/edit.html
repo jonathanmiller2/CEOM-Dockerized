@@ -14,42 +14,40 @@ table td {
      border-top: none; 
      width:100px;
  }
-.olLayerGooglePoweredBy.olLayerGoogleV3.gmnoprint {
-visibility:none;
-display: none;
-} 
+
 .grp-help {
-max-width: 758px;
-padding: 5px 0 0;
-color: #9a9a9a;
-font-size: 11px !important;
-line-height: 13px;
-white-space: normal !important;
+	max-width: 758px;
+	padding: 5px 0 0;
+	color: #9a9a9a;
+	font-size: 11px;
+	line-height: 13px;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+   -webkit-appearance: none;
+   margin: 0;
+}
+input[type="number"] {
+   -moz-appearance: textfield;
+}
+
 </style>
-<link href="/static/css/datepicker.css" rel="stylesheet">
-<script type="text/javascript" src="/static/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-	$("form").change(function(e){
-		console.log("this");
-	});
-	var l = olwidget_id_point.getLayersByName("Point");
-	l.onFeatureInsert = function(f){
-		console.log(f);
-	};
-    $('#id_takendate').datepicker();
+	$('#id_takendate').datepicker();
 });
+
 function wkt(){};
 </script>
 {% endblock %}
 {% block content %}
 <div class="well">
-    <div class="grid" >
+    <div class="grid">
 		<h2 style="color: #dc143c;">{% trans "Edit Photo" %}</h2>
 		<div class="hr"></div>&nbsp;
 
-		<form action="." method="post">{% csrf_token %}
+		<form method="post">{% csrf_token %}
 			<table class='table' style="max-width:700px;">
 				<tr>
 					<td>{% trans "Photo" %}</td>
@@ -69,7 +67,7 @@ function wkt(){};
 					<td>{% trans "Location" %}</td>
 					<td>{{form.point}}</td>
 					<td>{{form.point.errors}}</td>
-				<small><tr style="width:100%;"><td></td><td style=" top:-10px; cellpadding-top:none;" class="grp-help">({% trans "In Latitude and Longitude" %} {{form.lat.help_text}})</td></tr></small>
+				<small><tr style="width:100%;"><td></td><td style="top:-10px;" class="grp-help">({% trans "In Latitude and Longitude, " %} {{form.lat.help_text}})</td></tr></small>
 				<tr>
 					<td>{% trans "Latitude" %}</td>
 					<td>{{form.lat}} {% trans "Decimal degrees" %}.</td>
@@ -111,26 +109,14 @@ function wkt(){};
 					<td>{{form.notes}}</td>
 					<td>{{form.notes.errors}}</td>
 				</tr>
-				<tr>
-					<td colspan="2" align="right">
-					{% if 'ref' in request.GET %}
-					<input class='btn btn-info' type="submit" name="Save_and_Goto_Prev_Photo" value="{% trans 'Save & go Previous' %}"/>
-					{% endif %}
-					<input class='btn btn-primary' type="submit" name="save" value="{% trans 'Save' %}"/>
-					{% if 'ref' in request.GET %}
-					<input class='btn btn-info' type="submit" name="Save_and_Goto_Next_Photo" value="{% trans 'Save & go next' %}"/>
-					{% endif %}
-					</td>
-				</tr>
-				<!--<tr>
-					<td>
-					<input class='btn btn-danger' style ="margin-bottom:5px;" onclick="return confirm('Are you sure, you want to delete?');" type="submit" name="del" value="Delete"/>
-					</td>
-				</tr>-->
-				<tr>
-					<td colspan="2" align="left">
-					</td></tr>
 			</table>
+			{% if 'ref' in request.GET %}
+				<button class='btn btn-info mx-2' type="submit" name="Save_and_Goto_Prev_Photo">{% trans 'Save & Go To Previous Photo' %}</button>
+			{% endif %}
+				<button class='btn btn-primary mx-2' type="submit" name="save">{% trans 'Save' %}</button>
+			{% if 'ref' in request.GET %}
+				<button class='btn btn-info mx-2' type="submit" name="Save_and_Goto_Next_Photo">{% trans 'Save & Go To Next Photo' %}</button>
+			{% endif %}
 		</form>
 	</div>
 </div>
