@@ -30,7 +30,9 @@ services:
     volumes:
       - ./app:/code
     expose:
-      - 8000            
+      - 8000
+      - 587
+      - 25
     env_file:
       - ./.env
     depends_on:
@@ -66,7 +68,10 @@ services:
       - .:/code
 
     ports:
+      - 25:25
       - 80:80
+      - 587:587
+
     depends_on:
       - web
 

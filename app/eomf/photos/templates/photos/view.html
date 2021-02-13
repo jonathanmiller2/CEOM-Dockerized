@@ -24,8 +24,8 @@
         <dt>{% trans "Filename" %}</dt><dd>{{photo.basename}}</dd>
         <dt>{% trans "Landcover" %}</dt><dd>{% if photo.category %}{% trans photo.category.name %} {% else %} {%trans "Not set" %}{% endif %}</dd>
         <dt>{% trans "Field Notes" %}</dt><dd>{% if photo.notes %}{{photo.notes}} {% else %} {% trans "No notes" %} {% endif %}</dd>
-        {% if photo.user = request.user or request.user.is_admin %}
-        <dt>{% trans "Exif" %}</dt><dd><a target="_blank" href="/photos/exif/{{photo.pk}}">EXIF</a><dd>
+        {% if photo.user == request.user or request.user.is_admin %}
+        <dt>{% trans "Exif" %}</dt><dd><a target="_blank" href="/photos/exif/{{photo.pk}}/">EXIF</a><dd>
         {% endif %}
         <!-- <ul class="unstyled">
             <li>{{photo.takendate}}</li>

@@ -9,6 +9,7 @@ from django.forms.widgets import SelectDateWidget, Select, TextInput
 from django.utils.translation import ugettext_lazy as _
 
 from eomf.photos.models import DIR_CARD_CHOICES
+from eomf.photos.models import STATUS_CHOICES
 
 category_qs = Category.objects.order_by("order").all()
 users = Photo.objects.values('user').distinct()
@@ -131,21 +132,18 @@ class WorksetForm(forms.ModelForm):
 
 
 class PhotoForm(forms.ModelForm):
-    lon = forms.FloatField(required=False, help_text="use +/- to designate east or west hemisphere")
-    lat = forms.FloatField(required=False, help_text="use +/- to designate east or west hemisphere")
-
-    def __init__(self, *args, **kwargs):
-        super(PhotoForm, self).__init__(*args, **kwargs)
-
-        # Set the form fields based on the model object
-        if 'instance' in kwargs:
-            instance = kwargs['instance']
-            self.initial['lat'] = instance.lat
-            self.initial['lon'] = instance.lon
-
-            #WTF - form.instance gets padded with spaces and breaks select
-            if instance.dir_card:
-               self.initial['dir_card'] = self.initial['dir_card'].strip()
+    lon = forms.FloatField(required=False, help_text="use +/- to designate east or west hemisphere", widget=forms.NumberInput(attrs={'class':'form-control form-control-sm'}))
+    lat = forms.FloatField(required=False, help_text="use +/- to designate east or west hemisphere", widget=forms.NumberInput(attrs={'class':'form-control form-control-sm'}))
+    alt = forms.FloatField(required=False, widget=forms.NumberInput(attrs={'class':'form-control form-control-sm'}))
+    takendate = forms.DateField(
+        initial=None, required=False,
+        widget=forms.DateInput(format='%d/%m/%Y', attrs={'placeholder':'mm/dd/yyyy', 'class':'form-control form-control-sm'}),        
+        input_formats=('%m/%d/%Y', '%d/%m/%Y', '%d-%m-%Y', '%Y-%m-%d')
+    )
+    dir_card = forms.ChoiceField(required=False, choices=DIR_CARD_CHOICES, widget=forms.Select(attrs={'class':'form-control form-control-sm'}))
+    status = forms.ChoiceField(required=False, choices=STATUS_CHOICES, widget=forms.Select(attrs={'class':'form-control form-control-sm'}))
+    category = forms.ModelChoiceField(required=False, queryset=Category.objects.all(), widget=forms.Select(attrs={'class':'form-control form-control-sm'}))
+    notes = forms.CharField(required=False, widget=forms.Textarea(attrs={'class':'form-control form-control-sm'}))
 
 
     def save_off(self, commit=True):
@@ -163,4 +161,4 @@ class PhotoForm(forms.ModelForm):
     class Meta:
         model = Photo
         options = {'layers': ['google.hybrid'], 'map_div_style': {'width': '400px', 'height': '300px'}}
-        fields = ("point", "alt", "takendate", "dir_card", "category", "notes", "status")
+        fields = ("point",)
