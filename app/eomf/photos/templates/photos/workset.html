@@ -2,7 +2,7 @@
 {% load photos_tags %}
 {% load thumbnail %}
 {% load i18n %}
-{% block title %}{% trans "EOMF user photos" %} {% endblock %}
+{% block title %}{% trans "EOMF working photos" %} {% endblock %}
 
 {% block content %}
 <style>
@@ -60,7 +60,10 @@
 </style>
 <nav>
     <!-- <div class='row-fluid'> -->
-    {% if photos %}
+        <div class="row">
+            <h4 class="pull-left col-md-auto">{% trans "Working Photos" %}</h4></a>
+        </div>
+    <!-- {% if photos %} -->
     {% if paginator %}
         <div class="row">
             <h4 class="pull-left col-md-auto">{% trans "By date of Photo upload" %} / <a href='/photos/user/?sort=tk'>{% trans "By date of Photo Taken" %}</h4></a>
@@ -223,7 +226,7 @@
         </form>
         {% endif %}
     </div>
-    {% endif %}
+    <!-- {% endif %} -->
 
     {% if not photos %}
     <p>{% trans "You don't seem to have any photos yet." %}</p>
