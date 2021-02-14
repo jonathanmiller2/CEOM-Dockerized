@@ -226,7 +226,7 @@ def workset_photos(request):
             data['photos'] = photos
             data['gallerytitle'] = "Working set of photos"
             
-            return render(request, 'photos/workset.html', context=data)
+            return render(request, 'photos/user.html', context=data)
         else:
             return HttpResponseRedirect("/photos/browse/")
     else:

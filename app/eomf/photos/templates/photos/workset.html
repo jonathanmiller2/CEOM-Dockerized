@@ -63,7 +63,7 @@
         <div class="row">
             <h4 class="pull-left col-md-auto">{% trans "Working Photos" %}</h4></a>
         </div>
-    <!-- {% if photos %} -->
+    {% if photos %}
     {% if paginator %}
         <div class="row">
             <h4 class="pull-left col-md-auto">{% trans "By date of Photo upload" %} / <a href='/photos/user/?sort=tk'>{% trans "By date of Photo Taken" %}</h4></a>
@@ -226,7 +226,7 @@
         </form>
         {% endif %}
     </div>
-    <!-- {% endif %} -->
+    {% endif %}
 
     {% if not photos %}
     <p>{% trans "You don't seem to have any photos yet." %}</p>
