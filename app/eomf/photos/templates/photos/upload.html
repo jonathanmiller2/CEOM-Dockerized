@@ -32,13 +32,13 @@
         <span>{% trans "Cancel upload" %}</span>
     </button>
 
-    <div class="progress">
+    <div class="progress mt-2">
         <div id="big-progress-bar" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
 
     <div id="file-list"></div>
 
-    <form enctype="multipart/form-data" action="." method="POST">
+    <form enctype="multipart/form-data" action="." method="POST" class="mt-2">
         {% csrf_token %}
         {% trans "The default setting for photos is public, do you want to change it to private?" %}
         <input type='checkbox' class="" name='private' value='Yes'>
@@ -139,16 +139,19 @@
                             <img id="image-thumbnail-${info.id}" style="height: 60px; max-width: 100px" class="col-2" src="#" /> 
                             <p class="card-text col-4 align-self-center" style="vertical-align: middle">${info.file.name}</p>
                             <div class="progress col-3 m-0 p-0 align-self-center">
-                                <div id="progress-bar-${info.id}" class="progress-bar progress-bar-striped align-self-center" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div id="progress-bar-${info.id}" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                             <div class="col-3 align-self-center d-flex justify-content-end">
-                            <button id="upload-button-${info.id}" type="button" class="btn btn-sm btn-info mr-3">
-                                {% trans "Start upload" %}
-                            </button>
-                            <button id="cancel-button-${info.id}" type="button" class="btn btn-sm btn-warning" style="margin-left:-10px">
-                                {% trans "Cancel upload" %}
-                            </button>
+                                <button id="upload-button-${info.id}" type="button" class="btn btn-sm btn-info mr-3">
+                                    {% trans "Start upload" %}
+                                </button>
+                                <button id="cancel-button-${info.id}" type="button" class="btn btn-sm btn-warning" style="margin-left:-10px">
+                                    {% trans "Cancel upload" %}
+                                </button>
                             </div>
+                            <button id="delete-button-${info.id}" type="button" class="btn btn-sm btn-danger align-self-center" style="display: none;">	                            
+                                {% trans "Delete" %}	
+                            </button>
                         </div>
                     </div>
                 `);
