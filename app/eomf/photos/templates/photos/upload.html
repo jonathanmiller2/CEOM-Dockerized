@@ -3,7 +3,31 @@
 {% block title %}{% trans "EOMF photo upload" %} {% endblock %}
 
 {% block content %}
+<style>
+    @media screen and (max-width: 736px) {
 
+        #delete-button- {
+            margin-top: 10px;
+        }
+        /* #upload-button- {
+            margin-top: 10px;
+        }
+        #cancle-button- {
+            margin-top: 10px;
+        } */
+        .d-flex {
+            margin-top: 5px;
+        }
+    }
+
+    /* @media screen and (max-width:575px) {
+
+        .title {
+            font-size: min(max(3.8vw, 23px), 30px);
+        }
+    } */
+
+</style>
 {% if request.user.is_authenticated %}
 <h4>{% trans "Upload" %}</h4>
 
@@ -41,7 +65,7 @@
     <form enctype="multipart/form-data" action="." method="POST" class="mt-2">
         {% csrf_token %}
         {% trans "The default setting for photos is public, do you want to change it to private?" %}
-        <input type='checkbox' class="" name='private' value='Yes'>
+        <input type='checkbox' style="width:40px"class="" name='private' value='Yes'>
         <input type="submit" class="btn btn-sm btn-primary" value="Save Uploaded Images">
     </form>
 
@@ -134,24 +158,25 @@
                 files.push(info);
 
                 let fileElement = $(`
-                    <div id="uploaded-photo-${info.id}" class="card bg-light">
+                    <div id="uploaded-photo-${info.id}" class="row card bg-light">
                         <div class="card-body row" >
                             <img id="image-thumbnail-${info.id}" style="height: 60px; max-width: 100px" class="col-2" src="#" /> 
                             <p class="card-text col-4 align-self-center" style="vertical-align: middle">${info.file.name}</p>
-                            <div class="progress col-3 m-0 p-0 align-self-center">
+                            <div class="progress col-2 m-0 p-0 align-self-center">
                                 <div id="progress-bar-${info.id}" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <div class="col-3 align-self-center d-flex justify-content-end">
+                            <div class="col-3 align-self-center d-flex justify-content-between">
                                 <button id="upload-button-${info.id}" type="button" class="btn btn-sm btn-info mr-3">
                                     {% trans "Start upload" %}
                                 </button>
                                 <button id="cancel-button-${info.id}" type="button" class="btn btn-sm btn-warning" style="margin-left:-10px">
                                     {% trans "Cancel upload" %}
                                 </button>
-                            </div>
+                            
                             <button id="delete-button-${info.id}" type="button" class="btn btn-sm btn-danger align-self-center" style="display: none;">	                            
                                 {% trans "Delete" %}	
                             </button>
+                        </div>
                         </div>
                     </div>
                 `);
