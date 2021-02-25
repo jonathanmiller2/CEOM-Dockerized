@@ -47,15 +47,13 @@
             <p class="mx-4 m-0 text-left">{% trans "Upload" %}</p>
         </a>
     </li>
-
-    {% if request.session.workset %}
-        <li> 
-            <a href='/photos/workset/' class="btn btn-light btn-block rounded-0 p-0">
-                <p class="mx-4 m-0 text-left">{% trans "Working Photos" %}</p>
-            </a>
-        </li>
+    {% if request.session.workset %}	
+        <li> 	
+            <a href='/photos/workset/' class="btn btn-light btn-block rounded-0 p-0">	
+                <p class="mx-4 m-0 text-left">{% trans "Working Photos" %}</p>	
+            </a>	
+        </li>	
     {%endif%}
-
     <li> 
         <a href='/accounts/logout/' class="btn btn-light btn-block rounded-0 p-0">
             <p class="mx-4 m-0 text-left">{% trans "Log out" %}</p>

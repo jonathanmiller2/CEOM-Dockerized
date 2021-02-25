@@ -121,6 +121,13 @@
         }
     }
 </script>
+<style>
+    .menu-button {
+        font-size:small; 
+        padding-left: 0px; 
+        padding-right: 0px;
+    }
+</style>
 <form id='search' class="mx-3 mt-3" action="." method="post" name="searchform" onkeypress="return runScript(event)">{% csrf_token %}
     <fieldset>
         {{ search.non_field_errors }}
@@ -263,8 +270,8 @@
         <div class="d-flex row justify-content-around my-3">
             <div class="container">
                 <div class="row justify-content-around">
-                    <input class="col-4 btn btn-primary btn-sm" type="button" onclick="getBoundarieslong()" value="Submit" style="margin-left: 10px;"></input>
-                    <input class="col-4 btn btn-danger btn-sm" type="button" onclick="allReset()" value="Reset" style="margin-right: 10px;"></input>
+                    <input class="col-4 btn btn-primary btn-sm ml-2 menu-button" type="button" onclick="getBoundarieslong()" value="Submit"></input>
+                    <input class="col-4 btn btn-danger btn-sm mr-2 menu-button" type="button" onclick="allReset()" value="Reset""></input>
                 </div>
             </div>
         </div>

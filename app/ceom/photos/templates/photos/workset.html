@@ -2,7 +2,7 @@
 {% load photos_tags %}
 {% load thumbnail %}
 {% load i18n %}
-{% block title %}{% trans "CEOM user photos" %} {% endblock %}
+{% block title %}{% trans "EOMF user photos" %} {% endblock %}
 
 {% block content %}
 <style>
@@ -62,15 +62,9 @@
     <!-- <div class='row-fluid'> -->
     {% if photos %}
     {% if paginator %}
-    {% if 'sort' in request.get_full_path %}
-        <div class="row">
-            <a href='/photos/user/'> <h4 class="pull-left col-md-auto">{% trans "By date of Photo upload" %}</a> / {% trans "By date of Photo Taken" %}</h4>
-        </div>
-    {% else %}
         <div class="row">
             <h4 class="pull-left col-md-auto">{% trans "By date of Photo upload" %} / <a href='/photos/user/?sort=tk'>{% trans "By date of Photo Taken" %}</h4></a>
         </div>
-    {% endif %}
         
     <div class="container-fluid pt-2 pl-0">
         <div class="row justify-content-between mr-5">
@@ -179,7 +173,6 @@
             </div>
         </div>
 
-
         {% endif %}
         {% if checkbox %}
         <form method='post' id="downloadORbatchedit" name="downloadORbatchedit" onSubmit="return ActionOnSubmit();">
@@ -226,7 +219,6 @@
                 {% include "photos/photo_tile.html" %}
                 {% endfor %}
             </div>
-
 
         </form>
         {% endif %}
@@ -283,3 +275,4 @@
 </script>
 
 {% endblock %}
+
