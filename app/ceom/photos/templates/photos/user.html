@@ -1,0 +1,204 @@
+{% extends "photos/base.html" %}
+{% load photos_tags %}
+{% load thumbnail %}
+{% load i18n %}
+{% block title %}{% trans "CEOM user photos" %} {% endblock %}
+
+{% block content %}
+{% if photos %}
+    
+    {% if paginator %}
+        <div class='row-fluid'>
+            <div class='span3'>
+                <h3>{{gallerytitle}}</h3>
+                <div class="pull-left">{{paginator.count}} {% trans "photos" %}</div>
+            </div>
+            <div class='span7'>
+                <div class="pagination pagination-small pagination-centered">
+                    <ul>
+                        {% if photos.has_previous %}
+                            <li><a href="?page=1&amp;ppp={{ppp}}&amp;date={{request.GET.date}}">&laquo;&laquo;</a></li>
+                            <li><a href="?page={{ photos.previous_page_number }}&amp;ppp={{ppp}}&amp;date={{request.GET.date}}">&laquo;</a></li>
+                        {% endif %}
+                        {% for n in page_range %}
+                            {% if photos.number != n %}
+                                <li><a href="?page={{n}}&amp;ppp={{ppp}}&amp;date={{request.GET.date}}">{{n}}</a><li>
+                            {% else %}
+                                <li class="active"><a href='#'>{{n}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if photos.has_next %}
+                            <li><a href="?page={{ photos.next_page_number }}&amp;ppp={{ppp}}&amp;date={{request.GET.date}}">&raquo;</a></li>
+                            <li><a href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}&amp;date={{request.GET.date}}"> &raquo;&raquo; </a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class='span2'>
+                <div class='pull-right'>
+                    <form class="form-horizontal"> 
+                        <div class="control-group">
+                            <label class="control-label" style='padding-left: 0px;' for='ppp'>{% trans "Per page" %}</label>
+                            <div class='controls'>
+                                <select class="input-mini" id='ppp' onChange="location.assign('/photos/user/?ppp='+this.options[selectedIndex].text+'&date='+{{request.GET.date}});">
+                                    <option {% if ppp == "24" %}selected{%endif%}>24</option>
+                                    <option {% if ppp == "48" %}selected{%endif%}>48</option>
+                                    <option {% if ppp == "96" %}selected{%endif%}>96</option>
+                                    <option {% if ppp == "192" %}selected{%endif%}>192</option>
+                                    <!--<option {% if ppp == "all" %}selected{%endif%}>All</option>-->
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <br/>
+    <div class='row-fluid'>
+    {% if checkbox %}
+        <form method='post' id="downloadORbatchedit" name="downloadORbatchedit" onSubmit="return ActionOnSubmit();">
+    {% endif %}
+            <div class='row-fluid'>
+                {% for photo in photos %}
+                    {% include "photos/photo_tile_for_userPhotos.html" %}
+                {% endfor %}
+            </div>
+    {% if checkbox %}
+            {% trans "Select All" %} <input type="checkbox" name="selector" value="Off" onclick="selectAll(event);">
+            <br/>
+            <div style="padding-bottom:5px;"></div>
+            
+            <div class="span3" style="width:300px; padding-bottom:10px;">
+            <select name="format" >
+                <option value="csv">{% trans "CSV file and images." %}</option>
+                <option value="kmz">{% trans "KMZ: KML and images." %}</option>
+                <!--<option value="shp">ESRI Shapefile/DBF.</option>-->
+            </select>
+            <br/>
+            <select name="img" >
+                <option value="big">{% trans "Original images." %}</option>
+                <option value="small">{% trans "Downsized images." %}</option>
+            </select>
+            <br/>
+            <input class='btn' type="submit" value="{% trans 'Download' %}" onClick="document.pressed=this.value">
+            </div>
+            
+            <input type='button' class="btn btn-info" id='hideshow' value='Click Here to Batch Edit Selected Photos'>
+            
+            <div class="span4" id="batchedit-fade">
+                {% csrf_token %}
+                <!--<strong style="padding-bottom:5px;">Batch Edit Selected Photos:</strong><br/>-->
+                <table>{{form.as_table|safe}}</table>
+                <input class='btn btn-info' type="submit" value="{% trans 'Submit Batch Edits' %}" onClick="document.pressed=this.value">
+            </div>
+        </form>
+    {% endif %}
+    </div>
+{% endif %}
+{% if dates %}
+    {% if 'sort' in request.get_full_path %}
+
+        <a href='/photos/user/'><h4>{% trans "By date of Photo upload" %} </a> / {% trans "By date of Photo Taken" %}</h4>
+    
+    {% else %}
+    
+        <h4>{% trans "By date of Photo upload" %} / <a href='/photos/user/?sort=tk'>{% trans "By date of Photo Taken" %}</h4></a>
+    {% endif %}
+    <table class='gallery'>
+        {% for row in dates|tablecols:6 %}
+        <tr>
+            {% for p in row %}
+            <td>
+            {% if p.file|photoexists %}
+                {% thumbnail p.file "150x150" as im %}
+                    <a class='thumbnail' href='/photos/user/?date={% if 'sort' in request.get_full_path %}{{p.takendate|date:"Y-m-d"}}&sort=tk{% else %}{{p.uploaddate|date:"Y-m-d"}}{% endif %}'><img class='gallery-thumb' src='{{im.url}}' alt='{{p.file.name}}' style="width:150px;height:150px;"/></a><br/>
+                {% endthumbnail %}
+            {% else %}
+                <a class='thumbnail' href='/photos/user/?date={% if 'sort' in request.get_full_path %}{{p.takendate|date:"Y-m-d"}}&sort=tk{% else %}{{p.uploaddate|date:"Y-m-d"}}{% endif %}'><img class='gallery-thumb' src='' alt='Image not available' style="width:150px;height:150px;" /></a><br/>
+            {% endif %}
+                {% if 'sort' in request.GET_full_path %}{{p.takendate}}{% else %}{{p.uploaddate}} {% endif %}
+            </td>
+            {% endfor %}
+            
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    {% if galleries %}
+    <h4>Galleries</h4>
+    <table class='gallery'>
+        {% for row in galleries|tablecols:6 %}
+        <tr>
+            {% for p in row %}
+            <td>
+            {% if p.file|photoexists%}
+                {% thumbnail p.file "150x150" as im %}
+                <a href='/photos/user/?gallery='><img class='gallery-thumb' src='{{ im.url}}' alt='{{p.file.name}}'/></a><br/>
+                {% endthumbnail %}
+            {% else %}
+                <a href='/photos/user/?gallery='><img class='gallery-thumb' src='' alt='image not available'/></a><br/>
+            {% endif %}
+            {%if p.uploaddate == gallerytitle %}<b>{{p.uploaddate}}</b>{%else%}{{p.uploaddate}}{%endif%}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+{% if not photos and not dates %}
+<p>{% trans "You don't seem to have any photos yet." %}</p>
+<p><a href='{% url "upload" %}'>{% blocktrans %}Upload</a> some photos, and they will show up on this page.{% endblocktrans %}</p>
+{% endif %}
+
+<script>
+function ActionOnSubmit()
+    {
+
+        if(document.pressed == 'Download')
+        {
+            document.downloadORbatchedit.action ="/photos/download/";
+        }
+        else
+        if(document.pressed == 'Submit Batch Edits')
+        {
+            document.downloadORbatchedit.action ="/photos/batchedit/?next={{request.get_full_path|urlencode}}";
+        }
+        return true;
+    }
+//**************************************************************
+//(BATCHEDITING STUFF)
+//***********************BEGIN**********************************
+//this code is for div showing on hideshow button click
+var countChecked = function() {
+  var n = $( "input:checked" ).length;
+  if(n>1) { 
+    if( $("#batchedit-fade").is(':hidden') ) {
+        $("#hideshow").show(200);
+    }
+  }
+  else { 
+    $("#hideshow").hide(200);
+    $("#batchedit-fade").hide(200);
+  }
+};
+
+countChecked(); 
+$( "input[type=checkbox]" ).on( "click", countChecked );
+$('#batchedit-fade').hide(); //initially hide div on first page load
+$("#hideshow").hide();  //hide button on first page load
+
+//below code is for hideshow button
+jQuery(document).ready(function(){
+    jQuery('#downloadORbatchedit').on('click', '#hideshow', function(event) {        
+         jQuery('#batchedit-fade').toggle('show');
+         $("#hideshow").hide();
+    });
+});
+//***************************END**********************************
+//****************************************************************
+</script>
+
+{% endblock %}
+

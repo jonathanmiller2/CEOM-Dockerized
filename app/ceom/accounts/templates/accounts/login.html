@@ -1,0 +1,25 @@
+{% extends 'accounts/base.html' %}
+{% load i18n %}
+{% block title %}{% trans "CEOM: Log in" %}{% endblock %}
+
+{% block content %}
+    <legend><h4>{% trans "Log in" %}</h4></legend>
+    <hr />
+    
+    <div class="col-lg-2 my-3">
+        <form method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button style="width: 100%" class="btn btn-primary btn-sm" type="submit">Login</button>
+        </form>
+    </div>
+    <p class="ml-3">Don't have an account? <a href="/accounts/register/" target="blank"><strong>register here!</strong></a></p>
+
+    {% for message in messages %}
+        <div class="alert alert-danger">
+            <a class="close" href="#" data-dismiss="alert">×</a>
+                {{ message }}
+        </div>
+    {% endfor %}
+
+{% endblock %}

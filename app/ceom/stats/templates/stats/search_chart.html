@@ -1,0 +1,293 @@
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="http://highslide-software.github.io/export-csv/export-csv.js"></script>
+
+<script type="text/javascript">
+//console.log(""+{{photos}});
+$(function () {
+    $('#containers1').highcharts({
+        chart: {
+            zoomType: 'xy',
+
+        },
+        credits: {
+            enabled : true,
+            href : "http://www.ceom.ou.edu",
+            text : "ceom.ou.edu"
+        },
+        title: {
+            text: '<strong>Total photos over time</strong>',
+            x: 0//center
+        },
+       /* subtitle: {
+            text: 'Source: WorldClimate.com',
+            x: -20
+        },*/
+        xAxis: {
+            categories: {{build_cat}},
+        },
+        yAxis: {
+            title: {
+                text: 'Total photos'
+            },
+            lineColor: '#665f5f',
+            lineWidth: 1,
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">#Photos: </td>' +
+                '<td style="padding:0"><b>{point.y:.0f} Photos</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: '#photos',
+            data: {{count}},
+
+        }]
+    });
+});
+$('#getcsv').click(function () {
+    alert(chart.getCSV());
+});
+        </script>
+<script type="text/javascript">
+    console.log({{data_mon}});
+    console.log({{new_month.0}});
+$(function () {
+    $('#containers2').highcharts({
+
+        chart: {
+            type: 'column',
+            zoomType: 'xy',
+        },
+        credits: {
+            enabled : true,
+            href : "http://www.ceom.ou.edu",
+            text : "ceom.ou.edu"
+        },
+
+        title: {
+            text: 'No. of new photos (month - year)'
+        },
+
+        xAxis: {
+            categories: {{build_cat}}
+        },
+
+        yAxis: {
+            allowDecimals: false,
+            lineColor: '#665f5f',
+            lineWidth: 1,
+            min: 0,
+            title: {
+                text: '#Photos'
+            }
+        },
+
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + this.point.stackTotal;
+            }
+        },
+
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        },
+
+        /* Series should be in the following format :
+
+                    We must have name as the month.
+                    and 
+                    data as asked for the year.month list 
+                    and stack as january, february like same as name lets say.
+                    # data_mon :  dictionary to contain monthly data year passed as a key 
+                    # build_cat : COntains Year information
+                    # count : contains yearly count! so we need only one and 2
+enumerate(['january','february','march','april','may','june','july','august','september','october','november','december']
+{{new_month.0}}
+        */
+        //var idx = 0;
+
+          series: [
+        {
+            name: 'january',
+            data: {{new_month.0}},
+            stack: 'january',
+        },
+        {
+            name: 'february',
+            data: {{new_month.1}},
+            stack: 'february',
+        },
+        {
+            name: 'march',
+            data: {{new_month.2}},
+            stack: 'march',
+        },
+        {
+            name: 'april',
+            data: {{new_month.3}},
+            stack: 'april',
+        },
+        {
+            name: 'may',
+            data: {{new_month.4}},
+            stack: 'may',
+        },
+        {
+            name: 'june',
+            data: {{new_month.5}},
+            stack: 'june',
+        },
+        {
+            name: 'july',
+            data: {{new_month.6}},
+            stack: 'july',
+        },
+        {
+            name: 'august',
+            data: {{new_month.7}},
+            stack: 'august',
+        },
+        {
+            name: 'september',
+            data: {{new_month.8}},
+            stack: 'september',
+        },
+        {
+            name: 'october',
+            data: {{new_month.9}},
+            stack: 'october',
+        },
+        {
+            name: 'november',
+            data: {{new_month.10}},
+            stack: 'november',
+        },
+        {
+            name: 'december',
+            data: {{new_month.11}},
+            stack: 'december',
+        },]
+
+      /*  series: [{
+            name: 'John',
+            data: [5, 3, 4, 7, 2],
+            stack: 'male'
+        }, {
+            name: 'Joe',
+            data: [3, 4, 4, 2, 5],
+            stack: 'male'
+        }, {
+            name: 'Jane',
+            data: [2, 5, 6, 2, 1],
+            stack: 'female'
+        }, {
+            name: 'Janet',
+            data: [3, 0, 4, 4, 3],
+            stack: 'female'
+        }]*/
+    });
+});
+//{{photos.query}}
+$('#getcsv').click(function () {
+    alert(chart.getCSV());
+});
+        </script>
+        <script type="text/javascript">
+$(function () {
+    $('#containers3').highcharts({
+        chart: {
+            type: 'column',
+            zoomType: 'xy',
+
+        },
+        credits: {
+            enabled : true,
+            href : "http://www.ceom.ou.edu",
+            text : "ceom.ou.edu"
+        },
+        title: {
+            text: '<strong>Number of new photos per year</strong>'
+        },
+       // subtitle: {
+        //    text: 'Source: ceom.ou.edu'
+        //},
+        xAxis: {
+            categories: {{build_cat}},
+            crosshair: true,
+        },
+        yAxis: {
+            lineColor: '#665f5f',
+            lineWidth: 1,
+            min: 0,
+            title: {
+                text: '#new photos uploaded per year'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">#photos: </td>' +
+                '<td style="padding:0"><b>{point.y:.0f} photos</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'photos per Year',
+            data: {{peryear}},
+
+        }]
+    });
+});
+$('#getcsv').click(function () {
+    alert(chart.getCSV());
+});
+</script>
+<h1 class="text-center">Statistics based on your search-criteria</h1>
+<hr/>
+<div class="span12">
+<div id="containers2" class="span6" style="min-width: 310px; max-width: 800px; height: 350px; margin: 0 auto"></div>
+<div id="containers1" class="span6" style="min-width: 310px; max-width: 800px; height: 350px; margin: 0 auto">
+</div>
+</div>
+<div class="span6 offset3">
+
+<div id="containers3" class="span12" style="min-width: 310px; max-width: 800px; height: 350px; margin: 50px"></div>
+</div>
+<div class="span12">
+<!--{{photos}}
+{{photos.query}}-->
+</div>
+<button id="getcsv">Alert CSV</button>
+<script type="text/javascript">$("#getcsv").hide();</script>
+<script>
+
+$('#getcsv').click(function () {
+    alert(chart.getCSV());
+});
+</script>
