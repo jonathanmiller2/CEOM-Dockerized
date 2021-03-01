@@ -18,37 +18,40 @@
 		margin: 1.5em 0em 0.25em 1.5em;
     }
 </style>
+
 <li class='nav-header'>
     {% trans "Photos Actions" %}
 </li>
 <li> 
-    <a href='/photos/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="mx-4 m-0 text-left">{% trans "Overview" %}</p>
+    <a href='/photos/' class="{% if '/photos/' in request.path %}active{% endif %} btn btn-light btn-block rounded-0 p-0">
+        <p class=" mx-4 m-0 text-left">{% trans "Overview" %}</p>
     </a>
 </li>
 <li> 
-    <a href='/photos/browse/' class="btn btn-light btn-block rounded-0 p-0">
+
+    <a href='/photos/browse/' class="{% if '/photos/browse' in request.path %}active{% endif %} btn btn-light btn-block rounded-0 p-0">
         <p class="mx-4 m-0 text-left">{% trans "Browse" %}</p>
     </a>
+ 
 </li>
 <li> 
-    <a href='/photos/map/' class="btn btn-light btn-block rounded-0 p-0">
+    <a href='/photos/map/' class="{% if '/photos/map/' in request.path %}active{% endif %} btn btn-light btn-block rounded-0 p-0">
         <p class="mx-4 m-0 text-left">{% trans "Map" %}</p>
     </a>
 </li>
 {% if request.user.is_authenticated %}
     <li> 
         <a href='/photos/user/' class="btn btn-light btn-block rounded-0 p-0">
-            <p class="mx-4 m-0 text-left">{% trans "My Photos" %}</p>
+            <p class="{% if '/photos/user/' in request.path %}active mx-4 m-0 text-left{% endif %}mx-4 m-0 text-left">{% trans "My Photos" %}</p>
         </a>
     </li>
     <li> 
-        <a href='/photos/upload/' class="btn btn-light btn-block rounded-0 p-0">
+        <a href='/photos/upload/' class="{% if '/photos/upload/' in request.path %}active{% endif %}btn btn-light btn-block rounded-0 p-0">
             <p class="mx-4 m-0 text-left">{% trans "Upload" %}</p>
         </a>
     </li>
     <li> 
-        <a href='/accounts/logout/' class="btn btn-light btn-block rounded-0 p-0">
+        <a href='/accounts/logout/' class="{% if '/photos/logout/' in request.path %}active{% endif %}btn btn-light btn-block rounded-0 p-0">
             <p class="mx-4 m-0 text-left">{% trans "Log out" %}</p>
         </a>
     </li>
