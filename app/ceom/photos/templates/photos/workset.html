@@ -2,7 +2,7 @@
 {% load photos_tags %}
 {% load thumbnail %}
 {% load i18n %}
-{% block title %}{% trans "EOMF user photos" %} {% endblock %}
+{% block title %}{% trans "EOMF working photos" %} {% endblock %}
 
 {% block content %}
 <style>
@@ -60,6 +60,9 @@
 </style>
 <nav>
     <!-- <div class='row-fluid'> -->
+        <div class="row">
+            <h4 class="pull-left col-md-auto">{% trans "Working Photos" %}</h4></a>
+        </div>
     {% if photos %}
     {% if paginator %}
         <div class="row">
