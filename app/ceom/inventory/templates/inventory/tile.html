@@ -1,0 +1,92 @@
+<html>
+{% load i18n %}
+<head>
+<title>{% trans "CEOM Data Inventory for Tile" %} {{tile}}</title>
+</head>
+<style>
+a{
+    color: #082;
+}
+html,body {
+	padding: 0px;
+	height: 100%;
+	font-family: Arial,sans-serif;
+	line-height: 22px;
+	text-align: center;
+}
+table {
+    font-size: 14px;
+}
+
+table.mystyle
+{
+    border-width: 1px;
+    border-spacing: 0;
+    border-collapse: collapse;
+    border-style: solid;
+}
+
+.mystyle td, .mystyle th
+{
+    margin: 0;
+    padding: 4px;
+    border-width: 1px 1px 0 0;
+}
+</style>    
+</head>
+
+<body onload='this.focus()'>
+
+<h2 align="center">{% trans "Data Inventory for Tile" %} {{tile}}</h2>
+
+<table border="0" cellspacing="3">
+  <tr>
+    <td width="100"><b>{% trans "Tile Code" %}</b></td>
+    <td><!-- <a href="http://remotesensing.ou.edu/modis_v5/tile_details.cgi?map.x={{coords.x}}&map.y={{coords.y}}" target="details"> -->{{tile}}<!-- </a> --></td>
+  </tr>
+  <!--<tr>
+    <td width="100"><b>Region</b></td>
+    <td><a href="cont_inventory_wait.cgi?cont=_REGION-DIR_" target="cont_inventory">{{region}}</a></td>
+  </tr>-->
+</table>
+<br>
+
+<table class='mystyle' border='1' cellpadding="5" cellspacing="0">
+  <tr>
+    <th width="100px">{% trans "Product" %}</th>
+    <th>{% trans "Year" %}</th>
+    <th>{% trans "Days" %}</th>
+    <th>{% trans "Missing" %}</th>
+    <th>{% trans "Total" %}</th>
+  </tr>
+  
+{% for product, years in files %}
+    {% for year, tiles in years %}
+    <tr align="center">
+    {% if forloop.first %}
+    <td rowspan="{{years|length}}">{{product|upper}}</td>
+    {% endif %}
+    <td>{{year}}</td>
+        {% for tile, days in tiles %}
+        <td>{{days.ranges}}</td>
+        <td>{{days.missing}}</td>
+        <td><b>{{days.total}}</b></td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+{% endfor %}
+  <tr>
+    <th colspan="4">{% trans "Files Total" %}</th>
+    <th>{{total}}</th>
+  </tr>
+
+</table>
+<p style="margin-bottom: 0">{% trans "Inventory as of" %} <b>{% now "jS F Y H:i" %}</b></p>
+<hr>
+<p align="center"><a href="#" onClick="window.close()">{% trans "Close this window" %}</a></p>
+<pre>
+{{debug}}
+</pre>
+</body>
+
+</html>

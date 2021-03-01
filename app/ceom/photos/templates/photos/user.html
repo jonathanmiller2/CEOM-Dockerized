@@ -1,0 +1,285 @@
+{% extends "photos/base.html" %}
+{% load photos_tags %}
+{% load thumbnail %}
+{% load i18n %}
+{% block title %}{% trans "CEOM user photos" %} {% endblock %}
+
+{% block content %}
+<style>
+    @media screen and (min-width:575px) and (max-width: 1250px) {
+
+        #title {
+            font-size: min(max(3.9vw, 10px), 30px);
+        }
+    }
+
+    @media screen and (max-width:575px) {
+
+        #title {
+            font-size: min(max(3.8vw, 23px), 30px);
+        }
+    }
+
+    .menu-field {
+        font-size: small;
+        height: 22px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .img-thumbnail {
+        height: 150px;
+        width: 150px;
+    }
+
+    .img-thumbnail:hover {
+        border-color: #0088cc;
+    }
+
+    .control-group {
+        display: inline-flex;
+    }
+
+    .font {
+        font-size: 9pt;
+        color: #555;
+    }
+
+    .batch {
+        width: initial;
+        font-size: small;
+    }
+
+    .selectAll {
+        display: inline;
+    }
+
+    .container {
+        display: inline-grid;
+    }
+</style>
+<nav>
+    <!-- <div class='row-fluid'> -->
+    {% if photos %}
+    {% if paginator %}
+    {% if 'sort' in request.get_full_path %}
+        <div class="row">
+            <a href='/photos/user/'> <h4 class="pull-left col-md-auto">{% trans "By date of Photo upload" %}</a> / {% trans "By date of Photo Taken" %}</h4>
+        </div>
+    {% else %}
+        <div class="row">
+            <h4 class="pull-left col-md-auto">{% trans "By date of Photo upload" %} / <a href='/photos/user/?sort=tk'>{% trans "By date of Photo Taken" %}</h4></a>
+        </div>
+    {% endif %}
+        
+    <div class="container-fluid pt-2 pl-0">
+        <div class="row justify-content-between mr-5">
+            <div class="col-md-auto">
+                <label><b class="font">{{paginator.count}} {% trans "photos" %}</b></label>
+            </div>
+            <div class='col-md-auto'>
+                <div class="pagination">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm">
+                            {% if photos.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1&amp;ppp={{ppp}}&amp;date={{request.GET.date}}"
+                                    area-label="Previous">
+                                    <span aria-hidden="true"> &laquo;&laquo;</span>
+                                    <span class="sr-only">PreviousX2</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link"
+                                    href="?page={{ photos.previous_page_number }}&amp;ppp={{ppp}}&amp;date={{request.GET.date}}">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" area-label="Previous">
+                                    <span aria-hidden="true"> &laquo;&laquo;</span>
+                                    <span class="sr-only">PreviousX2</span>
+                                </a>
+                            </li>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% for n in page_range %}
+                            {% if photos.number != n %}
+                            <li class="page-item"><a class="page-link"
+                                    href="?page={{n}}&amp;ppp={{ppp}}&amp;date={{request.GET.date}}">
+                                    <span aria-hidden="true">{{n}}</span>
+                                    <span class="sr-only">{{n}}</span></a>
+                            </li>
+                            {% elif photos.number == n %}
+                            <li class="page-item active"><a class="page-link" href='#'>{{n}}
+                                    <span class="sr-only">{{n}}</span></a>
+                            </li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href='#'>{{n}}
+                                    <!-- <span aria-hidden="true">{{n}}</span> -->
+                                    <span class="sr-only">{{n}}</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if photos.has_next %}
+                            <li class="page-item"><a class="page-link"
+                                    href="?page={{ photos.next_page_number }}&amp;ppp={{ppp}}&amp;date={{request.GET.date}}">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                            <li class="page-item"><a class="page-link"
+                                    href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}&amp;date={{request.GET.date}}"
+                                    aria-label="Next">
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                    <span class="sr-only">NextX2</span>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled"><a class="page-link" href="#">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                            <li class="page-item disabled"><a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                    <span class="sr-only">NextX2</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <div class='col-md-auto'>
+                <form class="form-horizontal">
+                    <div class="control-group">
+                        <label class="control-label" for='ppp'>
+                            <b class="font">{% trans "Photos per page:" %}</b></label>
+                        <div class='controls ml-2'>
+                            <select class="menu-field" id='ppp'
+                                onChange="location.assign('/photos/user/?ppp='+this.options[selectedIndex].text+'&date='+{{request.GET.date}});">
+                                <option {% if ppp == "25" %}selected{%endif%}>25</option>
+                                <option {% if ppp == "50" %}selected{%endif%}>50</option>
+                                <option {% if ppp == "100" %}selected{%endif%}>100</option>
+                                <option {% if ppp == "500" %}selected{%endif%}>500</option>
+                                <!--<option {% if ppp == "all" %}selected{%endif%}>All</option>-->
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        {% endif %}
+        {% if checkbox %}
+        <form method='post' id="downloadORbatchedit" name="downloadORbatchedit" onSubmit="return ActionOnSubmit();">
+            {% endif %}
+            <div class="row justify-content-between mr-5">
+                {% if checkbox %}
+
+                <div class="col-md-auto selectAll">
+                    <b class="font" style="vertical-align: 2.2px;">Select All: </b>
+                    <input type="checkbox" name="selector" value="Off" onclick="selectAll(event);" style="margin-left: -100px;">
+                </div>
+
+                <div class="row mx-2">
+                    <select name="format" class="col-md-auto menu-field m-1">
+                        <option value="option1" disabled>{% trans " Image Format." %}</option>
+                        <option value="csv">{% trans "CSV file and images." %}</option>
+                        <option value="kmz">{% trans "KML: KML and images." %}</option>
+                    </select>
+
+                    <select name="img" class="col-md-auto menu-field m-1">
+                        <option value="option1" disabled>{% trans " Image Size." %}</option>
+                        <option value="big">{% trans "Original images." %}</option>
+                        <option value="small">{% trans "Downsized images." %}</option>
+                    </select>
+
+                    <button type="submit" class='col-md-auto btn btn-primary menu-field m-1'
+                        value="{% trans 'Download' %}">{% trans 'Download' %}</button>
+                </div>
+
+            </div>
+            <input type='button' class="btn btn-info batch" id='hideshow' value='Click Here to Batch Edit Selected Photos'>
+
+            <div id="batchedit-fade">
+                {% csrf_token %}
+                <table>{{form.as_table|safe}}</table>
+                <input class='btn' type="submit" value="batchedit"
+                    formaction="/photos/batchedit/?next={{request.get_full_path}}">
+            </div>
+
+            <hr/>
+
+            <div class="container-fluid">
+                {% for photo in photos %}
+                {% include "photos/photo_tile.html" %}
+                {% endfor %}
+            </div>
+
+
+        </form>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% if not photos %}
+    <p>{% trans "You don't seem to have any photos yet." %}</p>
+    <p><a href='{% url "upload" %}'>{% blocktrans %}Upload</a> some photos, and they will show up on this
+        page.{% endblocktrans %}</p>
+    {% endif %}
+</nav>
+<script>
+    function ActionOnSubmit() {
+
+        if (document.pressed == 'Download') {
+            document.downloadORbatchedit.action = "/photos/download/";
+        } else
+        if (document.pressed == 'Submit Batch Edits') {
+            document.downloadORbatchedit.action = "/photos/batchedit/?next={{request.get_full_path|urlencode}}";
+        }
+        return true;
+    }
+    //**************************************************************
+    //(BATCHEDITING STUFF)
+    //***********************BEGIN**********************************
+    //this code is for div showing on hideshow button click
+    var countChecked = function () {
+        var n = $("input:checked").length;
+        if (n > 1) {
+            if ($("#batchedit-fade").is(':hidden')) {
+                $("#hideshow").show(200);
+            }
+        } else {
+            $("#hideshow").hide(200);
+            $("#batchedit-fade").hide(200);
+        }
+    };
+
+    countChecked();
+    $("input[type=checkbox]").on("click", countChecked);
+    $('#batchedit-fade').hide(); //initially hide div on first page load
+    $("#hideshow").hide(); //hide button on first page load
+
+    //below code is for hideshow button
+    jQuery(document).ready(function () {
+        jQuery('#downloadORbatchedit').on('click', '#hideshow', function (event) {
+            jQuery('#batchedit-fade').toggle('show');
+            $("#hideshow").hide();
+        });
+    });
+    //***************************END**********************************
+    //****************************************************************
+</script>
+
+{% endblock %}

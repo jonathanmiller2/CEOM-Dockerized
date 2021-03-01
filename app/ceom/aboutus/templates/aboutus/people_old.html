@@ -1,0 +1,157 @@
+{% extends "aboutus/base.html" %}
+{% load i18n %}
+{% block title %}{{block.super}} {% trans "Researchers at CEOM" %}{% endblock %}
+
+{% block content %}
+<style>
+.people-tile {
+  border: 1px solid #ddd;
+  text-align: center;
+  display: block;
+  float:left;
+  margin: 0px 25px 30px 0px;
+  width: 170px;
+  min-height: 275px;
+  box-shadow: 0 0 6px #444;
+-webkit-shadow: 0 0 6px #444;
+-moz-shadow: 0 0 6px #444;
+ padding: 5px 5px 10px 5px;"
+}
+</style>
+<div class="well">
+	<div class="grid" >
+		<h2  style="color: #dc8e14;">{% trans "Researchers at the University of Oklahoma" %}</h2>
+		<div class="hr"></div>&nbsp;
+		<div class="row-fluid">
+		{% for p in people%}
+		{% if p.alumni_group == None%}
+			{% ifchanged p.alumni_group%}
+			<h2  style="color: #14bfdc;">{% trans "current" %} </h2>
+			{% endifchanged %}
+			{% ifchanged p.group %}
+			<div style="clear: both;"></div>
+			<!-- <div> -->
+				<p>
+				<h3 style="border-bottom: 1px solid #66ccff;">{% trans p.group.name %}</h3> 
+				{% if p.group.name == "Information Technology Support Group" %} 
+						<p> {% blocktrans %} The following OU IT members provide information technology support and service to the CEOM. Please contact them at if you have any questions and need any help related to the computing facilities available at the CEOM(<a href="mailto:support@rccc.ou.edu">support@rccc.ou.edu</a>) and OSCER(<a href="mailto:support@oscer.ou.edu">support@oscer.ou.edu</a>) (including Oklahoma PetaStore and supercomputers).{% endblocktrans %} </p>
+				{% endif %} 
+				</p>
+			{% endifchanged %}
+			<div class="people-tile">
+				{% if not p.headshot %} <a href="#"><img style="max-height: 150px; max-width: 136px; overflow:hidden; margin:auto;" src="/static/img/dummy_headshot.jpg" ></a>
+				{% elif p.headshot and p.link %} <a href="{{p.link}}"><img style="max-height: 150px; max-width: 136px;overflow:hidden;margin:auto;" src="{{p.headshot.url}}" ></a>
+				{%elif p.headshot and not p.link %} <img style="max-height: 150px; max-width: 136px;overflow:hidden;margin:auto;" src="{{p.headshot.url}}" ></a>
+				   {%endif%}
+				<div >
+				<h5 style="margin:8px 0;">
+				{% if p.link %} 
+					<a href="{{p.link}}">
+					{% if p.first_name  %}{{p.first_name}}{% endif %}
+					{% if p.middle_name  %} {{p.middle_name}}{% endif %}
+					{% if p.last_name  %} {{p.last_name}}{% endif %}
+					</a> 
+				{%else%}
+					<strong>{% if p.first_name  %}{{p.first_name}}{% endif %}
+					{% if p.middle_name  %} {{p.middle_name}}{% endif %}
+					{% if p.last_name  %} {{p.last_name}}{% endif %}</strong> 
+				{% endif %} 
+			</h5>
+				{% if p.title %} <div style="margin:4px 0;"> {% trans p.title %} <br> </div> {% endif %}
+				{% if p.phone %} <div style="margin:4px 0;"> {{p.phone}} <br> </div> {% endif %}
+				{% if p.email %}<small> <a href="mailto:{{p.email}}">{{p.email}}<br></a>  </small> {% endif %}
+				</div>
+			</div>
+		{% endif %}
+		
+
+			<!--</p> 
+			<!-- {% ifchanged p.group %}
+			</div>
+			<div style="clear: both;"></div><div>
+				<p>
+				 <h3 style="border-bottom: 1px solid #66ccff;">{% trans p.group.name %}</h3> 
+				{% if p.group.name == "Information Technology Support Group" %} 
+						<p> {% blocktrans %} The following OU IT members provide information technology support and service to the CEOM. Please contact them at if you have any questions and need any help related to the computing facilities available at the CEOM(<a href="mailto:support@rccc.ou.edu">support@rccc.ou.edu</a>) and OSCER(<a href="mailto:support@oscer.ou.edu">support@oscer.ou.edu</a>) (including Oklahoma PetaStore and supercomputers).{% endblocktrans %} </p>
+				{% endif %} 
+				</p>
+			{% endifchanged %} -->
+			<!-- commented by bibas
+			{% if p.alumni_group %}
+					{% ifchanged p.alumni_group %}
+						<div style="clear: both;"></div>
+						<h4>{{p.alumni_group.name}}</h4>
+					 {% endifchanged %}
+			{% endif %}
+			<div class="people-tile">
+				{% if not p.headshot %} <a href="#"><img style="max-height: 150px; max-width: 136px; overflow:hidden; margin:auto;" src="/static/img/dummy_headshot.jpg" ></a>
+				{% elif p.headshot and p.link %} <a href="{{p.link}}"><img style="max-height: 150px; max-width: 136px;overflow:hidden;margin:auto;" src="{{p.headshot.url}}" ></a>
+				{%elif p.headshot and not p.link %} <img style="max-height: 150px; max-width: 136px;overflow:hidden;margin:auto;" src="{{p.headshot.url}}" ></a>
+				   {%endif%}
+				<div >
+				<h5 style="margin:8px 0;">
+				{% if p.link %} 
+					<a href="{{p.link}}">
+					{% if p.first_name  %}{{p.first_name}}{% endif %}
+					{% if p.middle_name  %} {{p.middle_name}}{% endif %}
+					{% if p.last_name  %} {{p.last_name}}{% endif %}
+					</a> 
+				{%else%}
+					<strong>{% if p.first_name  %}{{p.first_name}}{% endif %}
+					{% if p.middle_name  %} {{p.middle_name}}{% endif %}
+					{% if p.last_name  %} {{p.last_name}}{% endif %}</strong> 
+				{% endif %} 
+			</h5>
+				{% if p.title %} <div style="margin:4px 0;"> {% trans p.title %} <br> </div> {% endif %}
+				{% if p.phone %} <div style="margin:4px 0;"> {{p.phone}} <br> </div> {% endif %}
+				{% if p.email %}<small> <a href="mailto:{{p.email}}">{{p.email}}<br></a>  </small> {% endif %}
+				</div>
+			</div>
+			-->
+		{% endfor %}
+		{% for p in people%}
+		{% if p.group.name == "Alumni" %}
+			{% ifchanged p.group %}
+			<h2 style="color: #14bfdc;"><p>{% trans "Alumni"%}</p></h2>
+			{% endifchanged %}
+			{% ifchanged p.alumni_group %}
+			</div>
+			<div style="clear: both;"></div><div>
+				<p>
+				<h3 style="border-bottom: 1px solid #66ccff;">{% trans p.alumni_group.name %}</h3> 
+				</p>
+			{% endifchanged %}
+			<div class="people-tile">
+				{% if not p.headshot %} <a href="#"><img style="max-height: 150px; max-width: 136px; overflow:hidden; margin:auto;" src="/static/img/dummy_headshot.jpg" ></a>
+				{% elif p.headshot and p.link %} <a href="{{p.link}}"><img style="max-height: 150px; max-width: 136px;overflow:hidden;margin:auto;" src="{{p.headshot.url}}" ></a>
+				{%elif p.headshot and not p.link %} <img style="max-height: 150px; max-width: 136px;overflow:hidden;margin:auto;" src="{{p.headshot.url}}" ></a>
+				   {%endif%}
+				<div >
+				<h5 style="margin:8px 0;">
+				{% if p.link %} 
+					<a href="{{p.link}}">
+					{% if p.first_name  %}{{p.first_name}}{% endif %}
+					{% if p.middle_name  %} {{p.middle_name}}{% endif %}
+					{% if p.last_name  %} {{p.last_name}}{% endif %}
+					</a> 
+				{%else%}
+					<strong>{% if p.first_name  %}{{p.first_name}}{% endif %}
+					{% if p.middle_name  %} {{p.middle_name}}{% endif %}
+					{% if p.last_name  %} {{p.last_name}}{% endif %}</strong> 
+				{% endif %} 
+			</h5>
+				{% if p.title %} <div style="margin:4px 0;"> {% trans p.title %} <br> </div> {% endif %}
+				{% if p.phone %} <div style="margin:4px 0;"> {{p.phone}} <br> </div> {% endif %}
+				{% if p.email %}<small> <a href="mailto:{{p.email}}">{{p.email}}<br></a>  </small> {% endif %}
+				</div>
+			</div>
+		{% endif %}
+		{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+
+
+

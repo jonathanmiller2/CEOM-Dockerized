@@ -1,0 +1,233 @@
+{% extends "photos/base.html" %}
+
+{% load i18n %}
+{% block title %}{% trans "CEOM Field Photo Map" %} {% endblock %}
+
+{% block head_extra %}
+{{block.super|safe}}
+    
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/css/datePicker.css" />
+    
+    <!-- required plugins -->
+
+
+    <style type="text/css">
+        #map {
+           height: 768px;
+        }
+    </style>
+    
+ 	
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=initMap" />
+
+    <script type="text/javascript">
+    var lon = 0;
+    var lat = 0;
+    var zoom = 2;
+    {% if search.lon_min.value and search.lat_min.value and search.lon_max.value and search.lat_max.value %}
+    var init_bbox = [{{search.lon_min.value}}, {{search.lat_min.value}},
+                                     {{search.lon_max.value}}, {{search.lat_max.value}}];
+    {% else %}
+    var init_bbox = false;
+    {% endif %}
+    //$(document).ready(init);
+    </script>
+{% endblock %}
+
+{% block body_tag %}<body bgcolor="#FFFFFF">{% endblock %}
+
+{% block sidebar_extra %}
+<nav class="card bg-light ml-5 mt-3 shadow-sm">
+    {% include "photos/search_form.html" %}
+</nav>
+
+{% endblock %}
+{% block content_with_span10 %}
+<div id='content' class="span10">
+    <h2 class="legend" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
+    <div class='row-fluid'>
+    	<div id="loading">{% trans "Loading Photos..."%}</div>
+
+        <div id="photototal" style="display:none">
+        	<p id="photototaltext" style="display:inline-block">{% trans "Total Photos: "%}</p>
+        	<p id="photototalcount" style="display:inline-block"></p>
+        </div>
+
+        <div id="map"></div>
+    </div>
+    
+    
+
+    <!--<form method='post' name="download" action="/photos/download/">-->
+    <div class='row-fluid'>
+        <br/>
+        <div name="gallery" id="gallery"></div>
+        <div id="debug"></div>
+    </div>
+
+
+    <script>
+    var circles = [];
+    var map;
+    var selectedFeature;
+    var circleColor;
+    	
+	function initMap() 
+	{
+        var startLocation = {lat: 0, lng: 0};
+        
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 3,
+          center: startLocation,
+          gestureHandling: 'cooperative',
+          mapTypeId: 'satellite',
+          draggableCursor: 'crosshair',
+        });
+    	
+    	map.addListener('click', deselectCircles);
+        map.addListener('dragend', updateMapCircles);
+        map.addListener('zoom_changed', updateMapCircles); 
+
+        updateMapCircles();
+    }
+
+    function clearCircles() 
+    {
+    	for(i = 0; i < circles.length; i++)
+       	{
+        	circles[i].circleObj.setMap(null);
+        }
+
+    	circles = [];
+    }
+
+    function updateMapCircles() 
+    {
+       	document.getElementById("loading").style.display = "block";
+       	document.getElementById("photototal").style.display = "none";
+
+        var picTotal = 0;
+
+        clearCircles();
+
+        //Convert the bounds to x1, y1, x2, y2 for the handler in views.py
+        if(map.getBounds())
+        {
+        	var bb = map.getBounds().toUrlValue().split(',');
+        }
+        else
+        {
+        	var bb = [-55, -120, 55, 120];	
+        }
+
+        //Request data from the current host
+        var datasrc = window.location.protocol + '//' + window.location.host + '/photos/gmapclusters.kml?bbox=' + bb[1] + ',' + bb[0] + ',' + bb[3] + ',' + bb[2];
+
+        var xhr = new XMLHttpRequest();
+		xhr.open('GET', datasrc, true);
+		xhr.send();
+
+		xhr.onreadystatechange = function () {
+			if(xhr.readyState == 4 && xhr.status == 200)
+			{
+				parser = new DOMParser();
+				xmlDoc = parser.parseFromString(xhr.response,"text/xml");
+
+				placemarks = xmlDoc.getElementsByTagName('Placemark')
+
+				for(i = 0; i < placemarks.length; i++)
+				{
+                    var name = placemarks[i].getElementsByTagName('name')[0].textContent;
+                    var ids = parseInt(placemarks[i].getElementsByTagName('Data')[0].getElementsByTagName('value')[0].textContent);
+					var count = parseInt(placemarks[i].getElementsByTagName('Data')[1].getElementsByTagName('value')[0].textContent);
+					var xsize = parseFloat(placemarks[i].getElementsByTagName('Data')[2].getElementsByTagName('value')[0].textContent);
+					var ysize = parseFloat(placemarks[i].getElementsByTagName('Data')[3].getElementsByTagName('value')[0].textContent);
+
+                    picTotal += count;
+
+					var rad = xsize * (15000 + 400 * Math.sqrt(count));
+
+					var coords = placemarks[i].getElementsByTagName('Point')[0].getElementsByTagName('coordinates')[0].textContent.split(',');
+					coords = {lat: parseFloat(coords[1]), lng: parseFloat(coords[0])};
+
+					smallColor = [255, 0, 0];
+					bigColor = [240, 240, 0];
+					var percent = Math.sqrt(count) / 10;
+					percent = Math.min(Math.max(percent, 0), 1);
+					r = Math.round(smallColor[0] + (bigColor[0] - smallColor[0]) * percent);
+					g = Math.round(smallColor[1] + (bigColor[1] - smallColor[1]) * percent);
+					b = Math.round(smallColor[2] + (bigColor[2] - smallColor[2]) * percent);
+					cssCircleColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+
+					var newCircle = new google.maps.Circle({
+						strokeColor: cssCircleColor,
+      					strokeOpacity: 0.85,
+      					strokeWeight: 2,
+      					fillColor: cssCircleColor,
+      					fillOpacity: 0.40,
+      					map: map,
+      					center: coords,
+      					radius: rad
+					});
+
+					var circleData = {"circleObj": newCircle, "circleColor": cssCircleColor};
+
+					addFeatureSelectListener(newCircle, ids, xsize, ysize);
+
+					circles.push(circleData);
+
+                }
+
+				document.getElementById("loading").style.display = "none";
+       			document.getElementById("photototal").style.display = "block";
+       			document.getElementById("photototalcount").textContent = picTotal;
+			}
+
+
+		}
+	}
+
+	function deselectCircles()
+	{
+        circles.forEach((element) => 
+        {
+        	element.circleObj.setOptions({
+            fillColor: element.circleColor,
+            strokeColor: element.circleColor
+            });	
+        
+        });
+	}
+
+    function addFeatureSelectListener(circle, ids, x_size, y_size)
+    {
+    	circle.addListener('click', function(event) 
+    	{
+    		deselectCircles();
+
+            //Set selection color
+            circle.setOptions({
+                fillColor: "#0000FF",
+                strokeColor: "#0000FF",
+            });
+
+            selectedFeature = {"ids":ids, "x_size":x_size, "y_size":y_size};
+
+            displayGallery(selectedFeature, 1, 24)
+        });
+    }
+
+    function displayGallery(feature, desired_page, desired_ppp)
+    {
+    	$("#gallery").html("<div class=\"span12 text-center\"><i class='icon-spinner icon-2x icon-spin icon-large'></i></div>").fadeIn();
+    	$.get("/photos/photos.html", {ids:feature.ids,   x_size:feature.x_size,   y_size:feature.y_size,   page:desired_page,   ppp:desired_ppp}, function(html){
+    	    $("#gallery").html(html).fadeIn();
+    	});
+	}
+
+    </script>
+    
+    
+
+ </div>
+{% endblock %}

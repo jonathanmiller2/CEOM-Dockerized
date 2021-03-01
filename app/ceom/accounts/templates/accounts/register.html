@@ -1,0 +1,72 @@
+{% extends "accounts/base.html" %}
+
+{% load i18n %}
+{% block title %}CEOM: {% trans "Create an account" %}{% endblock %}
+
+{% block head_extra %}
+{{ block.super }}
+{{ profile_form.media }}
+<style type="text/css">
+
+
+</style>
+{% endblock%}
+{% block content %}
+    <h3>{% trans "Create an account" %}</h3>
+    <form action="." method="post" class="form-horizontal"> 
+    {% csrf_token %}
+    <fieldset class="my-3">
+        <legend class="my-0" style="font-size: 14pt;">{% trans "Required Information" %}</legend>
+        <hr class="my-1" />
+        <div class="col-lg-2 m-3">
+            <label>{% trans "Username" %}</label>
+            {{user_form.username}}
+
+            <label>{% trans "Email address" %}</label>
+            {{user_form.email}}
+
+            <label>{% trans "Password" %}</label>
+            {{user_form.password1}}
+ 
+            <label>{% trans "Password (again)" %}</label>
+            {{user_form.password2}}
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend class="my-0" style="font-size: 14pt;">{% trans "Extended Profile" %}</legend>
+        <hr class="my-1" />
+        <div class="col-lg-2 m-3">
+            <label>{% trans "First name" %}</label>
+            {{user_form.first_name}}
+
+            <label>{% trans "Last name" %}</label>
+            {{user_form.last_name}}
+
+            <label>{% trans "Country" %}</label>
+            {{profile_form.country}}
+
+            <label>{% trans "Affiliation" %}</label>
+            {{profile_form.affiliation}}
+
+            <label>{% trans "Address 1" %}</label>
+            {{profile_form.address1}}
+
+            <label>{% trans "Address 2" %}</label>
+            {{profile_form.address2}}
+
+            <label>{% trans "Phone Number" %}</label>
+            {{profile_form.telephone}}
+
+            <label>{% trans "Postal Code" %}</label>
+            {{profile_form.postal}}
+
+            <label>{% trans "URL" %}</label>
+            {{profile_form.url}}
+        </div>
+    </fieldset>
+    <div class="m-3">
+        <hr />
+        <input class='m-3 btn btn-primary' type="submit" value="{% trans 'Create Account' %}" />
+    </div>
+</form>
+{% endblock %}

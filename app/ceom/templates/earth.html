@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %} Data Visualization - Birds Tracking Data {% endblock %}
+
+{% block head_extra %}
+{{ block.super }}
+    <script src="http://www.google.com/jsapi?key=ABQIAAAAmuvLtH3m9h8LpbkjVzUDhBQyRLBZZgMo3VuWp3Pab5JM-oPN4hRjhrpJr4lifELK29a1ma50wKiWHg""></script>
+    <script>
+        google.load("earth", "1");
+        
+        var ge = null;
+        var birds_kml = "http://ceom-dev.ou.edu/birds/all.kml";
+        
+        function init() {
+          google.earth.createInstance("map3d", initCallback, failureCallback);
+          //var kO = ge.parseKml(kmlString);
+          //alert("test");
+          //ge.getFeatures().appendChild(kO);
+        }
+        
+        function initCallback(object) {
+          ge = object;
+          ge.getWindow().setVisibility(true);
+          ge.getOptions().setStatusBarVisibility(true);
+          ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
+          //ge.getLayerRoot().enableLayerById(ge.LAYER_BORDERS, true);
+          //ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, true);
+        var la = ge.createLookAt('');
+        la.set(37, 120, 100, ge.ALTITUDE_RELATIVE_TO_GROUND, 0, 45, 2500000);
+        ge.getView().setAbstractView(la);
+
+
+          google.earth.fetchKml(ge, birds_kml, function(kmlObject) {
+          if (kmlObject)
+            ge.getFeatures().appendChild(kmlObject);
+          });
+        }
+        
+        function failureCallback(object) {
+            alert("Error #"+object);
+        }
+    </script>
+{% endblock %}
+
+{% block body_tag %}<body onload='init()' id='body'>{% endblock %}
+
+{% block content %}
+<h3>Bird Tracking Data</h3>
+<div id='map3d' style='border: 1px solid silver; height: 600px; width: 760px;'></div>
+
+{% endblock %}

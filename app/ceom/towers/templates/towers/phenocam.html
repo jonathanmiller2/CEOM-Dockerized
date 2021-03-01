@@ -1,0 +1,127 @@
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="http://highslide-software.github.io/export-csv/export-csv.js"></script>
+<script>
+function my_js_callback(data){
+    console.log(data);
+    window.alert(data.message);
+}
+function get_site(data){
+    console.log(data);
+    console.log(data.site_name);
+    //window.alert(data.name1);
+    console.log('/static/pheno/Marena/'+data.name1);
+    $( '#namechange' ).html( "<big>"+data.site_name+"</big>" );
+    $('#image_load').show();
+    $('#image_change').attr('src', '/static/pheno/Marena/'+data.name1);
+    $('#image_load').hide();
+}
+/*$('#image_change').on('load', function(){
+  // hide/remove the loading image
+  $('#image_load').hide();
+});*/
+</script>
+		<script type="text/javascript">
+//console.log(""+{{photos}});
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            zoomType: 'xy',
+
+        },
+        credits: {
+            enabled : true,
+            href : "http://www.ceom.ou.edu",
+            text : "ceom.ou.edu"
+        },
+        title: {
+            text: '<strong>GCC over time</strong>',
+            x: 0//center
+        },
+       /* subtitle: {
+            text: 'Source: WorldClimate.com',
+            x: -20
+        },*/
+        {% autoescape off %}
+        xAxis: {
+            categories: {{x_val}},
+        },
+        {% endautoescape %}
+        yAxis: {
+            title: {
+                text: 'GCC vs Time'
+            },
+            lineColor: '#665f5f',
+            lineWidth: 0.2,
+            plotLines: [{
+                value: 0,
+                width: 0.2,
+                color: '#81FF42'
+            }],
+            plotBands: [{
+                from: 0.34,
+                to: 0.5,
+                color: 'rgba(68, 170, 213, 0.1)',
+                label: {
+                    text: 'Greener',
+                    style: {
+                        color: '#606060'
+                    }
+                }
+            }]
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">#gcc: </td>' +
+                '<td style="padding:0"><b>{point.y:.9f} </b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    point: {
+                        events: {
+                            click: function (e) {
+                                console.log(e);
+                                console.log(e.point.category);
+                                Dajaxice.ceom.towers.getPhoto(get_site, {'site_name':e.point.category});
+
+                                //console.log(e.y.key);
+                            }
+                        }
+                    },
+                    marker: {
+                        lineWidth: 1
+                    }
+                }
+            },
+        series: [{
+            name: 'GCC',
+            data: {{y_val}},
+            lineWidth: 0.2,
+            lineColor: '#81FF42',
+
+        }]
+    });
+});
+$('#getcsv').click(function () {
+    alert(chart.getCSV());
+});
+        </script>
+        <div class="span12">
+        <div class="span5"><div id="namechange" class="span12"></div><img id="image_load" src="/static/ajax-loader.gif" width=100 px height=100 px border="0"/><script>$('#image_load').hide();</script><img id="image_change" src="/static/pheno/Marena/Marena-2012-0330-133002.jpg" width=600 px height=800 px border="0"/></div>
+        <div class="span7" id="container" style="min-width: 500px; height: 500px; max-width: 1000px; margin: 0 auto">{{x_val}}{{y_val}}</div>
+        </div>
+        <button id="getcsv">Alert CSV</button>
+        <script type="text/javascript">$("#getcsv").hide();</script>
+        <!--
+        <input type=button value="hello" onclick="Dajaxice.ceom.towers.sayhello(my_js_callback);"></input><script>$('#image_load').hide();</script-->

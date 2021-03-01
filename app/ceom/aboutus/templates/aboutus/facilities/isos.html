@@ -1,0 +1,14 @@
+{% extends "aboutus/base.html" %}
+{% load i18n %}
+{% block title%}{% trans "CEOM Facilities: Integrated Land Observation Sites (iLOS)" %}{% endblock%}
+{% block content %}
+<div class="well">
+	<div class="grid" >
+		<h2 style="color: #dc143c;">{% trans "Integrated Land Observation Sites (iLOS)" %}</h2>
+		<div class="hr"></div>&nbsp;
+		<p>{% blocktrans %} The integrated field observation platforms aim to link in-situ observations with airborne and satellite observations, and collect data for development and validation of algorithms and models. Through collaboration effort between OU and USDA/ARS Grazinglands Research Laboratory at El Reno, Oklahoma, we have established one Integrated Grassland Observation System (iGOS) for native grassland and one integrated Cropland Observation system (iCOS) for winter wheat field. It currently has LI-COR instruments for CO2, H2O and CH4 fluxes, PhenoCam for phenology, and COSMOS for soil moisture, as well as Oklahoma Mesonet stations.>{% endblocktrans %}</p>
+		<p>&nbsp;</p>
+		<img style="vertical-align: bottom; display: block; margin-left: auto; margin-right: auto;" src="/static/images/igos.png" alt="igos.png" width="533" height="400" />
+	</div>
+</div>
+{% endblock %}

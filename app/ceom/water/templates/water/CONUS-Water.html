@@ -1,0 +1,47 @@
+{% extends "water/base.html" %}
+
+{% load i18n %}
+{% block title %} {% trans "CONUS-Water Datasets" %}{% endblock %}
+
+{% block content %}
+<div class="well">
+    <h2 style="color: #dc143c;">{% trans "CONUS-Water Datasets" %}</h2>
+<style>
+.hr {
+content: "";
+height: 1px;
+width: 100%;
+background: #272727;
+background: -webkit-gradient(linear,left top,right top,color-stop(0%,transparent),color-stop(50%,#272727),color-stop(100%,#dfecaf));
+background: -webkit-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%);
+background: -moz-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%);
+background: -ms-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%);
+background: -o-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%);
+background: linear-gradient(left,transparent 0%,#272727 50%,transparent 100%);
+}
+
+.mask {
+display: block;
+position: absolute;
+top: 0;
+left: 0;
+z-index: 1;
+width: 177px;
+height: 177px;
+background: url(web-storefront/images/mask175.png) 0 0 no-repeat;
+background-size: 175px 175px;
+}
+</style>
+<div class="well">
+    <h4 style="color: #0f4ba4;">{% trans "Datasets of Annual and 33-year water body frequency maps of the contiguous US from 1984 to 2016" %}</h4>
+    <div class="hr"></div>
+    &nbsp;            
+    <p> {% blocktrans %}There are 50 5-by-5 degree tiles covering the entire CONUS. In each zipped tile folder, there are 33 annual water body frequency images (e.g. freq_2016_-070_040.tif), one 33-year water body frequency image (e.g. 33YearFreq_1984_2016_-070_040.tif), and one 33-year good observation image (e.g. 33YearGoodObs_1984_2016_-070_040.tif).{% endblocktrans %} </p>
+
+    <p>The complete information regarding how these Annual and 33-Year water body frequency maps are generated can be obtained here: [<a href='https://zenodo.org/record/1194516#.Ww3i5FWnGou'>click here</a>]</p>
+        
+    <p>For additional details regarding the datasets, please go to our lab server [<a href='http://mangrove.rccc.ou.edu/ceomftp/conus_water_dataset/'>conus_water_dataset</a>]</p>
+
+    <p>{% trans " To use this data, please cite our articles: Zou, Z., Xiao, X., Dong, J., Qin, Y., Doughty, R.B., Menarguez, M.A., Zhang, G., Wang, J. Divergent Trends of Open Surface Water Body Area in the Contiguous United States from 1984 to 2016, PNAS, doi: 10.1073/pnas.1719275115 Zou, Z., J. Dong, M. A. Menarguez, X. Xiao, Y. Qin, R. B. Doughty, K. V. Hooker, and K. David Hambright (2017), Continued decrease of open surface water body area in Oklahoma during 1984-2015, Sci Total Environ, 595, 451-460, doi: 10.1016/j.scitotenv.2017.03.259." %} </p>
+     
+{% endblock %}
