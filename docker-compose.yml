@@ -5,7 +5,7 @@ services:
   web:
     build: ./app
 
-    #user: eomfuser
+    #user: ceomuser
 
     command: bash -c "python manage.py migrate --noinput -v 1 && 
                       echo MIGRATE_FIN &&
@@ -14,10 +14,10 @@ services:
                       python manage.py collectstatic --noinput &&
                       echo COLLECTSTATIC_FIN &&
                       python manage.py compilemessages &&
-                      gunicorn eomf.wsgi:application --bind 0.0.0.0:8000"
+                      gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
                       
                       #tail -F anything"
-                      #gunicorn eomf.wsgi:application --bind 0.0.0.0:8000"
+                      #gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
                       #python manage.py runserver 0.0.0.0:8000"
 
                       #python manage.py makemigrations outreach &&
@@ -44,7 +44,7 @@ services:
   db:
     image: postgis/postgis
 
-    #user: eomfuser
+    #user: ceomuser
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -61,7 +61,7 @@ services:
       dockerfile: ./nginx/Dockerfile
 
     #TODO: Figure out how to avoid containers running as root
-    #user: eomfuser
+    #user: ceomuser
 
     #TODO: Nginx NEEDS this link to the active files because media files are added during runtime, after docker's copy command. Thus the container doesn't have the new media files.
     volumes: 
@@ -83,7 +83,7 @@ services:
 #
 #  celery:
 #    build: ./app
-#    command: celery -A eomf worker -l info
+#    command: celery -A ceom worker -l info
 #    volumes:
 #      - ./app/:/code/
 #    

@@ -1,3 +1,5 @@
+*.swp
+
 # Media files
 media/
 *.bak

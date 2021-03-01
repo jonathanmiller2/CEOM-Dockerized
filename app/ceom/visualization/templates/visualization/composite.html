@@ -1,0 +1,271 @@
+{% extends "visualization/base.html" %}
+
+{% load i18n %}
+{% block title %} {% trans "CEOM MODIS Composite Image Visualization" %} {% endblock %}
+
+{% block head_extra %}
+<script src="http://www.openlayers.org/api/OpenLayers.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var map;
+    var graphic;
+    function init(){
+        map = new OpenLayers.Map('map');
+
+        graphic = new OpenLayers.Layer.Image(
+            'City Lights',
+            'http://landweb.nascom.nasa.gov/browse/images/{{version}}/{{sat_name}}/{{prod}}/{{year}}/A{{year}}{{julian_day}}/MOD09.A{{year}}{{julian_day}}.{{version}}.png',
+            //'http://landweb.nascom.nasa.gov/browse/images/{{prod}}/{{sat_ver}}/{{year}}/A{{year}}{{julian_day}}/HAM/HAM.A{{year}}{{julian_day}}.{{prod}}.{{version}}.900x450.jpg',
+            //http://landweb.nascom.nasa.gov/browse/images/006/Terra/MOD09/2015/A2015273/MOD09.A2015273.006.png
+            //'http://landweb.nascom.nasa.gov/browse/images/055/MOD17A2-GPP/2000/A2000001/MOD17A2-GPP.A2000001.055.m.png',
+            new OpenLayers.Bounds(-180, -90, 180, 90),
+            new OpenLayers.Size(1350, 675),
+            {numZoomLevels: 3}
+		);
+		
+        graphic.events.on({
+            loadstart: function() {
+                OpenLayers.Console.log("loadstart");
+            },
+            loadend: function() {
+                OpenLayers.Console.log("loadend");
+            }
+        });
+
+
+        map.addLayers([graphic]);
+        //map.addControl(new OpenLayers.Control.LayerSwitcher());
+        map.zoomToMaxExtent();
+    }
+</script>
+
+
+{% endblock %}
+
+{% block body_tag %}<body bgcolor="#FFFFFF" onload="init()" >{% endblock %}
+{% block content %}
+<script type="text/javascript">
+	function image_error(){
+		var src = "/media/visualization/composite/not_available.png";
+		$( "#map" ).attr("src", src);
+	}
+	$(function() {
+       $( "#accordion" ).accordion({
+          heightStyle: "content",
+          collapsible: true,
+          active: false
+        });
+      });
+	$(function() {
+	    $( "#CAL_DATE" ).datepicker({
+	      changeMonth: true,
+	      changeYear: true
+	    });
+	  });
+  function calendarSubmit(){
+    var value = document.getElementById("CAL_DATE").value
+    console.log(value)
+    if (value != ""){
+      var day =parseInt($.datepicker.formatDate("o", new Date(value)))
+      var year =parseInt($.datepicker.formatDate("yy", new Date(value)))
+
+     }else{
+      alert("Please select a date by clicking on the calendar input and picking the desired date.")
+     }
+     console.log(year.toString())
+	 console.log(day.toString())
+     window.location.replace("/visualization/composite/"+ year.toString() +"/"+ day.toString() +"/");
+  }
+	function julianSubmit(){
+		var year = parseInt(document.getElementById("JUL_YEAR").value);
+		var day = parseInt(document.getElementById("JUL_DAY").value);
+		var text = /^[0-9]+$/;
+	    if ((year != "") && (!text.test(year))) {
+	        alert("Please Enter Numeric Values Only for the year");
+	        return false;
+	    }
+	    if (year.toString().length != 4) {
+	        alert("Year is not proper. Please check format (YYYY)");
+	        return false;
+	    }
+	    var current_year=new Date().getFullYear();
+	    if((year < 2000))
+	        {
+	        alert("Year should be in range 2000");
+	        return false;
+	        }
+	    if ((day != "") && (!text.test(day))){
+	    	alert("Please Enter Numeric Values Only for the day");
+	    }
+	    else{
+	    	if ((day != "") && (text.test(day)) && (day>366 || day<1)){
+	    		alert("Please Enter a day from 1 to 366");
+	    	}
+	    }
+	   	
+      window.location.replace("/visualization/composite/"+ year.toString() +"/"+ day.toString() +"/");
+	    
+
+	}
+	function set50km(){
+		map.removeLayer(graphic,false);
+		 graphic = new OpenLayers.Layer.Image(
+            'Mymap',
+            'http://landweb.nascom.nasa.gov/browse/images/{{version}}/{{sat_name}}/{{prod}}/{{year}}/A{{year}}{{julian_day}}/MOD09.A{{year}}{{julian_day}}.{{version}}.png',
+            //'http://landweb.nascom.nasa.gov/browse/images/{{prod}}/{{sat_ver}}/{{year}}/A{{year}}{{julian_day}}/HAM/HAM.A{{year}}{{julian_day}}.{{prod}}.{{version}}.900x450.jpg',
+            new OpenLayers.Bounds(-180, -90, 180, 90),
+            new OpenLayers.Size(1350, 675),
+            {numZoomLevels: 4}
+        );        //900x450.jpg
+        //7208x3604.jpg
+		 map.addLayers([graphic]);
+        map.zoomToMaxExtent();
+	}
+	function set5km(){
+		map.removeLayer(graphic,false);
+		 graphic = new OpenLayers.Layer.Image(
+            'Mymap',
+            'http://landweb.nascom.nasa.gov/browse/images/{{version}}/{{sat_name}}/{{prod}}/{{year}}/A{{year}}{{julian_day}}/MOD09.A{{year}}{{julian_day}}.{{version}}.full.png',
+            //'http://landweb.nascom.nasa.gov/browse/images/{{prod}}/{{sat_ver}}/{{year}}/A{{year}}{{julian_day}}/HAM/HAM.A{{year}}{{julian_day}}.{{prod}}.{{version}}.7208x3604.jpg',
+            new OpenLayers.Bounds(-180, -90, 180, 90),
+            new OpenLayers.Size(1350, 675),
+            {numZoomLevels: 7}
+        );
+		 map.addLayers([graphic]);
+        map.zoomToMaxExtent();
+	}
+
+</script>
+<h2 style="color:rgb(61,147,56); float:left"> {% trans "MODIS TERRA composite map" %}</h2><br /><br /><br />
+<h4 style="color:rgb(17,34,215); float:left;">{{prod}}/{{sat_name}}_{{sat_ver}}({{version}}):<b>{{year}}-{{julian_day}}</b></h4>
+
+<div id="map" style="height: 675px;"></div>
+<div class="row justify-content-around" style="margin: 60px 0px 10px 0px;">
+	<div>
+		<a href="/visualization/composite/{{previous8_year}}/{{previous8_day}}/" class="btn btn-primary mx-1" role="button">
+			<span class="fas fa-chevron-left"></span> 8
+		</a>
+
+		<a href="/visualization/composite/{{next8_year}}/{{next8_day}}/" class="btn btn-primary mx-1" role="button">
+			8 <span class="fas fa-chevron-right"></span>
+		</a>
+	</div>
+	
+	<div>
+		<button type="button" class="btn btn-primary mx-1" onclick="set50km()"> {% trans "50 km" %} <span class="fas fa-globe-americas"></span></button> 
+		<button type="button" class="btn btn-primary mx-1" onclick="set5km()">  {% trans "5 km" %} <span class="fas fa-search-plus"></span></button>
+	</div>
+</div>
+
+<div class="row justify-content-around mb-5">
+	<div class="col-lg-5 m-2 card bg-light shadow-sm">
+		<div class="row justify-content-around mt-3">
+			<div class="form-group row mx-2">
+				<label class="col col-form-label">{% trans "Year" %}:</label>
+				<div style="width: 80px">
+					<input class="form-control" id="JUL_YEAR" type="number" min="2000" max="{%now "Y"%}" step="1" placeholder="Year" value="{{year}}">
+				</div>
+			</div>
+			<div class="form-group row mx-2">
+				<label class="col col-form-label">{% trans "Date" %}:</label>
+				<div style="width: 80px">
+					<input class="form-control" id="JUL_DAY" type="number" min="1" max="365" step="1" placeholder="Julian day" value="{{julian_day}}">
+				</div>
+			</div>
+			<div class="form-group row mx-3">
+				<button class="btn btn-primary" onclick="julianSubmit()">{% trans "Submit" %}</button>
+			</div>
+		</div>
+		
+	</div>
+	<div class="col-lg-5 m-2 card bg-light shadow-sm">
+		<div class="row justify-content-around mt-3">
+			<div class="form-group row mx-2">
+				<label class="col col-form-label">{% trans "Calendar" %}:</label>
+				<div style="width: 200px">
+					<input class="form-control" id="CAL_DATE" type="text" style="position: relative; z-index: 100000;"  placeholder="click to choose the date" readonly="readonly">
+				</div>
+			</div>
+			<div class="form-group row mx-3">
+				<button class="btn btn-primary" onclick="calendarSubmit()">{% trans "Submit" %}</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="accordion"> <!--What the heck? Why is the accordion functionality tied to the id??-->
+	<h3> {% trans "Julian calendar Leap years" %} </h3>
+	<div>
+		{% include "visualization/julianCalendarLeap.html" %}
+	</div>
+	<h3> {% trans "Julian calendar Regular years" %} </h3>
+	<div>
+		{% include "visualization/julianCalendarRegular.html" %}
+	</div>
+</div>
+
+
+<!-- This is a fix for the scroll issue on the openlayer map. Taken from: https://stackoverflow.com/questions/55955171/preventing-unable-to-preventdefault-inside-passive-event-listener-error-within -->
+<script>
+	const eventListenerOptionsSupported = () => {
+	  let supported = false;
+
+	  try {
+	    const opts = Object.defineProperty({}, 'passive', {
+	      get() {
+	        supported = true;
+	      }
+	    });
+
+	    window.addEventListener('test', null, opts);
+	    window.removeEventListener('test', null, opts);
+	  } catch (e) {}
+
+	  return supported;
+	}
+
+	const defaultOptions = {
+	  passive: false,
+	  capture: false
+	};
+	const supportedPassiveTypes = [
+	  'scroll', 'wheel',
+	  'touchstart', 'touchmove', 'touchenter', 'touchend', 'touchleave',
+	  'mouseout', 'mouseleave', 'mouseup', 'mousedown', 'mousemove', 'mouseenter', 'mousewheel', 'mouseover'
+	];
+	const getDefaultPassiveOption = (passive, eventName) => {
+	  if (passive !== undefined) return passive;
+
+	  return supportedPassiveTypes.indexOf(eventName) === -1 ? false : defaultOptions.passive;
+	};
+
+	const getWritableOptions = (options) => {
+	  const passiveDescriptor = Object.getOwnPropertyDescriptor(options, 'passive');
+
+	  return passiveDescriptor && passiveDescriptor.writable !== true && passiveDescriptor.set === undefined
+	    ? Object.assign({}, options)
+	    : options;
+	};
+
+	const overwriteAddEvent = (superMethod) => {
+	  EventTarget.prototype.addEventListener = function (type, listener, options) {
+	    const usesListenerOptions = typeof options === 'object' && options !== null;
+	    const useCapture          = usesListenerOptions ? options.capture : options;
+
+	    options         = usesListenerOptions ? getWritableOptions(options) : {};
+	    options.passive = getDefaultPassiveOption(options.passive, type);
+	    options.capture = useCapture === undefined ? defaultOptions.capture : useCapture;
+
+	    superMethod.call(this, type, listener, options);
+	  };
+
+	  EventTarget.prototype.addEventListener._original = superMethod;
+	};
+
+	const supportsPassive = eventListenerOptionsSupported();
+
+	if (supportsPassive) {
+	  const addEvent = EventTarget.prototype.addEventListener;
+	  overwriteAddEvent(addEvent);
+	}
+</script>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load dajaxice_templatetags %}
+{% block head_extra %}
+	{% dajaxice_js_import %}
+{% endblock %}
+{% block left_menu %}
+{% endblock %}
+{% block sidebar_extra %}
+{% endblock %}
+{% block content %}
+	<div id="show_1"></div>
+	<div class="span12">
+		<a href="/feedback/tracking/"><button>Back</button></a>
+		<p> <strong>Feedback provided by : {{feed.email}}</strong> </p>
+		<p> <strong>Details :</strong> <br/><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{feed.text}}</p>
+		<strong>Attachments:</strong><br/>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<a href=/media/{{feed.Photo}}><img src=/media/{{feed.Photo}} style="height:100px;width:100px"></a>
+	</div>
+	<span class="offset4">
+		<a href="#namefind"><button class="button btn-primary">
+			Click here to add a comment
+		</button></a>
+	</span>
+	<br/>
+	<hr/>
+	<div class="span12" style="overflow:scroll;width:100%;height:400px;">
+		{% for x in comments %}
+			<div class="span7 offset4" style="text-align:justify;margin:15px">
+				
+				<span class="span12 addcolo">
+				{{x.Comment_text}}<br/></span>
+			</div>
+		{% endfor %}
+		<!-- the div is given this id so that it should not be coincided with anythind -->
+		<div class="span12" style="text-align:justify;" id="123456">
+			
+		</div>
+	</div>
+	<div class="span12">
+		<strong>Enter your name:&nbsp;</strong>
+		<input type=text id="namefind" required></input><br/>
+		<strong>Enter your comment here :</strong>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		
+		<textarea rows="4" cols="50" id="comment_area" required>
+		</textarea>
+		<button class="button btn-primary" onclick="addcomment()">Submit</button>
+	</div>
+	<script>
+	var z = "";
+	function addcomment(){
+		console.log($("#comment_area").val());
+		name = $("#namefind").val();
+		if($("#comment_area").val()==""||name == ""){
+			return "False";
+		}
+		test = new Date();
+		test.toDateString();
+		console.log(test);
+		total_comment = test;
+		console.log(total_comment);
+		total_comment = name + "@" + total_comment + ": " + $("#comment_area").val();
+		console.log(total_comment);
+		z =total_comment;
+		//here you should do such that the user sees immediate action of addition of his comment to the page
+		//and also the database should be updated
+		//do a DAJAX call to update the database
+		Dajaxice.ceom.feedback.updateComment(success_or_not,{'feed_id':{{feed.id}},'new_val':total_comment});
+	};
+	function success_or_not(data){
+		if(data.message == "Success"){
+			// //do something interactive to user
+			// console.log($("#123456").html()+"<div class = 'span12'">+$("#comment_area").val()+"</div>");
+			// $("#123456").html($("#123456").html()+"<div class = 'span12'">+$("#comment_area").val()+"</div>");
+			// $("#123456").slideUp(1000);
+			// var x = $("#123456").html();
+			// var y = "<div class = 'span12'">+$("#comment_area").val()+"</div>";
+			// var z = x+y;
+			// console.log("correct?: "+z);
+			console.log($("#123456").html());
+			x = $("#123456").html()
+			$("#123456").html(x+"<span class='span12 addcolo'>"+z+"</span><br/>");
+			$('#namefind').val('');
+			$('#comment_area').val('');
+			$("#show_1").html("<p style='color:green'>Successfully Updated</p>");
+			$( "#show_1" ).slideUp( 500 ).delay( 500 ).fadeIn( 100 );
+			// $("#show_1").hide();
+		}
+		else if(data.message == "Failure") {
+			//Tell the user the data is not updated.
+			$("#show_1").html("<p style='color:red'>Update Failed</p>");
+			$( "#show_1" ).slideUp( 300 ).delay( 1000 ).fadeIn(100);
+			// $("#show_1").hide();
+		}
+	};
+	</script>
+	<style>
+	.addcolo{
+	background-color: lightblue;
+	width: 100%;
+	/*border: 5px;
+	border-left: 30px;
+	border-right: 30px;*/
+	margin: auto;
+	margin-right:auto;
+	margin-left:25px;
+	padding: 5px;
+	padding-right: 15px;
+	text-align: justify;
+	border-radius: 5px;
+	}
+	</style>
+{% endblock %}

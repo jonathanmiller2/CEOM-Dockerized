@@ -1,0 +1,251 @@
+{% extends "gisday/base.html" %}
+
+{% block head_extra %}
+{{block.super}}
+{{ head_extra|safe }}
+{% endblock %}
+
+
+
+{% block content %}
+<style>
+.grid{padding:10px}. h2{font-size:1.2em;line-height:1.3em;}
+.hr{content:""; height:1px; width:100%; background:#272727; background:-webkit-gradient(linear,left top,right top,color-stop(0%,transparent),color-stop(50%,#272727),color-stop(100%,#dfecaf)); background:-webkit-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%); background:-moz-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%); background:-ms-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%); background:-o-linear-gradient(left,transparent 0%,#272727 50%,transparent 100%); background:linear-gradient(left,transparent 0%,#272727 50%,transparent 100%)}
+.border{position:relative;border:1px solid #bbb;margin:10px 0px;padding:5px 5px 0px 5px;background-color:#ddd;-moz-box-shadow:inset 0 1px 1px #eeeeee;-ms-box-shadow:inset 0 1px 1px #eeeeee;-o-box-shadow:inset 0 1px 1px #eeeeee;-webkit-box-shadow:inset 0 1px 1px #EEE;box-shadow:inset 0 1px 1px #EEE;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;}
+.border:before,.border:after{z-index:-1;position:absolute;content:"";bottom:15px;left:10px;width:50%;top:50%;max-width:300px;background:rgba(0, 0, 0, .7);-webkit-box-shadow:0 15px 10px rgba(0, 0, 0, .7);-moz-box-shadow:0 15px 10px rgba(0, 0, 0, .7);box-shadow:0 15px 10px rgba(0, 0, 0, .7);-webkit-transform:rotate(-3deg);-moz-transform:rotate(-3deg);-o-transform:rotate(-3deg);-ms-transform:rotate(-3deg);transform:rotate(-3deg);}
+.border:after{-webkit-transform:rotate(3deg);-moz-transform:rotate(3deg);-o-transform:rotate(3deg);-ms-transform:rotate(3deg);transform:rotate(3deg);right:10px;left:auto;}
+#linearBg2 {
+  /* fallback */
+  background-color: #1a82f7;
+  background: url(images/linear_bg_2.png);
+  background-repeat: repeat-x;
+
+  /* Safari 4-5, Chrome 1-9 */
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFFFFF), to(#2F2727));
+
+  /* Safari 5.1, Chrome 10+ */
+  background: -webkit-linear-gradient(top, #fff , #63a5f0  );
+
+  /* Firefox 3.6+ */
+  background: -moz-linear-gradient(top, #fff , #63a5f0  );
+
+  /* IE 10 */
+  background: -ms-linear-gradient(top, #fff , #63a5f0  );
+
+  /* Opera 11.10+ */
+  background: -o-linear-gradient(top, #fff , #63a5f0 );
+}
+
+.sidebar-nav-fixed {
+     position:fixed;
+     top:180px;
+     width:auto;
+ }
+
+ @media (max-width: 767px) {
+     .sidebar-nav-fixed {
+         width:auto;
+     }
+ }
+
+ @media (max-width: 1248px) {
+     .sidebar-nav-fixed {
+         position:static;
+        width: auto;
+     }
+ }
+
+</style>
+
+
+<script type="text/javascript">
+$('#mycontent').scrollspy();
+</script>
+
+<div data-target="#myNavbar" id="mycontent">
+<!--<div data-spy="scroll" data-target="#myNavbar" id="mycontent">-->
+
+<div class="well">
+    <div class="grid">
+        <h4 id="Summary">Summary</h4>
+            <div class="hr"></div>
+            <p> The first campus wide GIS Day Expo was held November 14th, 2012 at the National Weather Center located on the University of Oklahoma Research Campus.
+            The event was coordinated by the Center for Spatial Analysis and Center for Earth Observation and Modeling,
+            two closely affiliated university sponsored research centers working in geospatial information science and technology.
+            The organizing committee was multidisciplinary and included representatives from a wide variety of campus entities.
+            The event featured a GIS exhibition, graduate student poster contest, speakers, K-12 activities and more.</p>
+	</div>
+</div>
+
+<div class="well">
+    <div class="grid" >
+        <h4 id="Participation">Participation </h4>
+            <div class="hr"></div>
+            <p> Participation in OU GIS Day was free and open to the campus and public. Participants included students, faculty and staff from across campus,
+            representatives from government agencies and private industry, K-12 students and others in the local GIS community. Registration was not required so actual attendance is unknown.
+            There were <b>92</b> total registered volunteers, exhibitors and other participants in addition to 101 high school students</p>
+	</div>
+</div>
+
+<div class="well">
+    <div class="grid">
+        <h4 id="Sponsorship">Sponsorship </h4>
+            <div class="hr"></div>
+            <p> Funding for OU GIS Day was provided by 14 partners from across campus, government agencies and private industry. Sponsors are listed below
+            <ul>
+                <li>OU College of Atmospheric and Geographic Sciences</li>
+                <li>Oklahoma NASA Space Grant</li>
+                <li>Oklahoma NSF EPSCoR</li>
+                <li>OU Vice President for Research</li>
+                <li>OU Graduate College</li>
+                <li>OU NSF EPSCoR Track II CyberCommons Project</li>
+                <li>OU Department of Microbiology and Plant Biology</li>
+                <li>OU Center for Earth Observation and Modeling</li>
+                <li>OU Department of Geography and Environmental Sustainability</li>
+                <li>Oklahoma Biological Survey</li>
+                <li>Oklahoma Geological Survey</li>
+                <li>Oklahoma NASA Space Grant</li>
+                <li>Oklahoma NSF EPSCoR</li>
+                <li>Access Midstream Partners</li>
+                <li>Spectral Evolution</li>
+                <li>Weather Decision Technologies, Inc.</li>
+            <ul>
+            </p>
+	</div>
+</div>
+
+<div class="well">
+    <div class="grid">
+        <h4 id="Exhibitors">Exhibitors </h4>
+            <div class="hr"></div>
+            <p> Booth space for exhibition at OU GIS Day was open to the campus and the public. A total of 27 exhibitors hosted booths at the event representing academic department
+            and research centers, government agencies, private industry and more. A list of participants is provided below.
+            <ul>
+                <li><b>OU research and outreach centers:</b></li>
+                    <ul>
+                        <li>Center for Spatial Analysis</li>
+                        <li>Center for Earth Observation and Modeling</li>
+                        <li>Hydrometeorology and Remote Sensing Laboratory</li>
+                        <li>K20 Center for EducationLandcover </li>
+                        <li>Land Use Change Group</li>
+                        <li>Oklahoma Lab for Transportation Research, Education and Outreach</li>
+                        <li>Oklahoma NASA Space Grant</li>
+                        <li>OU Information technologyRadar Aeroecology  Group</li>
+                    </ul>
+
+                <li><b>OU academic departments:</b></li>
+                    <ul>
+                        <li>Landscape Architecture</li>
+                        <li>Geography and Environmental Sustainability</li>
+                        <li>Regional and City Planning</li>
+                        <li>OU Microbiology and Plant Biology</li>
+                        <li>OU Health Science Center Biostatistics and Epidemiology</li>
+                    </ul>
+
+                <li><b>State government participants:</b></li>
+                    <ul>
+                       <li>Oklahoma Geological Survey</li>
+                        <li> Oklahoma Biological Survey</li>
+                    </ul>
+
+                <li><b>Federal government participants:</b></li>
+                    <ul>
+                        <li>DOI South Central Climate Science Center</li>
+                        <li>NOAA/National Severe Storms Lab</li>
+                        <li>USDA-ARS Grazing Lands Research Laboratory</li>
+                        <li>Private industry participants:</li>
+                        <li>Access Midstream Partners</li>
+                        <li>Spectral Evolution</li>
+                        <li>Weather Decision Technologies, Inc.</li>
+                    </ul>
+
+                <li><b>Other participants:</b></li>
+                    <ul>
+                        <li>Tulsa Community College</li>
+                        <li>Oklahoma South Central Arc User Group</li>
+                        <li>OU Student Chapter of the American Society for Photogrammetry and Remote Sensing</li>
+                        <li>Community Collaborative Rain, Hail and Snow Network </li>
+                    </ul>
+            <ul>
+            </p>
+	</div>
+</div>
+
+
+
+<div class="well">
+    <div class="grid">
+        <h4 id="Speakers">Speakers </h4>
+            <div class="hr"></div>
+            <p> OU GIS Day featured a welcome and introduction by <a href="http://kkd.ou.edu/">Kelvin Droegemeier</a>, OU Vice President for Research
+            and keynote address from <a href="http://parker.ou.edu/~bmoore/">Dr. Berrien Moore</a>, Dean of OU College of Atmospheric and Geographic Sciences and Director of the National Weather Center.
+            The event also featured presentations on geospatial information science and technology Phillip Hanley of ERGIS,
+            DeWayne Mitchell of Weather Decision Technologies and Craig Moody of the Oklahoma Department of Transportation.</p>
+	</div>
+</div>
+
+<div class="well">
+    <div class="grid">
+        <h4 id="Poster-Contest">Graduate Student Poster Contest </h4>
+            <div class="hr"></div>
+            <p> With support from the <a href="http://www.ou.edu/gradweb">University of Oklahoma Graduate College</a> OU GIS Day featured a graduate student poster contest.
+            14 students from 7 academic departments under 6 different colleges at OU participated. Entries were judged by a panel from the OU GIS Day committee and three prizes were awarded.</p>
+	</div>
+</div>
+
+<div class="well">
+    <div class="grid">
+        <h4 id="K-12-Participation">K-12 Participation and Activities </h4>
+            <div class="hr"></div>
+            <p> The OU GIS Day committee worked with the University of Oklahoma Prospective Student Services (PSS) Diversity Enrichment Program to involve area high school students in the event.
+            The students attended a presentation by PSS and technical demonstrations in GIS, remote sensing and mobile application development by CSA student research assistants and OU information
+            technology. After browsing the GIS Day Expo the students had lunch at a campus cafeteria. 101 high school juniors and seniors from 6 participating schools attended with 10 adult sponsors.
+            Participants were selected by school counselors from the top 20 – 25% percent of their class and must be eligible for admittance to OU.
+            Each school is considered a high-minority serving institution and has a high incidence of poverty according to the Oklahoma Education Oversight Board Office of Accountability.
+            Profiles of participating schools can be viewed at the links below. </p>
+            <p>
+                <ul>
+                    <li><a href="http://www.schoolreportcard.org/2011/reports/src/201155I089780.pdf">http://www.schoolreportcard.org/2011/reports/src/201155I089780.pdf </a></li>
+                    <li><a href="http://www.schoolreportcard.org/2011/reports/src/201155I089707.pdf">http://www.schoolreportcard.org/2011/reports/src/201155I089707.pdf</a></li>
+                    <li><a href="http://www.schoolreportcard.org/2011/reports/src/201155I089750.pdf">http://www.schoolreportcard.org/2011/reports/src/201155I089750.pdf</a></li>
+                    <li><a href="http://www.schoolreportcard.org/2011/reports/src/201155I089726.pdf">http://www.schoolreportcard.org/2011/reports/src/201155I089726.pdf</a></li>
+                    <li><a href="http://www.schoolreportcard.org/2011/reports/src/201155I089760.pdf">http://www.schoolreportcard.org/2011/reports/src/201155I089760.pdf</a></li>
+                    <li><a href="http://www.schoolreportcard.org/2011/reports/src/201155I037705.pdf">http://www.schoolreportcard.org/2011/reports/src/201155I037705.pdf</a></li>
+                </ul>
+            </p>
+
+	</div>
+</div>
+
+<div class="well">
+    <div class="grid">
+        <h4 id="Organizing-Committee"> OU GIS Day Organizing Committee</h4>
+        <div class="hr"></div>
+        <ul>
+            <li><b>Committee Chair</b></li>
+                <ul><li>Xiangming Xiao <small>(xiangming.xiao@ou.edu, 405-3258941)</small></li></ul>
+
+        <li><b>Event Coordinators</b></li>
+        <ul><li>Chandrashekhar Biradar</li>
+        <li>Susan Dubbs</li>
+        <li>Melissa L. Scott *<small>(mscott@ou.edu, 405-3254871)</small></li></ul>
+
+        <li><b>Faculty Advisors</b></li>
+        <ul><li>Keith Brewster</li>
+        <li>Kirsten de Beurs</li>
+        <li>Yang Hong</li>
+        <li>Guoqiang Shen</li>
+        <li>Xiangming Xiao</li>
+        <li>May Yuan</li></ul>
+
+        <li><b>Graduate Student Liaisons</b></li>
+        <ul><li>Cui Jin * <small>(cuijin@ou.edu, 405-3253131)</small></li>
+        <li>Xiaodi Yu</li></ul>
+        </ul>
+         (* contact person)
+	</div>
+</div>
+
+</div>
+
+{% endblock %}

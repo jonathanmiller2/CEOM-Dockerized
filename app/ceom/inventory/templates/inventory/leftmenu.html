@@ -1,0 +1,75 @@
+{% load i18n %}
+<style>
+	a {
+		font-size: 11pt;
+		color: #4f85d1;
+	}
+
+	a > p {
+		font-size: 11pt;
+		color: #4f85d1;
+	}
+
+	.nav-header {
+        color: #999999;
+		font-weight: bold;
+		font-size: 8pt;
+		text-transform: uppercase;
+		margin: 1.5em 0em 0.25em 1.5em;
+    }
+</style>
+<li class='nav-header'>
+    {%trans "MODIS data"%}
+</li>
+<li>
+    <a href="/modis/visualization/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">{% trans "Overview" %}</p>
+    </a>
+</li>
+<li class='nav-header'>
+    {%trans "Inventory"%}
+</li>
+<li>
+    <a href="/modis/data/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left"> {%trans "NASA data"%}</p>
+    </a>
+</li>
+<li>
+    <a href="/modis/data/#modisdata" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">{%trans "CEOM data"%}</p>
+    </a>
+</li>
+<li class='nav-header'>
+    {%trans "Visualization"%}
+</li>
+<li>
+    <a href="/modis/visualization/composite" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">{%trans "Composite Image"%}</p>
+    </a>
+</li>
+<li>
+    <a href="/modis/visualization/olmap/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">{%trans "Vegetation Index Map"%}</p>
+    </a>
+</li>
+<li class='nav-header'>
+    {%trans "Delivery"%}
+</li>
+<li>
+    <a href="/modis/visualization/gmap/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">{%trans "Single Site Time-Series"%}</p>
+    </a>
+</li>
+<li>
+    <a href="/modis/visualization/multiple/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">{%trans "Multiple Site Time-Series"%}</p>
+    </a>
+</li>
+<li class='nav-header'>
+    {%trans "Request history"%}
+</li>
+<li>
+    <a href="/modis/visualization/timeseries/single/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">{% trans "Single Site history" %}</p>
+    </a>
+</li>

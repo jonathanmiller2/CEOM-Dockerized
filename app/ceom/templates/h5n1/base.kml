@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  {% if points %}
+  <Document>
+  <Style id="info">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.google.com/mapfiles/kml/shapes/info.png</href>
+      </Icon>
+      <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      <scale>0.5</scale>
+    </IconStyle>
+    <LabelStyle>
+      <color>00000000</color>
+    </LabelStyle>      
+    <color>BFFFFFFF</color>
+  </Style>
+  <Style id="Domestic">
+    <IconStyle>
+      <Icon>
+        <href>http://ceom-dev.ou.edu/static/images/icons/chicken.png</href>
+      </Icon>
+      <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      <scale>0.8</scale>
+    </IconStyle>
+    <LabelStyle>
+      <color>00000000</color>
+    </LabelStyle>      
+    <color>BFFFFFFF</color>
+  </Style>
+  <Style id="Wild Captive,Domestic">
+    <IconStyle>
+      <Icon>
+        <href>http://ceom-dev.ou.edu/static/images/icons/goose-icon.png</href>
+      </Icon>
+      <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      <scale>1</scale>
+    </IconStyle>
+    <LabelStyle>
+      <color>00000000</color>
+    </LabelStyle>      
+    <color>BFFFFFFF</color>
+  </Style>
+  <Style id="Wild,Domestic">
+    <IconStyle>
+      <Icon>
+        <href>http://ceom-dev.ou.edu/static/images/icons/goose-icon.png</href>
+      </Icon>
+      <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      <scale>1</scale>
+    </IconStyle>
+    <LabelStyle>
+      <color>00000000</color>
+    </LabelStyle>      
+    <color>BFFFFFFF</color>
+  </Style>
+  <Style id="Wild">
+    <IconStyle>
+      <Icon>
+        <href>http://ceom-dev.ou.edu/static/images/icons/goose-icon.png</href>
+      </Icon>
+      <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      <scale>1</scale>
+    </IconStyle>
+    <LabelStyle>
+      <color>00000000</color>
+    </LabelStyle>      
+    <color>BFFFFFFF</color>
+  </Style>
+  <Style id="Human">
+    <IconStyle>
+      <Icon>
+        <href>http://ceom-dev.ou.edu/static/images/icons/Caveman-icon.png</href>
+      </Icon>
+      <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      <scale>1</scale>
+    </IconStyle>
+    <LabelStyle>
+      <color>00000000</color>
+    </LabelStyle>      
+    <color>BFFFFFFF</color>
+  </Style>
+    <Style id="Human,Domestic">
+    <IconStyle>
+      <Icon>
+        <href>http://ceom-dev.ou.edu/static/images/icons/Caveman-icon.png</href>
+      </Icon>
+      <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      <scale>1</scale>
+    </IconStyle>
+    <LabelStyle>
+      <color>00000000</color>
+    </LabelStyle>      
+    <color>BFFFFFFF</color>
+  </Style>
+    <Style id="Human,Wild,Domestic">
+    <IconStyle>
+      <Icon>
+        <href>http://ceom-dev.ou.edu/static/images/icons/Caveman-icon.png</href>
+      </Icon>
+      <hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+      <scale>1</scale>
+    </IconStyle>
+    <LabelStyle>
+      <color>00000000</color>
+    </LabelStyle>      
+    <color>BFFFFFFF</color>
+  </Style>
+  
+  {% for point in points %}
+  <Placemark>
+    <name>Case {{ point.id }}</name>
+    {% if point.observation_date %}
+    <TimeSpan> <begin>{{point.observation_date}}</begin><end>{{point.observation_date}}</end> </TimeSpan>
+    {% endif %}
+    <styleUrl>{{point.animal_type}}</styleUrl>
+    <description>  <![CDATA[{{point.virus}}
+        Region: {{point.region}}
+        Country: {{point.country}}
+        Date observed: {{point.observation_date}}
+        Administrator 1: {{point.admin1}}
+        Administrator 2: {{point.admin2}}
+        Locality: {{point.locality}}
+        Animal: {{point.species}}; {{point.animal_type}}; {{point.animal_class}};
+        At risk: {{point.at_risk}}
+        Cases: {{point.cases}}
+        Deathes: {{point.deaths}}
+        Latitude: {{point.latitude}}
+        Longitude: {{point.longitude}}]]> </description>
+    {{ point.kml|safe }}
+  </Placemark>
+  {% endfor %}
+  </Document>
+  {% endif %}
+</kml>

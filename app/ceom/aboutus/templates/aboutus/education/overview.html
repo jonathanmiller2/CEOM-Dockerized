@@ -1,0 +1,17 @@
+{% extends "aboutus/base.html" %}
+{% load i18n %}
+{% block title%} CEOM Education {% endblock%}
+{% block content %}
+<div class="well">
+	<div class="grid" >
+		<h2 style="color: #dc143c;">{% trans "Education" %}</h2>
+		<div class="hr"></div>&nbsp;
+		<p>{% blocktrans %}The CEOM faculty, post-doctoral researchers, and Ph.D. students have been involved in formal and informal education of geospatial technologies, science and applications. For example, we teach &ldquo;Environmental Remote Sensing&rdquo; course in fall semester, which is a cross-listing course between the Department of Microbiology and Plant Biology and the Department of Geography and Environmental Sustainability (PBIO-4733/5733 and GIS-4733/5733). In 2012, we also launched and led an effort to host the first campus-wide GIS Day 2012 event at the OU Norman&nbsp;campus, which attracted many high school students from several local high schools and undergraduate students from the OU.{% endblocktrans %}&nbsp;</p>
+		<div class="row" style="display: block; margin-left: auto; margin-right: auto;">
+			<div class="span4" ><a href="/static/images/CIMG0165.jpg" target="_blank"><img src="/static/images/CIMG0165.jpg" alt="" width="100%" /></a></div>
+			<div class="span4" ><a href="/static/images/CIMG0153.jpg" target="_blank"><img src="/static/images/CIMG0153.jpg" alt="" width="100%" /></a></div>
+			<div class="span4" ><a href="/static/images/fall2012_ers_1234.jpg" target="_blank"><img src="/static/images/fall2012_ers_1234.jpg" alt="" width="100%" /></a></div>
+		</div>
+	</div>
+</div>
+{% endblock %}

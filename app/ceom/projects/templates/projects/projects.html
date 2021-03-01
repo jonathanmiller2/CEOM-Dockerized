@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %} Projects - {{block.super}} {% endblock %}
+
+{% block content %}
+<h2> Projects </h2>
+<p><h5>Funded Research Projects since 1994 (51 projects, a total of $72 million).</h5></p>
+<p> As of July 23, 2013, the CEOM has been involved in 51 research projects receiving a total of $72 million from various funding agencies.
+The list below provides brief information on project title, funding agency, project period, and total amount of fund for individual projects.</p>
+
+<ol>
+	{% for proj in project %}		
+		<li value="{{forloop.revcounter}}">
+			{{proj.project_title}}
+			{% if proj.funding_agency %} , {{proj.funding_agency}} {%endif%}
+			{% if proj.start_date %} , {{proj.start_date}} {%endif%}
+			{% if proj.end_date %} -{{proj.end_date}} {%endif%}
+			{% if proj.fund %} , ${{proj.fund|intcomma}} {%endif%}.
+		</li>
+	{% endfor %}
+</ol>
+
+
+
+{% endblock %}
