@@ -41,7 +41,7 @@ def registration_enabled(year):
     return False
 # VIEWS
 
-def overview(request):
+def gisday_overview(request):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
     images = OverviewImage.objects.all().order_by('order')
     try:
@@ -50,6 +50,19 @@ def overview(request):
         content = 'Error: content is missing in the database for overview.'
     
     return render(request, 'outreach/overview.html', context={
+        'available_years': available_years,
+        'content': content,
+        'images': images,
+    })
+def workshop_overview(request):
+    available_years = Year.objects.filter(hidden=False).order_by('-date')
+    images = OverviewImage.objects.all().order_by('order')
+    try:
+        content = OverviewContent.objects.all()[0].content
+    except:
+        content = 'Error: content is missing in the database for overview.'
+    
+    return render(request, 'outreach/workshop_overview.html', context={
         'available_years': available_years,
         'content': content,
         'images': images,

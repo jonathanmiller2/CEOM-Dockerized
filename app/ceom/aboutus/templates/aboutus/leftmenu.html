@@ -77,7 +77,7 @@
 	</ul>
 </li>
 <li>
-	<a href="/aboutus/group_photos/" class="btn btn-light btn-block rounded-0 p-0">
+	<a href="/aboutus/group_photos/" class="{% if request.path == '/aboutus/group_photos/' %}active{% endif %}btn btn-light btn-block rounded-0 p-0">
 		<p class="mx-4 m-0 text-left"> {% trans "Group Photos" %} </p>
 	</a>
 </li>

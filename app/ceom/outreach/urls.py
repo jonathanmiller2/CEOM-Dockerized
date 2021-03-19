@@ -7,12 +7,13 @@ import ceom.outreach.views
 
 
 urlpatterns = [
-    re_path(r'^$', ceom.outreach.views.overview),
+    re_path(r'^$', ceom.outreach.views.gisday_overview),
 
-    re_path(r'^overview', ceom.outreach.views.overview),
+    re_path(r'^overview', ceom.outreach.views.gisday_overview),
+    re_path(r'^workshop/overview', ceom.outreach.views.workshop_overview),
 
-    re_path(r'^2012/$', ceom.outreach.views.year2012),
-    re_path(r'^2012/gallery', ceom.outreach.views.gallery_2012),
+    #re_path(r'^2012/$', ceom.outreach.views.year2012),
+    #re_path(r'^2012/gallery', ceom.outreach.views.gallery_2012),
 
     re_path(r'^(?P<year>[0-9]{4})/summary', ceom.outreach.views.summary),
 	re_path(r'^(?P<year>[0-9]{4})/agenda', ceom.outreach.views.agenda),
@@ -41,8 +42,8 @@ urlpatterns = [
     
     re_path(r'^current/(?P<year>\d+)', ceom.outreach.views.workshop_list_by_year_current),
     re_path(r'^current/', ceom.outreach.views.workshop_current),
-    re_path(r'^past/(?P<year>\d+)', ceom.outreach.views.workshop_list_by_year_past),
-    re_path(r'^past/', ceom.outreach.views.workshop_past),
+    re_path(r'^workshop/past/(?P<year>\d+)', ceom.outreach.views.workshop_list_by_year_past),
+    re_path(r'^workshop/past/', ceom.outreach.views.workshop_past),
     re_path(r'^content/(?P<workshop_id>\d+)', ceom.outreach.views.workshop),
     re_path(r'^register/(?P<workshop_id>\d+)', ceom.outreach.views.workshop_registration),
     re_path(r'^presentations/(?P<workshop_id>\d+)', ceom.outreach.views.presentations),
