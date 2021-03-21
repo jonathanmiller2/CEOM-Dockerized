@@ -1,0 +1,24 @@
+{% extends "gisday/base.html" %}
+{% block content %}
+
+<h3 align="left">GIS Day {{gisdate.date|date:"Y"}} at the University of Oklahoma, {{gisdate.date|date:"M d"}}<sup>th</sup> {{gisdate.date|date:"Y"}}
+<a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
+<a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a>
+
+	</h3>
+
+<div class="well">
+	<div class="grid" >
+		<h2  style="color: #dc143c;">Logistics</h2>
+		<div class="hr"></div>
+		<h3>Location</h3>
+		<p>Oklahoma Memorial Union, Molly Shi Boren Ballroom<br />900 Asp Ave. Norman OK, 73019 (<a href="http://union.ou.edu/">http://union.ou.edu/</a>)</h4><br /><br /></p>
+		<h3>Driving Directions</h3>
+		<p><a href="http://union.ou.edu/index.php?option=content&amp;task=view&amp;id=103">http://union.ou.edu/index.php?option=content&amp;task=view&amp;id=103</a></p>
+		<p><strong>Google Maps:&nbsp;<br /></strong><a href="https://maps.google.com/maps?hl=en&amp;tab=wl">https://maps.google.com/maps?hl=en&amp;tab=wl</a></p>
+		<p>&nbsp;or click 'Get Directions' on Google Map<br /><br /></p>
+		<h3>Parking</h3>
+		<p>Visitor parking permits and information will be provided to exhibitors. Other visitors to campus please inquire with Melissa Scott at <a href="mailto:mscott@ou.edu">mscott@ou.edu</a>. OU participants park as usual.<br /><br /></p>
+	</div>
+</div>
+{% endblock %}
