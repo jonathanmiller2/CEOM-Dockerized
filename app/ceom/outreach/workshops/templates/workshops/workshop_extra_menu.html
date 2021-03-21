@@ -1,0 +1,29 @@
+{% load i18n %}
+<div class='well sidebar-nav span12'>
+    <ul class="nav nav-list sidebar-list">
+        <li class='nav-header'>{% trans "Content" %}</li>
+             <li {% if  '/workshops/content/' in request.path  %}class='active' {% endif %}>
+                <a href="/workshops/content/{{workshop.id}}"><i class="icon-list"></i> {% trans "Description" %}</a>
+             </li>
+            <li {% if  '/workshops/registration/' in request.path  %}class='active' {%endif%}> 
+                {% if workshop.registration_open %}
+                    <a class="btn btn-primary" style="text-align:left" href="/workshops/register/{{workshop.id}}"><i class="icon-pencil"></i> {% trans "Register now here" %} </a>
+                {% else %}
+                    <a class="muted"><i class="icon-pencil"></i> {% trans "Registration closed" %}</a>
+                {% endif %}    
+            </li>
+            <li> 
+                {% if workshop.agenda %}
+                    <a href="{{workshop.agenda.url}}"><i class="icon-calendar"></i> {% trans "Agenda" %} </a>
+                {% else %}
+                    <a class="disabled"><i class="icon-calendar"></i> {% trans "Agenda not available" %}</a>
+               {% endif %} 
+            </li>
+            <li {% if  '/workshops/presentations/' in request.path  %}class='active' {% endif %}> 
+                <a href="/workshops/presentations/{{workshop.id}}"><i class="icon-download-alt"></i> {% trans "Presentations" %} <span class="badge badge-success">{{ num_presentations }}</span></a>
+            </li>
+            <li {% if  '/workshops/photos/' in request.path  %}class='active' {% endif %}> 
+                <a href="/workshops/photos/{{workshop.id}}"><i class="icon-picture"></i> {% trans "Photo Gallery" %} <span class="badge badge-success">{{ num_photos }}</span></a>
+            </li>
+    </ul>    
+</div>

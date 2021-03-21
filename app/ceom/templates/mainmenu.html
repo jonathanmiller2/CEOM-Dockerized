@@ -139,7 +139,7 @@
 			</a>
 		</li>
 		<li id="menu-outreach" class="nav-item{% if '/outreach/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/outreach/">
+			<a class="nav-link" href="/outreach/gisday/">
 				<span class="fas fa-rss"></span> 
 				{% trans "Outreach" %}
 			</a>
@@ -204,16 +204,10 @@
 				 {% trans "GeoHealth" %}
 			</a>
 		</li>
-		<li id="menu-gis" class="nav-item{% if '/gisday/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/gisday/">
+		<li id="menu-gis" class="nav-item{% if '/outreach/' in request.path %} active{% endif %}">
+			<a class="nav-link" href="/outreach/workshops/">
 				<span class="fas fa-rss"></span> 
-				{% trans "GIS Day" %}
-			</a>
-		</li>
-		<li id="menu-workshops" class="nav-item{% if '/workshops/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/workshops/">
-				<span class="fas fa-briefcase"></span> 
-				{% trans "Workshops" %}
+				{% trans "Outreach" %}
 			</a>
 		</li>
 		<li id="menu-water" class="nav-item{% if '/water/' in request.path %} active{% endif %}">

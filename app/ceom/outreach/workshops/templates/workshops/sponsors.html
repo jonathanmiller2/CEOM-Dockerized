@@ -1,0 +1,13 @@
+ {% load i18n %}
+ <div class='sidebar-nav span12 text-center'>
+                 <h3>{% trans "Sponsors" %}:</h3>
+                <div class="hr"></div>
+                <br>
+            <div class="row-fluid text-center">
+       {% for sponsor in sponsors %}
+                
+                <img id="sponsor{{forloop.counter}}"  src="{{sponsor.sponsor.logo.url}}" alt="{{sponsor.sponsor.name}}" data-toggle="tooltip" title="{{sponsor.sponsor.name}}" style="width:50%;max-width:100px;margin-left:20px;float:left;">
+       {% endfor %}
+       </div>
+ }
+</div>

@@ -1,0 +1,61 @@
+{% extends "gisday/base.html" %}
+{% load extra_template_tags %}
+<style>
+body p {
+font-family: Arial,serif;
+font-size:small;
+}
+</style>
+{%block content %}
+<img style="float: right; margin-right: 50px; width: 63px; height: 87px;" src="/static/images/OU-Logo-GisDay2013.jpg" alt="" />
+<img style="float: left; margin-left: 40px; width: 170px; height: 70px;" src="/static/images/GISDay_logo.png" alt="" />
+<div style="text-align: center;">
+	<h1 style="color: #dc143c;">The University of Oklahoma <a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
+	<a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a></h1>
+	<h3 style="color: #dc143c;"> 10:00 am to 3:00 pm, {{gisdate.date|date:"l F d, Y"}}</h3>
+	<h3 align="center">The Molly Shi Boren Ballroom, Oklahoma Memorial Union</h3>
+	<h4 align="center">900 ASP Avenue, Norman, OK 73019 (<a href="http://union.ou.edu/">http://union.ou.edu/</a>)</h4>
+	
+</div>
+	<div id="myCarousel" class="carousel slide">
+		<!-- Carousel items -->
+		<div class="carousel-inner" style="margin:auto">
+
+		<!-- First announcement-->
+			{% for announcement in announcements%}
+			<div class="item {% ifequal position announcement.position %}active {% endifequal %}"><div class="pagination-centered">
+			<div class="well">
+				<div class="grid" >
+					{% if announcement.entry_name%}<h3>{{announcement.entry_name}} ({{announcement.date|date:"F d, Y"}})</h3>{% endif %}
+					<div class="hr"></div>
+					{% if announcement.content %}
+						{{announcement.content|render}}
+					{% endif%}
+					{% if announcement.image %}
+						<img src="{{announcement.image.url}}"  style="magins:auto; width: 400 px; height: 800px">
+					{% endif%}
+				</div>	
+			</div>
+			</div></div>
+			{% endfor %}
+		
+		</div>
+		    <ol class="carousel-indicators" >
+		    	{% for announcement in announcements%}
+			    <li data-target="#myCarousel" data-slide-to="{{announcement.position}}" {% ifequal position announcement.position %}class="active" {% endifequal %}></li>
+			    {% endfor %}
+		    </ol>
+			<!-- Carousel nav -->
+		<a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
+		<a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+
+	</div>
+<div style="text-align: center;">
+	&nbsp;
+	<p style="text-decoration: underline;">Contact persons</p>
+	<p>Prof. Xiangming Xiao (<a href="mailto:xiangming.xiao@ou.edu">xiangming.xiao@ou.edu</a>; http://www.ceom.ou.edu) at the Earth Observation and Modeling Facility</p>
+	<p>Ms. Melissa Scott (<a href="mailto:mscott@ou.edu">mscott@ou.edu</a>; http://www.csa.ou.edu) at the Center for Spatial Analysis</p>
+	<p><em>For questions or accommodations on the basis of disability contact 325-4871 or </em><a href="mailto:mscott@ou.edu"><em>mscott@ou.edu</em></a></p>
+
+</div>
+{% endblock %}

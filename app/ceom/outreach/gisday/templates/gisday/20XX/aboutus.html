@@ -1,0 +1,74 @@
+{% extends "gisday/base.html" %}
+{% load extra_template_tags %}
+{% block content %}
+
+        <h3 align="left">GIS Day {{gisdate.date|date:"Y"}} at the University of Oklahoma, {{gisdate.date|date:"M d"}}<sup>th</sup> {{gisdate.date|date:"Y"}}
+          <a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
+          <a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a>
+        </h3>
+
+<style>
+.people-tile {
+  border: 1px solid #ddd;
+  text-align: center;
+  display: block;
+  float:left;
+  margin: 0px 25px 30px 0px;
+  width: 136px;
+  min-height: 245px;
+  box-shadow: 0 0 6px #444;
+-webkit-shadow: 0 0 6px #444;
+-moz-shadow: 0 0 6px #444;
+ padding: 5px 5px 10px 5px;"
+}
+</style>
+
+<style>
+.people-tile-highlight {
+  border: 1px solid #ddd;
+  text-align: center;
+   background-color: #fffef0;
+  display: block;
+  float:left;
+  margin: 0px 25px 30px 0px;
+  width: 136px;
+  min-height: 245px;
+  box-shadow: 0 0 6px #444;
+-webkit-shadow: 0 0 6px #444;
+-moz-shadow: 0 0 6px #444;
+ padding: 5px 5px 10px 5px;"
+
+}
+</style>
+
+<h2 style="color: #dc143c;">Organizing Committee</h2>
+		<div class="hr"></div>&nbsp;
+		{{content|render}}
+<div class="row-fluid">
+
+{% for p in people%}
+	{% ifchanged p.group %}
+		</div><div style="clear: both;"></div><div>
+		<h3 style="border-bottom: 1px solid #66ccff;">{{p.group.name}}</h3>
+	{% endifchanged %}
+	{% if p.highlight %}<div class="people-tile-highlight"> {% else %} <div class="people-tile">
+	{% endif %}
+		{% if not p.person.headshot %} <a href="/media/gisday/dummy_headshot222.jpg"><img style="max-height: 150px; max-width: 136px; overflow:hidden; margin:auto;" src="/media/gisday/dummy_headshot222.jpg" ></a>
+       	{%elif p.person.headshot %}<a href="{{p.person.headshot.url}}"><img style="max-height: 150px; max-width: 136px;overflow:hidden;margin:auto;" src="{{p.person.headshot.url}}" ></a>
+	       {%endif%}
+		<div >
+        <h5 style="margin:8px 0;">
+			<strong>{% if p.person.first_name  %}{{p.person.first_name}}{% endif %}
+			{% if p.person.middle_name  %} {{p.person.middle_name}}{% endif %}
+			{% if p.person.last_name  %} {{p.person.last_name}}{% endif %}</strong> 
+	</h5>
+		{% if p.person.phone %} <div style="margin:4px 0;"> {{p.person.phone}} <br> </div> {% endif %}
+		{% if p.person.email %}<small> <a href="mailto:{{p.email}}">{{p.person.email}}<br></a>  </small> {% endif %}
+		{% if p.highlight %}<img style="max-height: 50px; max-width: 116px;overflow:hidden;margin:auto;" src="/media/gisday/aboutus/contactperson.png" >{% endif %}
+        </div>
+    </div>
+{% endfor %}
+
+</div>
+
+{% endblock %}

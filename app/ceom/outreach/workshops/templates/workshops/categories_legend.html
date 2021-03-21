@@ -1,0 +1,15 @@
+{% load i18n %}
+ <div class='well sidebar-nav span12 text-center'>
+                 <h3>{% trans "Categories" %}:</h3>
+                <div class="hr"></div>
+                <br>
+       {% for category in categories %}
+            <div class="span12 text-center">
+
+                <img src="{{category.image.url}}" style="width:64px;height:64px" alt = "{{category.name}}">
+                <h4 class="span12"> {% trans category.name %}</h4>
+                
+            </div>
+       {% endfor %}
+
+</div>

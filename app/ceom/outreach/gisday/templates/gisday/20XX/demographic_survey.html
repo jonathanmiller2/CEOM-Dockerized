@@ -1,0 +1,42 @@
+{% extends "gisday/base.html" %}
+{% load crispy_forms_tags %}
+{% load extra_template_tags %}
+{% block content %}
+
+<h3 align="left">GIS Day {{gisdate.date|date:"Y"}} at the University of Oklahoma, {{gisdate.date|date:"M d"}}<sup>th</sup> {{gisdate.date|date:"Y"}}
+<a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
+<a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a>
+
+</h3>
+
+<div class="well">
+    <div class="grid" >
+        <h2  style="color: #dc143c;">Demographic Survey</h2>
+        <div class="hr"></div>
+        <br>
+        <p>We appreciate that you take your time to answer these short questions. Your opinion will help us build a better GISday in the future </p>    
+        <br>
+        {% if form %}
+<!--             <form action="." method='post' class='form-horizontal'>
+            {% csrf_token %} -->
+            {% crispy form %}
+            <!-- </form> -->
+            <br/>
+        {% else %}
+        {% if registration_successful %}
+
+        <h3 style="color: #007f00;">Your opinion is most valuable to us and will help us to improve GISday next year . Thank you!</h3>
+        
+        {% else %}
+        
+        <h3 class="text-warning">Survey ended or not open yet</h3>
+        
+        {% endif %}
+            
+        {% endif %}
+
+        
+
+    </div>
+</div>
+{% endblock %}
