@@ -282,18 +282,6 @@ class BoothContent(models.Model):
     class Meta:
         unique_together = (("year",),)
 
-class OverviewContent(models.Model):
-    content = tinymce_models.HTMLField(null=True,blank=True)
-
-class OverviewImage(models.Model):
-    image = models.ImageField(null=False,blank=False, upload_to='gisday/overview/')
-    order = models.IntegerField(null=False,blank=False)
-    title = models.CharField(max_length=300,null=True,blank=True)
-    description = models.CharField(max_length=300,null=True,blank=True)
-
-    class Meta:
-        unique_together = (("order",),)
-
 INSTITUTION_CHOICES=(
     ("Oklahoma State University","Oklahoma State University"),
     ("Samuel Roberts Noble Foundation","Samuel Roberts Noble Foundation"),

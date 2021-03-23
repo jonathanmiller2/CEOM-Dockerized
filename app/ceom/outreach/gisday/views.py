@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm, SurveyForm, DemographicSurveyForm, volunteerForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
-from ceom.outreach.gisday.models import Booth, Year, OverviewImage
+from ceom.outreach.gisday.models import Booth, Year
 import os
 import sys
 import json
@@ -478,7 +478,6 @@ def logistics(request, year, name=None):
 
 def overview(request):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
-    images = OverviewImage.objects.all().order_by('order')
     try:
         content = OverviewContent.objects.all()[0].content
     except:

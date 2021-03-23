@@ -233,22 +233,6 @@ class CommitteeContentAdmin(admin.ModelAdmin):
         model = CommitteeContent
 admin.site.register(CommitteeContent, CommitteeContentAdmin)
 
-class OverviewContentAdmin(admin.ModelAdmin):
-    list_filter = ['content',]
-    list_display = ('content',)
-    class Meta:
-        model = OverviewContent
-
-admin.site.register(OverviewContent, OverviewContentAdmin)
-
-class OverviewImageAdmin(admin.ModelAdmin):
-    list_filter = ['order',]
-    list_display = ('order','title','description')
-    class Meta:
-        model = OverviewImage
-
-admin.site.register(OverviewImage, OverviewImageAdmin)
-
 class BoothContentAdmin(admin.ModelAdmin):
     list_filter = ['year',]
     list_display = ('year','max_booths')
