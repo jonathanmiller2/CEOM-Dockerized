@@ -483,11 +483,11 @@ def overview(request):
         content = OverviewContent.objects.all()[0].content
     except:
         content = 'Error: content is missing in the database for overview.'
-    return render(request, 'gisday/overview.html', context={
-        'available_years': available_years,
-        'content': content,
-        'images': images,
-    })
+        return render(request, 'gisday/overview.html', context={
+            'available_years': available_years,
+            'content': content,
+            'images': images,
+        })
 
 
 def year2012(request):
