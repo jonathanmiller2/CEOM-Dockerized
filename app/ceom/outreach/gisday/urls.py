@@ -8,7 +8,7 @@ import ceom.outreach.gisday.views
 
 urlpatterns = [
     re_path(r'^$', ceom.outreach.gisday.views.overview),
-    re_path(r'^gisday/overview', ceom.outreach.gisday.views.overview),
+    re_path(r'^overview', ceom.outreach.gisday.views.overview),
 
     re_path(r'^2012/$', ceom.outreach.gisday.views.year2012),
     re_path(r'^2012/gallery', ceom.outreach.gisday.views.gallery_2012),
