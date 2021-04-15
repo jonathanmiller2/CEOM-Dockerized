@@ -8,11 +8,11 @@
         <hr>
         <ul class="nav nav-pills">        
             <li {% if not year_selected %}class='active'{% endif %}>
-                <a href="/workshops/current/">All <span class="badge"> {{total_workshops}}</span></a>
+                <a href="/outreach/workshops/past/">All <span class="badge"> {{total_workshops}}</span></a>
             </li>
         {% for year in years %} 
             <li {% ifequal year_selected year.year|floatformat:-1 %}class='active'{% endifequal %}>
-                <a href="/workshops/current/{{year.year|floatformat:-1}}">{{year.year|floatformat:-1}} <span class="badge"> {{year.count}}</span></a>
+                <a href="/outreach/workshops/current/{{year.year|floatformat:-1}}">{{year.year|floatformat:-1}} <span class="badge"> {{year.count}}</span></a>
             </li>
         {% endfor %}
         </ul>
