@@ -27,16 +27,17 @@
 <li>
 
 {% for year in available_years %}
+
 <li>
-	<a href="#" data-toggle="collapse" data-target="#{{year.date|date:'Y'}}" class="btn btn-light btn-block rounded-0 p-0">
+	<a href="/outreach/gisday/{{year.date|date:'Y'}}/" data-toggle="collapse" data-target="#Y{{year.date|date:'Y'}}" class="btn btn-light btn-block rounded-0 p-0">
 		<p class="ml-4 m-0 text-left">GIS Day {{year.date|date:'Y'}}</p>
 	
 		<!-- <img src="/static/images/twitter_logo.png" style="width:25px;height:25px" onclick="window.location.href = 'https://twitter.com/@ougisday'"> -->
 	</a>
 
-	<ul id="{{year.date|date:'Y'}}" class="collapse {% if year.date|date:'Y' in request.path  %}show{% endif %}">
+	<ul id="Y{{year.date|date:'Y'}}" style="list-style-type: none;" class="collapse {% if year.date|date:'Y' in request.path  %}show{% endif %}">
 		{% if not year.summary_hidden%}
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/summary">Summary</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/">Summary</a></li>
 		{% endif %}
 		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/announcements">Announcements</a></li>
 		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/aboutus/">Commitee</a></li>
