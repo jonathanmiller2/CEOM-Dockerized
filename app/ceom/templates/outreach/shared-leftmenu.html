@@ -37,7 +37,7 @@
 
 	<ul id="Y{{year.date|date:'Y'}}" style="list-style-type: none;" class="collapse {% if year.date|date:'Y' in request.path  %}show{% endif %}">
 		{% if not year.summary_hidden%}
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/">Summary</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/summary">Summary</a></li>
 		{% endif %}
 		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/announcements">Announcements</a></li>
 		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/aboutus/">Commitee</a></li>

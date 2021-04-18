@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm, SurveyForm, DemographicSurveyForm, volunteerForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
-from ceom.outreach.gisday.models import Booth, Year
+from ceom.outreach.gisday.models import Booth, Year, Announcement
 import os
 import sys
 import json
@@ -448,8 +448,7 @@ def announcements(request, year, position=None):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
     if year_available(year):
         date = Year.objects.get(date__year=year)
-        announcements = Announcement.objects.filter(
-            year=date).order_by('position')
+        announcements = Announcement.objects.filter(year=date).order_by('position')
         if (not position):
             position = len(announcements) - 1
         position = max(min(int(position), len(announcements) - 1), 0)
