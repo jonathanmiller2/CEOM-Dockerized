@@ -14,23 +14,23 @@
 		<!-- <div class="hr"></div> -->
 
         <hr>
-        <ul class="nav nav-pills my-2">            
-            <li {% if not year_selected %}class='active'{% endif %}>
-                <a href="/outreach/workshops/past/">All <span class="badge"> {{total_workshops}}</span></a>
+        <ul class="nav nav-pills my-2">         
+            <li class='mx-1' {% if not year_selected %}class='active'{% endif %}>
+                <a href="/outreach/workshops/past/">All <span class="badge badge-pill badge-secondary"> {{total_workshops}}</span></a>
             </li>
         {% for year in years %} 
-            <li {% ifequal year_selected year.year|floatformat:-1 %}class='active'{% endifequal %}>
-                <a href="/outreach/workshops/past/{{year.year|floatformat:-1}}/">{{year.year|floatformat:-1}} <span class="badge"> {{year.count}}</span></a>
+            <li class='mx-1' {% ifequal year_selected year.year|floatformat:-1 %}class='active mx-1'{% endifequal %}>
+                <a href="/outreach/workshops/past/{{year.year|floatformat:-1}}/">{{year.year|floatformat:-1}} <span class="badge badge-pill badge-secondary"> {{year.count}}</span></a>
             </li>
         {% endfor %}
         </ul>
 		<ul>
 		{% for workshop in workshops %}	
-            <div class="media">
+            <div class="media my-3">
               <a class="pull-left" href="#">
                 <img class="media-object" style="width:64px;height:64px" src="{{workshop.category.image.url}}" alt="{{workshop.category.name}}">
               </a>
-              <div class="media-body ">
+              <div class="media-body mx-2">
                 <h4 class="media-heading"><a href="/outreach/workshops/content/{{workshop.id}}">{% trans workshop.name %}</a></h4>
                 {% trans workshop.description %}      
               </div>
