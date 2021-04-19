@@ -11,10 +11,10 @@
 </style>
 	<div id="well" class="well">
 		<h1 class="text-center">{% trans "Workshops" %}</h1>
-		<div class="hr"></div>
+		<!-- <div class="hr"></div> -->
 
         <hr>
-        <ul class="nav nav-pills">            
+        <ul class="nav nav-pills my-2">            
             <li {% if not year_selected %}class='active'{% endif %}>
                 <a href="/outreach/workshops/past/">All <span class="badge"> {{total_workshops}}</span></a>
             </li>

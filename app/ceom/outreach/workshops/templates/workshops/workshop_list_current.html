@@ -1,18 +1,26 @@
 {% extends "workshops/base.html" %}
 {% load i18n %}
+
 {% block content %}
-	<div class="well">
-		<h1 class="text-center"> {% trans "Current Workshops" %}</h1>
+<style>
+	#well {
+		margin-right: 30px;
+		overflow-wrap: break-word;
+		word-wrap: break-word;
+	}
+</style>
+	<div id="well" class="well">
+		<h1 class="text-center">{% trans "Workshops" %}</h1>
 		<div class="hr"></div>
 
         <hr>
-        <ul class="nav nav-pills">        
+        <ul class="nav nav-pills">            
             <li {% if not year_selected %}class='active'{% endif %}>
-                <a href="/outreach/workshops/past/">All <span class="badge"> {{total_workshops}}</span></a>
+                <a href="/workshops/past">All <span class="badge"> {{total_workshops}}</span></a>
             </li>
         {% for year in years %} 
             <li {% ifequal year_selected year.year|floatformat:-1 %}class='active'{% endifequal %}>
-                <a href="/outreach/workshops/current/{{year.year|floatformat:-1}}">{{year.year|floatformat:-1}} <span class="badge"> {{year.count}}</span></a>
+                <a href="/workshops/past/{{year.year|floatformat:-1}}">{{year.year|floatformat:-1}} <span class="badge"> {{year.count}}</span></a>
             </li>
         {% endfor %}
         </ul>
@@ -24,7 +32,7 @@
               </a>
               <div class="media-body ">
                 <h4 class="media-heading"><a href="/workshops/content/{{workshop.id}}">{% trans workshop.name %}</a></h4>
-                {% trans workshop.description %}
+                {% trans workshop.description %}      
               </div>
             </div>
 		{% endfor %}

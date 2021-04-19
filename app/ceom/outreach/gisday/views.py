@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm, SurveyForm, DemographicSurveyForm, volunteerForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
-from ceom.outreach.gisday.models import Booth, Year, Announcement, PersonInGroup, SponsorInYear
+from ceom.outreach.gisday.models import Booth, Year, Announcement, PersonInGroup, SponsorInYear, ItemInYear, SummaryContent
 import os
 import sys
 import json
