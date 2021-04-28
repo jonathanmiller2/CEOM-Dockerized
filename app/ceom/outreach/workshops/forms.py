@@ -15,33 +15,25 @@ from captcha.fields import CaptchaField
 class WorkshopRegistrationForm(ModelForm):
     captcha = CaptchaField()
 
-    #TODO: Remove all this debug shit last guy left behind
-
     def __init__(self, *args, **kwargs):
+        print("what is in kwargs: ")
+        print (kwargs)
         try:
             self.workshop = kwargs.pop('data')
         except AttributeError:
             try:
                 self.workshop = kwargs.pop('request')
             except:
-                print("i dont know what happened")
-            print("i got a Attribute error probably because you sent me a post request and i dont know how to handle")
+                pass
+                
         except KeyError:
-            print("i dont know what hit me!")
             try:
                 self.workshop = kwargs.pop('request')
             except:
-                print("i dont know what happened")
-            print("i got a Attribute error probably because you sent me a post request and i dont know how to handle")
-        print("i came here:")
-        #print self.workshop
-        #send_mail('debug:worshop forms', str(type(self))+":"+str(kwargs)+" args: "+str(args), 'admin@ceom.ou.edu', ['bhargavreddy.bolla@ou.edu','bhargavreddy.bolla@gmail.com'], fail_silently=True)
-        # foo = open("/media/foo.txt",'a')
-        # foo.write(str(kwargs)+" args: "+str(args))
-        # foo.close()
-        #print self
+                pass
+       
         super(WorkshopRegistrationForm, self).__init__(*args, **kwargs)
-        #send_mail('debug:worshop forms2', str(type(self))+str(args[0][unicode('workshop')])+":"+str(kwargs)+" args: "+str(args), 'admin@ceom.ou.edu', ['bhargavreddy.bolla@ou.edu','bhargavreddy.bolla@gmail.com'], fail_silently=True)
+      
         try:    
             self.fields['workshop']=forms.ModelChoiceField(queryset=Workshop.objects.all(), widget=forms.HiddenInput(),initial=self.workshop.id)
             self.fields['verifyemail'] = forms.EmailField(label="verify email",required=True, max_length=60)

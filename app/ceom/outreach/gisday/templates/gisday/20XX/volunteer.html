@@ -21,11 +21,13 @@
         </tr>
     </thead>
     <tbody>
-    	{% for items in data %}
+    	{% for item in data %}
     	<tr>
-            {% for info in items %}
-            <td>{{info}}</td>
-            {% endfor %}
+            <td>{{item.last_name}}</td>
+            <td>{{item.first_name}}</td>
+            <td>{{item.prole}}</td>
+            <td>{%if item.lunch %}Yes{% else %}No{% endif %}</td>
+            <td>{{item.TShirtSize}}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
