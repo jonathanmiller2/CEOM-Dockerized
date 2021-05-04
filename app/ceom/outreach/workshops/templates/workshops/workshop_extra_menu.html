@@ -23,13 +23,13 @@
     <ul class="p-0" style="list-style: none;">
         <li class='nav-header'>{% trans "Content" %}</li>
              <li {% if  '/workshops/content/' in request.path  %} class='active' {% endif %}> 
-                <a href="/workshops/content/{{workshop.id}}" class="btn btn-light btn-block rounded-0 p-0"><i class="icon-list"></i> 
+                <a href="/outreach/workshops/content/{{workshop.id}}" class="btn btn-light btn-block rounded-0 p-0"><i class="icon-list"></i> 
                     <p class="mx-4 m-0 text-left">{% trans "Description" %}</p>
                 </a>
              </li>
             <li {% if  '/workshops/registration/' in request.path  %}class='active' {%endif%}> 
                 {% if workshop.registration_open %}
-                    <a class="btn btn-light btn-block rounded-0 p-0" style="text-align:left" href="/workshops/register/{{workshop.id}}"><i class="icon-pencil"></i> 
+                    <a class="btn btn-light btn-block rounded-0 p-0" style="text-align:left" href="/outreach/workshops/register/{{workshop.id}}"><i class="icon-pencil"></i> 
                         <p class="mx-4 m-0 text-left">{% trans "Register now here" %} </p>
                     </a>
                 {% else %}
@@ -50,12 +50,12 @@
                {% endif %} 
             </li>
             <li {% if  '/workshops/presentations/' in request.path  %}class='active' {% endif %}> 
-                <a href="/workshops/presentations/{{workshop.id}}" class="btn btn-light btn-block rounded-0 p-0"><i class="icon-download-alt"></i> 
+                <a href="/outreach/workshops/presentations/{{workshop.id}}" class="btn btn-light btn-block rounded-0 p-0"><i class="icon-download-alt"></i> 
                     <p class="mx-4 m-0 text-left">{% trans "Presentations" %} <span class="badge badge-success">{{ num_presentations }}</span> </p>
                 </a>
             </li>
             <li {% if  '/workshops/photos/' in request.path  %}class='active' {% endif %}> 
-                <a href="/workshops/photos/{{workshop.id}}" class="btn btn-light btn-block rounded-0 p-0"><i class="icon-picture"></i> 
+                <a href="/outreach/workshops/photos/{{workshop.id}}" class="btn btn-light btn-block rounded-0 p-0"><i class="icon-picture"></i> 
                     <p class="mx-4 m-0 text-left">{% trans "Photo Gallery" %} <span class="badge badge-success">{{ num_photos }}</span></p>
                 </a>
             </li>

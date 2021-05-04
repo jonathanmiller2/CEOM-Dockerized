@@ -64,7 +64,7 @@ class WorkshopRegistration(models.Model):
     institution = models.CharField(max_length=200,null=False,blank=False)
     address = models.CharField(max_length=200,null=False,blank=False)
     email = models.EmailField(null=False,blank=False)
-    phone = InternationalPhone(null=True, blank = True)
+    phone = InternationalPhone(null=True, blank=True)
     area_of_expertise = models.CharField(max_length=300,null=False,blank=False)
     # Migrated to exta_boolean_field1
     # requests_travel_assistance = models.BooleanField(null=False, default=False)
@@ -100,6 +100,8 @@ class WorkshopPhoto(models.Model):
     @property
     def filename(self):
         return self.image.name.rsplit('/', 1)[-1]
+
+
 class Institution(models.Model):
     name = models.CharField(max_length=200,null=False,blank=False)
     link = models.CharField(max_length=300,null=False,blank=False)

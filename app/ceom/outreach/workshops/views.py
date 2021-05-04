@@ -99,41 +99,45 @@ def workshop(request, workshop_id):
 
 def workshop_registration(request, workshop_id):
     try:
-        workshop = Workshop.objects.get(id = workshop_id)
+        workshop = Workshop.objects.get(id=workshop_id)
     except:
         return render(request, 'workshops/not_found.html')
+
     if not workshop.registration_open:
         return render(request, 'workshops/not_found.html')
+
     validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('created')
     awaiting_validation_registrations =  WorkshopRegistration.objects.filter(workshop=workshop,validated=False)
     sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
     num_presentations = len(Presentation.objects.filter(workshop=workshop))
     num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
+
     if request.method == 'POST':
-        #return HttpResponse(json.dumps({'request':request.POST}))
-        form = WorkshopRegistrationForm(request.POST)
-        #return HttpResponse(json.dumps({'request':request.POST,'form':form}))
+        
+        form = WorkshopRegistrationForm(request.POST, data=workshop)
+
         if form.is_valid():
             v = form.save(commit=False)
             v.validated = False
             v.save()
-            #building message
-            tos = workshop.admin_emails.split(';')
-            tos.append(v.email);
-            subject = "Registration for "+ workshop.name
-            message = workshop.registration_message
-            if not message:
-                message = full_name+", " 
-                message="Thank you for registering for this workshop"
-            from_email = "noreply@ceom.ou.edu"
-            msg = EmailMultiAlternatives(subject, message, from_email, tos)
-            msg.attach_alternative(message, "text/html")
-            msg.send()
+
+            #TODO: Figure out how to send this email from inside docker
+            #tos = workshop.admin_emails.split(';')
+            #tos.append(v.email)
+            #subject = "Registration for "+ workshop.name
+            #message = workshop.registration_message
+            #if not message:
+            #    message="Thank you for registering for this workshop"
+            #from_email = "noreply@ceom.ou.edu"
+            #msg = EmailMultiAlternatives(subject, message, from_email, tos)
+            #msg.attach_alternative(message, "text/html")
+            #msg.send()
+
             return render(request, 'workshops/registration.html', context={
                  'title':workshop.name,
                  'content': workshop.content,
                  'workshop_reg':workshop,
-                 'registration_succesfull':True,
+                 'registration_successful':True,
                  'validated_registrations':validated_registrations,
                  'awaiting_validation_registrations':awaiting_validation_registrations,
                  'workshop':workshop,
@@ -144,11 +148,12 @@ def workshop_registration(request, workshop_id):
                 }
             )
         else:
+            #Render form with errors
             return render(request, 'workshops/registration.html', context={
                  'title':workshop.name,
                  'content': workshop.content,
                  'workshop_reg':workshop,
-                 'registration_succesfull':False,
+                 'registration_successful':False,
                  'form':form,
                  'validated_registrations':validated_registrations,
                  'awaiting_validation_registrations':awaiting_validation_registrations,
@@ -157,15 +162,11 @@ def workshop_registration(request, workshop_id):
                  'show_registration':False,
                  'num_presentations':num_presentations,
                  'num_photos':num_photos,
-                }, 
-                
+                },  
             )
-    else:
-        form = WorkshopRegistrationForm(data=workshop
-             )
-        # form = WorkshopRegistrationForm(request.POST={
-        #     'full_workshop':workshop
-        #     })
+
+    form = WorkshopRegistrationForm(data=workshop)
+
     return render(request, 'workshops/registration.html', context={
          'title':workshop.name,
          'content': workshop.content,
@@ -178,8 +179,7 @@ def workshop_registration(request, workshop_id):
          'show_registration':False,
          'num_presentations':num_presentations,
          'num_photos':num_photos,
-        }, 
-        
+        },  
     )
 
 def presentations(request, workshop_id):

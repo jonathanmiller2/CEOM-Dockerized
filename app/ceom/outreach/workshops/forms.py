@@ -60,16 +60,15 @@ class WorkshopRegistrationForm(ModelForm):
             self.helper.form_class = 'form-horizontal'
             self.helper.layout = Layout(
                 Div('workshop',
-                    Div('form_errors',style="font-size: 25px;  font-weight: bold;",css_class="span12"),
-                    Div(Div('first_name',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('last_name',style="font-size: 25px;  font-weight: bold;",css_class="span5 offset1"),css_class='span12'),
-                    Div(Div('institution',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('position',style="font-size: 25px;  font-weight: bold;",css_class="span5 offset1"),css_class='span12'),
-                    Div(Div('address',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('area_of_expertise',style="font-size: 25px;  font-weight: bold;",css_class="span5 offset1"),css_class='span12'),
-                    Div(Div('email',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('verifyemail',style="font-size: 25px;  font-weight: bold;",css_class="span5 offset1"),css_class='span12'),
-                    Div(Div('phone',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('international_phone',style="font-size: 25px;  font-weight: bold;",css_class="span5 offset1"),css_class='span12'),
-                    Div(Div('extra_boolean_field1',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('extra_boolean_field2',style="font-size: 25px;  font-weight: bold;",css_class="span5"),css_class='span12'),
-                    Div(Div('extra_boolean_field3',style="font-size: 25px;  font-weight: bold;",css_class="span6"), Div('extra_text_field1',style="font-size: 25px; margin-left: 50px; font-weight: bold;",css_class="span5"),css_class='span12'),
-                    Div(Div('extra_text_field2',style="font-size: 25px;  font-weight: bold;",css_class="span6"), Div('extra_text_field3',style="font-size: 25px;  font-weight: bold;",css_class="span5"),css_class='span12'),
-                    Div(Div(Field('captcha', placeholder=" Enter Result"),style="font-size: 25px;  font-weight: bold;",css_class="span12"),css_class='span12'),
+                    Div(Div('first_name',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), Div('last_name',style="font-size: 25px;  font-weight: bold;",css_class="col-6"),css_class='row'),
+                    Div(Div('institution',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), Div('position',style="font-size: 25px;  font-weight: bold;",css_class="col-6"),css_class='row'),
+                    Div(Div('address',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), Div('area_of_expertise',style="font-size: 25px;  font-weight: bold;",css_class="col-6 offset1"),css_class='row'),
+                    Div(Div('email',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), Div('verifyemail',style="font-size: 25px;  font-weight: bold;",css_class="col-6 offset1"),css_class='row'),
+                    Div(Div('phone',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), css_class='row'),
+                    Div(Div('extra_boolean_field1',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), Div('extra_boolean_field2',style="font-size: 25px;  font-weight: bold;",css_class="col-6"),css_class='row'),
+                    Div(Div('extra_boolean_field3',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), Div('extra_text_field1',style="font-size: 25px; margin-left: 50px; font-weight: bold;",css_class="col-6"),css_class='row'),
+                    Div(Div('extra_text_field2',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), Div('extra_text_field3',style="font-size: 25px;  font-weight: bold;",css_class="col-6"),css_class='row'),
+                    Div(Div(Field('captcha', placeholder=" Enter Result"),style="font-size: 25px;  font-weight: bold;",css_class="col-6"),css_class='row'),
                     # PrependedText('captcha', '=', placeholder="Enter Result")
                 )
             )
@@ -98,18 +97,17 @@ class WorkshopRegistrationWithPassword(WorkshopRegistrationForm):
         super(WorkshopRegistrationWithPassword, self).__init__(*args, **kwargs)
         self.helper.layout = Layout(
             Div('workshop',
-                Div('password',style="font-size: 25px;  font-weight: bold;",css_class="span12"),
-                Div('form_errors',style="font-size: 25px;  font-weight: bold;",css_class="span12"),
-                Div(Div('first_name',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('last_name',style="font-size: 25px;  font-weight: bold;",css_class="span5 offset1"),css_class='span12'),
-                Div(Div('institution',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('position',style="font-size: 25px;  font-weight: bold;",css_class="span5 offset1"),css_class='span12'),
-                Div(Div('address',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('area_of_expertise',style="font-size: 25px;  font-weight: bold;",css_class="span5 offset1"),css_class='span12'),
-                Div(Div('email',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('verifyemail',style="font-size: 25px;  font-weight: bold;",css_class="span5 offset1"),css_class='span12'),
-                Div(Div('phone',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('international_phone',style="font-size: 25px;  font-weight: bold;",css_class="span5 offset1"),css_class='span12'),
-                Div(Div('extra_boolean_field1',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('extra_boolean_field2',style="font-size: 25px;  font-weight: bold;",css_class="span5 offset1"),css_class='span12'),
+                Div('password',style="font-size: 25px;  font-weight: bold;",css_class="row"),
+                Div(Div('first_name',style="font-size: 25px;  font-weight: bold;",css_class="col-6 pr-2"), Div('last_name',style="font-size: 25px;  font-weight: bold;",css_class="col-6 offset1"),css_class='row'),
+                Div(Div('institution',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), Div('position',style="font-size: 25px;  font-weight: bold;",css_class="col-6 offset1"),css_class='row'),
+                Div(Div('address',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), Div('area_of_expertise',style="font-size: 25px;  font-weight: bold;",css_class="col-6 offset1"),css_class='row'),
+                Div(Div('email',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), Div('verifyemail',style="font-size: 25px;  font-weight: bold;",css_class="col-6 offset1"),css_class='row'),
+                Div(Div('phone',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), css_class='row'),
+                Div(Div('extra_boolean_field1',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), Div('extra_boolean_field2',style="font-size: 25px;  font-weight: bold;",css_class="col-6 offset1"),css_class='row'),
                 'extra_boolean_field3',
-                Div(Div('extra_text_field1',style="font-size: 25px;  font-weight: bold;",css_class="span5"), Div('extra_text_field2',style="font-size: 25px;  font-weight: bold;",css_class="span5 offset1"),css_class='span12'),
+                Div(Div('extra_text_field1',style="font-size: 25px;  font-weight: bold;",css_class="col-6"), Div('extra_text_field2',style="font-size: 25px;  font-weight: bold;",css_class="col-6 offset1"),css_class='row'),
                 'extra_text_field3',    
-                Div(Div('captcha',style="font-size: 25px;  font-weight: bold;",css_class="span12"),css_class='span12'),
+                Div(Div('captcha',style="font-size: 25px;  font-weight: bold;",css_class="col-6"),css_class='row'),
             )
         )
         self.helper.add_input(Submit('submit', 'Submit'))

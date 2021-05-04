@@ -119,7 +119,7 @@
 				{% trans "About Us" %} 
 			</a>
 		</li>
-		<li id="menu-photos" class="nav-item{% if '/photos/' in request.path %} active{% endif %}">
+		<li id="menu-photos" class="nav-item{% if '/photos/' in request.path and '/outreach/' not in request.path %} active{% endif %}">
 			<a class="nav-link" href="/photos/">
 				<span class="fas fa-camera"></span> 
 				{% trans "Photo" %}
@@ -185,10 +185,10 @@
 				{% trans "About Us" %} 
 			</a>
 		</li>
-		<li id="menu-photos" class="nav-item{% if '/photos/' in request.path %} active{% endif %}">
+		<li id="menu-photos" class="nav-item{% if '/photos/' in request.path and '/outreach/' not in request.path %} active{% endif %}">
 			<a class="nav-link" href="/photos/">
 				<span class="fas fa-camera"></span> 
-				{% trans "Photo" %}
+				{% trans "Photo" %} 
 			</a>
 		</li>
 		<!--<li id="menu-inventory" {% if '/inventory/' in request.path %}class='active'{% endif %}><a href="/inventory/"><span class="icon-list-ul navbar-icon"></span> {% trans "Datasets" %} </a></li>-->
@@ -205,7 +205,7 @@
 			</a>
 		</li>
 		<li id="menu-gis" class="nav-item{% if '/outreach/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/outreach/workshops/">
+			<a class="nav-link" href="/outreach/gisday/">
 				<span class="fas fa-rss"></span> 
 				{% trans "Outreach" %}
 			</a>
