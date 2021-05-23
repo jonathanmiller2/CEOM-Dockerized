@@ -4,7 +4,7 @@ from django.shortcuts import render
 from ceom.outreach.workshops.models import *
 from django.db.models import Count
 from datetime import datetime
-from ceom.outreach.workshops.forms import WorkshopRegistrationForm
+# from ceom.outreach.workshops.forms import WorkshopRegistrationForm
 from django.core.mail import EmailMultiAlternatives
 import json
 
@@ -114,12 +114,12 @@ def workshop_registration(request, workshop_id):
 
     if request.method == 'POST':
         
-        form = WorkshopRegistrationForm(request.POST, data=workshop)
+        # form = WorkshopRegistrationForm(request.POST, data=workshop)
 
-        if form.is_valid():
-            v = form.save(commit=False)
-            v.validated = False
-            v.save()
+        # if form.is_valid():
+        #     v = form.save(commit=False)
+        #     v.validated = False
+        #     v.save()
 
             #TODO: Figure out how to send this email from inside docker
             #tos = workshop.admin_emails.split(';')
@@ -133,7 +133,8 @@ def workshop_registration(request, workshop_id):
             #msg.attach_alternative(message, "text/html")
             #msg.send()
 
-            return render(request, 'workshops/registration.html', context={
+            return render(request, 'workshops/registration.html'
+            , context={
                  'title':workshop.name,
                  'content': workshop.content,
                  'workshop_reg':workshop,
@@ -147,31 +148,33 @@ def workshop_registration(request, workshop_id):
                  'num_photos':num_photos,
                 }
             )
-        else:
+        # else:
             #Render form with errors
-            return render(request, 'workshops/registration.html', context={
-                 'title':workshop.name,
-                 'content': workshop.content,
-                 'workshop_reg':workshop,
-                 'registration_successful':False,
-                 'form':form,
-                 'validated_registrations':validated_registrations,
-                 'awaiting_validation_registrations':awaiting_validation_registrations,
-                 'workshop':workshop,
-                 'sponsors':sponsors,
-                 'show_registration':False,
-                 'num_presentations':num_presentations,
-                 'num_photos':num_photos,
-                },  
-            )
+            # return render(request, 'workshops/registration.html'
+            # , context={
+            #      'title':workshop.name,
+            #      'content': workshop.content,
+            #      'workshop_reg':workshop,
+            #      'registration_successful':False,
+            #      'form':form,
+            #      'validated_registrations':validated_registrations,
+            #      'awaiting_validation_registrations':awaiting_validation_registrations,
+            #      'workshop':workshop,
+            #      'sponsors':sponsors,
+            #      'show_registration':False,
+            #      'num_presentations':num_presentations,
+            #      'num_photos':num_photos,
+            #     },  
+            # )
 
-    form = WorkshopRegistrationForm(data=workshop)
+    # form = WorkshopRegistrationForm(data=workshop)
 
-    return render(request, 'workshops/registration.html', context={
+    return render(request, 'workshops/registration.html'
+    , context={
          'title':workshop.name,
          'content': workshop.content,
          'workshop_reg':workshop,
-         'form':form,
+        #  'form':form,
          'validated_registrations':validated_registrations,
          'awaiting_validation_registrations':awaiting_validation_registrations,
          'workshop':workshop,
