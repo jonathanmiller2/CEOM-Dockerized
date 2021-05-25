@@ -114,6 +114,11 @@ def workshop_registration(request, workshop_id):
 
     if request.method == 'POST':
         
+        registration = WorkshopRegistration.objects.create(first_name=request.POST['first_name'], last_name=request.POST['last_name'], institution=request.POST['institution'], position=request.POST['position'], address=request.POST['address'], area_of_expertise=request.POST['area_of_expertise'], email=request.POST['email'], verify_email=request.POST['verify_email'], phone=request.POST['phone'])
+        print(request.POST)
+        #http://eomf-dev2.sooner.net.ou.edu/outreach/workshops/register/1?first_name=Greg&last_name=Smith&phone=1234121231123123123
+
+
         # form = WorkshopRegistrationForm(request.POST, data=workshop)
 
         # if form.is_valid():
@@ -133,21 +138,21 @@ def workshop_registration(request, workshop_id):
             #msg.attach_alternative(message, "text/html")
             #msg.send()
 
-            return render(request, 'workshops/registration.html'
-            , context={
-                 'title':workshop.name,
-                 'content': workshop.content,
-                 'workshop_reg':workshop,
-                 'registration_successful':True,
-                 'validated_registrations':validated_registrations,
-                 'awaiting_validation_registrations':awaiting_validation_registrations,
-                 'workshop':workshop,
-                 'sponsors':sponsors,
-                 'show_registration':False,
-                 'num_presentations':num_presentations,
-                 'num_photos':num_photos,
-                }
-            )
+            # return render(request, 'workshops/registration.html'
+            # , context={
+            #      'title':workshop.name,
+            #      'content': workshop.content,
+            #      'workshop_reg':workshop,
+            #      'registration_successful':True,
+            #      'validated_registrations':validated_registrations,
+            #      'awaiting_validation_registrations':awaiting_validation_registrations,
+            #      'workshop':workshop,
+            #      'sponsors':sponsors,
+            #      'show_registration':False,
+            #      'num_presentations':num_presentations,
+            #      'num_photos':num_photos,
+            #     }
+            # )
         # else:
             #Render form with errors
             # return render(request, 'workshops/registration.html'
@@ -174,7 +179,6 @@ def workshop_registration(request, workshop_id):
          'title':workshop.name,
          'content': workshop.content,
          'workshop_reg':workshop,
-        #  'form':form,
          'validated_registrations':validated_registrations,
          'awaiting_validation_registrations':awaiting_validation_registrations,
          'workshop':workshop,

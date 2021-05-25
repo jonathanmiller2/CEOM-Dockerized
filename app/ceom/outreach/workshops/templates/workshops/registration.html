@@ -1,8 +1,8 @@
 {% extends "workshops/base.html" %}
 
-{% load extra_template_tags %}
+<!-- {% load extra_template_tags %} -->
 {% load i18n %}
-{% load crispy_forms_tags %}
+<!-- {% load crispy_forms_tags %} -->
 {% block content %}
 <style>
 #submit-id-submit {
@@ -23,44 +23,44 @@
         <h5>{% trans "You have successfuly registered for this workshop. Please check your email for confirmation." %}</h5>
     {% else %}
 
-    <form enctype="multipart/form-data" action="." method="POST" >
+    <form enctype="multipart/form-data" method="POST">
         {% csrf_token %}
         <div class="form-group">
             <div class="row justify-content-around">
                 <label for="first_name" class="col-1">First Name</label>
-                <input type="first" class="form-control col-3" id="first_name" placeholder="First Name">
+                <input type="first" class="form-control col-3" name="first_name" placeholder="First Name">
                 <label for="last_name" class="col-1">Last Name</label>
-                <input type="last" class="form-control col-3" id="last_name" placeholder="Last Name">
+                <input type="last" class="form-control col-3" name="last_name" placeholder="Last Name">
             </div>
         </div>
         <div class="form-group">
             <div class="row justify-content-around">
                 <label for="institution" class="col-1">Institution</label>
-                <input type="institution" class="form-control col-3" >
+                <input type="institution" class="form-control col-3" name="institution" placeholder="Institution">
                 <label for="position" class="col-1">Position</label>
-                <input type="position" class="form-control col-3" >
+                <input type="position" id="position" class="form-control col-3" name="position" placeholder="Position">
             </div>
         </div>
         <div class="form-group">
             <div class="row justify-content-around">
-                <label for="address" class="col-1">Adress</label>
-                <input type="address" class="form-control col-3">
+                <label for="address" class="col-1">Address</label>
+                <input type="address" class="form-control col-3" name="address" placeholder="Address">
                 <label for="area_of_expertise" class="col-1">Area of Expertise</label>
-                <input type="area_of_expertise" class="form-control col-3" >
+                <input type="area_of_expertise" class="form-control col-3" name="area_of_expertise" placeholder="Area of Expertise">
             </div>
         </div>
         <div class="form-group">
             <div class="row justify-content-around">
                 <label for="email" class="col-1">Email</label>
-                <input type="email" class="form-control col-3" >
+                <input type="email" class="form-control col-3" name="email" placeholder="Email">
                 <label for="verify_email" class="col-1">Verify Email</label>
-                <input type="verity_email" class="form-control col-3" >
+                <input type="verity_email" class="form-control col-3" name="verify_email" placeholder="Verify Email">
             </div>
         </div>
         <div class="form-group">
             <div class="row justify-content-around">
                 <label for="phone" class="col-1">Phone</label>
-                <input type="phone" class="form-control col-3" >
+                <input type="phone" class="form-control col-3" name="phone" placeholder="Phone">
             </div>
         </div>
         <!-- <div class="form-group">
@@ -98,10 +98,68 @@
 
         </table>
     </div>
-    <script>
+    <!-- <script>
         $(function () {
+            function registration() {
+                var first_name= document.getElementById("first_name").value;
+                var last_name= document.getElementById("last_name").value;
+                var institution= document.getElementById("institution").value;
+                var position= document.getElementById("position").value;			
+                // var cpwd= document.getElementById("t5").value;
+                // TODO: other variables!
+                
+                //email id expression code
+                var letters = /^[A-Za-z]+$/;
+                var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+                if(first_name=='')
+                {
+                    alert('Please enter your first name');
+                }
+                else if(last_name=='')
+                {
+                    alert('Please enter your last name');
+                }
+                else if(!letters.test(first_name))
+                {
+                    alert('Name field required only alphabet characters');
+                }
+                else if(!letters.test(last_name))
+                {
+                    alert('Name field required only alphabet characters');
+                }
+                else if(email=='')
+                {
+                    alert('Please enter your user email id');
+                }
+                else if (!filter.test(email))
+                {
+                    alert('Invalid email');
+                }
+                else if(uname=='')
+                {
+                    alert('Please enter the user name.');
+                }
+                else if(!letters.test(uname))
+                {
+                    alert('User name field required only alphabet characters');
+                }
+                else if(document.getElementById("t5").value.length > 12)
+                {
+                    alert ('Password max length is 12');
+                }
+            }
+            function clearFunc()
+            {
+                document.getElementById("t1").value="";
+                document.getElementById("t2").value="";
+                document.getElementById("t3").value="";
+                document.getElementById("t4").value="";
+                document.getElementById("t5").value="";
+            }
             function register(givenInfo) {
-                let formData = new FormData();
+                let formData = new formData();
+                // [givenInfo[0], givenInfo[1], givenInfo[2], givenInfo[3], givenInfo[4], givenInfo[5]];
                 formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
                 $.ajax({
@@ -128,6 +186,6 @@
                 contentType: false
             });
             }
-            
-    </script>
+        })
+    </script> -->
 {% endblock %}
