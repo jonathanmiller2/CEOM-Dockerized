@@ -4,9 +4,11 @@ from django.shortcuts import render
 from ceom.outreach.workshops.models import *
 from django.db.models import Count
 from datetime import datetime
+from ceom.outreach.workshops.models import Workshop,WorkshopRegistration
 # from ceom.outreach.workshops.forms import WorkshopRegistrationForm
 from django.core.mail import EmailMultiAlternatives
 import json
+
 
 def overview(request):
     return render(request, 'workshops/overview.html')
@@ -113,9 +115,22 @@ def workshop_registration(request, workshop_id):
     num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
 
     if request.method == 'POST':
-        
-        registration = WorkshopRegistration.objects.create(first_name=request.POST['first_name'], last_name=request.POST['last_name'], institution=request.POST['institution'], position=request.POST['position'], address=request.POST['address'], area_of_expertise=request.POST['area_of_expertise'], email=request.POST['email'], verify_email=request.POST['verify_email'], phone=request.POST['phone'])
-        print(request.POST)
+        if request.POST['email'] == request.POST['verify_email']:
+          
+            registration = WorkshopRegistration.objects.create(
+                workshop=workshop,
+                first_name=request.POST['first_name'], 
+                last_name=request.POST['last_name'], 
+                institution=request.POST['institution'], 
+                position=request.POST['position'], 
+                address=request.POST['address'], 
+                area_of_expertise=request.POST['area_of_expertise'], 
+                email=request.POST['email'], 
+                verify_email=request.POST['verify_email'], 
+                phone=request.POST['phone'], 
+                validated=False
+            )
+            
         #http://eomf-dev2.sooner.net.ou.edu/outreach/workshops/register/1?first_name=Greg&last_name=Smith&phone=1234121231123123123
 
 

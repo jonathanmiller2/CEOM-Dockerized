@@ -64,6 +64,7 @@ class WorkshopRegistration(models.Model):
     institution = models.CharField(max_length=200,null=False,blank=False)
     address = models.CharField(max_length=200,null=False,blank=False)
     email = models.EmailField(null=False,blank=False)
+    verify_email = models.EmailField(null=True,blank=False)
     phone = InternationalPhone(null=True, blank=True)
     area_of_expertise = models.CharField(max_length=300,null=False,blank=False)
     # Migrated to exta_boolean_field1
@@ -71,7 +72,7 @@ class WorkshopRegistration(models.Model):
     
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    validated = models.BooleanField()
+    validated = models.BooleanField(default=False)
 
 
     extra_boolean_field1 = models.BooleanField(default=False)

@@ -1,16 +1,16 @@
-from django.forms import ModelForm
-from django.db import models
-from django import forms
-from ceom.outreach.workshops.models import Workshop,WorkshopRegistration
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, HTML, Layout, Field, Row, Div, Column
-from crispy_forms.bootstrap import PrependedText
-from django.http import HttpResponse, HttpResponseRedirect
-import json
-from django.core.mail import send_mail
+# from django.forms import ModelForm
+# from django.db import models
+# from django import forms
+# from ceom.outreach.workshops.models import Workshop,WorkshopRegistration
+# from crispy_forms.helper import FormHelper
+# from crispy_forms.layout import Submit, HTML, Layout, Field, Row, Div, Column
+# from crispy_forms.bootstrap import PrependedText
+# from django.http import HttpResponse, HttpResponseRedirect
+# import json
+# from django.core.mail import send_mail
 
-#capchta
-from captcha.fields import CaptchaField
+# #capchta
+# from captcha.fields import CaptchaField
 
 # class WorkshopRegistrationForm(ModelForm):
 #     captcha = CaptchaField()
