@@ -3,6 +3,21 @@
 {% load extra_template_tags %}
 {% load i18n %}
 {% block content %}
+<style>
+    @media screen and (min-width:575px) and (max-width: 1250px) {
+
+        .title {
+            font-size: min(max(3.9vw, 10px), 30px);
+        }
+    }
+
+    @media screen and (max-width:575px) {
+
+        .title {
+            font-size: min(max(3.8vw, 23px), 30px);
+        }
+    }
+</style>
 	<div class="well span12">
  	{{content|render}}
     {% if validated_registrations %}
