@@ -5,6 +5,7 @@ from ceom.outreach.workshops.models import *
 from django.db.models import Count
 from datetime import datetime
 from ceom.outreach.workshops.models import Workshop,WorkshopRegistration
+from django.db import IntegrityError
 # from ceom.outreach.workshops.forms import WorkshopRegistrationForm
 from django.core.mail import EmailMultiAlternatives
 import json
@@ -116,81 +117,56 @@ def workshop_registration(request, workshop_id):
 
     if request.method == 'POST':
         if request.POST['email'] == request.POST['verify_email']:
-          
-            registration = WorkshopRegistration.objects.create(
-                workshop=workshop,
-                first_name=request.POST['first_name'], 
-                last_name=request.POST['last_name'], 
-                institution=request.POST['institution'], 
-                position=request.POST['position'], 
-                address=request.POST['address'], 
-                area_of_expertise=request.POST['area_of_expertise'], 
-                email=request.POST['email'], 
-                verify_email=request.POST['verify_email'], 
-                phone=request.POST['phone'], 
-                validated=False
+            try:
+                registration = WorkshopRegistration.objects.create(
+                    workshop=workshop,
+                    first_name=request.POST['first_name'], 
+                    last_name=request.POST['last_name'], 
+                    institution=request.POST['institution'], 
+                    position=request.POST['position'], 
+                    address=request.POST['address'], 
+                    area_of_expertise=request.POST['area_of_expertise'], 
+                    email=request.POST['email'], 
+                    verify_email=request.POST['verify_email'], 
+                    phone=request.POST['phone'], 
+                    validated=False
+                )
+            except IntegrityError as error:
+                error='Duplicate Account'
+                # return HttpResponse("ERROR: Same account already exists!")
+                return render(request, 'workshops/registration.html', context={
+                    'title':workshop.name,
+                    'error':error,
+                    'content': workshop.content,
+                    'workshop_reg':workshop,
+                    'validated_registrations':validated_registrations,
+                    'awaiting_validation_registrations':awaiting_validation_registrations,
+                    'workshop':workshop,
+                    'sponsors':sponsors,
+                    'show_registration':False,
+                    'num_presentations':num_presentations,
+                    'num_photos':num_photos,
+                    },  
+                )
+        else: 
+            error='Email-mismatch'
+            #return HttpResponse("ERROR: Email mismatch")
+            return render(request, 'workshops/registration.html', context={
+                'title':workshop.name,
+                'error':error,
+                'content': workshop.content,
+                'workshop_reg':workshop,
+                'validated_registrations':validated_registrations,
+                'awaiting_validation_registrations':awaiting_validation_registrations,
+                'workshop':workshop,
+                'sponsors':sponsors,
+                'show_registration':False,
+                'num_presentations':num_presentations,
+                'num_photos':num_photos,
+                },  
             )
-            
-        #http://eomf-dev2.sooner.net.ou.edu/outreach/workshops/register/1?first_name=Greg&last_name=Smith&phone=1234121231123123123
 
-
-        # form = WorkshopRegistrationForm(request.POST, data=workshop)
-
-        # if form.is_valid():
-        #     v = form.save(commit=False)
-        #     v.validated = False
-        #     v.save()
-
-            #TODO: Figure out how to send this email from inside docker
-            #tos = workshop.admin_emails.split(';')
-            #tos.append(v.email)
-            #subject = "Registration for "+ workshop.name
-            #message = workshop.registration_message
-            #if not message:
-            #    message="Thank you for registering for this workshop"
-            #from_email = "noreply@ceom.ou.edu"
-            #msg = EmailMultiAlternatives(subject, message, from_email, tos)
-            #msg.attach_alternative(message, "text/html")
-            #msg.send()
-
-            # return render(request, 'workshops/registration.html'
-            # , context={
-            #      'title':workshop.name,
-            #      'content': workshop.content,
-            #      'workshop_reg':workshop,
-            #      'registration_successful':True,
-            #      'validated_registrations':validated_registrations,
-            #      'awaiting_validation_registrations':awaiting_validation_registrations,
-            #      'workshop':workshop,
-            #      'sponsors':sponsors,
-            #      'show_registration':False,
-            #      'num_presentations':num_presentations,
-            #      'num_photos':num_photos,
-            #     }
-            # )
-        # else:
-            #Render form with errors
-            # return render(request, 'workshops/registration.html'
-            # , context={
-            #      'title':workshop.name,
-            #      'content': workshop.content,
-            #      'workshop_reg':workshop,
-            #      'registration_successful':False,
-            #      'form':form,
-            #      'validated_registrations':validated_registrations,
-            #      'awaiting_validation_registrations':awaiting_validation_registrations,
-            #      'workshop':workshop,
-            #      'sponsors':sponsors,
-            #      'show_registration':False,
-            #      'num_presentations':num_presentations,
-            #      'num_photos':num_photos,
-            #     },  
-            # )
-
-    # form = WorkshopRegistrationForm(data=workshop)
-
-    return render(request, 'workshops/registration.html'
-    , context={
+    return render(request, 'workshops/registration.html', context={
          'title':workshop.name,
          'content': workshop.content,
          'workshop_reg':workshop,
