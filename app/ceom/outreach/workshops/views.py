@@ -132,7 +132,7 @@ def workshop_registration(request, workshop_id):
                     validated=False
                 )
             except IntegrityError as error:
-                error='Duplicate Account'
+                error='duplicate-account'
                 # return HttpResponse("ERROR: Same account already exists!")
                 return render(request, 'workshops/registration.html', context={
                     'title':workshop.name,
@@ -149,7 +149,7 @@ def workshop_registration(request, workshop_id):
                     },  
                 )
         else: 
-            error='Email-mismatch'
+            error='email-mismatch'
             #return HttpResponse("ERROR: Email mismatch")
             return render(request, 'workshops/registration.html', context={
                 'title':workshop.name,
