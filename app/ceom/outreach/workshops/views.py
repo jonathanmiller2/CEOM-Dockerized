@@ -101,6 +101,8 @@ def workshop(request, workshop_id):
     )
 
 def workshop_registration(request, workshop_id):
+    data = {}
+
     try:
         workshop = Workshop.objects.get(id=workshop_id)
     except:
@@ -109,76 +111,42 @@ def workshop_registration(request, workshop_id):
     if not workshop.registration_open:
         return render(request, 'workshops/not_found.html')
 
-    validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('created')
-    awaiting_validation_registrations =  WorkshopRegistration.objects.filter(workshop=workshop,validated=False)
-    sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
-    num_presentations = len(Presentation.objects.filter(workshop=workshop))
-    num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
+    #TODO: If we're passing the whole workshop, why do we need to pass the individual parts of the workshop?
+    #TODO: Why is show_registration always returning false? Remove it
+    data['workshop'] = workshop
+    data['title'] = workshop.name
+    data['content'] = workshop.content
+    data['workshop_reg'] = workshop
+    data['validated_registrations'] = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('created')
+    data['awaiting_validation_registrations'] =  WorkshopRegistration.objects.filter(workshop=workshop,validated=False)
+    data['sponsors'] = SponsorInWorkshop.objects.filter(workshop=workshop)
+    data['num_presentations'] = len(Presentation.objects.filter(workshop=workshop))
+    data['num_photos'] = len(WorkshopPhoto.objects.filter(workshop=workshop))
+    data['show_registration'] = False
 
     if request.method == 'POST':
-        if request.POST['email'] == request.POST['verify_email']:
-            try:
-                registration = WorkshopRegistration.objects.create(
-                    workshop=workshop,
-                    first_name=request.POST['first_name'], 
-                    last_name=request.POST['last_name'], 
-                    institution=request.POST['institution'], 
-                    position=request.POST['position'], 
-                    address=request.POST['address'], 
-                    area_of_expertise=request.POST['area_of_expertise'], 
-                    email=request.POST['email'], 
-                    verify_email=request.POST['verify_email'], 
-                    phone=request.POST['phone'], 
-                    validated=False
-                )
-            except IntegrityError as error:
-                error='duplicate-account'
-                # return HttpResponse("ERROR: Same account already exists!")
-                return render(request, 'workshops/registration.html', context={
-                    'title':workshop.name,
-                    'error':error,
-                    'content': workshop.content,
-                    'workshop_reg':workshop,
-                    'validated_registrations':validated_registrations,
-                    'awaiting_validation_registrations':awaiting_validation_registrations,
-                    'workshop':workshop,
-                    'sponsors':sponsors,
-                    'show_registration':False,
-                    'num_presentations':num_presentations,
-                    'num_photos':num_photos,
-                    },  
-                )
-        else: 
-            error='email-mismatch'
-            #return HttpResponse("ERROR: Email mismatch")
-            return render(request, 'workshops/registration.html', context={
-                'title':workshop.name,
-                'error':error,
-                'content': workshop.content,
-                'workshop_reg':workshop,
-                'validated_registrations':validated_registrations,
-                'awaiting_validation_registrations':awaiting_validation_registrations,
-                'workshop':workshop,
-                'sponsors':sponsors,
-                'show_registration':False,
-                'num_presentations':num_presentations,
-                'num_photos':num_photos,
-                },  
-            )
+        if request.POST['email'] != request.POST['verify_email']:
+            data['error'] = 'email-mismatch'
+            return render(request, 'workshops/registration.html', context=data)
 
-    return render(request, 'workshops/registration.html', context={
-         'title':workshop.name,
-         'content': workshop.content,
-         'workshop_reg':workshop,
-         'validated_registrations':validated_registrations,
-         'awaiting_validation_registrations':awaiting_validation_registrations,
-         'workshop':workshop,
-         'sponsors':sponsors,
-         'show_registration':False,
-         'num_presentations':num_presentations,
-         'num_photos':num_photos,
-        },  
-    )
+        try:
+            registration = WorkshopRegistration.objects.create(
+                workshop=workshop,
+                first_name=request.POST['first_name'], 
+                last_name=request.POST['last_name'], 
+                institution=request.POST['institution'], 
+                position=request.POST['position'], 
+                address=request.POST['address'], 
+                area_of_expertise=request.POST['area_of_expertise'], 
+                email=request.POST['email'], 
+                verify_email=request.POST['verify_email'], 
+                phone=request.POST['phone'], 
+            )
+        except IntegrityError as error:
+            data['error'] = 'duplicate-account'
+            return render(request, 'workshops/registration.html', context=data)
+
+    return render(request, 'workshops/registration.html', context=data)
 
 def presentations(request, workshop_id):
     try:
