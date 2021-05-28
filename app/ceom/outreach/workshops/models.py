@@ -58,20 +58,21 @@ class WorkshopClass(models.Model):
 
 class WorkshopRegistration(models.Model):
     workshop = models.ForeignKey(Workshop, related_name='workshop', related_query_name='workshop', on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=100,null=False,blank=False)
-    last_name = models.CharField(max_length=100,null=False,blank=False)
-    position = models.CharField(max_length=300,null=False,blank=False)
-    institution = models.CharField(max_length=200,null=False,blank=False)
-    address = models.CharField(max_length=200,null=False,blank=False)
-    email = models.EmailField(null=False,blank=False)
-    phone = InternationalPhone(null=True, blank = True)
-    area_of_expertise = models.CharField(max_length=300,null=False,blank=False)
+    first_name = models.CharField(max_length=100,null=False)
+    last_name = models.CharField(max_length=100,null=False)
+    position = models.CharField(max_length=300,null=False)
+    institution = models.CharField(max_length=200,null=False)
+    address = models.CharField(max_length=200,null=False)
+    email = models.EmailField(null=False)
+    verify_email = models.EmailField(null=True)
+    phone = InternationalPhone(null=True, blank=True)
+    area_of_expertise = models.CharField(max_length=300,null=False)
     # Migrated to exta_boolean_field1
     # requests_travel_assistance = models.BooleanField(null=False, default=False)
     
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    validated = models.BooleanField()
+    validated = models.BooleanField(default=False)
 
 
     extra_boolean_field1 = models.BooleanField(default=False)
@@ -100,6 +101,8 @@ class WorkshopPhoto(models.Model):
     @property
     def filename(self):
         return self.image.name.rsplit('/', 1)[-1]
+
+
 class Institution(models.Model):
     name = models.CharField(max_length=200,null=False,blank=False)
     link = models.CharField(max_length=300,null=False,blank=False)

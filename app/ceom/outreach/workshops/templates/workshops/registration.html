@@ -1,9 +1,24 @@
 {% extends "workshops/base.html" %}
 
-{% load extra_template_tags %}
+<!-- {% load extra_template_tags %} -->
 {% load i18n %}
-{% load crispy_forms_tags %}
+<!-- {% load crispy_forms_tags %} -->
 {% block content %}
+<style>
+    @media screen and (min-width:575px) and (max-width: 1250px) {
+
+        .title {
+            font-size: min(max(3.9vw, 10px), 30px);
+        }
+    }
+
+    @media screen and (max-width:575px) {
+
+        .title {
+            font-size: min(max(3.8vw, 23px), 30px);
+        }
+    }
+</style>
 <style>
 #submit-id-submit {
     padding: 15px;
@@ -19,16 +34,74 @@
     <div class="hr"></div>
     <br>
     <div class="text-center" style="margin-left:auto;margin-right:auto; width:50%;min-width:400px"></div>
-    {% if registration_succesfull%}
+    {% if registration_successful%}
         <h5>{% trans "You have successfuly registered for this workshop. Please check your email for confirmation." %}</h5>
     {% else %}
-        {% if form %}
-            {% crispy form %}
-        {% endif %}
+
+    <form enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="first_name" class="col-1">First Name</label>
+                <input type="first" class="form-control col-3" name="first_name" placeholder="First Name" required>
+                <label for="last_name" class="col-1">Last Name</label>
+                <input type="last" class="form-control col-3" name="last_name" placeholder="Last Name" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="institution" class="col-1">Institution</label>
+                <input type="institution" class="form-control col-3" name="institution" placeholder="Institution" required>
+                <label for="position" class="col-1">Position</label>
+                <input type="position" id="position" class="form-control col-3" name="position" placeholder="Position" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="address" class="col-1">Address</label>
+                <input type="address" class="form-control col-3" name="address" placeholder="Address" required>
+                <label for="area_of_expertise" class="col-1">Area of Expertise</label>
+                <input type="area_of_expertise" class="form-control col-3" name="area_of_expertise" placeholder="Area of Expertise" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="email" class="col-1">Email</label>
+                <input type="email" class="form-control col-3 {% if error is not None %} is-invalid {% endif %}" name="email" placeholder="Email" required>
+                <label for="verify_email" class="col-1">Verify Email</label>
+                <input type="verity_email" class="form-control col-3 {% if error is not None %} is-invalid {% endif %}" name="verify_email" placeholder="Verify Email" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="phone" class="col-1">Phone</label>
+                <input type="phone" class="form-control col-3" name="phone" placeholder="Phone">
+                <div class="col-1"></div>
+                <div class="col-3"></div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            {% if error %}
+            <div class="alert alert-danger">
+                {% if error == 'email-mismatch' %}
+                    The email fields do not match.
+                {% elif error == 'duplicate-account' %}
+                    That email is already taken.
+                {% else %}
+                    {{error}}
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        <div class="row justify-content-center pb-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+
  	{% endif %}
     </div>
     <div class="hr"></div>
-    <h2 class="text-center"> {% trans "Registered participants" %}: 
+    <h2 class="text-center pt-3"> {% trans "Registered participants" %}: 
     {% if validated_registrations %}<span class="badge badge-info">{{validated_registrations|length}} </span>{% endif %}
     {% if awaiting_validation_registrations %}<small> Awaiting validation:</small><span class="badge badge-error">{{awaiting_validation_registrations|length}} </span>{% endif %}
     </h2>
@@ -48,4 +121,5 @@
 
         </table>
     </div>
+    
 {% endblock %}

@@ -4,9 +4,12 @@ from django.shortcuts import render
 from ceom.outreach.workshops.models import *
 from django.db.models import Count
 from datetime import datetime
-from ceom.outreach.workshops.forms import WorkshopRegistrationForm
+from ceom.outreach.workshops.models import Workshop,WorkshopRegistration
+from django.db import IntegrityError
+# from ceom.outreach.workshops.forms import WorkshopRegistrationForm
 from django.core.mail import EmailMultiAlternatives
 import json
+
 
 def overview(request):
     return render(request, 'workshops/overview.html')
@@ -98,89 +101,52 @@ def workshop(request, workshop_id):
     )
 
 def workshop_registration(request, workshop_id):
+    data = {}
+
     try:
-        workshop = Workshop.objects.get(id = workshop_id)
+        workshop = Workshop.objects.get(id=workshop_id)
     except:
         return render(request, 'workshops/not_found.html')
+
     if not workshop.registration_open:
         return render(request, 'workshops/not_found.html')
-    validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('created')
-    awaiting_validation_registrations =  WorkshopRegistration.objects.filter(workshop=workshop,validated=False)
-    sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
-    num_presentations = len(Presentation.objects.filter(workshop=workshop))
-    num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
+
+    #TODO: If we're passing the whole workshop, why do we need to pass the individual parts of the workshop?
+    #TODO: Why is show_registration always returning false? Remove it
+    data['workshop'] = workshop
+    data['title'] = workshop.name
+    data['content'] = workshop.content
+    data['workshop_reg'] = workshop
+    data['validated_registrations'] = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('created')
+    data['awaiting_validation_registrations'] =  WorkshopRegistration.objects.filter(workshop=workshop,validated=False)
+    data['sponsors'] = SponsorInWorkshop.objects.filter(workshop=workshop)
+    data['num_presentations'] = len(Presentation.objects.filter(workshop=workshop))
+    data['num_photos'] = len(WorkshopPhoto.objects.filter(workshop=workshop))
+    data['show_registration'] = False
+
     if request.method == 'POST':
-        #return HttpResponse(json.dumps({'request':request.POST}))
-        form = WorkshopRegistrationForm(request.POST)
-        #return HttpResponse(json.dumps({'request':request.POST,'form':form}))
-        if form.is_valid():
-            v = form.save(commit=False)
-            v.validated = False
-            v.save()
-            #building message
-            tos = workshop.admin_emails.split(';')
-            tos.append(v.email);
-            subject = "Registration for "+ workshop.name
-            message = workshop.registration_message
-            if not message:
-                message = full_name+", " 
-                message="Thank you for registering for this workshop"
-            from_email = "noreply@ceom.ou.edu"
-            msg = EmailMultiAlternatives(subject, message, from_email, tos)
-            msg.attach_alternative(message, "text/html")
-            msg.send()
-            return render(request, 'workshops/registration.html', context={
-                 'title':workshop.name,
-                 'content': workshop.content,
-                 'workshop_reg':workshop,
-                 'registration_succesfull':True,
-                 'validated_registrations':validated_registrations,
-                 'awaiting_validation_registrations':awaiting_validation_registrations,
-                 'workshop':workshop,
-                 'sponsors':sponsors,
-                 'show_registration':False,
-                 'num_presentations':num_presentations,
-                 'num_photos':num_photos,
-                }
+        if request.POST['email'] != request.POST['verify_email']:
+            data['error'] = 'email-mismatch'
+            return render(request, 'workshops/registration.html', context=data)
+
+        try:
+            registration = WorkshopRegistration.objects.create(
+                workshop=workshop,
+                first_name=request.POST['first_name'], 
+                last_name=request.POST['last_name'], 
+                institution=request.POST['institution'], 
+                position=request.POST['position'], 
+                address=request.POST['address'], 
+                area_of_expertise=request.POST['area_of_expertise'], 
+                email=request.POST['email'], 
+                verify_email=request.POST['verify_email'], 
+                phone=request.POST['phone'], 
             )
-        else:
-            return render(request, 'workshops/registration.html', context={
-                 'title':workshop.name,
-                 'content': workshop.content,
-                 'workshop_reg':workshop,
-                 'registration_succesfull':False,
-                 'form':form,
-                 'validated_registrations':validated_registrations,
-                 'awaiting_validation_registrations':awaiting_validation_registrations,
-                 'workshop':workshop,
-                 'sponsors':sponsors,
-                 'show_registration':False,
-                 'num_presentations':num_presentations,
-                 'num_photos':num_photos,
-                }, 
-                
-            )
-    else:
-        form = WorkshopRegistrationForm(data=workshop
-             )
-        # form = WorkshopRegistrationForm(request.POST={
-        #     'full_workshop':workshop
-        #     })
-    return render(request, 'workshops/registration.html', context={
-         'title':workshop.name,
-         'content': workshop.content,
-         'workshop_reg':workshop,
-         'form':form,
-         'validated_registrations':validated_registrations,
-         'awaiting_validation_registrations':awaiting_validation_registrations,
-         'workshop':workshop,
-         'sponsors':sponsors,
-         'show_registration':False,
-         'num_presentations':num_presentations,
-         'num_photos':num_photos,
-        }, 
-        
-    )
+        except IntegrityError as error:
+            data['error'] = 'duplicate-account'
+            return render(request, 'workshops/registration.html', context=data)
+
+    return render(request, 'workshops/registration.html', context=data)
 
 def presentations(request, workshop_id):
     try:

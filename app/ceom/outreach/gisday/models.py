@@ -282,18 +282,6 @@ class BoothContent(models.Model):
     class Meta:
         unique_together = (("year",),)
 
-class OverviewContent(models.Model):
-    content = tinymce_models.HTMLField(null=True,blank=True)
-
-class OverviewImage(models.Model):
-    image = models.ImageField(null=False,blank=False, upload_to='gisday/overview/')
-    order = models.IntegerField(null=False,blank=False)
-    title = models.CharField(max_length=300,null=True,blank=True)
-    description = models.CharField(max_length=300,null=True,blank=True)
-
-    class Meta:
-        unique_together = (("order",),)
-
 INSTITUTION_CHOICES=(
     ("Oklahoma State University","Oklahoma State University"),
     ("Samuel Roberts Noble Foundation","Samuel Roberts Noble Foundation"),
@@ -427,9 +415,20 @@ class Survey(DemographicSurvey):
     #     if self.role="Other":
     #         return '%s Other(%s) created: %s' % (self.year, self.uther_role,created)
     #     else 
+
 class SurveyContents(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True) 
     class Meta:
         unique_together = (("year",),)
+
+class Volunteer(models.Model):
+    #Un-normalized, names are re-stored for repeat volunteers
+
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
+    last_name = models.CharField(max_length=100, null=True, blank=True)
+    first_name = models.CharField(max_length=100, null=True, blank=True)
+    prole = models.CharField(max_length=20, null=True, blank=True)
+    lunch = models.BooleanField(default=False)
+    TShirtSize = models.CharField(max_length=20, null=True, blank=True)
 

@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm, SurveyForm, DemographicSurveyForm, volunteerForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
-from ceom.outreach.gisday.models import Booth, Year, OverviewImage
+from ceom.outreach.gisday.models import Booth, Year, Announcement, PersonInGroup, SponsorInYear, ItemInYear, SummaryContent, Volunteer
 import os
 import sys
 import json
@@ -448,8 +448,7 @@ def announcements(request, year, position=None):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
     if year_available(year):
         date = Year.objects.get(date__year=year)
-        announcements = Announcement.objects.filter(
-            year=date).order_by('position')
+        announcements = Announcement.objects.filter(year=date).order_by('position')
         if (not position):
             position = len(announcements) - 1
         position = max(min(int(position), len(announcements) - 1), 0)
@@ -478,16 +477,15 @@ def logistics(request, year, name=None):
 
 def overview(request):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
-    images = OverviewImage.objects.all().order_by('order')
     try:
         content = OverviewContent.objects.all()[0].content
     except:
         content = 'Error: content is missing in the database for overview.'
-    return render(request, 'gisday/overview.html', context={
-        'available_years': available_years,
-        'content': content,
-        'images': images,
-    })
+        return render(request, 'gisday/overview.html', context={
+            'available_years': available_years,
+            'content': content,
+            'images': images,
+        })
 
 
 def year2012(request):
@@ -791,11 +789,12 @@ def posterupdate(request, id, year, email):
             return HttpResponse(t.render(c))
         return HttpResponse("Some thing went wrong!")
 
-def volunteer(request,year):
+def volunteer(request, year):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
     roles = {1:'UnderGraduate',2:'Graduate',3:'Post Doc',4:'Poster Judge',5:'Committee Member'}
-    lunch_choice = {1:'Yes',2:'No'}
+    lunch_choice = {1:True,2:False}
     tshirt_choices = {1:'Small',2:'Medium',3:'Large',4:'XL',5:'XXL'}
+
     if request.method == 'POST':
         form = volunteerForm(request.POST)
         if form.is_valid():
@@ -804,24 +803,19 @@ def volunteer(request,year):
             fname = x['First_Name']
             prole = roles[int(x['Primary_Role'])]
             lunchOpt = lunch_choice[int(x['Lunch'])]
-            TshirtSize = tshirt_choices[int(x['TShirt_size'])]
-            v_info = lname+','+fname+','+prole+','+lunchOpt+','+TshirtSize
-            with open('volunteerdata','a') as vd:
-                vd.write(v_info + "\n")
-                vd.close()
-            t = loader.get_template('gisday/20XX/Thanks.html')
-            c = RequestContext(request,{'available_years': available_years,'data':v_info})    
-            return HttpResponse(t.render(c))
+            TShirtSize = tshirt_choices[int(x['TShirt_size'])]
+            v_info = lname+','+fname+','+prole+','+str(lunchOpt)+','+TShirtSize
+
+            yearObject = Year.objects.get(date__year=year)
+            Volunteer.objects.create(year=yearObject, first_name=fname, last_name=lname, prole=prole, lunch=lunchOpt, TShirtSize=TShirtSize)
+
+            return render(request, 'gisday/20XX/Thanks.html', {'available_years': available_years,'data':v_info})
 
     # if a GET (or any other method) we'll create a blank form
-    else:
-        form = volunteerForm()
-    volunteer_data = []
-    with open('volunteerdata','r') as vd:
-        for line in vd:
-            newLine = line.split(',')
-            volunteer_data.append(newLine)
-        vd.close()
-    t = loader.get_template('gisday/20XX/volunteer.html')
-    c = RequestContext(request,{'available_years': available_years,'form':form,'data':volunteer_data})    
-    return HttpResponse(t.render(c))
+    form = volunteerForm()
+    all_volunteers = list(Volunteer.objects.values())
+
+    return render(request, 'gisday/20XX/volunteer.html', {'available_years': available_years,'form':form,'data':all_volunteers})
+
+
+

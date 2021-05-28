@@ -3,10 +3,24 @@
 {% load extra_template_tags %}
 {% load i18n %}
 {% block content %}
-	<div class="well span12">
+<style>
+    @media screen and (min-width:575px) and (max-width: 1250px) {
+
+        .title {
+            font-size: min(max(3.9vw, 10px), 30px);
+        }
+    }
+
+    @media screen and (max-width:575px) {
+
+        .title {
+            font-size: min(max(3.8vw, 23px), 30px);
+        }
+    }
+</style>
+	<div class="well pr-4">
  	{{content|render}}
- 	</div>
-    {% if validated_registrations%}
+    {% if validated_registrations %}
     </div>
     <h2 class="text-center"> {% trans "Registered participants" %}: 
     {% if validated_registrations %}<span class="badge badge-info">{{validated_registrations|length}} </span>{% endif %}

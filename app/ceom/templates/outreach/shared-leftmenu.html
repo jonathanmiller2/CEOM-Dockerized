@@ -21,48 +21,48 @@
 	GIS Day
 </li>
 <li>
-	<a href="/gisday/overview/" id="news" class="btn btn-light btn-block rounded-0 p-0">
+	<a href="/outreach/gisday/overview/" id="news" class="btn btn-light btn-block rounded-0 p-0">
 		<p class="ml-4 m-0 text-left">Overview </p>
 	</a>
 <li>
 
 {% for year in available_years %}
+
 <li>
-	<a href="#" data-toggle="collapse" data-target="#{{year.date|date:'Y'}}" class="btn btn-light btn-block rounded-0 p-0">
+	<a href="/outreach/gisday/{{year.date|date:'Y'}}/" data-toggle="collapse" data-target="#Y{{year.date|date:'Y'}}" class="btn btn-light btn-block rounded-0 p-0">
 		<p class="ml-4 m-0 text-left">GIS Day {{year.date|date:'Y'}}</p>
 	
-
 		<!-- <img src="/static/images/twitter_logo.png" style="width:25px;height:25px" onclick="window.location.href = 'https://twitter.com/@ougisday'"> -->
 	</a>
 
-	<ul id="{{year.date|date:'Y'}}" class="collapse {% if year.date|date:"Y" in request.path  %}show{% endif %}">
+	<ul id="Y{{year.date|date:'Y'}}" style="list-style-type: none;" class="collapse {% if year.date|date:'Y' in request.path  %}show{% endif %}">
 		{% if not year.summary_hidden%}
-		<li><a href="/gisday/{{year.date|date:'Y'}}/summary">Summary</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/summary">Summary</a></li>
 		{% endif %}
-		<li><a href="/gisday/{{year.date|date:'Y'}}/announcements">Announcements</a></li>
-		<li><a href="/gisday/{{year.date|date:'Y'}}/aboutus/">Commitee</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/announcements">Announcements</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/aboutus/">Commitee</a></li>
 		{% if not year.agenda_hidden%}
-		<li><a href="/gisday/{{year.date|date:'Y'}}/agenda/">Agenda</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/agenda/">Agenda</a></li>
 		{% endif %}
-		<li><a href="/gisday/{{year.date|date:'Y'}}/logistics/">Logistics</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/logistics/">Logistics</a></li>
 		{% if not year.photo_contest_hidden%}
-		<li><a href="/gisday/{{year.date|date:'Y'}}/photo-contest/">Photo Contest</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/photo-contest/">Photo Contest</a></li>
 		{% endif %}
 		{% if not year.poster_contest_hidden%}
-		<li><a href="/gisday/{{year.date|date:'Y'}}/poster-contest/">Poster Registration</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/poster-contest/">Poster Registration</a></li>
 		{% endif %}
-		<li><a href="/gisday/{{year.date|date:'Y'}}/booth/">Exhibitor Registration</a></li>
-		<li><a href="/gisday/{{year.date|date:'Y'}}/guests/">Visitor Registration</a></li>
-		<li><a href="/gisday/{{year.date|date:'Y'}}/volunteer/">Volunteer Registration</a></li>
-		<li><a href="/gisday/{{year.date|date:'Y'}}/sponsors/">Sponsors</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/booth/">Exhibitor Registration</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/guests/">Visitor Registration</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/volunteer/">Volunteer Registration</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/sponsors/">Sponsors</a></li>
 		{% if not year.photo_gallery_hidden%}
-		<li><a href="/gisday/{{year.date|date:'Y'}}/photo-gallery">Photo gallery</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/photo-gallery">Photo gallery</a></li>
 		{% endif %}
 		{% if not year.image_gallery_hidden%}
-		<li><a href="/gisday/{{year.date|date:'Y'}}/image-gallery">Image gallery</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/image-gallery">Image gallery</a></li>
 		{% endif %}
 		{% if year.survey_open %}
-		<li><a href="/gisday/{{year.date|date:'Y'}}/survey/">Survey</a></li>
+		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/survey/">Survey</a></li>
 		{% endif %}
 
 	</ul>
@@ -71,7 +71,7 @@
 {% endfor %}
 
 <!-- TODO: Figure out why 2012 isn't displayed the same way as all of the other years-->
-<li>
+<!-- <li>
 	<a href="#" data-toggle="collapse" data-target="#twentytwelve" class="btn btn-light btn-block rounded-0 p-0">
 		<p class="ml-4 m-0 text-left">GIS Day 2012</p>
 	</a>
@@ -86,4 +86,17 @@
 		<li><a href="/gisday/2012/#Organizing-Committee">Organizing Committee</a></li>
 		<li><a href="/gisday/2012/gallery">Photo Gallery</a></li>
 	</ul>
+</li> -->
+<li class="nav-header">
+    Workshop
+</li>
+<li> 
+    <a href='/outreach/workshops/overview/' class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">Overview</p>
+    </a>
+</li>
+<li> 
+    <a href='/outreach/workshops/past/' class="btn btn-light btn-block rounded-0 p-0">
+        <p class="mx-4 m-0 text-left">Workshops</p>
+    </a>
 </li>
