@@ -426,9 +426,8 @@ class Volunteer(models.Model):
     #Un-normalized, names are re-stored for repeat volunteers
 
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
-    last_name = models.CharField(max_length=100, null=True, blank=True)
-    first_name = models.CharField(max_length=100, null=True, blank=True)
-    prole = models.CharField(max_length=20, null=True, blank=True)
-    lunch = models.BooleanField(default=False)
-    TShirtSize = models.CharField(max_length=20, null=True, blank=True)
-
+    last_name = models.CharField(max_length=100, null=True)
+    first_name = models.CharField(max_length=100, null=True)
+    prole = models.CharField(max_length=20, null=True)
+    lunch = models.CharField(max_length=4)
+    TShirtSize = models.CharField(max_length=20, null=True)

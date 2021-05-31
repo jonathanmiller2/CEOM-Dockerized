@@ -1,14 +1,56 @@
+<!-- import 'bootstrap/dist/js/bootstrap.bundle'; -->
+
 {% extends "gisday/base.html" %}
 {% load extra_template_tags %}
 {% block content %}
- <h1>Volunteer registration page</h1>
+ <h1 class="pb-3">Volunteer registration page</h1>
  <form action="." method='post'>
     {% csrf_token %}
-    {{form}}
-    <br>
-    <input type="submit" value="Submit" />
+    <!-- {{form}} -->
+    <div class="form-group">
+        <div class="row justify-content-around">
+            <label for="lname" class="col-1">Last Name</label>
+            <input type="last" class="form-control col-3" name="lname" placeholder="Last Name" required>
+            <label for="fname" class="col-1">First Name</label>
+            <input type="first" class="form-control col-3" name="fname" placeholder="First Name" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row justify-content-around">
+            <label for="prole" class="col-1">Primary Role</label>
+            <select class="form-control col-3" name="prole">
+                <option>UnderGraduate</option>
+                <option>Graduate</option>
+                <option>Post Doc</option>
+                <option>Poster Judge</option>
+                <option>Committee Member</option>
+            </select>
+            <label for="lunch" class="col-1">Lunch</label>
+            <select class="form-control col-3" name="lunch">
+                <option>Yes</option>
+                <option>No</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row justify-content-around">
+            <label for="TShirtSize" class="col-1">T-shirt Size</label>
+            <select class="form-control col-3" name="TShirtSize">
+                <option>Small</option>
+                <option>Medium</option>
+                <option>Large</option>
+                <option>XL</option>
+                <option>XXL</option>
+            </select>
+            <div class="col-1"></div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+    <div class="row justify-content-center pb-3">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
  </form>
- <h4>Registered Volunteers</h4>
+ <h3 class="pb-2">Registered Volunteers</h4>
 
 <table class="table table-striped">
     <thead>

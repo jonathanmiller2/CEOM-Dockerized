@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.forms.utils import ErrorList
 from django.core.mail import send_mail
 
-from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm, SurveyForm, DemographicSurveyForm, volunteerForm
+from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm, SurveyForm, DemographicSurveyForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
 from ceom.outreach.gisday.models import Booth, Year, Announcement, PersonInGroup, SponsorInYear, ItemInYear, SummaryContent, Volunteer
@@ -791,31 +791,24 @@ def posterupdate(request, id, year, email):
 
 def volunteer(request, year):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
-    roles = {1:'UnderGraduate',2:'Graduate',3:'Post Doc',4:'Poster Judge',5:'Committee Member'}
-    lunch_choice = {1:True,2:False}
-    tshirt_choices = {1:'Small',2:'Medium',3:'Large',4:'XL',5:'XXL'}
-
+  
     if request.method == 'POST':
-        form = volunteerForm(request.POST)
-        if form.is_valid():
-            x = request.POST
-            lname = x['Last_Name']
-            fname = x['First_Name']
-            prole = roles[int(x['Primary_Role'])]
-            lunchOpt = lunch_choice[int(x['Lunch'])]
-            TShirtSize = tshirt_choices[int(x['TShirt_size'])]
-            v_info = lname+','+fname+','+prole+','+str(lunchOpt)+','+TShirtSize
+        yearObject = Year.objects.get(date__year=year)
+        v_info = request.POST['lname']+','+request.POST['fname']+','+request.POST['prole']+','+request.POST['lunch']+','+request.POST['TShirtSize']
+        volunteer = Volunteer.objects.create(
+            year=yearObject,
+            last_name=request.POST['lname'],
+            first_name=request.POST['fname'],
+            prole=request.POST['prole'],
+            lunch=request.POST['lunch'],
+            TShirtSize=request.POST['TShirtSize'],
+        )
 
-            yearObject = Year.objects.get(date__year=year)
-            Volunteer.objects.create(year=yearObject, first_name=fname, last_name=lname, prole=prole, lunch=lunchOpt, TShirtSize=TShirtSize)
+        return render(request, 'gisday/20XX/Thanks.html', {'available_years': available_years,'data':v_info})
 
-            return render(request, 'gisday/20XX/Thanks.html', {'available_years': available_years,'data':v_info})
-
-    # if a GET (or any other method) we'll create a blank form
-    form = volunteerForm()
     all_volunteers = list(Volunteer.objects.values())
 
-    return render(request, 'gisday/20XX/volunteer.html', {'available_years': available_years,'form':form,'data':all_volunteers})
+    return render(request, 'gisday/20XX/volunteer.html', {'available_years': available_years,'data':all_volunteers})
 
 
 

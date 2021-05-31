@@ -362,33 +362,3 @@ class SurveyForm(ModelForm):
         elif role=="Other" and other_role=="":
             raise forms.ValidationError("Other role must be written")
         return other_role
-
-class volunteerForm(forms.Form):
-    roles = (
-        (1,'UnderGraduate'),
-        (2,'Graduate'),
-        (3,'Post Doc'),
-        (4,'Poster Judge'),
-        (5,'Committee Member'),
-        )
-    lunch_choice = (
-        (1,'Yes'),
-        (2,'No'),
-        )
-    tshirt_choices = (
-        (1,'Small'),
-        (2,'Medium'),
-        (3,'Large'),
-        (4,'XL'),
-        (5,'XXL'),
-        )
-    Last_Name = forms.CharField(max_length=128)
-    First_Name = forms.CharField(max_length=128)
-    Primary_Role = forms.ChoiceField(choices=roles)
-    Lunch = forms.ChoiceField(choices=lunch_choice)
-    TShirt_size = forms.ChoiceField(choices=tshirt_choices)
-    #class Meta:
-    #    model = TestModel
-    #    fields = ('name','attendingAs','tshirtSize','lunch')
-
-
