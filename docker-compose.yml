@@ -48,7 +48,7 @@ services:
     #user: ceomuser
 
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - /data/web/ceom/postgres:/var/lib/postgresql/data
 
     env_file:
       - ./.env.db
@@ -92,7 +92,3 @@ services:
 #
 #    depends_on:
 #      - redis
-
-      
-volumes:
-  postgres_data:
