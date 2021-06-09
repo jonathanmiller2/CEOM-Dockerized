@@ -4,11 +4,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.forms.utils import ErrorList
 from django.core.mail import send_mail
+from django.template.base import VariableDoesNotExist
+from django.db import IntegrityError
 
-from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm, SurveyForm, DemographicSurveyForm
+from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
-from ceom.outreach.gisday.models import Booth, Year, Announcement, PersonInGroup, SponsorInYear, ItemInYear, SummaryContent, Volunteer
+from ceom.outreach.gisday.models import Booth, Year, Announcement, PersonInGroup, SponsorInYear, ItemInYear, SummaryContent, Volunteer, Survey, DemographicSurvey
 import os
 import sys
 import json
@@ -506,32 +508,33 @@ def survey(request, year):
         except:
             content = '<p>Please help us in reporting to our federals sponsors (USGS, NASA, NSF EPSCoR) by completing this survey. Your participation will help ensure continued funding and improve GIS Day in future years. Your responses are anonymous and not linked to any identifiable information such as email address.</p>'
         if request.method == "POST":
-            form = SurveyForm(request.POST)
-            if form.is_valid():
-                data = form.save()
-                return render(request, 'gisday/20XX/survey.html', context={
-                    'available_years': available_years,
-                    'gisdate': date,
-                    'registration_successful': True,
-                    'content': content,
-                })
+            if request.POST.get('participate_again') == 'on':
+                participate_again = True
             else:
-                return render(request, 'gisday/20XX/survey.html', context={
-                    'available_years': available_years,
-                    'gisdate': date,
-                    'form': form,
-                    'content': content,
-                })
-        else:
-            form = SurveyForm(initial={
-                'year': date
-            })
+                participate_again = False
+    
+            survey = Survey.objects.create(
+                year=date,
+                participate_again=participate_again,
+                role=request.POST['role'],
+                other_role=request.POST['other_role'],
+                beneficial_aspects=request.POST['beneficial_aspects'],
+                comments_and_suggestions=request.POST['comments_and_suggestions'],
+            )
             return render(request, 'gisday/20XX/survey.html', context={
                 'available_years': available_years,
+                'year': date,
                 'gisdate': date,
-                'form': form,
+                'form_done': True,
+                'registration_successful': True,
                 'content': content,
+                'form': survey
             })
+        return render(request, 'gisday/20XX/survey.html', context={
+                'available_years': available_years,
+                'gisdate': date,
+                'content': content,
+        })
     else:
         return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
@@ -543,29 +546,29 @@ def demographic_survey(request, year):
         if not date.survey_open:
             return render(request, 'gisday/notfound.html', context={'available_years': available_years})
         if request.method == "POST":
-            form = DemographicSurveyForm(request.POST)
-            if form.is_valid():
-                data = form.save()
-                return render(request, 'gisday/20XX/demographic_survey.html', context={
-                    'available_years': available_years,
-                    'gisdate': date,
-                    'registration_successful': True,
-                })
-            else:
-                return render(request, 'gisday/20XX/demographic_survey.html', context={
-                    'available_years': available_years,
-                    'gisdate': date,
-                    'form': form,
-                })
-        else:
-            form = DemographicSurveyForm(initial={
-                'year': date
-            })
-            return render(request, 'gisday/20XX/demographic_survey.html', context={
-                'available_years': available_years,
-                'gisdate': date,
-                'form': form,
-            })
+            survey = DemographicSurvey.objects.create(
+                year=date,
+                institution=request.POST['institution'],
+                other_institution=request.POST['other_institution'],
+                position=request.POST['position'],
+                other_position=request.POST['other_position'],
+                highest_degree=request.POST['highest_degree'],
+                gender=request.POST['gender'],
+                ethnicity=request.POST['ethnicity'],
+                citizenship=request.POST['citizenship'],
+                race=request.POST['race'],
+                other_race=request.POST['other_race'],
+                disability=request.POST['disability'],
+                other_disability=request.POST['other_disability'],
+            )
+        return render(request, 'gisday/20XX/demographic_survey.html', context={
+            'available_years': available_years,
+            'year': date,
+            'gisdate': date,
+            'form_done': True,
+            'registration_successful': True,
+            'form': survey,
+        })
     else:
         return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 

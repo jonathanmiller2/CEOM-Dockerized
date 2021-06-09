@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.db import models
 from django import forms
-from ceom.outreach.gisday.models import Booth, Visitor, PhotoContestParticipant, Poster, Year, Survey, DemographicSurvey
+from ceom.outreach.gisday.models import Booth, Visitor, PhotoContestParticipant, Poster, Year
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, HTML, Layout, Field, Row, Div, Column, Fieldset
 
@@ -196,34 +196,34 @@ class PosterForm(ModelForm):
 #             raise forms.ValidationError("Other role must be written")
 #         return other_role
 
-class DemographicSurveyForm(ModelForm):
-    captcha = CaptchaField()
-    def __init__(self, *args, **kwargs):
-        super(DemographicSurveyForm, self).__init__(*args, **kwargs)
-        self.fields['year']=forms.ModelChoiceField(queryset=Year.objects.all(), widget=forms.HiddenInput())
-        self.helper = FormHelper()
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'span2'
-        self.helper.field_class = 'span8'
-        self.helper.add_input(Submit('submit', 'Submit'))
-        self.helper.layout = Layout(
-                Div(Div('institution',css_class="span5"),Div('other_institution',css_class="span5"),css_class="span12"),
-                Div(Div('position',css_class="span5"),Div('other_position',css_class="span5"),css_class="span12"),
-                'highest_degree',
-                'year',
-                'gender',
-                'ethnicity',
-                'citizenship',
-                Div(Div('race',css_class="span5"),Div('other_race',css_class="span5"),css_class="span12"),
-                Div(Div('disability',css_class="span5"),Div('other_disability',css_class="span5"),css_class="span12"),
-                'parents_degree',
-                'captcha'
+# class DemographicSurveyForm(ModelForm):
+#     captcha = CaptchaField()
+#     def __init__(self, *args, **kwargs):
+#         super(DemographicSurveyForm, self).__init__(*args, **kwargs)
+#         self.fields['year']=forms.ModelChoiceField(queryset=Year.objects.all(), widget=forms.HiddenInput())
+#         self.helper = FormHelper()
+#         self.helper.form_class = 'form-horizontal'
+#         self.helper.label_class = 'span2'
+#         self.helper.field_class = 'span8'
+#         self.helper.add_input(Submit('submit', 'Submit'))
+#         self.helper.layout = Layout(
+#                 Div(Div('institution',css_class="span5"),Div('other_institution',css_class="span5"),css_class="span12"),
+#                 Div(Div('position',css_class="span5"),Div('other_position',css_class="span5"),css_class="span12"),
+#                 'highest_degree',
+#                 'year',
+#                 'gender',
+#                 'ethnicity',
+#                 'citizenship',
+#                 Div(Div('race',css_class="span5"),Div('other_race',css_class="span5"),css_class="span12"),
+#                 Div(Div('disability',css_class="span5"),Div('other_disability',css_class="span5"),css_class="span12"),
+#                 'parents_degree',
+#                 'captcha'
           
-        )
+#         )
 
-    class Meta:
-        model = DemographicSurvey
-        exclude = ("created","modified")
+#     class Meta:
+#         model = DemographicSurvey
+#         exclude = ("created","modified")
         
     def clean_other_position(self):
             other_position = self.cleaned_data["other_position"]
@@ -271,40 +271,40 @@ class DemographicSurveyForm(ModelForm):
                 raise forms.ValidationError("Other disability must be filled")
             return other_disability
 
-class SurveyForm(ModelForm):
-    captcha = CaptchaField()
-    def __init__(self, *args, **kwargs):
-        super(SurveyForm, self).__init__(*args, **kwargs)
-        self.fields['year']=forms.ModelChoiceField(queryset=Year.objects.all(), widget=forms.HiddenInput())
-        self.helper = FormHelper()
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'span2'
-        self.helper.field_class = 'span8'
-        self.helper.add_input(Submit('submit', 'Submit'))
-        self.helper.layout = Layout(
-                HTML('<h3>Demographics</h3>'),
-                Div(Div('institution',css_class="span5"),Div('other_institution',css_class="span5"),css_class="span12"),
-                Div(Div('position',css_class="span5"),Div('other_position',css_class="span5"),css_class="span12"),
-                'highest_degree',
-                'year',
-                'gender',
-                'ethnicity',
-                'citizenship',
-                Div(Div('race',css_class="span5"),Div('other_race',css_class="span5"),css_class="span12"),
-                Div(Div('disability',css_class="span5"),Div('other_disability',css_class="span5"),css_class="span12"),
-                'parents_degree',
-                HTML('<h3>Survey</h3>'),
-                'participate_again',
-                Div(Div('role',css_class="span5"),Div('other_role',css_class="span5"),css_class="span12"),
-                'beneficial_aspects',
-                'comments_and_suggestions',
-                'captcha',
-        )
+# class SurveyForm(ModelForm):
+#     captcha = CaptchaField()
+#     def __init__(self, *args, **kwargs):
+#         super(SurveyForm, self).__init__(*args, **kwargs)
+#         self.fields['year']=forms.ModelChoiceField(queryset=Year.objects.all(), widget=forms.HiddenInput())
+#         self.helper = FormHelper()
+#         self.helper.form_class = 'form-horizontal'
+#         self.helper.label_class = 'span2'
+#         self.helper.field_class = 'span8'
+#         self.helper.add_input(Submit('submit', 'Submit'))
+#         self.helper.layout = Layout(
+#                 HTML('<h3>Demographics</h3>'),
+#                 Div(Div('institution',css_class="span5"),Div('other_institution',css_class="span5"),css_class="span12"),
+#                 Div(Div('position',css_class="span5"),Div('other_position',css_class="span5"),css_class="span12"),
+#                 'highest_degree',
+#                 'year',
+#                 'gender',
+#                 'ethnicity',
+#                 'citizenship',
+#                 Div(Div('race',css_class="span5"),Div('other_race',css_class="span5"),css_class="span12"),
+#                 Div(Div('disability',css_class="span5"),Div('other_disability',css_class="span5"),css_class="span12"),
+#                 'parents_degree',
+#                 HTML('<h3>Survey</h3>'),
+#                 'participate_again',
+#                 Div(Div('role',css_class="span5"),Div('other_role',css_class="span5"),css_class="span12"),
+#                 'beneficial_aspects',
+#                 'comments_and_suggestions',
+#                 'captcha',
+#         )
           
 
-    class Meta:
-        model = Survey
-        exclude = ("created","modified")
+#     class Meta:
+#         model = Survey
+#         exclude = ("created","modified")
         
     def clean_other_position(self):
             other_position = self.cleaned_data["other_position"]

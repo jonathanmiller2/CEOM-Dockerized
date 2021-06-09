@@ -371,7 +371,7 @@ PARENTS_DEGREE_CHOICES=(
     ("NR","Prefer not to respond"),
 )
 class DemographicSurvey(models.Model):
-    year = models.ForeignKey(Year, on_delete=models.CASCADE)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE, null=True)
     institution = models.CharField("Participant Institution", max_length=80,choices=INSTITUTION_CHOICES,null=False)
     other_institution = models.CharField('If other, please specify',max_length=80,null=True,blank=True)
 
