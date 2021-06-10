@@ -168,7 +168,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     
     'django_countries',
-    'django_extensions', #Needed to nuke/recreate the database
+    'django_extensions',
 
     'autotranslate',
     'chunked_upload',

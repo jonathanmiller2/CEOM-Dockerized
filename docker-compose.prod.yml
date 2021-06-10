@@ -5,8 +5,6 @@ services:
   web:
     build: ./app
 
-    #user: ceomuser
-
     command: bash -c "python manage.py makemigrations &&
                       python manage.py migrate --noinput -v 1 && 
                       echo MIGRATE_FIN &&
@@ -27,34 +25,22 @@ services:
                       #python manage.py makemessages --all &&
                       #echo MAKE_MESSAGE_FIN &&
 
-    #TODO: Remove the volume connection in production. There should be no connection between the container and machine in production to avoid attacks on the base machine.
-    volumes:
-      - ./app:/code
     expose:
       - 8000
-      - 587
-      - 25
     env_file:
-      - ./.env
+      - ./.env.prod #TODO: RESTRICT HOSTNAME IN THE ENV FILE
     depends_on:
       - db
-#      - redis
-
-
 
   db:
     image: postgis/postgis
 
-    #user: ceomuser
-
     volumes:
       - /data/web/ceom/postgres:/var/lib/postgresql/data
+      - /docker-projects/eomf-postgres-data:/eomf-postgres-data #TODO: Remove this once the new postgres db is fully up and running
 
     env_file:
       - ./.env.db
-  
-
-
 
   nginx:
     build:
@@ -64,31 +50,11 @@ services:
     #TODO: Figure out how to avoid containers running as root
     #user: ceomuser
 
-    #TODO: Nginx NEEDS this link to the active files because media files are added during runtime, after docker's copy command. Thus the container doesn't have the new media files.
     volumes: 
       - .:/code
 
     ports:
-      - 25:25
       - 80:80
-      - 587:587
 
     depends_on:
       - web
-
-
-#  redis:
-#    image: redis:alpine
-#
-#
-#
-#  celery:
-#    build: ./app
-#    command: celery -A ceom worker -l info
-#    volumes:
-#      - ./app/:/code/
-#    
-#    #Env variables may be needed here?
-#
-#    depends_on:
-#      - redis

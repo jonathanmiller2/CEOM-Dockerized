@@ -3,8 +3,6 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from ceom.photos.models import *
 
-admin.site.register(Theme, admin.GeoModelAdmin)
-
 class CategoryAdmin(admin.GeoModelAdmin):
     actions = None
 

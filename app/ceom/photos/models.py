@@ -29,8 +29,7 @@ class ContinentBuffered(models.Model):
         verbose_name_plural = _('Continents')
 
 class Category(models.Model):
-    id = models.IntegerField(null=False)
-    id_prim = models.IntegerField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=40, blank=True)
     order = models.IntegerField()
     def __str__(self):
@@ -134,17 +133,6 @@ class PhotoUser(models.Model):
         db_table = 'users'
         verbose_name = _('Photo User')
         verbose_name_plural = _('Photo Users')
-
-class Theme(models.Model):
-    name = models.CharField(max_length=32)
-    description = models.TextField()
-    icon = models.ImageField(upload_to="photos/themes/")
-    class Meta:
-        verbose_name = _('Theme')
-        verbose_name_plural = _('Themes')
-    def __str__(self):
-        return str(_(self.name)) 
-
         
 STATUS_CHOICES = (
     (0, _("Deleted")),
@@ -195,25 +183,21 @@ class Photo(models.Model):
         blank=True,
         db_column="location"
     )
-    user = models.ForeignKey(User, null=True, blank=True, db_column='userid', on_delete=models.CASCADE)
-    theme = models.ForeignKey(Theme, null=True, blank=True, db_column='photogroupid', on_delete=models.CASCADE)
-    notes = models.TextField(blank=True, db_column='description')
+    user = models.ForeignKey(User, null=True, blank=True, db_column='userid', on_delete=models.DO_NOTHING)
+    notes = models.TextField(null=True, db_column='description')
     _lon = models.FloatField(null=True, blank=True, db_column='long')
     _lat = models.FloatField(null=True, blank=True, db_column='lat')
     regionid = models.IntegerField(null=True, blank=True)
     takendate = models.DateField(null=True, blank=True)
     time = models.DateTimeField(null=True, blank=True)
     uploaddate = models.DateField(null=True, blank=True, auto_now_add=True)
-    datum = models.CharField(max_length=8, blank=True)
+    datum = models.CharField(max_length=8, null=True, blank=True)
     alt = models.FloatField(null=True, blank=True)
-    category = models.ForeignKey(Category, null=True, blank=True, db_column='categoryid', on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, null=True, blank=True, db_column='categoryid', on_delete=models.DO_NOTHING)
     point = models.PointField(null=True, blank=True)
-    dir_card = models.CharField(max_length=4, choices=DIR_CARD_CHOICES, db_column='dir',blank=True)
+    dir_card = models.CharField(max_length=4, choices=DIR_CARD_CHOICES, db_column='dir', null=True, blank=True)
     dir_deg = models.FloatField(null=True, blank=True)
     status = models.IntegerField(choices=STATUS_CHOICES, null=True, blank=True, default=1)
-    #idxfti = models.TextField(blank=True) # This field type is a guess.
-    file_hash = models.CharField(max_length=32, blank=True, db_column='hash')
-    source = models.CharField(max_length=100, blank=True)
 
 
     def __str__(self):

@@ -1,0 +1,62 @@
+version: '3'
+    
+services:
+
+  web:
+    build: ./app
+
+    command: bash -c "python manage.py makemigrations &&
+                      python manage.py migrate --noinput -v 1 && 
+                      echo MIGRATE_FIN &&
+                      python manage.py check &&
+                      echo CHECK_FIN &&
+                      python manage.py collectstatic --noinput &&
+                      echo COLLECTSTATIC_FIN &&
+                      python manage.py compilemessages &&
+                      gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
+                      
+                      #tail -F anything"
+                      #gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
+                      #python manage.py runserver 0.0.0.0:8000"
+
+                      #python manage.py makemigrations outreach &&
+                      #python manage.py makemigrations --empty pages &&
+                      
+                      #python manage.py makemessages --all &&
+                      #echo MAKE_MESSAGE_FIN &&
+
+    volumes:
+      - ./app:/code
+    expose:
+      - 8000
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+
+  db:
+    image: postgis/postgis
+
+    volumes:
+      - /tmp/ceom-dev/postgres:/var/lib/postgresql/data
+      - /docker-projects/eomf-postgres-data:/eomf-postgres-data #TODO: Remove this once the new postgres db is fully up and running
+
+    env_file:
+      - ./.env.db
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+
+    #TODO: Figure out how to avoid containers running as root
+    #user: ceomuser
+
+    volumes: 
+      - .:/code
+
+    ports:
+      - 80:80
+
+    depends_on:
+      - web
