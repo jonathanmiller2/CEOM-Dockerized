@@ -3,6 +3,7 @@ version: '3'
 services:
 
   web:
+    container_name: ceom_web
     build: ./app
 
     command: bash -c "python manage.py makemigrations &&
@@ -35,6 +36,7 @@ services:
       - db
 
   db:
+    container_name: ceom_db
     image: postgis/postgis
 
     volumes:
@@ -45,6 +47,7 @@ services:
       - ./.env.db
 
   nginx:
+    container_name: ceom_nginx
     build:
       context: .
       dockerfile: ./nginx/Dockerfile
