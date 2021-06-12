@@ -1,51 +1,66 @@
 {% extends "aboutus/base.html" %}
 {% load i18n %}
 {% block content %}
-
+<style>
+	.tab-content>.active {
+		display:inline
+	}
+</style>
 <div class="card bg-light shadow-sm p-4">
 	<div class="card-body grid">
 		<h2 style="color: #dc143c;">{% trans "News" %}</h2>
 				<div class="hr"></div>&nbsp;
 
-		<div class="tabbable tabs-left">
-			<ul class="nav nav-tabs">
-			{% for post in posts %}
-				<li {% ifequal forloop.counter 1 %}class=" active"{% endifequal %}>
-					<a href="#tab{{forloop.counter}}" data-toggle="tab"> {{post.date|date}}</a>
-					
-				</li>
-			{% endfor %}
-			 </ul>
-			 <div class="tab-content">
-				{% for post in posts %}
-					<div class="tab-pane {% ifequal forloop.counter 1 %} active{% endifequal %}" id="tab{{forloop.counter}}">
-					<h4>{% trans post.title %}</h4>
-					<h5>{{post.date}}</h5>
-					<div class="hr"></div>
-					<p>{{ post.content }}</p>
-					{% if post.images.all%}
-					<div class="hr"></div>
-					</br >
-					<h4 align="center">{% trans "Images" %}</h4>
-						<div id="myCarousel{{forloop.counter}}"  class="carousel slide">
-						<div class="carousel-inner"; style="margin-left:auto;margin-right:auto;text-align:center">	
-							{% for photo in post.images.all %}	
-								<div class="{% ifequal forloop.counter 1 %} active {% endifequal %} item" style=" margin-left:auto;margin-right:auto; max-width: 80%">
-									<a href="{{photo.image.url}}"><img src="{{photo.image.url}}" width=100% /></a>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-2 mb-3">
+					<ul id="tab" class="nav nav-pills flex-column" role="tablist">
+						{% for post in posts %}
+						<li class="nav-item">
+							<a class="nav-link {% ifequal forloop.counter 1 %}  active {% endifequal %}" role="tab" href="#tab{{forloop.counter}}" data-toggle="tab">{{post.date|date}}</a>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="col-md-10">
+					<div class="tab-content">
+					{% for post in posts %}
+					<div class="tab-pane {% ifequal forloop.counter 1 %} active {% endifequal %}" id="tab{{forloop.counter}}" role="tabpanel" aria-labelledby="tab{{forloop.counter}}">
+						<h4>{% trans post.title %}</h4>
+						<h5>{{post.date}}</h5>
+						<div class="hr"></div>
+						<p>{{ post.content }}</p>
+						{% if post.images.all%}
+						<div class="hr"></div>
+						</br >
+						<h4 >{% trans "Images" %}</h4>
+						<div id="myCarousel{{forloop.counter}}" class="carousel slide" style="width:100%; margin:auto;">
+							<div class="carousel-inner" style="width:90%; margin:auto;">
+								{% for photo in post.images.all %}
+								{% if forloop.counter == 1 %}
+              					<div class="active item"><div class="pagination-centered"> <a href="{{photo.image.url}}"><img src="{{photo.image.url}}"></a></div>
 									<div class="carousel-caption">
-										<p>{{photo.description|linebreaks|urlize}}</p>
+									<p>{{photo.description|linebreaks|urlize}}</p>
 									</div>
 								</div>
+              					{% else %}
+              					<div class="item"><div class="pagination-centered"><a href="{{photo.image.url}}"><img src="{{photo.image.url}}"></a></div>
+									<div class="carousel-caption">
+									<p>{{photo.description|linebreaks|urlize}}</p>
+									</div>
+								</div>
+              					{% endif %}
 							{% endfor %}
+							</ol>
+							</div>
+							{% if post.images.all|length > 1 %}
+							<a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
+       						<a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+							{% endif %}
 						</div>
-						{% if post.images.all|length > 1 %}
-						<a id="nav{{forloop.counter}}-l" class="carousel-control left" href="#myCarousel{{forloop.counter}}" data-slide="prev">‹</a>
-						<a id="nav{{forloop.counter}}-r" class="carousel-control right" href="#myCarousel{{forloop.counter}}" data-slide="next">›</a>
 						{% endif %}
-						</div>	
-
-					{% endif %}
-				
+					</div>
+					
 					{% if post.files.all %}
 					<div class="hr"></div>
 					</br >
@@ -56,13 +71,15 @@
 							{% endfor %}
 						</ul>
 					{% endif %}
-					</br >
-					</div>
-				{% endfor %}
-				</div><!--tab-content-->
+					
+					{% endfor %}
+					</div><!--tab-content-->
+				</div>
 				
-		</div><!--tabbable -->
+		</div><!--row -->
 	</div>
-	
 </div>
+</div>
+
+
 {% endblock %}

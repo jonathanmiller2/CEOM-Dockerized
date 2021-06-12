@@ -16,7 +16,9 @@
         {{content|render}}
         <br>
     {% if not form_done %}
-    <h3 class="pb-3">Demographics</h3>
+    <form action="." method='post'>
+        {% csrf_token %}
+        <h3 class="pb-3">Demographics</h3>
     <form action="." method='post'>
         {% csrf_token %}
         <div class="form-group">
@@ -144,6 +146,7 @@
                 <label class="col-3"></label>
             </div>
         </div>
+        </form>
         <h3 class="pb-3">Survey</h3>
         <div class="form-group row pl-4">
             <div class="form-check">

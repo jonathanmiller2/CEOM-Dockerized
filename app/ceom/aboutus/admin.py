@@ -4,6 +4,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from tinymce.widgets import TinyMCE
 from django.http import HttpResponse
+from django.core.exceptions import FieldError
 
 class PostImageInLine(admin.StackedInline):
     model = PostImage
@@ -16,7 +17,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ['date']
     list_display = ('title','date','content',)
     fieldsets = [
-        ('Post data',  {'fields': ['title','date', 'content','image_comlumn_number']}),
+        ('Post data',  {'fields': ['title','date', 'content','image_column_number']}),
     ]
     inlines = [PostImageInLine,PostFileInLine]
     class Meta:
