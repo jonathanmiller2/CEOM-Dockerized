@@ -39,10 +39,6 @@ services:
     container_name: ceom_db
     image: postgis/postgis
 
-    volumes:
-      - /tmp/ceom-dev/postgres:/var/lib/postgresql/data
-      - /docker-projects/eomf-postgres-data:/eomf-postgres-data #TODO: Remove this once the new postgres db is fully up and running
-
     env_file:
       - ./.env.db
 
