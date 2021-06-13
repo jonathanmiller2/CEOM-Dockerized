@@ -2,11 +2,92 @@
 {% load i18n %}
 {% block content %}
 <style>
+	/* Big screen */
+    @media screen and (min-width:1250px) {
+
+		#outer-layout {
+			display: -ms-flexbox;
+			display: flex;
+			-ms-flex-wrap: wrap;
+			flex-wrap: wrap;
+			margin-right: -15px;
+			margin-left: -15px;
+		}
+
+		#body {
+			width: 100%;
+		}  
+
+		#well {
+			overflow-wrap: break-word;
+			word-wrap: break-word;
+		}
+
+		#carouselExampleIndicators {
+			margin-left: 60px;
+		}
+		}
+		/* Middle screen */
+	@media screen and (min-width:575px) and (max-width: 1250px) {
+
+		#title {
+			font-size: min(max(3.9vw, 10px),30px);
+		}
+
+		#subtitle {
+			font-size: min(max(3.8vw, 15px),30px);
+		}
+
+		#carouselExampleIndicators {
+			margin-left: 30px;
+		}
+	}
+		/* Small screen */
+	@media screen and (max-width:575px) {
+
+		#title {
+			font-size: min(max(3.8vw, 23px),30px);
+		}
+
+		#subtitle {
+			font-size: min(max(3.7vw, 17px),30px);
+		}
+	}
+
 	.tab-content>.active {
 		display:inline
 	}
+
+	.carouselArrow {
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        background: #555;
+        border: 2px solid #fff;
+        color: #fff;
+        text-align: center;
+    }
+
+    .carouselArrowInterior {
+        position: relative;
+        color: white;
+        font-size: 36pt;
+        line-height: 41%;
+    }
+
+    .carousel-item {
+        transition: transform 1s ease, opacity .5s ease-out;
+    }
+
+	.carousel-caption {
+		color:black
+	}
+
+	.carousel-indicators li {
+		background-color: black
+	}
 </style>
-<div class="card bg-light shadow-sm p-4">
+<div class="card shadow-sm p-4">
 	<div class="card-body grid">
 		<h2 style="color: #dc143c;">{% trans "News" %}</h2>
 				<div class="hr"></div>&nbsp;
@@ -34,31 +115,53 @@
 						<div class="hr"></div>
 						</br >
 						<h4 >{% trans "Images" %}</h4>
-						<div id="myCarousel{{forloop.counter}}" class="carousel slide" style="width:100%; margin:auto;">
-							<div class="carousel-inner" style="width:90%; margin:auto;">
-								{% for photo in post.images.all %}
-								{% if forloop.counter == 1 %}
-              					<div class="active item"><div class="pagination-centered"> <a href="{{photo.image.url}}"><img src="{{photo.image.url}}"></a></div>
-									<div class="carousel-caption">
-									<p>{{photo.description|linebreaks|urlize}}</p>
-									</div>
-								</div>
-              					{% else %}
-              					<div class="item"><div class="pagination-centered"><a href="{{photo.image.url}}"><img src="{{photo.image.url}}"></a></div>
-									<div class="carousel-caption">
-									<p>{{photo.description|linebreaks|urlize}}</p>
-									</div>
-								</div>
-              					{% endif %}
-							{% endfor %}
-							</ol>
-							</div>
+						
+						<div id="myCarousel{{forloop.counter}}" class="carousel slide" data-ride="carousel" style="width:80%; display: inline-block; background-color:white">
+							<!-- Indicators -->
 							{% if post.images.all|length > 1 %}
-							<a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
-       						<a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+							<ol class="carousel-indicators">
+								{% for photo in post.images.all %}
+								<li data-target="#myCarousel{{forloop.counter}}" data-slide-to="{{forloop.counter}}" class="{% ifequal forloop.counter 1 %} active {% endifequal %}"></li>
+								{% endfor %}
+							</ol>
+							{% endif %}
+							<!-- Carousel items -->
+							<div class="carousel-inner"style="display: inline-flex; height: 34vw">
+								{% for photo in post.images.all %}
+								
+              					<div class="carousel-item {% ifequal forloop.counter 1 %} active {% endifequal %}" style="background-color:white">
+									<div class="pagination-centered"> 
+										<a href="{{photo.image.url}}"><img class="d-block w-100" src="{{photo.image.url}}"></a>
+										<div class="carousel-caption d-md-block">
+											<p>{{photo.description|linebreaks|urlize}}</p>
+										</div>
+									</div>
+								</div>
+								
+								{% endfor %}
+              				</div>
+              					
+							
+							
+							{% if post.images.all|length > 1 %}
+							<!-- Carousel nav -->
+							<a class="carousel-control-prev" href="#myCarousel{{forloop.counter}}" role="button" data-slide="prev">
+								<div class="carouselArrow" aria-hidden="true">
+									<div class="carouselArrowInterior">&lsaquo;</div>
+								</div>
+								<span class="sr-only">Previous</span>
+							  </a>
+							  <a class="carousel-control-next" href="#myCarousel{{forloop.counter}}" role="button" data-slide="next">
+								<div class="carouselArrow" aria-hidden="true">
+									<div class="carouselArrowInterior">&rsaquo;</div>
+								</div>
+								<span class="sr-only">Next</span>
+							  </a>
 							{% endif %}
 						</div>
-						{% endif %}
+					
+						{% endif %}	
+						
 					</div>
 					
 					{% if post.files.all %}
