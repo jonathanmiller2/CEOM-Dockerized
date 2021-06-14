@@ -25,7 +25,8 @@ services:
                       
                       #python manage.py makemessages --all &&
                       #echo MAKE_MESSAGE_FIN &&
-
+    volumes: 
+      - /data/web/ceom/media/:/code/ceom/media/
     expose:
       - 8000
     env_file:
@@ -42,7 +43,7 @@ services:
 
     volumes: 
       - .:/code
-      - /data/web/ceom_photos/:/data/web/ceom_photos/
+      - /data/web/ceom/media/:/data/web/ceom/media/
 
     ports:
       - 80:80
