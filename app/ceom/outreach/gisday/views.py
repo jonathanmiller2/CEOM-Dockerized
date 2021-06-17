@@ -10,7 +10,7 @@ from django.db import IntegrityError
 from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
-from ceom.outreach.gisday.models import Booth, Year, Announcement, PersonInGroup, SponsorInYear, ItemInYear, SummaryContent, Volunteer, Survey
+from ceom.outreach.gisday.models import Booth, Year, Announcement, PersonInGroup, SponsorInYear, ItemInYear, SummaryContent, Volunteer, Survey, Agenda
 import os
 import sys
 import json
