@@ -370,42 +370,43 @@ PARENTS_DEGREE_CHOICES=(
     ("Don't know","I do not know"),
     ("NR","Prefer not to respond"),
 )
-class DemographicSurvey(models.Model):
+#class DemographicSurvey(models.Model):
+    
+class Survey(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE, null=True)
-    institution = models.CharField("Participant Institution", max_length=80,choices=INSTITUTION_CHOICES,null=False)
+    institution = models.CharField("Participant Institution", max_length=80,null=False)
     other_institution = models.CharField('If other, please specify',max_length=80,null=True,blank=True)
 
-    position = models.CharField("Participant Position", max_length=80,choices=PARTICIPANT_POSITION_CHOICES,null=False)
+    position = models.CharField("Participant Position", max_length=80,null=False)
     other_position = models.CharField('If other, please specify',max_length=80,null=True,blank=True)
 
-    highest_degree = models.CharField("Highest Degree Obtained", max_length=20,choices=HIGHEST_DEGREE_CHOICES,null=False)
+    highest_degree = models.CharField("Highest Degree Obtained", max_length=20,null=True)
 
-    gender = models.CharField("Gender", max_length=20,choices=GENDER_CHOICES,null=False)
+    gender = models.CharField("Gender", max_length=50,null=False)
 
-    ethnicity = models.CharField("Ethnicity", max_length=20,choices=ETHNICITY_CHOICES,null=False)
+    ethnicity = models.CharField("Ethnicity", max_length=50,null=False)
 
-    citizenship = models.CharField("Citizenship", max_length=30,choices=CITIZENSHIP_CHOICES,null=False)
+    citizenship = models.CharField("Citizenship", max_length=50,null=False)
     
-    race = models.CharField("Race", max_length=50,choices=RACE_CHOICES,null=False)
+    race = models.CharField("Race", max_length=50,null=False)
     other_race = models.CharField('If other, please specify',max_length=50,null=True,blank=True)
 
-    disability = models.CharField("Disability", max_length=50,choices=DISABILITY_CHOICES,null=False)
+    disability = models.CharField("Disability", max_length=50,null=False)
     other_disability = models.CharField('If other, please specify',max_length=50,null=True,blank=True)
 
-    parents_degree = models.CharField("In your family, which of your parents/guardians received college degrees?", max_length=80,choices=PARENTS_DEGREE_CHOICES,null=False)
+    parents_degree = models.CharField("In your family, which of your parents/guardians received college degrees?", max_length=80,null=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-ROLES_CHOICES = (
-    ("Organizing Committee","Organizing Committee"),
-    ("Faculty Poster Judge","Faculty Poster Judge"),
-    ("Student Poster Contestant","Student Poster Contestant"),
-    ("Booth Exhibitor","Booth Exhibitor"),
-    ("Poster Exhibitor","Poster Exhibitor"),
-    ("Student Facilitator/Volunteer","Student Facilitator/Volunteer"),
-    ("Staff Facilitator","Staff Facilitator"),
-    ("Other","Other (please specify)"),
-)
-class Survey(DemographicSurvey):
+    ROLES_CHOICES = (
+        ("Organizing Committee","Organizing Committee"),
+        ("Faculty Poster Judge","Faculty Poster Judge"),
+        ("Student Poster Contestant","Student Poster Contestant"),
+        ("Booth Exhibitor","Booth Exhibitor"),
+        ("Poster Exhibitor","Poster Exhibitor"),
+        ("Student Facilitator/Volunteer","Student Facilitator/Volunteer"),
+        ("Staff Facilitator","Staff Facilitator"),
+        ("Other","Other (please specify)"),
+    )
     participate_again = models.BooleanField("I would like to participate in the event again")
     role = models.CharField("What was you primary role in the event?",max_length=50,choices=ROLES_CHOICES,null=False)
     other_role = models.CharField('If other, please specify',max_length=80,null=True,blank=True)

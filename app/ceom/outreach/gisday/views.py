@@ -10,7 +10,7 @@ from django.db import IntegrityError
 from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
-from ceom.outreach.gisday.models import Booth, Year, Announcement, PersonInGroup, SponsorInYear, ItemInYear, SummaryContent, Volunteer, Survey, DemographicSurvey
+from ceom.outreach.gisday.models import Booth, Year, Announcement, PersonInGroup, SponsorInYear, ItemInYear, SummaryContent, Volunteer, Survey
 import os
 import sys
 import json
@@ -515,6 +515,19 @@ def survey(request, year):
     
             survey = Survey.objects.create(
                 year=date,
+                institution=request.POST['institution'],
+                other_institution=request.POST['other_institution'],
+                position=request.POST['position'],
+                other_position=request.POST['other_position'],
+                highest_degree=request.POST['highest_degree'],
+                gender=request.POST['gender'],
+                ethnicity=request.POST['ethnicity'],
+                citizenship=request.POST['citizenship'],
+                race=request.POST['race'],
+                other_race=request.POST['other_race'],
+                disability=request.POST['disability'],
+                other_disability=request.POST['other_disability'],
+                parents_degree=request.POST['parents_degree'],
                 participate_again=participate_again,
                 role=request.POST['role'],
                 other_role=request.POST['other_role'],
@@ -539,38 +552,38 @@ def survey(request, year):
         return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 
-def demographic_survey(request, year):
-    available_years = Year.objects.filter(hidden=False).order_by('-date')
-    if year_available(year):
-        date = Year.objects.get(date__year=year)
-        if not date.survey_open:
-            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
-        if request.method == "POST":
-            survey = DemographicSurvey.objects.create(
-                year=date,
-                institution=request.POST['institution'],
-                other_institution=request.POST['other_institution'],
-                position=request.POST['position'],
-                other_position=request.POST['other_position'],
-                highest_degree=request.POST['highest_degree'],
-                gender=request.POST['gender'],
-                ethnicity=request.POST['ethnicity'],
-                citizenship=request.POST['citizenship'],
-                race=request.POST['race'],
-                other_race=request.POST['other_race'],
-                disability=request.POST['disability'],
-                other_disability=request.POST['other_disability'],
-            )
-        return render(request, 'gisday/20XX/demographic_survey.html', context={
-            'available_years': available_years,
-            'year': date,
-            'gisdate': date,
-            'form_done': True,
-            'registration_successful': True,
-            'form': survey,
-        })
-    else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+# def demographic_survey(request, year):
+#     available_years = Year.objects.filter(hidden=False).order_by('-date')
+#     if year_available(year):
+#         date = Year.objects.get(date__year=year)
+#         if not date.survey_open:
+#             return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+#         if request.method == "POST":
+#             survey = DemographicSurvey.objects.create(
+#                 year=date,
+#                 institution=request.POST['institution'],
+#                 other_institution=request.POST['other_institution'],
+#                 position=request.POST['position'],
+#                 other_position=request.POST['other_position'],
+#                 highest_degree=request.POST['highest_degree'],
+#                 gender=request.POST['gender'],
+#                 ethnicity=request.POST['ethnicity'],
+#                 citizenship=request.POST['citizenship'],
+#                 race=request.POST['race'],
+#                 other_race=request.POST['other_race'],
+#                 disability=request.POST['disability'],
+#                 other_disability=request.POST['other_disability'],
+#             )
+#         return render(request, 'gisday/20XX/demographic_survey.html', context={
+#             'available_years': available_years,
+#             'year': date,
+#             'gisdate': date,
+#             'form_done': True,
+#             'registration_successful': True,
+#             'form': survey,
+#         })
+#     else:
+#         return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
 def boothvalidation(email, email2):
     if(email2 == email):
