@@ -1,16 +1,38 @@
 {% extends "gisday/base.html" %}
 {% load thumbnail %}
-{%block content %}
+{% block content %}
 <style>
-.img-thumb{
-padding: 4px;
-border: 1px solid #ddd;
-border-radius: 5px;
-margin: 10px;
-width: 200px;
-max-width: 200px;
-height: 150px;
-}
+  .img-thumb{
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px;
+  width: 200px;
+  max-width: 200px;
+  height: 150px;
+  }
+  .carouselArrow {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    background: #555;
+    border: 2px solid #fff;
+    color: #fff;
+    text-align: center;
+    }
+
+  .carouselArrowInterior {
+    position: relative;
+    color: white;
+    font-size: 36pt;
+    line-height: 41%;
+  }
+  .carousel-img {
+    height: 300px;
+  }
+  .carousel-item {
+    transition: transform 1s ease, opacity .5s ease-out;
+  }
 </style>
 <h3 align="left">GIS Day {{gisdate.date|date:"Y"}} at the University of Oklahoma, {{gisdate.date|date:"M d"}}<sup>th</sup> {{gisdate.date|date:"Y"}}
 <!-- <a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
@@ -23,24 +45,40 @@ height: 150px;
     
     <div class="hr"></div>
     <br>
-    <div id="myCarousel" class="carousel slide" style="width:100%; margin:auto;">
-
-        <div class="carousel-inner" style="width:90%; margin:auto;">
-            {% for photo in photos %}
-               {% thumbnail photo "600x600" crop="center" as im %}
-              		{% if forloop.counter == 1 %}
-              		<div class="active item"><div class="pagination-centered"> <a href="/media/{{photo}}"><img src="{{im.url}}"></a></div></div>
-              		{% else %}
-              		<div class="item"><div class="pagination-centered"><a href="/media/{{photo}}"><img src="{{im.url}}"></a></div></div>
-              		{% endif %}
-              {% endthumbnail %}
-            {%endfor%}
-        </ol>
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="width:80%; display: inline-block">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        {% for photo in photos %}
+          <li data-target="#carouselExampleIndicators" data-slide-to="{{forloop.counter}}" {% ifequal forloop.counter 1 %}class="active"{% endifequal %}></li>
+        {% endfor %}
+      </ol>
+      <!-- Carousel items -->
+      <div class="carousel-inner" style="display: inline-flex; height: 34vw">
+        {% for photo in photos %}
+          {% thumbnail photo "600x600" crop="center" as photo.image %}
+            {% if forloop.counter == 1 %}
+            <div class="carousel-item active"><div class="pagination-centered"> <a href="/media/{{photo}}"><img class="d-block w-100" src="{{photo.image.url}}"></a></div></div>
+            {% else %}
+            <div class="carousel-item"><div class="pagination-centered"><a href="/media/{{photo}}"><img class="d-block w-100" src="{{photo.image.url}}"></a></div></div>
+            {% endif %}
+        {% endthumbnail %}
+      {%endfor%}
+      </ol>
+      </div>
+      <!-- Carousel nav -->
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <div class="carouselArrow" aria-hidden="true">
+            <div class="carouselArrowInterior">&lsaquo;</div>
         </div>
-
-        <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
-        <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
-    </div>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <div class="carouselArrow" aria-hidden="true">
+            <div class="carouselArrowInterior">&rsaquo;</div>
+        </div>
+        <span class="sr-only">Next</span>
+      </a>
+      </div>
 
       <div class="row-fluid">
           
