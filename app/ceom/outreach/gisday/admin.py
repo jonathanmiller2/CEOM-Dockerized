@@ -251,15 +251,15 @@ class SurveyAdmin(admin.ModelAdmin):
     
 admin.site.register(Survey, SurveyAdmin)
 
-class DemographicSurveyAdmin(admin.ModelAdmin):
-    list_filter = ['year','institution','position','gender','highest_degree','highest_degree','ethnicity','citizenship','race','disability','parents_degree']
-    list_display = ('year','institution','position','gender','highest_degree','highest_degree','ethnicity','citizenship','race','disability','parents_degree')
-    readonly_fields=('created','modified',)
-    actions = [export_as_csv_action("Export selected item donor/s to CSV", fields= list_display, header=True),]
-    class Meta:
-        model = DemographicSurvey
+# class DemographicSurveyAdmin(admin.ModelAdmin):
+#     list_filter = ['year','institution','position','gender','highest_degree','highest_degree','ethnicity','citizenship','race','disability','parents_degree']
+#     list_display = ('year','institution','position','gender','highest_degree','highest_degree','ethnicity','citizenship','race','disability','parents_degree')
+#     readonly_fields=('created','modified',)
+#     actions = [export_as_csv_action("Export selected item donor/s to CSV", fields= list_display, header=True),]
+#     class Meta:
+#         model = DemographicSurvey
     
-admin.site.register(DemographicSurvey, DemographicSurveyAdmin)
+# admin.site.register(DemographicSurvey, DemographicSurveyAdmin)
 
 class SurveyContentsAdmin(admin.ModelAdmin):
     list_filter = ['year',]

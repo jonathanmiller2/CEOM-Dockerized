@@ -3,26 +3,35 @@
 
 
 {% block content %}
-
+<style>
+	.photo-tile {
+	position: relative;
+	height: 280px;
+    }
+</style>
 <h3 align="left">GIS Day {{gisdate.date|date:"Y"}} at the University of Oklahoma, {{gisdate.date|date:"M d"}}<sup>th</sup> {{gisdate.date|date:"Y"}}
-<a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
-<a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a>
+<!-- <a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
+<a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a> -->
 
 </h3>
 <div class="well">
 	<h2 style="color: #dc143c;">Image gallery 2013</h2>
 	<div class="hr"></div>&nbsp;
 	<div class="row-fluid">
+		
 	{% for photo in photos %}
-		<div class="text-center" style="float:left">
+
+		<div class="card text-center mr-2 mb-2" style="float:left; display:inline">
 		{% thumbnail photo.picture "600x600" crop="center" as im %}
-		    <a href="{{im.url}}"><img src="{{ im.url }}" width="{{ 300 }}" height="{{ 300 }}" class="img-polaroid"></a>
+		    <a href="{{im.url}}"><img src="{{ im.url }}" width="{{ 300 }}" height="{{ 300 }}" class="img-polaroid mb-2"></a>
 		<br>
-			<a href="{{im.url}}" target="_blank" ><button><i class="icon-resize-full"></i> 600 x 600</button></a>
+			<a href="{{im.url}}" target="_blank" ><button class="mb-2"><i class="icon-resize-full"></i> 600 x 600</button></a>
 		{% endthumbnail %}
 			<a href="{{photo.picture.url}}" target="_blank" ><button><i class="icon-fullscreen"></i> Full resolution</button></a>
 		</div>
+	
 	{% endfor %}
+
 	</div>
 </div>
 {% endblock %}
