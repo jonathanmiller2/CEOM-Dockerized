@@ -1,6 +1,5 @@
 from django.template import Context, RequestContext, loader, Template
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models import Q

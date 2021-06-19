@@ -11,8 +11,6 @@ from django.db import connection, transaction
 from django.contrib.gis.geos import GEOSGeometry, Polygon, Point
 from django.contrib.auth import authenticate, login, logout
 
-from django.contrib.staticfiles.templatetags.staticfiles import static
-
 import json as simplejson 
 
 from django.conf import settings

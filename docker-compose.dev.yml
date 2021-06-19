@@ -28,6 +28,7 @@ services:
 
     volumes:
       - ./app:/code
+      - /tmp/ceom/media/:/code/ceom/media/
     expose:
       - 8000
     env_file:

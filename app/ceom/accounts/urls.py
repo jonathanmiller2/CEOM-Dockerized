@@ -1,4 +1,4 @@
-from django.conf.urls import re_path
+from django.urls import re_path, path #todo, remove this
 from django.contrib.auth.models import User
 from django.contrib.auth import views as auth_views
 
@@ -31,6 +31,8 @@ urlpatterns = [
     re_path(r'^profile/$', ceom.accounts.views.profile_authed,name='profile_authed'),
     re_path(r'^profile/edit/$', ceom.accounts.views.profile_edit,name='profile_edit'),
     re_path(r'^profile/(?P<username>\w+)/$', ceom.accounts.views.profile, name='user_detail'),
+
+    path('send_test_email', ceom.accounts.views.send_test_email)
 
     #url(r'^id_from_username/$', 'ceom.accounts.views.id_from_username', name = 'id_from_username'),
 ]
