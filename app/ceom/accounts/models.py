@@ -16,7 +16,7 @@ class Profile(models.Model):
     state = models.CharField(verbose_name=_("State"),max_length=80, null=True, blank=True)
     postal = models.CharField(verbose_name=_("Postal code"),max_length=10, null=True, blank=True)
     url = models.CharField(verbose_name=_("URL"),max_length=100, null=True, blank=True)
-    gisday = models.NullBooleanField(verbose_name=_("Attending GIS Day"), blank=True, null=True)
+    gisday = models.BooleanField(verbose_name=_("Attending GIS Day"), blank=True, null=True)
 
     def get_all_fields(self):
         """Returns a list of all field names on the instance."""

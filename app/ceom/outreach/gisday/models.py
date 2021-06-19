@@ -50,7 +50,7 @@ class Booth(models.Model):
     email = models.EmailField(max_length=60)
     names = models.TextField("Aditional atendees",  null=True, blank=True)
     permits = models.CharField("No. of parking permits needed", null=True, blank=True, max_length=128)
-    oversized = models.NullBooleanField("Do you have a oversized exhibit or display?", null=True, blank=True)
+    oversized = models.BooleanField("Do you have a oversized exhibit or display?", null=True, blank=True)
     comment = models.TextField(
         "Questions & comments", null=True, blank=True,
     )
