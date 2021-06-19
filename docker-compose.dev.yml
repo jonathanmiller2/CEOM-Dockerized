@@ -54,6 +54,7 @@ services:
 
     volumes: 
       - .:/code
+      - /tmp/ceom/media/:/data/web/ceom/media/
 
     ports:
       - 80:80
