@@ -7,6 +7,9 @@
         <title>{% block title %}{% trans "CEOM: Center for Earth Observation and Modeling" %}{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <link rel="stylesheet" type="text/css" media="all" href="/static/OU-Global-Header/ou-global-header.css" />
+        <style type="text/css">.globalheader-wrapper { width:1200px; }</style>
+
         <!-- CDNs -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -68,16 +71,16 @@
                 overflow: hidden;
             }
 
-            #logo-rice {
+            #logo-ou {
+                display: block;
                 background-repeat: no-repeat;
-                background-image: url(/static/images/logo-rice.png);
-                background-size: 100% 100%;
+                background-image: url(/static/images/ou_logo_white.png);
+                background-size: cover;
                 height: 100%;
-                max-height: 100px;
                 position: relative;
                 left: 0;
                 float:left;
-                width: 10%;
+                width: 5%;
                 max-height: 100px;
             }
 
@@ -107,7 +110,6 @@
                 max-width: 80%;
                 height: 10%;
                 max-height: 100px;
-                top: 0px;
             }
 
             .logo-small{
@@ -225,12 +227,23 @@
     {% block body_tag %}
     <body id="body">
     {% endblock %}
+        <div class="globalheader">
+            <div class="globalheader-wrapper">
+                <ul>
+                    <li><a class="tip home" href="http://www.ou.edu/web.html" alt="OU Home link"><span>OU Homepage</span></a></li>
+                    <li><a class="tip search" href="http://www.ou.edu/content/ousearch.html" alt="OU Search link"><span>Search OU</span></a></li>
+                    <li><a class="tip social" href="http://www.ou.edu/web/socialmediadirectory.html" alt="OU Social Media link"><span>OU Social Media</span></a></li>
+                    <li class="wordmark">The University of Oklahoma</li>
+                </ul>
+                <div style="clear:both;"></div>
+             </div>
+        </div>
 
         <!-- in body block -->
         {% include "feedback/button.html" %}
         
         <div id="logo-title" >
-            <div id="logo-rice"></div>
+            <div id="logo-ou" class="mx-4"></div>
             <div id="logo-title-right"></div>
             <div id="logo-title-left"></div>
         </div>

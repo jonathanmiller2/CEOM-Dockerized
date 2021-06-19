@@ -44,7 +44,7 @@ class InitModelForm(forms.ModelForm):
 # in the HTML. Your mileage may vary. If/when Django ticket #3515
 # lands in trunk, this will no longer be necessary.
 #attrs_dict = {'class': 'required'}
-#TODO: Is this^ needed ?s
+#TODO: Is this^ needed ?
 
 #class RegisterForm(UserCreationForm):
 #

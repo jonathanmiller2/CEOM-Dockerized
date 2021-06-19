@@ -8,40 +8,8 @@ from operator import attrgetter
 from datetime import date
 
 def news(request):
-    #~ available_dates = Post.objects.dates('date','year').distinct()
-    #~ available_years = []
-    #~ for idx,date in enumerate(available_dates):
-        #~ available_years.append(date.year)
-    #~ if post_year:
-        posts = Post.objects.all().order_by("-date")
-        return render(request, 'aboutus/news.html', context={'posts': posts})
-    #~ elif post_id:
-        #~ try:
-#~ 
-            #~ post = Post.objects.get(id=post_id) 
-            #~ posts = Post.objects.all().filter(date__year=post.date__year).order_by("-date")
-            #~ #post_year= post.date__year 
-            #~ post_year=2013
-            #~ #post_year =  posts.values('date__year')[0]   
-            #~ return render_to_response('aboutus/news.html', {
-                #~ 'posts': posts,
-                #~ 'year':post_year,
-                #~ 'post_id':None,
-                #~ 'available_years':available_years,
-                #~ },context_instance=RequestContext(request)
-        #~ )
-        #~ except:
-            #~ return render_to_response('aboutus/notfound.html', {}, context_instance=RequestContext(request))
-    #~ else:
-        #~ posts = Post.objects.all().order_by("-date")
-        #~ post_year = 2013
-        #~ return render_to_response('aboutus/news.html', {
-            #~ 'posts': posts,
-            #~ 'year':post_year,
-            #~ 'post_id':None,
-            #~ 'available_years':available_years,
-            #~ },context_instance=RequestContext(request)
-        #~ )
+    posts = Post.objects.all().order_by("-date")
+    return render(request, 'aboutus/news.html', context={'posts': posts})
 
 def people(request):
     people = Person.objects.all().order_by('group__order', 'alumni_group__order','order', 'last_name')

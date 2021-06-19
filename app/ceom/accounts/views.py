@@ -135,3 +135,14 @@ def profile_edit(request):
         'user_form' : user_form, 
         'profile_form': profile_form
     })
+
+def send_test_email(request):
+    send_mail(
+        'Subject here',
+        'Here is the message.',
+        'from@example.com',
+        ['jonathan.g.miller@ou.edu'],
+        fail_silently=False,
+    )
+
+    return HttpResponse('jah man')   

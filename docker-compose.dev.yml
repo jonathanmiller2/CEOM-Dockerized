@@ -1,0 +1,71 @@
+version: '3'
+    
+services:
+
+  web:
+    container_name: ceom_web
+    build: ./app
+
+    command: bash -c "python manage.py makemigrations &&
+                      python manage.py migrate --noinput -v 1 && 
+                      python manage.py check &&
+                      python manage.py collectstatic --noinput &&
+                      python manage.py compilemessages &&
+                      python manage.py createsuperuser --noinput &&
+                      gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
+                      
+                      #     This can be used to make a development superuser for testing. See .env.dev for login info.
+                      #     To be placed after the migrations in the command list.
+                      #python manage.py createsuperuser --noinput &&
+
+                      #     This can be used to keep the web container open when it errors. Useful for poking around inside the container when it's broken. 
+                      #     To be placed as last command in command list.
+                      #tail -F anything"
+
+                      #     Alternate webserver that can be used instead of gunicorn.
+                      #     Replaces gunicorn line in command list.
+                      #python manage.py runserver 0.0.0.0:8000"
+
+                      #     These can be used to generate the initial migrations for a new section of the website. If the first one doesn't work, use the second one.
+                      #     To be placed at the top of the command list.
+                      #python manage.py makemigrations outreach &&
+                      #python manage.py makemigrations --empty pages &&
+                      
+                      #      This is for the translation system.
+                      #python manage.py makemessages --all &&
+
+    volumes:
+      - ./app:/code
+      - /tmp/ceom/media/:/code/ceom/media/
+    expose:
+      - 8000
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+
+  db:
+    container_name: ceom_db
+    image: postgis/postgis
+
+    env_file:
+      - ./.env.db
+
+  nginx:
+    container_name: ceom_nginx
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+
+    #TODO: Figure out how to avoid containers running as root
+    #user: ceomuser
+
+    volumes: 
+      - .:/code
+      - /tmp/ceom/media/:/data/web/ceom/media/
+
+    ports:
+      - 80:80
+
+    depends_on:
+      - web
