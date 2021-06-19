@@ -8,23 +8,30 @@ services:
 
     command: bash -c "python manage.py makemigrations &&
                       python manage.py migrate --noinput -v 1 && 
-                      echo MIGRATE_FIN &&
                       python manage.py check &&
-                      echo CHECK_FIN &&
                       python manage.py collectstatic --noinput &&
-                      echo COLLECTSTATIC_FIN &&
                       python manage.py compilemessages &&
                       gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
                       
+                      #     This can be used to make a development superuser for testing. See .env.dev for login info.
+                      #     To be placed after the migrations in the command list.
+                      #python manage.py createsuperuser --noinput &&
+
+                      #     This can be used to keep the web container open when it errors. Useful for poking around inside the container when it's broken. 
+                      #     To be placed as last command in command list.
                       #tail -F anything"
-                      #gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
+
+                      #     Alternate webserver that can be used instead of gunicorn.
+                      #     Replaces gunicorn line in command list.
                       #python manage.py runserver 0.0.0.0:8000"
 
+                      #     These can be used to generate the initial migrations for a new section of the website. If the first one doesn't work, use the second one.
+                      #     To be placed at the top of the command list.
                       #python manage.py makemigrations outreach &&
                       #python manage.py makemigrations --empty pages &&
                       
+                      #      This is for the translation system.
                       #python manage.py makemessages --all &&
-                      #echo MAKE_MESSAGE_FIN &&
     volumes: 
       - /data/web/ceom/media/:/code/ceom/media/
     expose:

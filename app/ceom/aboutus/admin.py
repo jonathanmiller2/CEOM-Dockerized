@@ -16,7 +16,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ['date']
     list_display = ('title','date','content',)
     fieldsets = [
-        ('Post data',  {'fields': ['title','date', 'content','image_comlumn_number']}),
+        ('Post data',  {'fields': ['title','date', 'content','image_column_number']}),
     ]
     inlines = [PostImageInLine,PostFileInLine]
     class Meta:
