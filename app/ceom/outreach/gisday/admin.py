@@ -164,6 +164,12 @@ class GisDayPhotoAdmin(admin.ModelAdmin):
         model = GisDayPhoto
 admin.site.register(GisDayPhoto, GisDayPhotoAdmin)
 
+class PhotoGalleryAdmin(admin.ModelAdmin):
+    list_filter = ['year', 'id']
+    list_display = ('year', 'id', 'picture')
+    class Meta:
+        model = PhotoGallery
+admin.site.register(PhotoGallery, PhotoGalleryAdmin)
 
 class AgendaAdmin(admin.ModelAdmin):
     list_filter = ['year','entry_name']

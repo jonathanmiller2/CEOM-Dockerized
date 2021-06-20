@@ -208,6 +208,10 @@ class GisDayPhoto(models.Model):
     picture = models.ImageField(null=True, upload_to='gisday/gallery/')
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
 
+class PhotoGallery(models.Model):
+    picture = models.ImageField(null=True, upload_to='gisday/gallery/')
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
+
 class Agenda(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
     entry_name = models.CharField(max_length=100, null=True, blank=True)

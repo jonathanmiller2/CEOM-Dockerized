@@ -39,7 +39,7 @@
 <a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a> -->
 
 </h3>
-<div class="well">
+<div class="well" style="padding-right: 60px; text-align: center;">
   <div class="grid" >
     <h2>GIS Day {{gisdate.date|date:"Y"}} photo gallery</h2>
     
@@ -55,11 +55,11 @@
       <!-- Carousel items -->
       <div class="carousel-inner" style="display: inline-flex; height: 34vw">
         {% for photo in photos %}
-          {% thumbnail photo "600x600" crop="center" as photo.image %}
+          {% thumbnail photo.picture "600x600" crop="center" as im %}
             {% if forloop.counter == 1 %}
-            <div class="carousel-item active"><div class="pagination-centered"> <a href="/media/{{photo}}"><img class="d-block w-100" src="{{photo.image.url}}"></a></div></div>
+            <div class="carousel-item active"><div class="pagination-centered"> <a href="{{im.url}}}"><img class="d-block w-100" src="{{im.url}}"></a></div></div>
             {% else %}
-            <div class="carousel-item"><div class="pagination-centered"><a href="/media/{{photo}}"><img class="d-block w-100" src="{{photo.image.url}}"></a></div></div>
+            <div class="carousel-item"><div class="pagination-centered"><a href="{{im.url}}"><img class="d-block w-100" src="{{im.url}}"></a></div></div>
             {% endif %}
         {% endthumbnail %}
       {%endfor%}
@@ -83,8 +83,8 @@
       <div class="row-fluid">
           
               {% for photo in photos %}
-               {% thumbnail photo "600x600" crop="center" as im %}
-                  <a href="/media/{{photo}}"><img src="{{im.url}}" class="img-thumb"></a>
+               {% thumbnail photo.picture "600x600" crop="center" as im %}
+                  <a href="{{im.url}}"><img src="{{im.url}}" class="img-thumb"></a>
                 {% endthumbnail %}
                 
               {%endfor%}
