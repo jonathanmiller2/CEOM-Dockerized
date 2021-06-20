@@ -45,17 +45,6 @@
 						</div>	
 
 					{% endif %}
-				
-					{% if post.files.all %}
-					<div class="hr"></div>
-					</br >
-					<h4 align="center">{% trans "Files" %}</h4>
-						<ul>
-							{% for f in post.files.all %}
-							 <li><a href="{{f.file_attached.url}}">{{f.title}}</a>:{{f.description}}	</li>
-							{% endfor %}
-						</ul>
-					{% endif %}
 					</br >
 					</div>
 				{% endfor %}

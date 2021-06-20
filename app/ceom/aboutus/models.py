@@ -57,15 +57,6 @@ class PostImage(models.Model):
     def __str__(self):
         return "Image  " + str(self.order) + ": " + str(self.post) 
  
- 
-class PostFile(models.Model):
-    title =models.CharField("File title",max_length=80, null=False, blank=False,)
-    description = models.TextField("Description",null=True, blank=True,)
-    post = models.ForeignKey(Post, related_name="files", null=False, on_delete=models.CASCADE)
-    file_attached = models.FileField(null=False, upload_to="news/docs")
-    def __str__(self):
-        return "Post: " + str(self.post) + " File: " +self.title  
-        
         
 class Group(models.Model):
     name = models.CharField(max_length=125)
