@@ -5,13 +5,37 @@ body p {
 font-family: Arial,serif;
 font-size:small;
 }
+.carouselArrow {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    background: #555;
+    border: 2px solid #fff;
+    color: #fff;
+    text-align: center;
+    }
+
+  .carouselArrowInterior {
+    position: relative;
+    color: white;
+    font-size: 36pt;
+    line-height: 41%;
+  }
+  .carousel-img {
+    height: 300px;
+  }
+  .carousel-item {
+    transition: transform 1s ease, opacity .5s ease-out;
+  }
 </style>
-{%block content %}
+{% block content %}
 <img style="float: right; margin-right: 50px; width: 63px; height: 87px;" src="/static/images/OU-Logo-GisDay2013.jpg" alt="" />
 <img style="float: left; margin-left: 40px; width: 170px; height: 70px;" src="/static/images/GISDay_logo.png" alt="" />
 <div style="text-align: center;">
-	<h1 style="color: #dc143c;">The University of Oklahoma <a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
-	<a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a></h1>
+	<h1 style="color: #dc143c;">The University of Oklahoma 
+		<!-- <a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
+		<a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a> -->
+	</h1>
 	<h3 style="color: #dc143c;"> 10:00 am to 3:00 pm, {{gisdate.date|date:"l F d, Y"}}</h3>
 	<h3 align="center">The Molly Shi Boren Ballroom, Oklahoma Memorial Union</h3>
 	<h4 align="center">900 ASP Avenue, Norman, OK 73019 (<a href="http://union.ou.edu/">http://union.ou.edu/</a>)</h4>
@@ -32,8 +56,8 @@ font-size:small;
 						{{announcement.content|render}}
 					{% endif%}
 					{% if announcement.image %}
-						<img src="{{announcement.image.url}}"  style="magins:auto; width: 400 px; height: 800px">
-					{% endif%}
+						<img src="{{announcement.image.url}}"  style="margin:auto; width: 400 px; height: 800px">
+					{% endif %}
 				</div>	
 			</div>
 			</div></div>
@@ -45,10 +69,19 @@ font-size:small;
 			    <li data-target="#myCarousel" data-slide-to="{{announcement.position}}" {% ifequal position announcement.position %}class="active" {% endifequal %}></li>
 			    {% endfor %}
 		    </ol>
-			<!-- Carousel nav -->
-		<a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
-		<a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
-
+			 <!-- Carousel nav -->
+			 <!-- <a class="carousel-control left" href="#myCarousel" role="button" data-slide="prev">
+				<div class="carouselArrow" aria-hidden="true">
+					<div class="carouselArrowInterior">&lsaquo;</div>
+				</div>
+				<span class="sr-only">Previous</span>
+			  </a>
+			  <a class="carousel-control right" href="#myCarousel" role="button" data-slide="next">
+				<div class="carouselArrow" aria-hidden="true">
+					<div class="carouselArrowInterior">&rsaquo;</div>
+				</div>
+				<span class="sr-only">Next</span>
+			  </a> -->
 	</div>
 <div style="text-align: center;">
 	&nbsp;

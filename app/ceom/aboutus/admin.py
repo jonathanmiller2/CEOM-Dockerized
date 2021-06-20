@@ -4,6 +4,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from tinymce.widgets import TinyMCE
 from django.http import HttpResponse
+from django.core.exceptions import FieldError
 
 class PostImageInLine(admin.StackedInline):
     model = PostImage

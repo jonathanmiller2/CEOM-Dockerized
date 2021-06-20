@@ -6,7 +6,6 @@ from django.db.models import Count
 from datetime import datetime
 from ceom.outreach.workshops.models import Workshop,WorkshopRegistration
 from django.db import IntegrityError
-# from ceom.outreach.workshops.forms import WorkshopRegistrationForm
 from django.core.mail import EmailMultiAlternatives
 import json
 

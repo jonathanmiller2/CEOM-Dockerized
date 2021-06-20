@@ -29,7 +29,7 @@ urlpatterns = [
 	re_path(r'^(?P<year>[0-9]{4})/image-gallery', ceom.outreach.gisday.views.images),
     re_path(r'^(?P<year>[0-9]{4})/survey/', ceom.outreach.gisday.views.survey),
     re_path(r'^(?P<year>[0-9]{4})/survey', ceom.outreach.gisday.views.survey),
-    re_path(r'^(?P<year>[0-9]{4})/demographic_survey', ceom.outreach.gisday.views.demographic_survey),
+    # re_path(r'^(?P<year>[0-9]{4})/demographic_survey', ceom.outreach.gisday.views.demographic_survey),
 
 	# TODO: Is this needed?
 	#(r'^(?P<year>[0-9]{4})/demograpichs_survey','demographic_survey),
