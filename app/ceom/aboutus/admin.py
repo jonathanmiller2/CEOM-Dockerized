@@ -1,4 +1,4 @@
-from ceom.aboutus.models import Post, PostImage, PostFile, Group, Person, GalleryPhoto
+from ceom.aboutus.models import Post, PostImage, Group, Person, GalleryPhoto
 from django.contrib import admin
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -9,9 +9,6 @@ from django.core.exceptions import FieldError
 class PostImageInLine(admin.StackedInline):
     model = PostImage
     extra = 2
-class PostFileInLine(admin.StackedInline):
-    model = PostFile
-    extra = 2
 
 class PostAdmin(admin.ModelAdmin):
     list_filter = ['date']
@@ -19,7 +16,7 @@ class PostAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Post data',  {'fields': ['title','date', 'content','image_column_number']}),
     ]
-    inlines = [PostImageInLine,PostFileInLine]
+    inlines = [PostImageInLine]
     class Meta:
         model = Post
         

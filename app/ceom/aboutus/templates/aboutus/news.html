@@ -159,25 +159,17 @@
 							  </a>
 							{% endif %}
 						</div>
-					
-						{% endif %}	
-						
-					</div>
-					
-					{% if post.files.all %}
-					<div class="hr"></div>
-					</br >
-					<h4 align="center">{% trans "Files" %}</h4>
-						<ul>
-							{% for f in post.files.all %}
-							 <li><a href="{{f.file_attached.url}}">{{f.title}}</a>:{{f.description}}	</li>
-							{% endfor %}
-						</ul>
+						{% if post.images.all|length > 1 %}
+						<a id="nav{{forloop.counter}}-l" class="carousel-control left" href="#myCarousel{{forloop.counter}}" data-slide="prev">‹</a>
+						<a id="nav{{forloop.counter}}-r" class="carousel-control right" href="#myCarousel{{forloop.counter}}" data-slide="next">›</a>
+						{% endif %}
+						</div>	
+
 					{% endif %}
-					
-					{% endfor %}
-					</div><!--tab-content-->
-				</div>
+					</br >
+					</div>
+				{% endfor %}
+				</div><!--tab-content-->
 				
 		</div><!--row -->
 	</div>
