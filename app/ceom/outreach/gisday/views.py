@@ -55,28 +55,6 @@ def gallery_2012(request):
 def gallery(request, year):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
     if year_available(year):
-        # date = Year.objects.get(date__year=year)
-        # photos = []
-        # PROJECT_ROOT = os.path.dirname(__file__)
-        # dirname = os.path.join(PROJECT_ROOT, '..')
-        # dirname = os.path.join(dirname, 'media/gisday/' +
-        #                        str(year) + '/photo-gallery/')
-        # if not os.path.isdir(dirname):
-        #     os.makedirs(dirname)
-        # for filename in os.listdir(dirname):
-        #     # Check that it is an image file
-
-        #     try:
-        #         im = Image.open(dirname + '/' + filename)
-        #         photos.append(os.path.join(
-        #             'gisday/' + str(year) + '/photo-gallery/', filename))
-        #     except:
-        #         pass
-        # return render(request, 'gisday/20XX/photoGallery.html', context={
-        #     'available_years': available_years,
-        #     'gisdate': date,
-        #     'photos': photos
-        # })
         date = Year.objects.get(date__year=year)
         photos = PhotoGallery.objects.all().filter(year=date)
         return render(request, 'gisday/20XX/photoGallery.html', context={
