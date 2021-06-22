@@ -2,36 +2,163 @@
 {% load extra_template_tags %}
 
 {% block container %}
-<!-- 
-<h3 align="left">GIS Day {{gisdate.date|date:"Y"}} at the University of Oklahoma, {{gisdate.date|date:"M d"}}<sup>th</sup> {{gisdate.date|date:"Y"}}
-    <a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
-    <a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a>
-
-</h3>
- -->
-<div class="well">
-	<div class="grid" >
-		<h2  style="color: #dc143c;">Exhibitor Registration for Booths - Update your regisration</h2>
-		<div class="hr"></div>
-		{{ content|render }}
-	 	{% if form %}
-			<form action="." method='post'>
-				{% csrf_token %}
-				{{ form }}
-			</form>
-		{% else %}
-            {% if registration_successful %}
-            <h3  style="color: #007f00;">Thank you for updating your GIS Day registration. Exhibitor information and parking permits will be sent out next week. Please direct any questions to Melissa Scott at mscott@ou.edu.
-                </h3>
-            {% else %}
-			<h3 class="text-warning"><strong>Registration period ended or not open yet</strong></h3>
-            {% endif %}
-		{% endif %}
-        
-	</div>
+	<!-- TODO: Pre-fill form values to show what the values used to be -->
+ <div>
+    <h2 style="color: #dc143c;">Exhibitor Registration for Booths - Update Your Registration</h2>
+    <div class="hr"></div>
+    <br>
+    {{content|render}}
+    <br>
+    <form action="." method='post'>
+        {% csrf_token %}
+        <h3 class="pb-1">Institution Type:</h3>
+        <fieldset class='form-group'>
+            <div class="row justify-content-around"></div>
+            <div class="form-check ml-5">
+                <input class="form-check-input" type="radio" name="institution-type" id="non-profit-radio" value="non-profit" checked>
+                <label class="form-check-label" for="non-profit-radio">
+                    University / Government / Non-Profit: Free registration
+                </label>
+            </div>
+            <div class="form-check ml-5">
+                <input class="form-check-input" type="radio" name="institution-type" id="for-profit-radio" value="for-profit">
+                <label class="form-check-label" for="for-profit-radio">
+                    Private Industry / For Profit: $300 registration fee
+                </label>
+            </div>
+        </fieldset>
+        <h3 class="pb-1">Details:</h3>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="institution-field" class="col-2 col-form-label">Institution</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="institution-field">
+                </div>
+                <label for="department-field" class="col-2 col-form-label">Department</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="department-field">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="firstname-field" class="col-2 col-form-label">First Name</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="firstname-field">
+                </div>
+                <label for="lastname-field" class="col-2 col-form-label">Last Name</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="lastname-field">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="address1-field" class="col-2 col-form-label">Address 1</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="address1-field">
+                </div>
+                <label for="address2-field" class="col-2 col-form-label">Address 2</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="address2-field">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="city-field" class="col-2 col-form-label">City</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="city-field">
+                </div>
+                <label for="state-field" class="col-2 col-form-label">State</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="state-field">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="zip-field" class="col-2 col-form-label">Zipcode</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="zip-field">
+                </div>
+                <label for="phone-field" class="col-2 col-form-label">Phone</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="phone-field">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="email-field" class="col-2 col-form-label">Email</label>
+                <div class="col-3">
+                    <input type="email" class="form-control" id="email-field">
+                </div>
+                <label for="email-verify-field" class="col-2 col-form-label">Verify Email</label>
+                <div class="col-3">
+                    <input type="email" class="form-control" id="email-verify-field">
+                </div>
+            </div>
+        </div>
+        <div class="form-group m-5">
+            <label for="additional-attendees-field">Additional Attendees</label>
+            <textarea class="form-control" id="additional-attendees-field" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="parking-passes-field" class="col-2 col-form-label">No. of Parking Permits Needed:</label>
+                <div class="col-3">
+                    <input type="number" class="form-control" id="parking-passes-field">
+                </div>
+                <label for="display-size-field" class="col-2 col-form-label">Do you have a oversized exhibit or display?</label>
+                <div class="col-3">
+                    <select class="form-control" id="display-size-field">
+                        <option>Unknown</option>
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="tshirt1-field" class="col-2 col-form-label">T-Shirt Size 1</label>
+                <div class="col-3">
+                    <select class="form-control" id="tshirt1-field">
+                        <option>Unknown</option>
+                        <option>Small</option>
+                        <option>Medium</option>
+                        <option>Large</option>
+                        <option>Extra Large</option>
+                        <option>Extra Extra Large</option>
+                    </select>
+                </div>
+                <label for="tshirt2-field" class="col-2 col-form-label">T-Shirt Size 2</label>
+                <div class="col-3">
+                    <select class="form-control" id="tshirt2-field">
+                        <option>Unknown</option>
+                        <option>Small</option>
+                        <option>Medium</option>
+                        <option>Large</option>
+                        <option>Extra Large</option>
+                        <option>Extra Extra Large</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group m-5">
+            <label for="comments-field">Questions & Comments:</label>
+            <textarea class="form-control" id="comments-field" rows="3"></textarea>
+        </div>
+        <div class="row justify-content-center pb-3">
+            <button type="submit" value="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    <!-- TODO: Add the conditions for these to appear
+    <h3 style="color: #007f00;">Congratulations, you have successfully registered for GIS Day. </br >
+        Proceed to find out about schedule, directions, and contest following the links above.
+    </h3>
+	<h3 class="text-warning"><strong>Registration period ended or not open yet</strong></h3> -->
 </div>
-<!-- {% if get %}
-You got a get request response
-{% endif %} -->
 
 {% endblock %}

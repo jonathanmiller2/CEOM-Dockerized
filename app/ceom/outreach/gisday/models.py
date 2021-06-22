@@ -48,15 +48,11 @@ class Booth(models.Model):
     zipcode = models.CharField(max_length=30)
     phone = models.CharField(max_length=30)
     email = models.EmailField(max_length=60)
-    names = models.TextField("Aditional atendees",  null=True, blank=True)
-    permits = models.CharField("No. of parking permits needed", null=True, blank=True, max_length=128)
-    oversized = models.BooleanField("Do you have a oversized exhibit or display?", null=True, blank=True)
-    comment = models.TextField(
-        "Questions & comments", null=True, blank=True,
-    )
-    tshirt_size_1 = models.CharField(
-        max_length=3, choices=SIZES,
-    )
+    names = models.TextField(null=True, blank=True)
+    permits = models.CharField(null=True, blank=True, max_length=128)
+    oversized = models.BooleanField(null=True, blank=True)
+    comment = models.TextField(null=True, blank=True,)
+    tshirt_size_1 = models.CharField(max_length=3, choices=SIZES)
     tshirt_size_2 = models.CharField(max_length=3, choices=SIZES)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)

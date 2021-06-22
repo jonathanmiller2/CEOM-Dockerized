@@ -6,25 +6,156 @@
 <h3 align="left">GIS Day {{gisdate.date|date:"Y"}} at the University of Oklahoma, {{gisdate.date|date:"M d"}}<sup>th</sup> {{gisdate.date|date:"Y"}}</h3>
 
 <div>
-	<h2  style="color: #dc143c;">Exhibitor Registration for Booths</h2>
-	<div class="hr"></div>
-	<form action="." method='post'>
-		{% csrf_token %}
-		<div class="form-check">
-            <input class="form-check-input" type="radio" id="exampleRadios1" value="option1" checked>
-            <label class="form-check-label" for="exampleRadios1">
-                University / Government / Non-Profit: Free registration
-            </label>
-          </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" id="exampleRadios2" value="option2">
-          <label class="form-check-label" for="exampleRadios2">
-                Private Industry / For Profit: $300 registration fee
-          </label>
+    <h2 style="color: #dc143c;">Exhibitor Registration for Booths</h2>
+    <div class="hr"></div>
+    <br>
+    {{content|render}}
+    <br>
+    <form action="." method='post'>
+        {% csrf_token %}
+        <h3 class="pb-1">Institution Type:</h3>
+        <fieldset class='form-group'>
+            <div class="row justify-content-around"></div>
+            <div class="form-check ml-5">
+                <input class="form-check-input" type="radio" name="institution-type" id="non-profit-radio" value="non-profit" checked>
+                <label class="form-check-label" for="non-profit-radio">
+                    University / Government / Non-Profit: Free registration
+                </label>
+            </div>
+            <div class="form-check ml-5">
+                <input class="form-check-input" type="radio" name="institution-type" id="for-profit-radio" value="for-profit">
+                <label class="form-check-label" for="for-profit-radio">
+                    Private Industry / For Profit: $300 registration fee
+                </label>
+            </div>
+        </fieldset>
+        <h3 class="pb-1">Details:</h3>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="institution-field" class="col-2 col-form-label">Institution</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="institution-field">
+                </div>
+                <label for="department-field" class="col-2 col-form-label">Department</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="department-field">
+                </div>
+            </div>
         </div>
-	</form>
-    <h1>___________________________</h1>
-    {{ form }}
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="firstname-field" class="col-2 col-form-label">First Name</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="firstname-field">
+                </div>
+                <label for="lastname-field" class="col-2 col-form-label">Last Name</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="lastname-field">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="address1-field" class="col-2 col-form-label">Address 1</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="address1-field">
+                </div>
+                <label for="address2-field" class="col-2 col-form-label">Address 2</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="address2-field">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="city-field" class="col-2 col-form-label">City</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="city-field">
+                </div>
+                <label for="state-field" class="col-2 col-form-label">State</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="state-field">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="zip-field" class="col-2 col-form-label">Zipcode</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="zip-field">
+                </div>
+                <label for="phone-field" class="col-2 col-form-label">Phone</label>
+                <div class="col-3">
+                    <input type="text" class="form-control" id="phone-field">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="email-field" class="col-2 col-form-label">Email</label>
+                <div class="col-3">
+                    <input type="email" class="form-control" id="email-field">
+                </div>
+                <label for="email-verify-field" class="col-2 col-form-label">Verify Email</label>
+                <div class="col-3">
+                    <input type="email" class="form-control" id="email-verify-field">
+                </div>
+            </div>
+        </div>
+        <div class="form-group m-5">
+            <label for="additional-attendees-field">Additional Attendees</label>
+            <textarea class="form-control" id="additional-attendees-field" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="parking-passes-field" class="col-2 col-form-label">No. of Parking Permits Needed:</label>
+                <div class="col-3">
+                    <input type="number" class="form-control" id="parking-passes-field">
+                </div>
+                <label for="display-size-field" class="col-2 col-form-label">Do you have a oversized exhibit or display?</label>
+                <div class="col-3">
+                    <select class="form-control" id="display-size-field">
+                        <option>Unknown</option>
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row justify-content-around">
+                <label for="tshirt1-field" class="col-2 col-form-label">T-Shirt Size 1</label>
+                <div class="col-3">
+                    <select class="form-control" id="tshirt1-field">
+                        <option>Unknown</option>
+                        <option>Small</option>
+                        <option>Medium</option>
+                        <option>Large</option>
+                        <option>Extra Large</option>
+                        <option>Extra Extra Large</option>
+                    </select>
+                </div>
+                <label for="tshirt2-field" class="col-2 col-form-label">T-Shirt Size 2</label>
+                <div class="col-3">
+                    <select class="form-control" id="tshirt2-field">
+                        <option>Unknown</option>
+                        <option>Small</option>
+                        <option>Medium</option>
+                        <option>Large</option>
+                        <option>Extra Large</option>
+                        <option>Extra Extra Large</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group m-5">
+            <label for="comments-field">Questions & Comments:</label>
+            <textarea class="form-control" id="comments-field" rows="3"></textarea>
+        </div>
+        <div class="row justify-content-center pb-3">
+            <button type="submit" value="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
     <!-- TODO: Add the conditions for these to appear
     <h3 style="color: #007f00;">Congratulations, you have successfully registered for GIS Day. </br >
         Proceed to find out about schedule, directions, and contest following the links above.
@@ -42,34 +173,34 @@
             <th>Department</th>
             <th>Institution</th>
             <th>Click to update</th>
-	</tr>
-	
+        </tr>
+
     </thead>
     <tbody>
-    {% for v in booth %}
+        {% for v in booth %}
         <tr>
             <td>{{forloop.counter}}</td>
             <td>{{v.last_name}}, {{v.first_name}}</td>
             <td>{{v.department}}</td>
             <td>{{v.institution}}</td>
             <td><button onclick="set_email({{pyear}},{{v.id}})">Update</button></td>
-		</tr>
-    {% endfor %}
+        </tr>
+        {% endfor %}
     </tbody>
 </table>
 <script>
-function set_email(year,id,email){
-    //take the email and redirect them.
-    var email = prompt("Please enter your email (This should be the same email as your initial registration with us)");
-    console.log(email,year,id);
-    if(email!=null){
-        var build_web = "/outreach/gisday/"+String(year)+"/booth/update_"+String(id)+"/email_"+email+"/";
-        console.log("redirect url:",build_web);
-        window.location.href = build_web;//similar to clicking on a link
+    function set_email(year, id, email) {
+        //take the email and redirect them.
+        var email = prompt("Please enter your email (This should be the same email as your initial registration with us)");
+        console.log(email, year, id);
+        if (email != null) {
+            var build_web = "/outreach/gisday/" + String(year) + "/booth/update_" + String(id) + "/email_" + email + "/";
+            console.log("redirect url:", build_web);
+            window.location.href = build_web; //similar to clicking on a link
+
+        }
 
     }
-
-}
 </script>
 <!-- (r'^(?P<year>[0-9]{4})/booth/update_(?P<id>[0-9]+)/$', 'boothupdate'), -->
 {% endblock %}
