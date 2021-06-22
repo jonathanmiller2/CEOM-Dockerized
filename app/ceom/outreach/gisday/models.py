@@ -205,7 +205,11 @@ class ItemInYear(models.Model):
         return '%s %s' % (self.name, self.value)
 
 class GisDayPhoto(models.Model):
-    picture = models.ImageField(null=True, upload_to='gisday/gallery/')
+    picture = models.ImageField(null=True, upload_to='gisday/imagegallery/')
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
+
+class PhotoGallery(models.Model):
+    picture = models.ImageField(null=True, upload_to='gisday/photogallery/')
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
 
 class Agenda(models.Model):

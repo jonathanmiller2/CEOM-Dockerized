@@ -10,7 +10,11 @@ from django.db import IntegrityError
 from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
+<<<<<<< HEAD
 from ceom.outreach.gisday.models import *
+=======
+from ceom.outreach.gisday.models import Booth, Year, Announcement, PersonInGroup, SponsorInYear, ItemInYear, SummaryContent, Volunteer, Survey, Agenda, GisDayPhoto, PhotoGallery, CommitteeContent
+>>>>>>> origin/visual-issues
 import os
 import sys
 import json
@@ -56,26 +60,11 @@ def gallery(request, year):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
     if year_available(year):
         date = Year.objects.get(date__year=year)
-        photos = []
-        PROJECT_ROOT = os.path.dirname(__file__)
-        dirname = os.path.join(PROJECT_ROOT, '..')
-        dirname = os.path.join(dirname, 'media/gisday/' +
-                               str(year) + '/photo-gallery/')
-        if not os.path.isdir(dirname):
-            os.makedirs(dirname)
-        for filename in os.listdir(dirname):
-            # Check that it is an image file
-
-            try:
-                im = Image.open(dirname + '/' + filename)
-                photos.append(os.path.join(
-                    'gisday/' + str(year) + '/photo-gallery/', filename))
-            except:
-                pass
+        photos = PhotoGallery.objects.all().filter(year=date)
         return render(request, 'gisday/20XX/photoGallery.html', context={
             'available_years': available_years,
             'gisdate': date,
-            'photos': photos
+            'photos': photos,
         })
     else:
         return render(request, 'gisday/notfound.html', context={'available_years': available_years})
