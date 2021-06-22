@@ -51,7 +51,7 @@ class Booth(models.Model):
     names = models.TextField(null=True, blank=True)
     permits = models.CharField(null=True, blank=True, max_length=128)
     oversized = models.BooleanField(null=True, blank=True)
-    comment = models.TextField(null=True, blank=True,)
+    comment = models.TextField(null=True, blank=True)
     tshirt_size_1 = models.CharField(max_length=3, choices=SIZES)
     tshirt_size_2 = models.CharField(max_length=3, choices=SIZES)
     created = models.DateTimeField(auto_now_add=True)
