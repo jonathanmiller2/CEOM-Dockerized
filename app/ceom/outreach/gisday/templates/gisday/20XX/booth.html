@@ -1,37 +1,35 @@
 {% extends "gisday/base.html" %}
 {% load extra_template_tags %}
 
-{% load crispy_forms_tags %}
-
 {% block content %}
 
-<h3 align="left">GIS Day {{gisdate.date|date:"Y"}} at the University of Oklahoma, {{gisdate.date|date:"M d"}}<sup>th</sup> {{gisdate.date|date:"Y"}}
-    <!-- <a href="https://www.facebook.com/OUGISDay" title="Visit OU GIS Day Facebook page"><img class='logo-tiny' src="/static/images/f_logo.png" style="width:45px;height:45px"></a>&nbsp;
-    <a title="Visit OU GIS Day Twitter page" href="https://twitter.com/OUGISDay"><img src="/static/images/twitter_logo.png" style="width:64px;height:64px"></a> -->
+<h3 align="left">GIS Day {{gisdate.date|date:"Y"}} at the University of Oklahoma, {{gisdate.date|date:"M d"}}<sup>th</sup> {{gisdate.date|date:"Y"}}</h3>
 
-</h3>
-
-<div class="well">
-	<div class="grid" >
-		<h2  style="color: #dc143c;">Exhibitor Registration for Booths</h2>
-		<div class="hr"></div>
-		{{ content|render }}
-	 	{% if form %}
-			<form action="." method='post'>
-				{% csrf_token %}
-				{% crispy form %}
-			</form>
-		{% else %}
-            {% if registration_successful %}
-            <h3  style="color: #007f00;">Congratulations, you have successfully registered for GIS Day. </br >
-                Proceed to find out about schedule, directions, and contest following the links above.
-                </h3>
-            {% else %}
-			<h3 class="text-warning"><strong>Registration period ended or not open yet</strong></h3>
-            {% endif %}
-		{% endif %}
-        
-	</div>
+<div>
+	<h2  style="color: #dc143c;">Exhibitor Registration for Booths</h2>
+	<div class="hr"></div>
+	<form action="." method='post'>
+		{% csrf_token %}
+		<div class="form-check">
+            <input class="form-check-input" type="radio" id="exampleRadios1" value="option1" checked>
+            <label class="form-check-label" for="exampleRadios1">
+                University / Government / Non-Profit: Free registration
+            </label>
+          </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="exampleRadios2" value="option2">
+          <label class="form-check-label" for="exampleRadios2">
+                Private Industry / For Profit: $300 registration fee
+          </label>
+        </div>
+	</form>
+    <h1>___________________________</h1>
+    {{ form }}
+    <!-- TODO: Add the conditions for these to appear
+    <h3 style="color: #007f00;">Congratulations, you have successfully registered for GIS Day. </br >
+        Proceed to find out about schedule, directions, and contest following the links above.
+    </h3>
+	<h3 class="text-warning"><strong>Registration period ended or not open yet</strong></h3> -->
 </div>
 
 <h4>Registered Booths</h4>
@@ -49,17 +47,13 @@
     </thead>
     <tbody>
     {% for v in booth %}
-		{% if forloop.counter < 31 %}
         <tr>
             <td>{{forloop.counter}}</td>
             <td>{{v.last_name}}, {{v.first_name}}</td>
             <td>{{v.department}}</td>
             <td>{{v.institution}}</td>
             <td><button onclick="set_email({{pyear}},{{v.id}})">Update</button></td>
-		</td>
-
 		</tr>
-		{% endif %}
     {% endfor %}
     </tbody>
 </table>
@@ -69,7 +63,7 @@ function set_email(year,id,email){
     var email = prompt("Please enter your email (This should be the same email as your initial registration with us)");
     console.log(email,year,id);
     if(email!=null){
-        var build_web = "/gisday/"+String(year)+"/booth/update_"+String(id)+"/email_"+email+"/";
+        var build_web = "/outreach/gisday/"+String(year)+"/booth/update_"+String(id)+"/email_"+email+"/";
         console.log("redirect url:",build_web);
         window.location.href = build_web;//similar to clicking on a link
 

@@ -10,7 +10,7 @@ from django.db import IntegrityError
 from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
-from ceom.outreach.gisday.models import Booth, Year, Announcement, PersonInGroup, SponsorInYear, ItemInYear, SummaryContent, Volunteer, Survey, Agenda, GisDayPhoto
+from ceom.outreach.gisday.models import *
 import os
 import sys
 import json
@@ -256,36 +256,16 @@ def poster_contest(request, year):
     else:
         return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
-np = '''Dear Exhibitor,
-
-Your request for booth has been received and is currently waiting for approval, please contact Melissa Scott for more information about the booth, at mscott@ou.edu
-
-Regards,
-
-The GISday team
-'''
-
-fp = '''Dear Exhibitor,
-
-Your request for booth has been received and will be approved dependent upon the payment of $300. Please contact Melissa Scott for more information about the booth at mscott@ou.edu.
-
-Regards,
-
-The GISday team
-
-'''
-
 from django.core.mail import EmailMultiAlternatives
-
 
 def booth(request, year):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
     if year_available(year):
-        form = None
         date = Year.objects.get(date__year=year)
         try:
             content = BoothContent.objects.get(year=date)
-        except:
+        except Exception as e:
+            print(e)
             return render(request, 'gisday/registrationsoon.html', context={'available_years': available_years})
         registration_successful = False
         if registration_enabled(year):
@@ -585,20 +565,12 @@ def survey(request, year):
 #     else:
 #         return render(request, 'gisday/notfound.html', context={'available_years': available_years})
 
-def boothvalidation(email, email2):
-    if(email2 == email):
-        return True
-    else:
-        return False
-
 
 def boothupdate(request, id, year, email):
     booth = Booth.objects.get(id=id)
-    x = boothvalidation(email, booth.email)
-    if x:
-        pass
-    else:
-        return HttpResponse("Some thing went wrong! please try again. If problem persists please contact administrator.")
+    if email != booth.email:
+        return HttpResponse("Something went wrong! please try again. If problem persists please contact administrator.")
+
     available_years = Year.objects.filter(hidden=False).order_by('-date')
     if year_available(year):
         form = None
@@ -607,203 +579,112 @@ def boothupdate(request, id, year, email):
             content = BoothContent.objects.get(year=date)
         except:
             return render(request, 'gisday/registrationsoon.html', context={'available_years': available_years})
-    # available_years = Year.objects.filter(hidden=False).order_by('-date')
-    # if year_available(year):
-    #     form = None
-    #     date = Year.objects.get(date__year=year)
-    # f = open('\static\workfile', 'w')  # everytime should be refreshed
-    # f.write("Debug file")
+
     if(request.method == "POST"):
-        # //here update the form contents to the model
-        # Don't want to do all the validations So how ??
-        # return HttpResponse("got into post")
-        # form = BoothForm(request.POST)
-        # return HttpResponse(json.dumps({'form':request.POST}))
-        x = request.POST
-        # # f.write(str(form.is_valid()))
-        # # f.write(str(form))
-        if True:
-            # v = form.save(commit=False)
-            v = booth
-            v.validated = True
-            v.comment = x['comment']
-            v.last_name = x['last_name']
-            v.names = x['names']
-            v.city = x['city']
-            v.first_name = x['first_name']
-            v.zipcode = x['zipcode']
-            v.state = x['state']
-            v.department = x['department']
-            v.email = x['email']
-            v.oversized = x['oversized']
-            v.phone = x['phone']
-            v.institution = x['institution']
-            v.permits = x['permits']
-            v.tshirt_size_1 = x['tshirt_size_1']
-            v.tshirt_size_2 = x['tshirt_size_2']
-            v.non_profit = bool(x['non_profit'])
-            v.address_1 = x['address_1']
-            v.address_2 = x['address_2']
-            try:
-                v.save()
-            except:
-                return HttpResponse("Some thing went wrong updating your record! Please try again or contact administrator")
+        booth.validated = True
+        booth.comment = request.POST['comment']
+        booth.last_name = request.POST['last_name']
+        booth.names = request.POST['names']
+        booth.city = request.POST['city']
+        booth.first_name = request.POST['first_name']
+        booth.zipcode = request.POST['zipcode']
+        booth.state = request.POST['state']
+        booth.department = request.POST['department']
+        booth.email = request.POST['email']
+        booth.oversized = request.POST['oversized']
+        booth.phone = request.POST['phone']
+        booth.institution = request.POST['institution']
+        booth.permits = request.POST['permits']
+        booth.tshirt_size_1 = request.POST['tshirt_size_1']
+        booth.tshirt_size_2 = request.POST['tshirt_size_2']
+        booth.non_profit = bool(request.POST['non_profit'])
+        booth.address_1 = request.POST['address_1']
+        booth.address_2 = request.POST['address_2']
+        try:
+            booth.save()
+        except:
+            return HttpResponse("Some thing went wrong updating your record! Please try again or contact administrator")
 
-            tos = content.registration_recipients.split(';')
-            tos.append(v.email)
-            subject = "GISDay " + str(year) + " Booth registration--update successful"
+        tos = content.registration_recipients.split(';')
+        tos.append(v.email)
+        subject = "GISDay " + str(year) + " Booth registration--update successful"
 
-            from_email = "noreply@ceom.ou.edu"
-            # return HttpResponse(v.non_profit is True)
-            if v.non_profit is True:
-                message = "Your exhibitor registration has been successfully updated, thank you for participating in the GIS Day Expo at OU."
-            else:
-                message = "Your exhibitor registration has been successfully updated, thank you for participating in the GIS Day Expo at OU."
-            if not message:
-                message = "Thank you for registering. Please contact the administrator."
-            msg = EmailMultiAlternatives(subject, message, from_email, tos)
-            msg.attach_alternative(message, "text/html")
-            msg.send()
-            form = None
-            registration_successful = True
-            # return HttpResponse("got into post and came till here")
-            return render(request, "gisday/Booth_update_form.html", context={
-                "booth": booth,
-                "form": form,
-                "registration_successful": registration_successful,
-                "pyear": year,
-            })
-    else:
-        form = BoothForm(initial={
-            'year': date,
-            'institution': booth.institution,
-            'non_profit': booth.non_profit,
-            'department': booth.department,
-            'last_name': booth.last_name,
-            'first_name': booth.first_name,
-            'address_1': booth.address_1,
-            'address_2': booth.address_2,
-            'city': booth.city,
-            'state': booth.state,
-            'zipcode': booth.zipcode,
-            'phone': booth.phone,
-            'email': booth.email,
-            'names': booth.names,
-            'permits': booth.permits,
-            'oversized': booth.oversized,
-            'comment': booth.comment,
-            'tshirt_size_1': booth.tshirt_size_1,
-            'tshirt_size_2': booth.tshirt_size_2,
+        from_email = "noreply@ceom.ou.edu"
+        
+        message = "Your exhibitor registration has been successfully updated, thank you for participating in the GIS Day Expo at OU."
+
+        msg = EmailMultiAlternatives(subject, message, from_email, tos)
+        msg.attach_alternative(message, "text/html")
+        msg.send()
+        
+        return render(request, "gisday/Booth_update_form.html", context={
+            "booth": booth,
+            "form": None,
+            "registration_successful": True,
+            "pyear": year,
         })
 
-        return render(request, 'gisday/Booth_update_form.html', context={'pers': booth, 'form': form, 'get': True})
-    return HttpResponse("Some thing went wrong!")
+    form = BoothForm(initial={
+        'year': date,
+        'institution': booth.institution,
+        'non_profit': booth.non_profit,
+        'department': booth.department,
+        'last_name': booth.last_name,
+        'first_name': booth.first_name,
+        'address_1': booth.address_1,
+        'address_2': booth.address_2,
+        'city': booth.city,
+        'state': booth.state,
+        'zipcode': booth.zipcode,
+        'phone': booth.phone,
+        'email': booth.email,
+        'names': booth.names,
+        'permits': booth.permits,
+        'oversized': booth.oversized,
+        'comment': booth.comment,
+        'tshirt_size_1': booth.tshirt_size_1,
+        'tshirt_size_2': booth.tshirt_size_2,
+    })
+
+    return render(request, 'gisday/Booth_update_form.html', context={'pers': booth, 'form': form, 'get': True})
 
 
 def posterupdate(request, id, year, email):
     poster = Poster.objects.get(id=id)
-    x = boothvalidation(email, poster.email)
-    if x:
-        pass
-    else:
+    if email != poster.email:
         return HttpResponse("Some thing went wrong! please try again. If problem persists please contact administrator.")
-    if False:
-        # return HttpResponse("I entered this ")
-        # poster_contest(request, year, id)
-        pass
-    else:
-        available_years = Year.objects.filter(hidden=False).order_by('-date')
-        registration_successful = False
-        if year_available(year):
-            form = None
-            date = Year.objects.get(date__year=year)
-            try:
-                content = PosterContestContent.objects.get(year=date)
-                if date.poster_contest_hidden:
-                    raise "content is hidden!"
-            except:
-                return render(request, 'gisday/notfound.html', context={'available_years': available_years})
-        # available_years = Year.objects.filter(hidden=False).order_by('-date')
-        # if year_available(year):
-        #     form = None
-        #     date = Year.objects.get(date__year=year)
-        # f = open('\static\workfile', 'w')  # everytime should be refreshed
-        # f.write("Debug file")
-        if(request.method == "POST"):
-            # //here update the form contents to the model
-            # Don't want to do all the validations So how ??
-            # return HttpResponse("got into post")
-            # form = BoothForm(request.POST)
-            return HttpResponse(json.dumps({'form':request.POST, 'files':request.FILES['preview'].name}))
-            x = request.POST
-            # # f.write(str(form.is_valid()))
-            # Delete this
-            # # f.write(str(form))
-            if True:
-                # v = form.save(commit=False)
-                v = poster
-                v.validated = True
-                v.comment = x['comment']
-                v.last_name = x['last_name']
-                v.category = PosterCategory.objects.get(id = x['category'])
-                v.title = x['title']
-                v.abstract = x['abstract']
-                v.authors = x['authors']
-                v.first_name = x['first_name']
-                v.department = x['department']
-                v.email = x['email']
-                v.institution = x['institution']
-                f = request.FILES['preview']
-                v.preview = f
-                try:
-                    v.save()
-                except:
-                    return HttpResponse("Some thing went wrong updating your record! Please try again or contact administrator")
 
-                tos = content.registration_recipients.split(';')
-                tos.append(v.email)
-                subject = "GISDay " + \
-                     str(year) + " Poster Contest registration"
-                message = content.registration_message
-                if not message:
-                    message = "Thank you for registering for the Poster contest!"
-                from_email = "noreply@ceom.ou.edu"
-                msg = EmailMultiAlternatives(
-                    subject, message, from_email, tos)
-                msg.attach_alternative(message, "text/html")
-                msg.send()
-                form = None
-                registration_successful = True
-                posters = Poster.objects.all().filter(
-                validated=True, year=date).order_by('category', "created")[:200]
-                return render(request, "gisday/20XX/posterContest.html", context={
-                    'available_years': available_years,
-                    'gisdate': date,
-                    "posters": posters,
-                    "form": form,
-                    "registration_successful": registration_successful,
-                    "content": content.content,
-                    "pyear": year,
-                })
-        else:
-            form = PosterForm(initial={
-                'year': date,
-                'validated' : True,
-                'comment' : poster.comment,
-                'last_name' : poster.last_name,
-                'category' : poster.category,
-                'title' : poster.title,
-                'abstract' : poster.abstract,
-                'authors' : poster.authors,
-                'first_name' : poster.first_name,
-                'department' : poster.department,
-                'email' : poster.email,
-                'institution' : poster.institution,
-            })
-            t = loader.get_template('gisday/Poster_update_form.html')
-            c = RequestContext(request, context={'pers': poster, 'form': form, 'get': True})
-            return HttpResponse(t.render(c))
-        return HttpResponse("Some thing went wrong!")
+    available_years = Year.objects.filter(hidden=False).order_by('-date')
+    registration_successful = False
+    if year_available(year):
+        form = None
+        date = Year.objects.get(date__year=year)
+        try:
+            content = PosterContestContent.objects.get(year=date)
+            if date.poster_contest_hidden:
+                raise "content is hidden!"
+        except:
+            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+
+    if(request.method == "POST"):
+        return HttpResponse(json.dumps({'form':request.POST, 'files':request.FILES['preview'].name}))
+    
+
+    form = PosterForm(initial={
+        'year': date,
+        'validated' : True,
+        'comment' : poster.comment,
+        'last_name' : poster.last_name,
+        'category' : poster.category,
+        'title' : poster.title,
+        'abstract' : poster.abstract,
+        'authors' : poster.authors,
+        'first_name' : poster.first_name,
+        'department' : poster.department,
+        'email' : poster.email,
+        'institution' : poster.institution,
+    })
+    return render(request, 'gisday/Poster_update_form.html', context={'pers': poster, 'form': form, 'get': True})
 
 def volunteer(request, year):
     available_years = Year.objects.filter(hidden=False).order_by('-date')

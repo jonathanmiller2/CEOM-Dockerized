@@ -1,8 +1,6 @@
 {% extends "gisday/base.html" %}
 {% load extra_template_tags %}
 
-{% load crispy_forms_tags %}
-
 {% block container %}
 <!-- 
 <h3 align="left">GIS Day {{gisdate.date|date:"Y"}} at the University of Oklahoma, {{gisdate.date|date:"M d"}}<sup>th</sup> {{gisdate.date|date:"Y"}}
@@ -19,7 +17,7 @@
 	 	{% if form %}
 			<form action="." method='post'>
 				{% csrf_token %}
-				{% crispy form %}
+				{{ form }}
 			</form>
 		{% else %}
             {% if registration_successful %}
