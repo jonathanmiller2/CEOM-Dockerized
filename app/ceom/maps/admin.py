@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from ceom.maps.models import map_gallery, Comment, poi, roi
 
-#admin.site.register(Feedback)
 
 class CommentInline(admin.TabularInline):
 	model = Comment

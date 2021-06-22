@@ -191,7 +191,6 @@ INSTALLED_APPS = [
     'ceom.projects',
     'ceom.aboutus',
     'ceom.stats',
-    'ceom.feedback',
     'ceom.towers',
     'ceom.maps',
     'ceom.water',

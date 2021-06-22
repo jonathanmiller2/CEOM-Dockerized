@@ -13,6 +13,10 @@ services:
                       python manage.py compilemessages &&
                       gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
                       
+                      #     This is used to fix having multiple leaf nodes in the migration tree.
+                      #     Replaces the first line in the command list.
+                      #manage.py makemigrations --merge
+
                       #     This can be used to make a development superuser for testing. See .env.dev for login info.
                       #     To be placed after the migrations in the command list.
                       #python manage.py createsuperuser --noinput &&
@@ -50,7 +54,7 @@ services:
 
     volumes: 
       - .:/code
-      - /data/web/ceom/media/:/data/web/ceom/media/
+      - /data/web/ceom/media/:/code/app/ceom/media/
 
     ports:
       - 80:80
