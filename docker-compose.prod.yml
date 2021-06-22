@@ -53,8 +53,8 @@ services:
     #user: ceomuser
 
     volumes: 
-      - .:/code
-      - /data/web/ceom/media/:/code/app/ceom/media/
+      - ./ceom/static/:/ceom/static/
+      - dev_media:/ceom/media/
 
     ports:
       - 80:80

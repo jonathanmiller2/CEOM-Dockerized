@@ -1,5 +1,4 @@
 {% extends "gisday/base.html" %}
-{% load crispy_forms_tags %}
 {% load extra_template_tags %}
 {% block head_extra %}
 <style type="text/css">
@@ -163,7 +162,6 @@
 	 	{% if form %}
 			<form action="." method='post'>
 				{% csrf_token %}
-				{% crispy form %}
 				<!-- <div class="span12 text-center">
 					<input type="submit" value="Submit" class="btn btn-primary">
 				</div> -->
