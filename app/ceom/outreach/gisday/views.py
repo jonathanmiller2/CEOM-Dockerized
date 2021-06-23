@@ -253,6 +253,7 @@ def booth(request, year):
     data['gisdate'] = Year.objects.get(date__year=year)
     data['registration_successful'] = False
     data['pyear'] = year
+    data['available_years'] = Year.objects.filter(hidden=False).order_by('-date')
     
     try:
         content = BoothContent.objects.get(year=data['gisdate'])
@@ -336,7 +337,7 @@ def visitor_registration(request, year):
 
     data['gisdate'] = Year.objects.get(date__year=year)
     data['registration_successful'] = False
-
+    data['available_years'] = Year.objects.filter(hidden=False).order_by('-date')
 
     try:
         content = VisitorRegistrationContent.objects.get(year=date)
@@ -602,6 +603,7 @@ def boothupdate(request, year):
     date = Year.objects.get(date__year=year)
     booth = Booth.objects.get(id=id)
     data['registration_successful'] = False
+    Year.objects.filter(hidden=False).order_by('-date')
 
     try:
         content = BoothContent.objects.get(year=date)
