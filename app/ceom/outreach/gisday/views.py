@@ -605,6 +605,9 @@ def boothupdate(request, year):
     data['registration_successful'] = False
     Year.objects.filter(hidden=False).order_by('-date')
 
+    if request.GET['email'] != booth.email:
+        return HttpResponse("The email provided is incorrect.")
+
     try:
         content = BoothContent.objects.get(year=date)
         data['content'] = content.content
