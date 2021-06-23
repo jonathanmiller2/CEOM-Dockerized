@@ -159,13 +159,78 @@
 <div class="well">
 		{{content|render}}
 		
-	 	{% if form %}
-			<form action="." method='post'>
-				{% csrf_token %}
-				<!-- <div class="span12 text-center">
-					<input type="submit" value="Submit" class="btn btn-primary">
-				</div> -->
-			</form>
+	 	{% if not form_done %}
+		<form action="." method='POST'>
+		{% csrf_token %}
+		<div class="form-group">
+			<div class="row justify-content-around">
+				<label for="last_name" class="col-1">Last Name</label>
+				<input type="last" class="form-control col-3" name="last_name" placeholder="Last Name" required>
+				<label for="first_name" class="col-1">First Name</label>
+				<input type="first" class="form-control col-3" name="first_name" placeholder="First Name" required>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="row justify-content-around">
+				<label for="institution" class="col-1">Institution</label>
+				<input type="institution" class="form-control col-3" name="institution" placeholder="Institution" required>
+				<label for="department" class="col-1">Department</label>
+				<input type="department" class="form-control col-3" name="department" placeholder="department" required>
+			</div>
+		</div>
+		<div class="form-group">
+            <div class="row justify-content-around">
+                <label for="email" class="col-1">Email</label>
+                <input type="email" class="form-control col-3 {% if error is not None %} is-invalid {% endif %}" name="email" placeholder="Email" required>
+                <label for="verify_email" class="col-1">Verify Email</label>
+                <input type="verity_email" class="form-control col-3 {% if error is not None %} is-invalid {% endif %}" name="verify_email" placeholder="Verify Email" required>
+            </div>
+        </div>
+		<div class="form-group">
+            <div class="row justify-content-around">
+                <label for="title" class="col-1">Title</label>
+                <input type="title" class="form-control col-3" name="title" placeholder="Title" required>
+                <label for="category" class="col-1">Category</label>
+                <select class="form-control col-3" name="category">
+					{% for category in all_categories %}
+					<option>{{ category.name }}</option>
+					{% endfor %}
+				</select>	
+            </div>
+        </div>
+		<div class="form-group">
+            <div class="row justify-content-around">
+                <label for="abstract" class="col-1">Poster Abstract</label>
+				<textarea class="form-control col-3" name="abstract" rows="3" required></textarea>
+                <label for="authors" class="col-1">Poster Author List</label>
+                <textarea class="form-control col-3" name="authors" rows="3" required></textarea>
+            </div>
+        </div>
+		<div class="form-group">
+            <div class="row justify-content-around">
+                <label for="comment" class="col-1">Questions & Comments</label>
+                <textarea class="form-control col-3" name="comment" rows="3" required></textarea>
+                <label for="preview" class="col-1">Preview</label>
+                <input type="file" class="form-control-file col-3" name="preview" rows="3"></textarea>
+            </div>
+        </div>
+		<div class="row justify-content-center">
+            {% if error %}
+            <div class="alert alert-danger">
+                {% if error == 'email-mismatch' %}
+                    The email fields do not match.
+				{% elif error == 'duplicate-account' %}
+					That email is already taken.
+                {% else %}
+                    {{error}}
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+		<div class="row justify-content-center pb-3">
+            <button type="submit" value="submit" class="btn btn-primary">Submit</button>
+        </div>
+		</form>
 		{% else %}
             {% if registration_successful %}
             <h3  style="color: #007f00;">Congratulations, you have successfully registered for  the poster contest. </br >
@@ -189,7 +254,6 @@
 		{% endifchanged %}
 			<li>
 				<figure>
-					<!-- media/gisday/gallery/postit.png -->
 					<img src="/media/gisday/gallery/postit.png">
 					<h5 class="author">{{v.title}} <span>{{v.last_name}}, {{v.first_name}}</span></h5>
 					<p class="institution">{{v.institution}}</p>

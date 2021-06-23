@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.template.base import VariableDoesNotExist
 from django.db import IntegrityError
 
-from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm, PosterForm
+from ceom.outreach.gisday.forms import VisitorForm, BoothForm, PhotoForm
 from PIL import Image
 from django.views.generic.edit import UpdateView
 from ceom.outreach.gisday.models import *
@@ -185,9 +185,7 @@ postMessage = '''
 def poster_contest(request, year):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
     registration_successful = False
-    # return HttpResponse("I was here!!")
     if year_available(year):
-        form = None
         date = Year.objects.get(date__year=year)
         try:
             content = PosterContestContent.objects.get(year=date)
@@ -196,47 +194,67 @@ def poster_contest(request, year):
         except:
             return render(request, 'gisday/notfound.html', context={'available_years': available_years})
         if registration_enabled(year):
+            all_categories = PosterCategory.objects.all()
+            posters = Poster.objects.all().filter(validated=True, year=date).order_by('category', "created")[:200]
             if request.method == 'POST':
-                # return HttpResponse("I was here!!")
-                form = PosterForm(request.POST, request.FILES)
-                if form.is_valid():
-                    v = form.save(commit=False)
-                    # if id!=None:
-                    #     v.id = id
-                    # else:
-                    #     pass
-                    v.validated = 'False'
-                    v.save()
-                    tos = content.registration_recipients.split(';')
-                    tos.append(v.email)
-                    subject = "GISDay " + \
-                        str(year) + " Poster Contest registration"
-                    message = content.registration_message
-                    if not message:
-                        message = "Thank you for registering for the Poster contest!"
-                    from_email = "noreply@ceom.ou.edu"
-                    msg = EmailMultiAlternatives(
-                        subject, message, from_email, tos)
-                    msg.attach_alternative(message, "text/html")
-                    msg.send()
-                    form = None
-                    registration_successful = True
-            else:
-                form = PosterForm(initial={
-                    'year': date,
-                })
-
-        posters = Poster.objects.all().filter(
-            validated=True, year=date).order_by('category', "created")[:200]
+                if request.POST['email'] != request.POST['verify_email']:
+                    error = 'email-mismatch'
+                    return render(request, 'gisday/20XX/posterContest.html', context={
+                        'available_years': available_years, 
+                        'year': date,
+                        'gisdate': date,
+                        'error': error,
+                        'all_categories': all_categories,
+                        'posters':posters
+                        })
+                try:
+                    category_object = PosterCategory.objects.get(name=request.POST['category'])
+                    form = Poster.objects.create(
+                        year=date,
+                        last_name=request.POST['last_name'],
+                        first_name=request.POST['first_name'],
+                        institution=request.POST['institution'],
+                        department=request.POST['department'],
+                        email=request.POST['email'], 
+                        verify_email=request.POST['verify_email'], 
+                        title=request.POST['title'],
+                        category=category_object,
+                        abstract=request.POST['abstract'],
+                        authors=request.POST['authors'],
+                        comment=request.POST['comment'],
+                        preview=request.POST['preview'],
+                    )
+                    return render(request, 'gisday/20XX/posterContest.html', context={
+                        'available_years': available_years,
+                        'year': date,
+                        'gisdate': date,
+                        'form_done': True,
+                        'registration_successful': True,
+                        'all_categories': all_categories,
+                        'content': content,
+                        'form': form,
+                        'posters':posters
+                    })
+                except IntegrityError as error:
+                    error = 'duplicate-account'
+                    return render(request, 'gisday/20XX/posterContest.html', context={
+                        'available_years': available_years,
+                        'year': date,
+                        'gisdate': date,
+                        'error': error,
+                        'all_categories': all_categories,
+                        'posters':posters
+                    })
+        
 
         return render(request, "gisday/20XX/posterContest.html", context={
             'available_years': available_years,
             'gisdate': date,
             "posters": posters,
-            "form": form,
             "registration_successful": registration_successful,
+            'all_categories': all_categories,
             "content": content.content,
-            "pyear": year,
+            "pyear": year
         })
     else:
         return render(request, 'gisday/notfound.html', context={'available_years': available_years})
