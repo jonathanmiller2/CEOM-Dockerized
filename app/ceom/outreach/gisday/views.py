@@ -183,81 +183,64 @@ postMessage = '''
 
 
 def poster_contest(request, year):
-    available_years = Year.objects.filter(hidden=False).order_by('-date')
-    registration_successful = False
-    if year_available(year):
-        date = Year.objects.get(date__year=year)
-        try:
-            content = PosterContestContent.objects.get(year=date)
-            if date.poster_contest_hidden:
-                raise "content is hidden!"
-        except:
-            return render(request, 'gisday/notfound.html', context={'available_years': available_years})
-        if registration_enabled(year):
-            all_categories = PosterCategory.objects.all()
-            posters = Poster.objects.all().filter(validated=True, year=date).order_by('category', "created")[:200]
-            if request.method == 'POST':
-                if request.POST['email'] != request.POST['verify_email']:
-                    error = 'email-mismatch'
-                    return render(request, 'gisday/20XX/posterContest.html', context={
-                        'available_years': available_years, 
-                        'year': date,
-                        'gisdate': date,
-                        'error': error,
-                        'all_categories': all_categories,
-                        'posters':posters
-                        })
-                try:
-                    category_object = PosterCategory.objects.get(name=request.POST['category'])
-                    form = Poster.objects.create(
-                        year=date,
-                        last_name=request.POST['last_name'],
-                        first_name=request.POST['first_name'],
-                        institution=request.POST['institution'],
-                        department=request.POST['department'],
-                        email=request.POST['email'], 
-                        verify_email=request.POST['verify_email'], 
-                        title=request.POST['title'],
-                        category=category_object,
-                        abstract=request.POST['abstract'],
-                        authors=request.POST['authors'],
-                        comment=request.POST['comment'],
-                        preview=request.POST['preview'],
-                    )
-                    return render(request, 'gisday/20XX/posterContest.html', context={
-                        'available_years': available_years,
-                        'year': date,
-                        'gisdate': date,
-                        'form_done': True,
-                        'registration_successful': True,
-                        'all_categories': all_categories,
-                        'content': content,
-                        'form': form,
-                        'posters':posters
-                    })
-                except IntegrityError as error:
-                    error = 'duplicate-account'
-                    return render(request, 'gisday/20XX/posterContest.html', context={
-                        'available_years': available_years,
-                        'year': date,
-                        'gisdate': date,
-                        'error': error,
-                        'all_categories': all_categories,
-                        'posters':posters
-                    })
-        
+    data = {}
 
-        return render(request, "gisday/20XX/posterContest.html", context={
-            'available_years': available_years,
-            'gisdate': date,
-            "posters": posters,
-            "registration_successful": registration_successful,
-            'all_categories': all_categories,
-            "content": content.content,
-            "pyear": year
-        })
-    else:
-        return render(request, 'gisday/notfound.html', context={'available_years': available_years})
+    if not year_available(year):
+        return render(request, 'gisday/notfound.html')
+    date = Year.objects.get(date__year=year)
+    data['available_years'] = Year.objects.filter(hidden=False).order_by('-date')
+    data['gisdate'] = Year.objects.get(date__year=year)
+    data['registration_successful'] = False
+
+    try:
+        content = PosterContestContent.objects.get(year=date)
+        data['content'] = content.content
+    except:
+        data['content'] = ''
+
+    if not registration_enabled(year):
+        data['error'] = 'registration_disabled'
+        return render(request, "gisday/20XX/posterContest.html", context=data)
+    
+    data['all_categories'] = PosterCategory.objects.all()
+    data['posters'] = Poster.objects.all().filter(validated=True, year=date).order_by('category', "created")[:200]
+
+    if request.method == 'POST':
+        data['previous_responses'] = request.POST
+
+        if request.POST['email'] != request.POST['verify_email']:
+            data['error'] = 'email-mismatch'
+            data['content'] = ''
+            return render(request, "gisday/20XX/posterContest.html", context=data)
+
+        try:
+            category_object = PosterCategory.objects.get(name=request.POST['category'])
+            form = Poster.objects.create(
+                year=date,
+                last_name=request.POST['last_name'],
+                first_name=request.POST['first_name'],
+                institution=request.POST['institution'],
+                department=request.POST['department'],
+                email=request.POST['email'], 
+                verify_email=request.POST['verify_email'], 
+                title=request.POST['title'],
+                category=category_object,
+                abstract=request.POST['abstract'],
+                authors=request.POST['authors'],
+                comment=request.POST['comment'],
+                preview=request.POST['preview'],
+            )
+            data['content'] = ''
+                   
+        except IntegrityError as error:
+            data['error'] = 'duplicate-account'
+            data['content'] = ''
+            return render(request, 'gisday/20XX/posterContest.html', context=data)
+
+        data['form_done'] = True
+        data['registration_successful'] = True
+
+    return render(request, "gisday/20XX/posterContest.html", context=data) 
 
 from django.core.mail import EmailMultiAlternatives
 
@@ -652,15 +635,16 @@ def boothupdate(request, id, year, email):
     return render(request, 'gisday/Booth_update_form.html', context={'pers': booth, 'form': form, 'get': True})
 
 
-def posterupdate(request, id, year, email):
+def posterupdate(request, year):
+    id = request.GET['id']
+    email = request.GET['email']
     poster = Poster.objects.get(id=id)
-    if email != poster.email:
-        return HttpResponse("Some thing went wrong! please try again. If problem persists please contact administrator.")
+    # if email != poster.email:
+    #     return HttpResponse("Some thing went wrong! please try again. If problem persists please contact administrator.")
 
     available_years = Year.objects.filter(hidden=False).order_by('-date')
     registration_successful = False
     if year_available(year):
-        form = None
         date = Year.objects.get(date__year=year)
         try:
             content = PosterContestContent.objects.get(year=date)
@@ -668,26 +652,104 @@ def posterupdate(request, id, year, email):
                 raise "content is hidden!"
         except:
             return render(request, 'gisday/notfound.html', context={'available_years': available_years})
-
-    if(request.method == "POST"):
-        return HttpResponse(json.dumps({'form':request.POST, 'files':request.FILES['preview'].name}))
-    
-
-    form = PosterForm(initial={
-        'year': date,
-        'validated' : True,
-        'comment' : poster.comment,
-        'last_name' : poster.last_name,
-        'category' : poster.category,
-        'title' : poster.title,
-        'abstract' : poster.abstract,
-        'authors' : poster.authors,
-        'first_name' : poster.first_name,
-        'department' : poster.department,
-        'email' : poster.email,
-        'institution' : poster.institution,
-    })
-    return render(request, 'gisday/Poster_update_form.html', context={'pers': poster, 'form': form, 'get': True})
+        all_categories = PosterCategory.objects.all()
+        #posters??
+        posters = Poster.objects.all().filter(validated=True, year=date).order_by('category', "created")[:200]
+        if request.method == "POST":
+            previous_responses = request.POST
+            if request.POST['email'] != request.POST['verify_email']:
+                error = 'email-mismatch'
+                return render(request, 'gisday/20XX/Poster_update_form.html', context={
+                    'available_years': available_years, 
+                    'year': date,
+                    'gisdate': date,
+                    'error': error,
+                    'all_categories': all_categories,
+                    'posters':posters,
+                    'previous_responses': previous_responses
+                })
+            # return HttpResponse(json.dumps({'form':request.POST, 'files':request.FILES['preview'].name}))
+            return render(request, 'gisday/Poster_update_form.html', context={
+                'pers': poster, 
+                'get': True, 
+                'previous_responses': previous_responses,
+                'form_done': True,
+                'registration_successful': True,
+                'posters': posters,
+                'content': content.content
+                })
+            try:
+                category_object = PosterCategory.objects.get(name=request.POST['category'])
+                poster.year=date,
+                poster.last_name=request.POST['last_name'],
+                poster.first_name=request.POST['first_name'],
+                poster.institution=request.POST['institution'],
+                poster.department=request.POST['department'],
+                poster.email=request.POST['email'], 
+                poster.verify_email=request.POST['verify_email'], 
+                poster.title=request.POST['title'],
+                poster.category=category_object,
+                poster.abstract=request.POST['abstract'],
+                poster.authors=request.POST['authors'],
+                poster.comment=request.POST['comment'],
+                poster.preview=request.POST['preview'],
+                poster.save()
+                return render(request, 'gisday/20XX/Poster_update_form.html', context={
+                    'pers': poster, 
+                    'get': True, 
+                    'available_years': available_years,
+                    'year': date,
+                    'gisdate': date,
+                    'form_done': True,
+                    'registration_successful': True,
+                    'all_categories': all_categories,
+                    'form': form,
+                    'posters':posters,
+                    'previous_responses': previous_responses
+                })
+            except IntegrityError as error:
+                error = 'duplicate-account'
+                return render(request, 'gisday/20XX/Poster_update_form.html', context={
+                    'pers': poster, 
+                    'get': True, 
+                    'available_years': available_years,
+                    'year': date,
+                    'gisdate': date,
+                    'error': error,
+                    'all_categories': all_categories,
+                    'posters':posters,
+                    'previous_responses': previous_responses
+                })
+        # form = PosterForm(initial={
+        #     'year': date,
+        #     'validated' : True,
+        #     'comment' : poster.comment,
+        #     'last_name' : poster.last_name,
+        #     'category' : poster.category,
+        #     'title' : poster.title,
+        #     'abstract' : poster.abstract,
+        #     'authors' : poster.authors,
+        #     'first_name' : poster.first_name,
+        #     'department' : poster.department,
+        #     'email' : poster.email,
+        #     'institution' : poster.institution,
+        # })
+        else:
+            previous_responses = {
+                'last_name': poster.last_name,
+                'first_name': poster.first_name,
+                'institution': poster.institution,
+                'department': poster.department,
+                'email': poster.email,
+                'verify_email': poster.email,
+                'title': poster.title,
+                'category': poster.category,
+                'abstract': poster.abstract,
+                'authors': poster.authors,
+                'comment': poster.comment,
+                'preview': poster.preview
+            }
+    return render(request, 'gisday/Poster_update_form.html', context={'pers': poster, 'get': True, 'previous_responses': previous_responses})
 
 def volunteer(request, year):
     available_years = Year.objects.filter(hidden=False).order_by('-date')
