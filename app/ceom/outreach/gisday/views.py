@@ -247,141 +247,150 @@ from django.core.mail import EmailMultiAlternatives
 def booth(request, year):
     data = {}
 
-    if year_available(year):
-        data['gisdate'] = Year.objects.get(date__year=year)
-        data['registration_successful'] = False
-        data['pyear'] = year
-
-        try:
-            content = BoothContent.objects.get(year=data['gisdate'])
-            data['content'] = content.content
-            max_number_of_booths = content.max_booths
-        except:
-            data['content'] = ''
-            max_number_of_booths = 1000
-
-        data['booth_list'] = Booth.objects.all().filter(validated=True, year=data['gisdate'])[:max_number_of_booths]
-
-        if registration_enabled(year):
-            if request.method == 'POST':
-                data['previous_responses'] = request.POST
-
-                if request.POST['email'] != request.POST['verify_email']:
-                    data['error_code'] = "email-mismatch"
-                    return render(request, "gisday/20XX/booth.html", context=data)
-                
-                try:
-                    v = Booth.objects.create(
-                        year=data['gisdate'],
-                        non_profit=request.POST['institution_type'],
-                        institution=request.POST['institution'],
-                        department=request.POST['department'],
-                        first_name=request.POST['firstname'],
-                        last_name=request.POST['lastname'],
-                        address_1=request.POST['address1'],
-                        address_2=request.POST['address2'],
-                        city=request.POST['city'],
-                        state=request.POST['state'],
-                        zipcode=request.POST['zipcode'],
-                        phone=request.POST['phone'],
-                        email=request.POST['email'],
-                        names=request.POST['additional_attendees'],
-                        permits=request.POST['parking_permits'],
-                        oversized=request.POST['oversized'],
-                        tshirt_size_1=request.POST['tshirt1'],
-                        tshirt_size_2=request.POST['tshirt2'],
-                        comment=request.POST['comments'],
-                        validated=False
-                    )
-                except IntegrityError:
-                    data['error_code'] = "duplicate"
-                    return render(request, "gisday/20XX/booth.html", context=data)
-
-                #TODO: Figure out how to send emails from inside docker  
-                #tos = content.registration_recipients.split(';')
-                #tos.append(v.email)
-                #subject = "GISDay " + str(year) + " Booth registration"
-
-                #from_email = "noreply@ceom.ou.edu"
-                #if v.non_profit:
-                #    message = content.registration_message_non_profit
-                #else:
-                #    message = content.registration_message_profit
-                #if not message:
-                #    message = "Thank you for registering. please contact Melissa Scott for more information about the booth, at mscott@ou.edu"
-                #msg = EmailMultiAlternatives(
-                #    subject, message, from_email, tos)
-                #msg.attach_alternative(message, "text/html")
-                #msg.send()
-
-                data['registration_successful'] = True
-        else:
-            data['error_code'] = 'registration_disabled'
-        
-        return render(request, "gisday/20XX/booth.html", context=data)
-    else:
+    if not year_available(year):
         return render(request, 'gisday/notfound.html')
+
+    data['gisdate'] = Year.objects.get(date__year=year)
+    data['registration_successful'] = False
+    data['pyear'] = year
+    
+    try:
+        content = BoothContent.objects.get(year=data['gisdate'])
+        data['content'] = content.content
+        max_number_of_booths = content.max_booths
+    except:
+        data['content'] = ''
+        max_number_of_booths = 1000
+
+    data['booth_list'] = Booth.objects.all().filter(validated=True, year=data['gisdate'])[:max_number_of_booths]
+
+
+    if not registration_enabled(year):
+        data['error_code'] = 'registration_disabled'
+        return render(request, "gisday/20XX/booth.html", context=data)
+
+    if request.method == 'POST':
+        data['previous_responses'] = request.POST
+
+        if request.POST['email'] != request.POST['verify_email']:
+            data['error_code'] = "email-mismatch"
+            return render(request, "gisday/20XX/booth.html", context=data)
+        
+        try:
+            v = Booth.objects.create(
+                year=data['gisdate'],
+                non_profit=request.POST['institution_type'],
+                institution=request.POST['institution'],
+                department=request.POST['department'],
+                first_name=request.POST['firstname'],
+                last_name=request.POST['lastname'],
+                address_1=request.POST['address1'],
+                address_2=request.POST['address2'],
+                city=request.POST['city'],
+                state=request.POST['state'],
+                zipcode=request.POST['zipcode'],
+                phone=request.POST['phone'],
+                email=request.POST['email'],
+                names=request.POST['additional_attendees'],
+                permits=request.POST['parking_permits'],
+                oversized=request.POST['oversized'],
+                tshirt_size_1=request.POST['tshirt1'],
+                tshirt_size_2=request.POST['tshirt2'],
+                comment=request.POST['comments'],
+                validated=False
+            )
+        except IntegrityError:
+            data['error_code'] = "duplicate"
+            return render(request, "gisday/20XX/booth.html", context=data)
+
+        #TODO: Figure out how to send emails from inside docker  
+        #tos = content.registration_recipients.split(';')
+        #tos.append(v.email)
+        #subject = "GISDay " + str(year) + " Booth registration"
+
+        #from_email = "noreply@ceom.ou.edu"
+        #if v.non_profit:
+        #    message = content.registration_message_non_profit
+        #else:
+        #    message = content.registration_message_profit
+        #if not message:
+        #    message = "Thank you for registering. please contact Melissa Scott for more information about the booth, at mscott@ou.edu"
+        #msg = EmailMultiAlternatives(
+        #    subject, message, from_email, tos)
+        #msg.attach_alternative(message, "text/html")
+        #msg.send()
+
+        data['registration_successful'] = True
+    
+    
+    return render(request, "gisday/20XX/booth.html", context=data)
+
 
 
 def visitor_registration(request, year):
     data = {}
 
-    if year_available(year):
-        data['gisdate'] = Year.objects.get(date__year=year)
-        data['registration_successful'] = False
+    if not year_available(year):
+        return render(request, 'gisday/notfound.html')
+
+
+    data['gisdate'] = Year.objects.get(date__year=year)
+    data['registration_successful'] = False
+
+
+    try:
+        content = VisitorRegistrationContent.objects.get(year=date)
+        data['content'] = content.content
+    except:
+        data['content'] = ''
+
+
+    if not registration_enabled(year):
+        data['error_code'] = 'registration_disabled'
+        return render(request, "gisday/20XX/visitor.html", context=data)
+
+
+    if request.method == 'POST':
+        data['previous_responses'] = request.POST
+        
+        if request.POST['email'] != request.POST['verify_email']:
+            data['error_code'] = "email-mismatch"
+            return render(request, "gisday/20XX/visitor.html", context=data)
 
         try:
-            content = VisitorRegistrationContent.objects.get(year=date)
-            data['content'] = content.content
-        except:
-            data['content'] = ''
+            vis = Visitor.objects.create(
+                year=data['gisdate'],
+                first_name=request.POST['firstname'],
+                last_name=request.POST['lastname'],
+                email=request.POST['email'],
+                institution=request.POST['institution'],
+                comment=request.POST['comments'],
+                validated=False
+            )
+        except IntegrityError:
+            data['error_code'] = "duplicate"
+            return render(request, "gisday/20XX/visitor.html", context=data)
 
-        if registration_enabled(year):
-            if request.method == 'POST':
-                data['previous_responses'] = request.POST
+        #TODO: Figure out how to send emails from inside docker  
+        #tos = content.registration_recipients.split(';')
+        #tos.append(v.email)
+        #subject = "GISDay " + str(year) + " Booth registration"
 
-                if request.POST['email'] != request.POST['verify_email']:
-                    data['error_code'] = "email-mismatch"
-                    return render(request, "gisday/20XX/visitor.html", context=data)
+        #from_email = "noreply@ceom.ou.edu"
+        #if v.non_profit:
+        #    message = content.registration_message_non_profit
+        #else:
+        #    message = content.registration_message_profit
+        #if not message:
+        #    message = "Thank you for registering. please contact Melissa Scott for more information about the booth, at mscott@ou.edu"
+        #msg = EmailMultiAlternatives(
+        #    subject, message, from_email, tos)
+        #msg.attach_alternative(message, "text/html")
+        #msg.send()
 
-                try:
-                    vis = Visitor.objects.create(
-                        year=data['gisdate'],
-                        first_name=request.POST['firstname'],
-                        last_name=request.POST['lastname'],
-                        email=request.POST['email'],
-                        institution=request.POST['institution'],
-                        comment=request.POST['comments'],
-                        validated=False
-                    )
-                except IntegrityError:
-                    data['error_code'] = "duplicate"
-                    return render(request, "gisday/20XX/visitor.html", context=data)
+        data['registration_successful'] = True
 
-                #TODO: Figure out how to send emails from inside docker  
-                #tos = content.registration_recipients.split(';')
-                #tos.append(v.email)
-                #subject = "GISDay " + str(year) + " Booth registration"
-
-                #from_email = "noreply@ceom.ou.edu"
-                #if v.non_profit:
-                #    message = content.registration_message_non_profit
-                #else:
-                #    message = content.registration_message_profit
-                #if not message:
-                #    message = "Thank you for registering. please contact Melissa Scott for more information about the booth, at mscott@ou.edu"
-                #msg = EmailMultiAlternatives(
-                #    subject, message, from_email, tos)
-                #msg.attach_alternative(message, "text/html")
-                #msg.send()
-
-                data['registration_successful'] = True
-        else:
-            data['error_code'] = 'registration_disabled'
-
-        return render(request, "gisday/20XX/visitor.html", context=data)
-    else:
-        return render(request, 'gisday/notfound.html')
+    return render(request, "gisday/20XX/visitor.html", context=data)
 
 
 def about_us(request, year):
