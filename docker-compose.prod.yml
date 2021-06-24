@@ -54,7 +54,7 @@ services:
 
     volumes: 
       - ./app/ceom/static/:/ceom/static/
-      - dev_media:/ceom/media/
+      - /data/web/ceom/media/:/ceom/media/
 
     ports:
       - 80:80
