@@ -53,7 +53,7 @@ services:
     #user: ceomuser
 
     volumes: 
-      - .app/ceom/static/:/ceom/static/
+      - ./app/ceom/static/:/ceom/static/
       - dev_media:/ceom/media/
 
     ports:
