@@ -11,13 +11,18 @@
 
 </h3>
  -->
-<div class="well">
-	<!-- <div class="grid" > -->
-		<h2 class="pb-3" style="color: #dc143c;">Poster Update form - Update your regisration</h2>
-		<div class="hr"></div>
-		{{ content|render }}
-		{% if not form_done %}
-		<form action="." method='POST'>
+<div class="mt-5">
+    <h2 style="color: #dc143c;">Poster Update form - Update your regisration</h2>
+    <hr />
+    <br>
+    {{content|render}}
+    <br>
+    {% if registration_successful %}
+        <h3 class="text-success mb-5">Thank you for updating your information.</h3>
+    {% elif error_code == 'registration_disabled' %}
+        <h3 class="text-warning mb-5"><strong>Registration period ended or not open yet</strong></h3>
+    {% else %}
+		<form method='post'>
 		{% csrf_token %}
 		<div class="form-group">
 			<div class="row justify-content-around">
@@ -66,7 +71,7 @@
 		<div class="form-group">
             <div class="row justify-content-around">
                 <label for="comment" class="col-1">Questions & Comments</label>
-                <textarea class="form-control col-3" name="comment" rows="3" required>{{ previous_responses.comment }}</textarea>
+                <textarea class="form-control col-3" name="comment" rows="3" required>{{ previous_responses.comment}}</textarea>
                 <label for="preview" class="col-1">Preview</label>
                 <input type="file" class="form-control-file col-3" name="preview" rows="3"></textarea>
             </div>
@@ -88,18 +93,6 @@
             <button type="submit" value="submit" class="btn btn-primary">Submit</button>
         </div>
 		</form>
-		{% else %}
-            {% if registration_successful %}
-            <h3  style="color: #007f00;">Thank you for updating your information. Please direct any questions to Melissa Scott at mscott@ou.edu. </br >
-                </h3>
-            {% else %}
-			<h3 class="text-warning"><strong>Registration period ended or not open yet</strong></h3>
-            {% endif %}
-		{% endif %}
+    {% endif %}
 </div>
-	 	<!-- </div> -->
-<!-- {% if get %}
-You got a get request response
-{% endif %} -->
-
 {% endblock %}
