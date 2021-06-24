@@ -10,37 +10,79 @@
 
 </style>
 <h3 align="left">GIS Day {{gisdate.date|date:"Y"}} at the University of Oklahoma, {{gisdate.date|date:"M d"}}<sup>th</sup> {{gisdate.date|date:"Y"}}</h3>
-
-<div class="well">
-	<div class="grid" >
-		<h2  style="color: #dc143c;">Visitor Registration</h2>
-		<div class="hr"></div>
-		{{content|render}}
-			
-		{% if form %}
-			<form action="." method='post' class='form-horizontal'>
-			{% csrf_token %}
-			{% crispy form %}
-			<!-- <b>Note : Please enter the result in the Captcha Field</b> -->
-			</form>
-			<br/>
-		{% else %}
-		{% if registration_successful %}
-
-		<h3 style="color: #007f00;">Congratulations, you have successfully registered for GIS Day.</h3>
-		<p>Proceed to find out about schedule, directions, and contest following the links above.</p>
-		
-		{% else %}
-		
-		<h3 class="text-warning"> Registration period ended or not open yet</h3>
-		
-		{% endif %}
-			
-		{% endif %}
-
-		
-
-	</div>
+<div class="mt-5">
+    <h2 style="color: #dc143c;">Visitor Registration</h2>
+    <hr />
+    <br>
+    {{content|render}}
+    <br>
+    {% if registration_successful %}
+        <h3 class="text-success mb-5">Congratulations, you have successfully registered for GIS Day. </br >
+            Proceed to find out about schedule, directions, and contest following the links on the left.
+        </h3>
+    {% elif error_code == 'registration_disabled'%}
+        <h3 class="text-warning mb-5"><strong>Registration period ended or not open yet</strong></h3>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            <h3 class="pb-1">Information:</h3>
+            <div class="form-group">
+                <div class="row justify-content-around">
+                    <label for="firstname-field" class="col-2 col-form-label">First Name</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" id="firstname-field" name="firstname" value='{{ previous_responses.firstname }}' required>
+                    </div>
+                    <label for="lastname-field" class="col-2 col-form-label">Last Name</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" id="lastname-field" name="lastname" value='{{ previous_responses.lastname }}' required>
+                    </div>
+                </div>
+            </div>
+			<div class="form-group">
+                <div class="row justify-content-around">
+                    <label for="email-field" class="col-2 col-form-label">Email</label>
+                    <div class="col-3">
+                        <input type="email" class="form-control {% if error_code == 'email-mismatch' or error_code == 'duplicate' %}is-invalid{% endif %}" id="email-field" name="email" value='{{ previous_responses.email }}' required>
+                        <div class="invalid-feedback">
+							{% if error_code == 'email-mismatch' %}
+                            	<p>The emails do not match</p>
+							{% elif error_code == 'duplicate' %}
+								<p>This email is already taken for this GISDay.</p>
+							{% endif %}
+                        </div>
+                    </div>
+                    <label for="email-verify-field" class="col-2 col-form-label">Verify Email</label>
+                    <div class="col-3">
+                        <input type="email" class="form-control {% if error_code == 'email-mismatch' or error_code == 'duplicate' %}is-invalid{% endif %}" id="email-verify-field" name="verify_email" value='{{ previous_responses.verify_email }}' required>
+                        <div class="invalid-feedback">
+							{% if error_code == 'email-mismatch' %}
+                            	<p>The emails do not match</p>
+							{% elif error_code == 'duplicate' %}
+								<p>This email is already taken for this GISDay.</p>
+							{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<div class="form-group">
+                <div class="row justify-content-around">
+                    <label for="institution-field" class="col-2 col-form-label">Institution</label>
+                    <div class="col-3">
+                        <input type="text" class="form-control" id="institution-field" name="institution" value='{{ previous_responses.institution }}' required>
+                    </div>
+                    <label for="department-field" class="col-2 col-form-label"></label>
+                    <div class="col-3"></div>
+                </div>
+            </div>
+            <div class="form-group m-5">
+                <label for="comments-field">Questions & Comments:</label>
+                <textarea class="form-control" id="comments-field" rows="3" name="comments">{{ previous_responses.comments }}</textarea>
+            </div>
+            <div class="row justify-content-center pb-3">
+                <button type="submit" value="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    {% endif %}
 </div>
 
 <script>

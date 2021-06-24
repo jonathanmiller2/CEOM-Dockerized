@@ -19,7 +19,7 @@ urlpatterns = [
 	re_path(r'^(?P<year>[0-9]{4})/announcements/(?P<position>[0-9]+)', ceom.outreach.gisday.views.announcements),
 	re_path(r'^(?P<year>[0-9]{4})/announcements', ceom.outreach.gisday.views.announcements),
 	re_path(r'^(?P<year>[0-9]{4})/aboutus', ceom.outreach.gisday.views.about_us),
-	re_path(r'^(?P<year>[0-9]{4})/booth/update/', ceom.outreach.gisday.views.boothupdate),
+	re_path(r'^(?P<year>[0-9]{4})/booth/update', ceom.outreach.gisday.views.boothupdate),
 	re_path(r'^(?P<year>[0-9]{4})/poster-contest/update', ceom.outreach.gisday.views.posterupdate),
 	re_path(r'^(?P<year>[0-9]{4})/guests', ceom.outreach.gisday.views.visitor_registration),
 	re_path(r'^(?P<year>[0-9]{4})/sponsors', ceom.outreach.gisday.views.sponsors),
