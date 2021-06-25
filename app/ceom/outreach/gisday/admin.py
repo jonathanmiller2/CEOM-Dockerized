@@ -208,14 +208,6 @@ class PhotoContestContentAdmin(admin.ModelAdmin):
         model = PhotoContestContent
 admin.site.register(PhotoContestContent, PhotoContestContentAdmin)
 
-class LogisticsContentAdmin(admin.ModelAdmin):
-    list_filter = ['year',]
-    list_display = ('year',)
-    class Meta:
-        model = LogisticsContent
-admin.site.register(LogisticsContent, LogisticsContentAdmin)
-
-
 class VisitorRegistrationContentAdmin(admin.ModelAdmin):
     list_filter = ['year',]
     list_display = ('year',)

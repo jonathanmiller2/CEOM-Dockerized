@@ -251,11 +251,6 @@ class PhotoContestContent(models.Model):
     content = tinymce_models.HTMLField(null=True,blank=True)
     class Meta:
         unique_together = (("year",),)
-class LogisticsContent(models.Model):
-    year = models.ForeignKey(Year, on_delete=models.CASCADE)
-    content = tinymce_models.HTMLField(null=True,blank=True)
-    class Meta:
-        unique_together = (("year",),)
 class VisitorRegistrationContent(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
