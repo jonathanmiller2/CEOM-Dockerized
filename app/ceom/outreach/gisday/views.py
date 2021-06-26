@@ -224,7 +224,6 @@ def poster_contest(request, year):
                 institution=request.POST['institution'],
                 department=request.POST['department'],
                 email=request.POST['email'], 
-                verify_email=request.POST['verify_email'], 
                 title=request.POST['title'],
                 category=category_object,
                 abstract=request.POST['abstract'],
@@ -738,7 +737,6 @@ def posterupdate(request, year):
             poster.institution=request.POST['institution']
             poster.department=request.POST['department']
             poster.email=request.POST['email']
-            poster.verify_email=request.POST['verify_email']
             poster.title=request.POST['title']
             poster.category=category_object
             poster.abstract=request.POST['abstract']
