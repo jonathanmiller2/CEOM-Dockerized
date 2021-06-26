@@ -116,7 +116,6 @@ class Poster(models.Model):
     department = models.CharField(max_length=128)
     category = models.ForeignKey(PosterCategory,null=False, on_delete=models.CASCADE)
     email = models.EmailField(max_length=30)
-    verify_email = models.EmailField(null=True)
     title = models.CharField(max_length=200)
     authors = models.TextField("Poster author list",null=True, blank=True)
     abstract = models.TextField("Poster abstract",null=False, blank=False)
