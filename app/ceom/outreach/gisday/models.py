@@ -388,7 +388,7 @@ class Survey(models.Model):
     #         return '%s Other(%s) created: %s' % (self.year, self.uther_role,created)
     #     else 
 
-class SurveyContents(models.Model):
+class SurveyContent(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True) 
     class Meta:

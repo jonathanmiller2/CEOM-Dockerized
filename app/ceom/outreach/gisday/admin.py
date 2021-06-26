@@ -236,11 +236,11 @@ admin.site.register(Survey, SurveyAdmin)
     
 # admin.site.register(DemographicSurvey, DemographicSurveyAdmin)
 
-class SurveyContentsAdmin(admin.ModelAdmin):
+class SurveyContentAdmin(admin.ModelAdmin):
     list_filter = ['year',]
     list_display = ('year','content',)
     actions = [export_as_csv_action("Export selected item donor/s to CSV", fields= list_display, header=True),]
     class Meta:
-        model = SurveyContents
+        model = SurveyContent
 
-admin.site.register(SurveyContents, SurveyContentsAdmin)
+admin.site.register(SurveyContent, SurveyContentAdmin)

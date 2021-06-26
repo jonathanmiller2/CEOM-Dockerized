@@ -515,7 +515,7 @@ def survey(request, year):
         if not date.survey_open:
             return render(request, 'gisday/notfound.html', context={'available_years': available_years})
         try:
-            content = SurveyContents.objects.get(year=date).content
+            content = SurveyContent.objects.get(year=date).content
         except:
             content = '<p>Please help us in reporting to our federals sponsors (USGS, NASA, NSF EPSCoR) by completing this survey. Your participation will help ensure continued funding and improve GIS Day in future years. Your responses are anonymous and not linked to any identifiable information such as email address.</p>'
         if request.method == "POST":
