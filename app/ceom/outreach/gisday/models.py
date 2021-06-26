@@ -132,30 +132,6 @@ class Poster(models.Model):
     class Meta:
        unique_together = (("year","email"),)
 
-class AboutUsGroup(models.Model):
-    name = models.CharField(max_length=125)
-    order = models.IntegerField(null=False)
-    
-    def __str__(self):
-        return self.name
-
-class AboutUsPerson(models.Model):
-    first_name = models.CharField(max_length=100, null=True, blank=True)
-    middle_name = models.CharField(max_length=50, null=True, blank=True)
-    last_name = models.CharField(max_length=100, null=True, blank=True)
-    email = models.EmailField(null=True, blank=True)
-    phone = models.CharField(max_length=16, null=True, blank=True)
-    headshot = models.ImageField(null=True, upload_to='gisday/aboutus/', default='gisday/aboutus/dummy_headshot222.jpg')
-
-    def __str__(self):
-        return '%s %s %s' % (self.first_name, self.middle_name, self.last_name)
-
-class PersonInGroup(models.Model):
-    group = models.ForeignKey(AboutUsGroup, related_name="pvsgInGroup", on_delete=models.CASCADE)
-    person = models.ForeignKey(AboutUsPerson, related_name="pvsgInPerson", on_delete=models.CASCADE)
-    year = models.ForeignKey(Year, on_delete=models.CASCADE)
-    highlight = models.BooleanField(default=False)
-
 class SponsorCategory(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     min_inversion = models.IntegerField(null=False)
