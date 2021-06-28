@@ -150,6 +150,14 @@
 		min-width: 300px;
 	}
 }
+.crop {
+  width:170px;
+  overflow:hidden;
+  max-height: 60px;
+ 
+  font-size: 14px;
+  overflow-wrap: break-word;
+}​
 </style>
 {% endblock %}
 {% block content %}
@@ -252,8 +260,9 @@
 		{% endifchanged %}
 			<li>
 				<figure>
-					<img style="max-width: 100%;max-height: 105%;"src="/static/gisday/gallery/postit.png">
-					<h5 class="author">{{v.title}} <span>{{v.last_name}}, {{v.first_name}}</span></h5>
+					<img style="max-width: 100%;max-height: 107%;"src="/static/gisday/gallery/postit.png">
+					<h5 class="crop author pt-2">{{v.title}} </h5>
+					<div class="text-center" style="height:25px"><span>{{v.last_name}}, {{v.first_name}}</span></div>
 					<p class="institution">{{v.institution}}</p>
 					<div class="text-center">
 						<button type="button" class="btn btn-info" data-toggle="modal" data-target="#posterModal{{v.id}}"><i class="icon-fullscreen"></i> Details</button>
