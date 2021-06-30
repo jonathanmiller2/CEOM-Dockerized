@@ -52,6 +52,9 @@
         .title {
             font-size: min(max(3.9vw, 10px), 30px);
         }
+        .content {
+        padding-left: 5%;
+    }
     }
 
     @media screen and (max-width:575px) {
@@ -59,9 +62,12 @@
         .title {
             font-size: min(max(3.8vw, 23px), 30px);
         }
+        .content {
+        padding-left: 5%;
+    }
     }    
 </style>
-<nav>
+<nav class="content">
     <h2 class="legend title">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
     <div class="container-fluid pl-0">
         <div class="row justify-content-between mr-5">
@@ -171,7 +177,7 @@
 
                 <div class="col-md-auto selectAll" style="display: inline;">
                     <b class="font" style="vertical-align: 2.2px;">Select All: </b>
-                    <input type="checkbox" name="selector" value="Off" onclick="selectAll(event);" style="margin-left: -100px;">
+                    <input type="checkbox" name="selector" value="Off" onclick="selectAll(event);">
                 </div>
 
                 <div class="row mx-2">
