@@ -116,7 +116,6 @@ class Poster(models.Model):
     department = models.CharField(max_length=128)
     category = models.ForeignKey(PosterCategory,null=False, on_delete=models.CASCADE)
     email = models.EmailField(max_length=30)
-    verify_email = models.EmailField(null=True)
     title = models.CharField(max_length=200)
     authors = models.TextField("Poster author list",null=True, blank=True)
     abstract = models.TextField("Poster abstract",null=False, blank=False)
@@ -132,30 +131,6 @@ class Poster(models.Model):
         return self.first_name + " " + self.last_name
     class Meta:
        unique_together = (("year","email"),)
-
-class AboutUsGroup(models.Model):
-    name = models.CharField(max_length=125)
-    order = models.IntegerField(null=False)
-    
-    def __str__(self):
-        return self.name
-
-class AboutUsPerson(models.Model):
-    first_name = models.CharField(max_length=100, null=True, blank=True)
-    middle_name = models.CharField(max_length=50, null=True, blank=True)
-    last_name = models.CharField(max_length=100, null=True, blank=True)
-    email = models.EmailField(null=True, blank=True)
-    phone = models.CharField(max_length=16, null=True, blank=True)
-    headshot = models.ImageField(null=True, upload_to='gisday/aboutus/', default='gisday/aboutus/dummy_headshot222.jpg')
-
-    def __str__(self):
-        return '%s %s %s' % (self.first_name, self.middle_name, self.last_name)
-
-class PersonInGroup(models.Model):
-    group = models.ForeignKey(AboutUsGroup, related_name="pvsgInGroup", on_delete=models.CASCADE)
-    person = models.ForeignKey(AboutUsPerson, related_name="pvsgInPerson", on_delete=models.CASCADE)
-    year = models.ForeignKey(Year, on_delete=models.CASCADE)
-    highlight = models.BooleanField(default=False)
 
 class SponsorCategory(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
@@ -247,11 +222,6 @@ class PosterContestContent(models.Model):
     class Meta:
         unique_together = (("year",),)
 class PhotoContestContent(models.Model):
-    year = models.ForeignKey(Year, on_delete=models.CASCADE)
-    content = tinymce_models.HTMLField(null=True,blank=True)
-    class Meta:
-        unique_together = (("year",),)
-class LogisticsContent(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
     class Meta:
@@ -418,7 +388,7 @@ class Survey(models.Model):
     #         return '%s Other(%s) created: %s' % (self.year, self.uther_role,created)
     #     else 
 
-class SurveyContents(models.Model):
+class SurveyContent(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True) 
     class Meta:
