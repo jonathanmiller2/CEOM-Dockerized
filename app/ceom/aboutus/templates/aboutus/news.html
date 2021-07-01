@@ -87,101 +87,95 @@
 		background-color: black
 	}
 </style>
-<div class="card shadow-sm p-4">
-	<div class="card-body grid">
-		<h2 style="color: #dc143c;">{% trans "News" %}</h2>
-				<div class="hr"></div>&nbsp;
-
-		<div class="container">
-			<div class="row">
-				<div class="col-md-2 mb-3">
-					<ul id="tab" class="nav nav-pills flex-column" role="tablist">
-						{% for post in posts %}
-						<li class="nav-item">
-							<a class="nav-link {% ifequal forloop.counter 1 %}  active {% endifequal %}" role="tab" href="#tab{{forloop.counter}}" data-toggle="tab">{{post.date|date}}</a>
-						</li>
-						{% endfor %}
-					</ul>
-				</div>
-				<div class="col-md-10">
-					<div class="tab-content">
+<div class="card-body grid">
+	<h2 style="color: #dc143c;">{% trans "News" %}</h2>
+		<div class="hr"></div>&nbsp;
+		<div class="row">
+			<div class="col-md-2 mb-3">
+				<ul id="tab" class="nav nav-pills flex-column" role="tablist">
 					{% for post in posts %}
-					<div class="tab-pane {% ifequal forloop.counter 1 %} active {% endifequal %}" id="tab{{forloop.counter}}" role="tabpanel" aria-labelledby="tab{{forloop.counter}}">
-						<h4>{% trans post.title %}</h4>
-						<h5>{{post.date}}</h5>
-						<div class="hr"></div>
-						<p>{{ post.content }}</p>
-						{% if post.images.all%}
-						<div class="hr"></div>
-						</br >
-						<h4 >{% trans "Images" %}</h4>
-						
-						<div id="myCarousel{{forloop.counter}}" class="carousel slide" data-ride="carousel" style="width:80%; display: inline-block; background-color:white">
-							<!-- Indicators -->
-							{% if post.images.all|length > 1 %}
-							<ol class="carousel-indicators">
-								{% for photo in post.images.all %}
-								<li data-target="#myCarousel{{forloop.counter}}" data-slide-to="{{forloop.counter}}" class="{% ifequal forloop.counter 1 %} active {% endifequal %}"></li>
-								{% endfor %}
-							</ol>
-							{% endif %}
-							<!-- Carousel items -->
-							<div class="carousel-inner"style="display: inline-flex; height: 34vw">
-								{% for photo in post.images.all %}
-								
-              					<div class="carousel-item {% ifequal forloop.counter 1 %} active {% endifequal %}" style="background-color:white">
-									<div class="pagination-centered"> 
-										<a href="{{photo.image.url}}"><img class="d-block w-100" src="{{photo.image.url}}"></a>
-										<div class="carousel-caption d-md-block">
-											<p>{{photo.description|linebreaks|urlize}}</p>
-										</div>
-									</div>
-								</div>
-								
-								{% endfor %}
-              				</div>
-              					
-							
-							
-							{% if post.images.all|length > 1 %}
-							<!-- Carousel nav -->
-							<a class="carousel-control-prev" href="#myCarousel{{forloop.counter}}" role="button" data-slide="prev">
-								<div class="carouselArrow" aria-hidden="true">
-									<div class="carouselArrowInterior">&lsaquo;</div>
-								</div>
-								<span class="sr-only">Previous</span>
-							  </a>
-							  <a class="carousel-control-next" href="#myCarousel{{forloop.counter}}" role="button" data-slide="next">
-								<div class="carouselArrow" aria-hidden="true">
-									<div class="carouselArrowInterior">&rsaquo;</div>
-								</div>
-								<span class="sr-only">Next</span>
-							  </a>
-							{% endif %}
-						</div>
-					
-						{% endif %}	
-						
-					</div>
-					
-					{% if post.files.all %}
+					<li class="nav-item">
+						<a class="nav-link {% ifequal forloop.counter 1 %}  active {% endifequal %}" role="tab" href="#tab{{forloop.counter}}" data-toggle="tab">{{post.date|date}}</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="col-md-10">
+				<div class="tab-content">
+				{% for post in posts %}
+				<div class="tab-pane {% ifequal forloop.counter 1 %} active {% endifequal %}" id="tab{{forloop.counter}}" role="tabpanel" aria-labelledby="tab{{forloop.counter}}">
+					<h4>{% trans post.title %}</h4>
+					<h5>{{post.date}}</h5>
+					<div class="hr"></div>
+					<p>{{ post.content }}</p>
+					{% if post.images.all%}
 					<div class="hr"></div>
 					</br >
-					<h4 align="center">{% trans "Files" %}</h4>
-						<ul>
-							{% for f in post.files.all %}
-							 <li><a href="{{f.file_attached.url}}">{{f.title}}</a>:{{f.description}}	</li>
-							{% endfor %}
-						</ul>
-					{% endif %}
+					<h4 >{% trans "Images" %}</h4>
 					
-					{% endfor %}
-					</div><!--tab-content-->
+					<div id="myCarousel{{forloop.counter}}" class="carousel slide" data-ride="carousel" style="width:80%; display: inline-block; background-color:white">
+						<!-- Indicators -->
+						{% if post.images.all|length > 1 %}
+						<ol class="carousel-indicators">
+							{% for photo in post.images.all %}
+							<li data-target="#myCarousel{{forloop.counter}}" data-slide-to="{{forloop.counter}}" class="{% ifequal forloop.counter 1 %} active {% endifequal %}"></li>
+							{% endfor %}
+						</ol>
+						{% endif %}
+						<!-- Carousel items -->
+						<div class="carousel-inner"style="display: inline-flex; height: 34vw">
+							{% for photo in post.images.all %}
+							
+							<div class="carousel-item {% ifequal forloop.counter 1 %} active {% endifequal %}" style="background-color:white">
+								<div class="pagination-centered"> 
+									<a href="{{photo.image.url}}"><img class="d-block w-100" src="{{photo.image.url}}"></a>
+									<div class="carousel-caption d-md-block">
+										<p>{{photo.description|linebreaks|urlize}}</p>
+									</div>
+								</div>
+							</div>
+							
+							{% endfor %}
+						</div>
+							
+						
+						
+						{% if post.images.all|length > 1 %}
+						<!-- Carousel nav -->
+						<a class="carousel-control-prev" href="#myCarousel{{forloop.counter}}" role="button" data-slide="prev">
+							<div class="carouselArrow" aria-hidden="true">
+								<div class="carouselArrowInterior">&lsaquo;</div>
+							</div>
+							<span class="sr-only">Previous</span>
+							</a>
+							<a class="carousel-control-next" href="#myCarousel{{forloop.counter}}" role="button" data-slide="next">
+							<div class="carouselArrow" aria-hidden="true">
+								<div class="carouselArrowInterior">&rsaquo;</div>
+							</div>
+							<span class="sr-only">Next</span>
+							</a>
+						{% endif %}
+					</div>
+				
+					{% endif %}	
+					
 				</div>
 				
+				{% if post.files.all %}
+				<div class="hr"></div>
+				</br >
+				<h4 align="center">{% trans "Files" %}</h4>
+					<ul>
+						{% for f in post.files.all %}
+							<li><a href="{{f.file_attached.url}}">{{f.title}}</a>:{{f.description}}	</li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+				
+				{% endfor %}
+				</div><!--tab-content-->
+			</div>	
 		</div><!--row -->
-	</div>
-</div>
 </div>
 
 
