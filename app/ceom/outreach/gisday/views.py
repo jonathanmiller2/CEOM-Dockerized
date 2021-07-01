@@ -126,7 +126,7 @@ def photo_contest(request, year):
         need_login = False
         already_registered = False
 
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             if len(PhotoContestParticipant.objects.filter(user=request.user)) == 0:
                 if request.method == 'POST' and registration_enabled == True and registration_enabled(year):
                     form = PhotoForm(request.POST)

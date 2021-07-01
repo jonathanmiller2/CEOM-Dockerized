@@ -2,6 +2,7 @@ from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from ceom.outreach.workshops.models import *
+from ceom.outreach.gisday.models import Year
 from django.db.models import Count
 from datetime import datetime
 from ceom.outreach.workshops.models import Workshop,WorkshopRegistration
@@ -11,7 +12,10 @@ import json
 
 
 def overview(request):
-    return render(request, 'workshops/overview.html')
+    available_years = Year.objects.filter(hidden=False).order_by('-date')
+    return render(request, 'workshops/overview.html', context={
+         'available_years': available_years,
+    })
 
 def get_workshop_count_yearly(max_date=None,min_date=None):
     workshops = None
@@ -27,10 +31,12 @@ def get_workshop_count_yearly(max_date=None,min_date=None):
     else:
         return None
 def workshop_current(request):
+    available_years = Year.objects.filter(hidden=False).order_by('-date')
     years = get_workshop_count_yearly(min_date=datetime.now())
     workshops = Workshop.objects.filter(date_end__gte=datetime.now()).order_by('-date_start')
     categories = WorkshopClass.objects.all()
     return render(request, 'workshops/workshop_list_current.html', context={
+         'available_years': available_years,
          'years': years,
          'workshops':workshops,
          'total_workshops':  workshops.count,
@@ -38,10 +44,12 @@ def workshop_current(request):
         }, 
     )
 def workshop_past(request):
+    available_years = Year.objects.filter(hidden=False).order_by('-date')
     years = get_workshop_count_yearly(max_date=datetime.now())
     workshops = Workshop.objects.filter(date_end__lt=datetime.now()).order_by('-date_end')
     categories = WorkshopClass.objects.all()
     return render(request, 'workshops/workshop_list_past.html', context={
+         'available_years': available_years,
          'years': years,
          'workshops':workshops,
          'total_workshops': workshops.count,
@@ -50,10 +58,12 @@ def workshop_past(request):
     )
 
 def workshop_list_by_year_past(request,year):
+    available_years = Year.objects.filter(hidden=False).order_by('-date')
     years = get_workshop_count_yearly(max_date=datetime.now())
     workshops = Workshop.objects.filter(date_start__year=year,date_end__lt=datetime.now()).order_by('-date_start')
     categories = WorkshopClass.objects.all()
     return render(request, 'workshops/workshop_list_past.html', context={
+         'available_years': available_years,
          'years': years,
          'workshops': workshops,
          'year_selected': year,
@@ -63,10 +73,12 @@ def workshop_list_by_year_past(request,year):
     )
 
 def workshop_list_by_year_current(request,year):
+    available_years = Year.objects.filter(hidden=False).order_by('-date')
     years = get_workshop_count_yearly(min_date=datetime.now())
     workshops = Workshop.objects.filter(date_start__year=year,date_end__gte=datetime.now()).order_by('-date_start')
     categories = WorkshopClass.objects.all()
     return render(request, 'workshops/workshop_list_current.html', context={
+         'available_years': available_years,
          'years': years,
          'workshops': workshops,
          'year_selected': year,
@@ -76,6 +88,7 @@ def workshop_list_by_year_current(request,year):
     )
 
 def workshop(request, workshop_id):
+    available_years = Year.objects.filter(hidden=False).order_by('-date')
     try:
         workshop = Workshop.objects.get(id = workshop_id)
     except:
@@ -86,6 +99,7 @@ def workshop(request, workshop_id):
     num_presentations = len(Presentation.objects.filter(workshop=workshop))
     num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
     return render(request, 'workshops/workshop.html', context={
+         'available_years': available_years,
          'title':workshop.name,
          'content': workshop.content,
          'registration_enabled': workshop.registration_open,
@@ -101,7 +115,7 @@ def workshop(request, workshop_id):
 
 def workshop_registration(request, workshop_id):
     data = {}
-
+    available_years = Year.objects.filter(hidden=False).order_by('-date')
     try:
         workshop = Workshop.objects.get(id=workshop_id)
     except:
@@ -112,6 +126,7 @@ def workshop_registration(request, workshop_id):
 
     #TODO: If we're passing the whole workshop, why do we need to pass the individual parts of the workshop?
     #TODO: Why is show_registration always returning false? Remove it
+    data['available_years'] = available_years
     data['workshop'] = workshop
     data['title'] = workshop.name
     data['content'] = workshop.content
@@ -148,6 +163,7 @@ def workshop_registration(request, workshop_id):
     return render(request, 'workshops/registration.html', context=data)
 
 def presentations(request, workshop_id):
+    available_years = Year.objects.filter(hidden=False).order_by('-date')
     try:
         workshop = Workshop.objects.get(id = workshop_id)
     except:
@@ -156,6 +172,7 @@ def presentations(request, workshop_id):
     presentations = Presentation.objects.filter(workshop=workshop)
     num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
     return render(request, 'workshops/workshop_presentations.html', context={
+         'available_years': available_years,
          'title':workshop.name,
          'content': workshop.content,
          'workshop':workshop,
@@ -169,6 +186,7 @@ def presentations(request, workshop_id):
     )
 
 def photos(request, workshop_id):
+    available_years = Year.objects.filter(hidden=False).order_by('-date')
     try:
         workshop = Workshop.objects.get(id = workshop_id)
     except:
@@ -177,6 +195,7 @@ def photos(request, workshop_id):
     presentations = len(Presentation.objects.filter(workshop=workshop))
     photos = WorkshopPhoto.objects.filter(workshop=workshop).order_by("priority")
     return render(request, 'workshops/photos.html', context={
+         'available_years': available_years,
          'title':workshop.name,
          'content': workshop.content,
          'workshop':workshop,
