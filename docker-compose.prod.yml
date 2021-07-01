@@ -36,7 +36,11 @@ services:
                       
                       #      This is for the translation system.
                       #python manage.py makemessages --all &&
+
+                      #      Helpful for weird sync issues (such as django trying to delete tables that are already deleted)
+                      #python manage.py migrate --fake
     volumes: 
+      - ./app:/code
       - /data/web/ceom/media/:/code/ceom/media/
     expose:
       - 8000

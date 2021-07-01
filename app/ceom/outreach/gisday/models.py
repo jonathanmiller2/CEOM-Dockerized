@@ -116,7 +116,6 @@ class Poster(models.Model):
     department = models.CharField(max_length=128)
     category = models.ForeignKey(PosterCategory,null=False, on_delete=models.CASCADE)
     email = models.EmailField(max_length=30)
-    verify_email = models.EmailField(null=True)
     title = models.CharField(max_length=200)
     authors = models.TextField("Poster author list",null=True, blank=True)
     abstract = models.TextField("Poster abstract",null=False, blank=False)
@@ -247,11 +246,6 @@ class PosterContestContent(models.Model):
     class Meta:
         unique_together = (("year",),)
 class PhotoContestContent(models.Model):
-    year = models.ForeignKey(Year, on_delete=models.CASCADE)
-    content = tinymce_models.HTMLField(null=True,blank=True)
-    class Meta:
-        unique_together = (("year",),)
-class LogisticsContent(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True)
     class Meta:
@@ -418,7 +412,7 @@ class Survey(models.Model):
     #         return '%s Other(%s) created: %s' % (self.year, self.uther_role,created)
     #     else 
 
-class SurveyContents(models.Model):
+class SurveyContent(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)
     content = tinymce_models.HTMLField(null=True,blank=True) 
     class Meta:

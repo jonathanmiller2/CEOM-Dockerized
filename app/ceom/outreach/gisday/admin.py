@@ -91,31 +91,8 @@ class PosterAdmin(admin.ModelAdmin):
     actions = [export_as_csv_action("Export selected poster contest participants to CSV", fields= list_display, header=True),]
     class Meta:
         model = Poster
-
-
 admin.site.register(Poster, PosterAdmin)
 
-class AboutUsGroupAdmin(admin.ModelAdmin):
-    list_filter = ['name']
-    list_display = ("name", "order")
-    class Meta:
-        model = AboutUsGroup
-admin.site.register(AboutUsGroup, AboutUsGroupAdmin)   
-    
-class AboutUsPersonAdmin(admin.ModelAdmin):
-    list_filter = ['last_name']
-    list_display = ("last_name", "first_name","middle_name", "email","phone","headshot")
-    actions = [export_as_csv_action("Export selected persons to CSV", fields= list_display, header=True),]
-    class Meta:
-        model = AboutUsPerson
-admin.site.register(AboutUsPerson, AboutUsPersonAdmin)
-
-class PersonInGroupAdmin(admin.ModelAdmin):
-    list_filter = ['person','year']
-    list_display = ('year',"person","group","year", "highlight")
-    class Meta:
-        model = PersonInGroup
-admin.site.register(PersonInGroup, PersonInGroupAdmin)
 
 class SponsorCategoryAdmin(admin.ModelAdmin):
     list_filter = ['name']
@@ -208,14 +185,6 @@ class PhotoContestContentAdmin(admin.ModelAdmin):
         model = PhotoContestContent
 admin.site.register(PhotoContestContent, PhotoContestContentAdmin)
 
-class LogisticsContentAdmin(admin.ModelAdmin):
-    list_filter = ['year',]
-    list_display = ('year',)
-    class Meta:
-        model = LogisticsContent
-admin.site.register(LogisticsContent, LogisticsContentAdmin)
-
-
 class VisitorRegistrationContentAdmin(admin.ModelAdmin):
     list_filter = ['year',]
     list_display = ('year',)
@@ -267,11 +236,11 @@ admin.site.register(Survey, SurveyAdmin)
     
 # admin.site.register(DemographicSurvey, DemographicSurveyAdmin)
 
-class SurveyContentsAdmin(admin.ModelAdmin):
+class SurveyContentAdmin(admin.ModelAdmin):
     list_filter = ['year',]
     list_display = ('year','content',)
     actions = [export_as_csv_action("Export selected item donor/s to CSV", fields= list_display, header=True),]
     class Meta:
-        model = SurveyContents
+        model = SurveyContent
 
-admin.site.register(SurveyContents, SurveyContentsAdmin)
+admin.site.register(SurveyContent, SurveyContentAdmin)

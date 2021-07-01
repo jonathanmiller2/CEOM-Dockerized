@@ -64,7 +64,6 @@ class WorkshopRegistration(models.Model):
     institution = models.CharField(max_length=200,null=False)
     address = models.CharField(max_length=200,null=False)
     email = models.EmailField(null=False)
-    verify_email = models.EmailField(null=True)
     phone = InternationalPhone(null=True, blank=True)
     area_of_expertise = models.CharField(max_length=300,null=False)
     # Migrated to exta_boolean_field1
