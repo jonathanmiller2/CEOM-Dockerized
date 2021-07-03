@@ -65,27 +65,31 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
+class Category(models.Model):
+    name = models.CharField(max_length=125)
+    order = models.IntegerField()
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name_plural = "categories"
+
 
 class Person(models.Model):
     group = models.ForeignKey(Group, related_name="personAsGroup", on_delete=models.CASCADE)
-    alumni_group = models.ForeignKey(Group, null=True, blank=True, related_name="personAsAlumniGroup", on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, null=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100, null=True, blank=True)
     middle_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=100, null=True, blank=True)
     title = models.CharField(max_length=250, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
-    phone = models.CharField(max_length=16, null=True, blank=True)
-
-    link = models.CharField(max_length=250, null=True, blank=True)
     date = models.DateField('date published', null=True)
-    extra =  models.TextField(null=True, blank=True)
-    content = models.TextField(null=True, blank=True)
     headshot = models.ImageField(null=True, upload_to='people/', default='/media/people/dummy_headshot222.jpg')
-    order= models.IntegerField(null=False, default=9999)
+    order = models.IntegerField(null=False, default=9999)
     def __str__(self):
         return '%s %s %s' % (self.first_name, self.middle_name, self.last_name)
     class Meta:
         unique_together = ('first_name', 'middle_name','last_name')
+
 class GalleryPhoto(models.Model):
     year = YearField(null=False, max_length=4,)
     order= models.IntegerField(null=False)

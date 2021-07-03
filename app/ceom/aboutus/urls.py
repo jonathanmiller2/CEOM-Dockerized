@@ -18,7 +18,6 @@ urlpatterns = [
     re_path(r'education/student_awards', TemplateView.as_view(template_name="aboutus/education/student_awards.html")),
     re_path(r'education/$', TemplateView.as_view(template_name="aboutus/education/overview.html")),
     re_path(r'facilities/clab/', TemplateView.as_view(template_name="aboutus/facilities/clab.html")),
-    re_path(r'facilities/vlab/', TemplateView.as_view(template_name="aboutus/facilities/vlab.html")),   
     re_path(r'facilities/rslab/', TemplateView.as_view(template_name="aboutus/facilities/rslab.html")),
     re_path(r'facilities/isos/', TemplateView.as_view(template_name="aboutus/facilities/isos.html")),
     re_path(r'facilities/$', TemplateView.as_view(template_name="aboutus/facilities/overview.html")),
