@@ -143,7 +143,7 @@
                 {{search.category}}
             </div>
         </div>
-
+        <br>
         
        {{search.keywords.errors}}
        <label for="keywords" data-toggle="collapse" data-target="#metadata">
@@ -154,7 +154,7 @@
                <input class="form-control form-control-sm" type="text" placeholder="EX: cocorahs" id="keywords" name="keywords" value="{%if search.keywords.value%}{{search.keywords.value}}{% endif %}">
            </div>
        </div>
-        
+       <br>
         
         
         {{ search.date_min.errors }}
@@ -170,7 +170,7 @@
                 {{ search.date_max }}
             </div>
         </div>
-
+        <br>
         
         <label data-toggle="collapse" data-target="#geoLocation" font-size:.9em;>
             <h6>{%trans "4. Geographic Location"%}</h6>
@@ -210,7 +210,7 @@
                 </div>
             </div>
         </div>
-        
+        <br>
 
         
         <label class="text-left" data-toggle="collapse" data-target="#region">
@@ -232,7 +232,7 @@
                 </div>
             </div>
         </div>
-
+        <br>
         
         <label data-toggle="collapse" data-target="#country">
             <h6>{% trans "6. Country" %}</h6>
@@ -243,7 +243,7 @@
                 {{search.country}}
             </div>
         </div>
-         
+        <br>
 
         <label data-toggle="collapse" data-target="#continent">
             <h6>{% trans "7. Continent" %}</h6>
@@ -254,7 +254,7 @@
                 {{search.continent}}
             </div>
         </div>
-
+        <br>
         
         <label data-toggle="collapse" data-target="#username">
             <h6>{% trans "8. Username" %}</h6>
@@ -265,7 +265,7 @@
                 {{search.user}}
             </div>
         </div>
-        
+        <br>
 
         <div class="d-flex row justify-content-around my-3">
             <div class="container">
