@@ -35,4 +35,5 @@ urlpatterns = [
     re_path(r'^gmapclusters.kml$', ceom.photos.views.gmapclusters),
     re_path(r'^gmapclusters.php$', ceom.photos.views.gmapclusters),
     re_path(r'^photos.json$', ceom.photos.views.photos_json),
+    re_path(r'^map_gallery.html$', ceom.photos.views.map_gallery),
 ]

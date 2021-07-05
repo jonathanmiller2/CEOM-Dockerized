@@ -77,13 +77,13 @@
         var startLocation = {lat: 0, lng: 0};
         
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 3,
+          zoom: 2,
           center: startLocation,
           gestureHandling: 'cooperative',
           mapTypeId: 'satellite',
           draggableCursor: 'crosshair',
         });
-    	
+
     	map.addListener('click', deselectCircles);
         map.addListener('dragend', updateMapCircles);
         map.addListener('zoom_changed', updateMapCircles); 
@@ -117,7 +117,7 @@
         }
         else
         {
-        	var bb = [-55, -120, 55, 120];	
+        	var bb = [-80, -150, 80, 150];	
         }
 
         //Request data from the current host
@@ -220,7 +220,7 @@
     function displayGallery(feature, desired_page, desired_ppp)
     {
     	$("#gallery").html("<div class=\"span12 text-center\"><i class='icon-spinner icon-2x icon-spin icon-large'></i></div>").fadeIn();
-    	$.get("/photos/photos.html", {ids:feature.ids,   x_size:feature.x_size,   y_size:feature.y_size,   page:desired_page,   ppp:desired_ppp}, function(html){
+    	$.get("/photos/map_gallery.html", {ids:feature.ids,   x_size:feature.x_size,   y_size:feature.y_size,   page:desired_page,   ppp:desired_ppp}, function(html){
     	    $("#gallery").html(html).fadeIn();
     	});
 	}

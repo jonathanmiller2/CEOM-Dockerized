@@ -56,18 +56,11 @@ class PostImage(models.Model):
         unique_together = ('post', 'order')
     def __str__(self):
         return "Image  " + str(self.order) + ": " + str(self.post) 
- 
-        
-class Group(models.Model):
-    name = models.CharField(max_length=125)
-    order = models.IntegerField()
-	
-    def __str__(self):
-        return self.name
 
 class Category(models.Model):
     name = models.CharField(max_length=125)
     order = models.IntegerField()
+    description = models.CharField(max_length=1000, null=True, blank=True)
     def __str__(self):
         return self.name
     class Meta:
@@ -75,7 +68,6 @@ class Category(models.Model):
 
 
 class Person(models.Model):
-    group = models.ForeignKey(Group, related_name="personAsGroup", on_delete=models.CASCADE)
     category = models.ForeignKey(Category, null=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100, null=True, blank=True)
     middle_name = models.CharField(max_length=50, null=True, blank=True)
@@ -83,7 +75,7 @@ class Person(models.Model):
     title = models.CharField(max_length=250, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
     date = models.DateField('date published', null=True)
-    headshot = models.ImageField(null=True, upload_to='people/', default='/media/people/dummy_headshot222.jpg')
+    headshot = models.ImageField(null=True, blank=True, upload_to='people/')
     order = models.IntegerField(null=False, default=9999)
     def __str__(self):
         return '%s %s %s' % (self.first_name, self.middle_name, self.last_name)

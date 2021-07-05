@@ -2,7 +2,7 @@
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from ceom.aboutus.models import Post, Group, Person, GalleryPhoto
+from ceom.aboutus.models import Post, Person, GalleryPhoto
 from itertools import chain
 from operator import attrgetter
 from datetime import date
@@ -14,7 +14,7 @@ def news(request):
 def people(request):
     data = {}
 
-    data['people'] = Person.objects.all().order_by('category__order', 'group__order', 'order', 'last_name')
+    data['people'] = Person.objects.all().order_by('category__order', 'order', 'last_name')
     
     return render(request, 'aboutus/people.html', context=data)
 

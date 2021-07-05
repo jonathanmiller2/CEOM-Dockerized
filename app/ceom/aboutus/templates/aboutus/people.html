@@ -18,46 +18,45 @@
  padding: 5px 5px 10px 5px;"
 }
 </style>
-<div>
-   <div class="grid">
-      <h3 class="mb-4" style="color: #0088cc;">{% trans "Researchers at the University of Oklahoma" %}</h3>
-      <div class="row-fluid">
-         {% for p in people%}
-         {% ifchanged p.category %}
-         <div style="clear: both;"></div>
-         <h3 style="border-bottom: 1px solid #11a584;color: #11a584;margin-top: 0px;">{% trans p.category.name %}</h3>
-         {% endifchanged %}
 
-         <div class="people-tile">
-            {% if not p.headshot %} <a href="#"><img style="max-height: 150px; max-width: 136px; overflow:hidden; margin:auto;" src="/static/img/dummy_headshot.jpg" ></a>
-            {% elif p.headshot and p.link %} <a href="{{p.link}}"><img style="max-height: 150px; max-width: 136px;overflow:hidden;margin:auto;" src="{{p.headshot.url}}" ></a>
-            {%elif p.headshot and not p.link %} <img style="max-height: 150px; max-width: 136px;overflow:hidden;margin:auto;" src="{{p.headshot.url}}" ></a>
-            {%endif%}
-            <div >
-               <h5 style="margin:8px 0;">
-                  {% if p.link %} 
-                  <a href="{{p.link}}">
-                  {% if p.first_name  %}{{p.first_name}}{% endif %}
-                  {% if p.middle_name  %} {{p.middle_name}}{% endif %}
-                  {% if p.last_name  %} {{p.last_name}}{% endif %}
-                  </a> 
-                  {%else%}
-                  <strong>{% if p.first_name  %}{{p.first_name}}{% endif %}
-                  {% if p.middle_name  %} {{p.middle_name}}{% endif %}
-                  {% if p.last_name  %} {{p.last_name}}{% endif %}</strong> 
-                  {% endif %} 
-               </h5>
-               {% if p.title %} 
-               <div style="margin:4px 0;"> {% trans p.title %} <br> </div>
-               {% endif %}
-               {% if p.phone %} 
-               <div style="margin:4px 0;"> {{p.phone}} <br> </div>
-               {% endif %}
-               {% if p.email %}<small> <a href="mailto:{{p.email}}">{{p.email}}<br></a>  </small> {% endif %}
-            </div>
-         </div>
-         {% endfor %}
+<h3 class="mb-4" style="color: #0088cc;">{% trans "Researchers at the University of Oklahoma" %}</h3>
+<div class="ml-3">
+   <div class="row">
+      {% for p in people%}
+      {% ifchanged p.category %}
       </div>
+      <h3 style="border-bottom: 1px solid #11a584; color: #11a584;">{% trans p.category.name %}</h3>
+      {% if p.category.description %}
+      <p>{% trans p.category.description %}</p>
+      {% endif %}
+      <div class="row ml-1">
+      {% endifchanged %}
+      <div class="people-tile">
+         {% if not p.headshot %} <a href="#"><img style="max-height: 150px; max-width: 136px; overflow:hidden; margin:auto;" src="/static/images/dummy_headshot.jpg" ></a>
+         {% elif p.headshot and p.link %} <a href="{{p.link}}"><img style="max-height: 150px; max-width: 136px;overflow:hidden;margin:auto;" src="{{p.headshot.url}}" ></a>
+         {% elif p.headshot and not p.link %} <img style="max-height: 150px; max-width: 136px;overflow:hidden;margin:auto;" src="{{p.headshot.url}}" ></a>
+         {%endif%}
+         <div>
+            <h5 class="my-2">
+               {% if p.link %} 
+               <a href="{{p.link}}">
+               {% if p.first_name  %}{{p.first_name}}{% endif %}
+               {% if p.middle_name  %} {{p.middle_name}}{% endif %}
+               {% if p.last_name  %} {{p.last_name}}{% endif %}
+               </a> 
+               {%else%}
+               <strong>{% if p.first_name  %}{{p.first_name}}{% endif %}
+               {% if p.middle_name  %} {{p.middle_name}}{% endif %}
+               {% if p.last_name  %} {{p.last_name}}{% endif %}</strong> 
+               {% endif %} 
+            </h5>
+            {% if p.title %} 
+            <div> {% trans p.title %}</div>
+            {% endif %}
+            {% if p.email %}<a href="mailto:{{p.email}}"><small>{{p.email}}</small></a>{% endif %}
+         </div>
+      </div>
+      {% endfor %}
    </div>
 </div>
 {% endblock %}

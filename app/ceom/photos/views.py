@@ -445,7 +445,7 @@ def gmapclusters(request):
     return HttpResponse(response)
 
 
-def get_photos_id_from_cluster_photo_id(request, id, x_size=22.25,y_size=11.125):
+def get_photos_id_from_cluster_photo_id(request, id, x_size=22.25, y_size=11.125):
 
     photos, search = search_for_photos(request)
     photos = photos.exclude(Q(point__bboverlaps=Point(0,0))|Q(point__isnull=True))
@@ -476,8 +476,6 @@ def get_photos_id_from_cluster_photo_id(request, id, x_size=22.25,y_size=11.125)
         return ids
         
 def photos_json(request):
-    print("Beginning photos_json") #TODO: Remove me
-
     id = request.GET['ids']
     ids = get_photos_id_from_cluster_photo_id(request, id)
     photos = Photo.objects.filter(id__in=ids.split(','))
@@ -512,6 +510,45 @@ def photos_json(request):
 
     return HttpResponse(simplejson.dumps(data))
 
+def map_gallery(request):
+    photos, search = search_for_photos(request)
+    id = request.GET['ids']
+    x_size = float(request.GET['x_size'])
+    page = y_size = float(request.GET['y_size'])
+    ids = get_photos_id_from_cluster_photo_id(request, id,x_size,y_size)
+    photos = Photo.objects.filter(id__in=ids.split(','))
+
+    page = request.GET.get('page',1)
+    ppp = request.GET.get('ppp', 24)
+    ppp = min(int(ppp),192)
+    if page != "all" and ppp != "All":
+        paginator = Paginator(photos, int(ppp))
+
+        try:
+            photos = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            photos = paginator.page(int(page))
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            photos = paginator.page(paginator.num_pages)
+
+        page = int(page)
+        page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
+    else:
+        paginator = None
+        page_range = range(10)
+    
+    return render(request, 'photos/browse_gallery_map.html', context={
+        'photos': photos,
+        'paginator' : paginator,
+        'search': search,
+        'ppp': ppp,
+        'page_range': page_range,
+        'checkbox': True,
+        'modis_timeseries': True
+    })
+
 def kml(request):
     return HttpResponse()
 
@@ -521,7 +558,6 @@ def view(request, id):
     return render(request, 'photos/view.html', context={
         'photo': photo,
     })
-
 
 def batchedit(request):
     if request.method == 'POST':
