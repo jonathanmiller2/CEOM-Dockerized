@@ -1,6 +1,6 @@
 from django.db import models
 from django import forms
-from ceom.inventory.models import Dataset
+from ceom.modis.inventory.models import Dataset
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_comma_separated_integer_list
 

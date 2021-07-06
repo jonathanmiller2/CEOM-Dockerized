@@ -20,9 +20,9 @@ def wpixel(request):
 
     t = loader.get_template('poi/what_is_in_pixel.html')
     categories = Category.objects.order_by('order')
-    c = RequestContext(request,{
+    c = {
         'categories': categories,
-        })
+    }
     return HttpResponse(t.render(c))
 def latlon2sin(lat,lon,npix):
     cons =(36.0 * npix)/(2.0 * pi)
@@ -144,27 +144,27 @@ def create_research(request):
             research = Research(name=form.cleaned_data["name"],user=request.user,description=form.cleaned_data["description"])
             try:
                 research.save()
-                c = RequestContext(request, {
+                c = {
                 'form': ResearchForm(request.POST),
                 'success': True,
                 'saved_research_id': research.id
-                })
+                }
                 return HttpResponse(t.render(c))
             except:
-                c = RequestContext(request, {
+                c = {
                     'form': form,
-                })
+                }
                 return HttpResponse(t.render(c))
         else:
-            c = RequestContext(request, {
+            c = {
                 'form': form,
-            })
+            }
             return HttpResponse(t.render(c))
 
     else:
         researchForm = ResearchForm()
         t = loader.get_template('poi/addPOIResearch.html')
-        c = RequestContext(request, {'form': researchForm})
+        c = {'form': researchForm}
         return HttpResponse(t.render(c))
 @login_required
 def edit_research(request,research_id):
@@ -172,7 +172,7 @@ def edit_research(request,research_id):
         research = Research.objects.get(id=research_id,user=request.user)
     except:
         t = loader.get_template('poi/researchNotFound.html')
-        c = RequestContext(request, {})
+        c = {}
         return HttpResponse(t.render(c))
 
     if request.method == 'POST':
@@ -185,10 +185,10 @@ def edit_research(request,research_id):
                 Research.objects.get(id=research_id,user=request.user).update(description=form.description)
             else:
                 Research.objects.get(id=research_id,user=request.user).update(name=form.name,description=form.description)
-        c = RequestContext(request, {
+        c = {
         'form': ResearchForm(request.POST),
         'success': True,
-        })
+        }
         return HttpResponse(t.render(c))
 
     else:
@@ -197,7 +197,7 @@ def edit_research(request,research_id):
         researchForm.set_id(research_id)
         
         t = loader.get_template('poi/editResearch.html')
-        c = RequestContext(request, {'form': researchForm})
+        c = {'form': researchForm}
         return HttpResponse(t.render(c))
 
 @login_required
@@ -208,12 +208,11 @@ def manage(request):
     if len(researchs)>0:
         pixels = ResearchPixel.objects.filter(research=researchs[0])
     t = loader.get_template('poi/manage.html')
-    c = RequestContext(request, {
+    c = {
         'researchs': researchs,
         'pixel_datasets':pixel_datasets,
         'pixels':pixels,
-        },
-        )
+        }
     return HttpResponse(t.render(c))
 
 def addPixelValidation(request):

@@ -1,7 +1,7 @@
 from django.contrib.gis.db import models
 from django import forms
 from django.conf import settings
-from ceom.inventory.models import Dataset
+from ceom.modis.inventory.models import Dataset
 import time
 
 class Datatype(models.Model):

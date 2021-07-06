@@ -1,4 +1,4 @@
-from ceom.inventory.models import File, Product, Dataset, Tile
+from ceom.modis.inventory.models import File, Product, Dataset, Tile
 from django.template import Context, loader, RequestContext
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404

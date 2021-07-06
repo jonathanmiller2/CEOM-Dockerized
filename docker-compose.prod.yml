@@ -16,10 +16,6 @@ services:
                       #     Replaces the first line in the command list.
                       #manage.py makemigrations --merge
 
-                      #     This can be used to make a development superuser for testing. See .env.dev for login info.
-                      #     To be placed after the migrations in the command list.
-                      #python manage.py createsuperuser --noinput &&
-
                       #     This can be used to keep the web container open when it errors. Useful for poking around inside the container when it's broken. 
                       #     To be placed as last command in command list.
                       #tail -F anything"
