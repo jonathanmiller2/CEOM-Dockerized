@@ -1,7 +1,3 @@
-#TODO: Are these imports necessary?
-from django.conf.urls import *
-from django.views.generic import RedirectView
-
 from django.urls import re_path
 import ceom.photos.views
 

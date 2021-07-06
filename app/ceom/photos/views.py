@@ -56,7 +56,6 @@ def zdecode(zstr):
 
 
 def compress(obj):
- #   return pylzma.compress(pickle.dumps(obj))
     #TODO: For some reason, pickle dumps are causing issues. If you see "could not decode bytes to JSON", with a confusing stack trace, it probably originates here.
     return pickle.dumps(obj)
 
@@ -211,8 +210,7 @@ def user_photos(request):
 
 
 def browse(request):
-    photos, search = search_for_photos(request) #TODO: This search is causing the serialization error
-    #request.session['query'] = pickle.dumps(photos.query)
+    photos, search = search_for_photos(request)
     
     page = request.GET.get('page',1)
     ppp = request.GET.get('ppp', 24)
@@ -355,7 +353,6 @@ def gmapclusters(request):
     photos, search = search_for_photos(request)
     photos = photos.exclude(Q(point__bboverlaps=Point(0,0))|Q(point__isnull=True))
 
-    #TODO: This check is redundant?
     if 'bbox' in request.GET:
         bb = request.GET['bbox'].split(',')
         bb = [float(x) for x in bb]
@@ -364,7 +361,6 @@ def gmapclusters(request):
         y_size = x_size / 1.5
         clause = " 1=1 "
         photos = photos.filter(point__bboverlaps=poly)
-        #die
     else:
         x_size = 22.25
         y_size = 11.125
@@ -677,8 +673,6 @@ def exif(request, id):
 
 @csrf_exempt
 def download(request):
-    print("Beginning download") #TODO: Remove me
-
     if request.method != 'POST':
         return HttpResponseRedirect("/photos/browse/")
 
@@ -843,7 +837,6 @@ def get_work_dir(request):
 
 @csrf_exempt
 def preload_delete(request, name):
-    print("Beginning preload_delete") #TODO: Remove me
     work_dir = get_work_dir(request)
     file_path = os.path.join(work_dir, name)
     success = os.path.isfile(file_path) and name[0] != "." and os.remove(file_path)

@@ -1,12 +1,7 @@
-#TODO: Are these imports necessary?
-from django.conf.urls import *
-from django.views.generic import TemplateView
-
 from django.urls import re_path
 import ceom.outreach.workshops.views
 
 urlpatterns = [
-    #re_path(r'^$', ceom.outreach.workshops.views.overview),
     re_path(r'^overview', ceom.outreach.workshops.views.overview),
     re_path(r'^current/(?P<year>\d+)', ceom.outreach.workshops.views.workshop_list_by_year_current),
     re_path(r'^current/', ceom.outreach.workshops.views.workshop_current),

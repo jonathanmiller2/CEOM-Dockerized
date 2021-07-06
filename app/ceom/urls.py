@@ -1,12 +1,9 @@
-#TODO: Are these imports necessary?
 from django.urls import path, re_path
 from django.conf.urls import url, include
 from filebrowser.sites import site
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
-from django.http import HttpResponseRedirect
-from django.contrib.flatpages import views
 
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns #For dajaxice
@@ -30,7 +27,6 @@ urlpatterns = [
     re_path(r'^h5n1/', include('ceom.h5n1.urls')),
  ##   # url(r'^service/', include('ceom.data.urls')),
     re_path(r'^contact/', TemplateView.as_view(template_name="contact.html")),
-    re_path(r'^projects/', include('ceom.projects.urls')),
     re_path(r'^aboutus/',include('ceom.aboutus.urls')),
     re_path(r'^outreach/workshops/', include('ceom.outreach.workshops.urls')),
     re_path(r'^outreach/gisday/', include('ceom.outreach.gisday.urls')),
@@ -47,14 +43,6 @@ urlpatterns = [
  #  url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
  #  url(r'^dajaxice/', include('dajaxice.urls')),
 ]
-
-#Development only pages
-if settings.DEBUG:
-    #urlpatterns.append(url(r'^people/',include('ceom.people.urls')))
-    #Append dev only urls here
-    pass
-
-from django.conf import settings
 
 if 'rosetta' in settings.INSTALLED_APPS:
     urlpatterns += [

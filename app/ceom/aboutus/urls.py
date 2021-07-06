@@ -1,11 +1,8 @@
 from django.conf.urls import *
 from django.urls import re_path
 from django.views.generic import TemplateView
-
 import ceom.aboutus.views
 
-#TODO: These likely need to be instances of url(), if these pages aren't accessible, this is what needs to be changed
-#ceom.aboutus.views
 urlpatterns = [
     re_path(r'news/(?P<post_id>\d+)/$', ceom.aboutus.views.news),
     re_path(r'news/(?P<post_year>\d{4})/$', ceom.aboutus.views.news),
@@ -26,8 +23,4 @@ urlpatterns = [
 	re_path(r'^group_photos/(?P<selYear>\d{4})', ceom.aboutus.views.group_photos),
 	re_path(r'^group_photos', ceom.aboutus.views.group_photos),
     re_path(r'$', ceom.aboutus.views.news),
-
-    #TODO: Remove if unnescessary
-    #(r'bhargavbolla/', 'bhrgvbolla'),
-    #(r'dd/$', TemplateView.as_view(template_name="aboutus/dheeraj_demo/trail.html")),
 ]

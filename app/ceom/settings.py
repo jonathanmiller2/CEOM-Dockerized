@@ -9,7 +9,6 @@ BASE_DIR = os.path.dirname(__file__)
 
 DEBUG = int(os.environ.get("DJANGO_DEBUG", default=0))
 
-#TODO: Remove ceom-dev1 if development environment changes off the VM I'm using right now
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 
@@ -188,7 +187,6 @@ INSTALLED_APPS = [
     'ceom.h5n1',
     'ceom.outreach.gisday',
     'ceom.outreach.workshops',
-    'ceom.projects',
     'ceom.aboutus',
     'ceom.stats',
     'ceom.towers',
@@ -288,5 +286,3 @@ FEEDBACK_EMAIL = "jonathan.g.miller@ou.edu;jonathanmiller2@hotmail.com"
 #Celery
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
-
-#TODO: Change the http to https

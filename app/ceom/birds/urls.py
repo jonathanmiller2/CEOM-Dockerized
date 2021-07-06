@@ -1,5 +1,3 @@
-#TODO: Is this conf import needed?
-from django.conf.urls import *
 from django.urls import re_path
 
 import ceom.birds.views
