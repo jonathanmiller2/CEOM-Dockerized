@@ -46,7 +46,7 @@
 		<h2 align="left" style="color: #dc143c;">{% trans "Group photos" %}</h2>
 		<div class="hr"></div>&nbsp;		 
 		{% if photos %}
-			<ul class="nav nav-pills mb-2" role="tablist">
+			<ul class="nav nav-pills mb-4" role="tablist">
 				{% for year in available_years %}
 					{% ifchanged year %}
 						{% if "20" in request.path %}
