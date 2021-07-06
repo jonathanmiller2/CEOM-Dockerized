@@ -43,7 +43,7 @@
 
 {% endblock %}
 {% block content_with_span10 %}
-<div id='content' class="span10">
+<div id='content'>
     <h2 class="legend" style="color: #0f4ba4;">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
     <div class='row-fluid'>
     	<div id="loading">{% trans "Loading Photos..."%}</div>
@@ -219,7 +219,7 @@
 
     function displayGallery(feature, desired_page, desired_ppp)
     {
-    	$("#gallery").html("<div class=\"span12 text-center\"><i class='icon-spinner icon-2x icon-spin icon-large'></i></div>").fadeIn();
+    	$("#gallery").html("<div align='center'><div class=\"spinner-border\" role=\"status\"><span class=\"sr-only\">Loading...</span></div></div>").fadeIn();
     	$.get("/photos/map_gallery.html", {ids:feature.ids,   x_size:feature.x_size,   y_size:feature.y_size,   page:desired_page,   ppp:desired_ppp}, function(html){
     	    $("#gallery").html(html).fadeIn();
     	});

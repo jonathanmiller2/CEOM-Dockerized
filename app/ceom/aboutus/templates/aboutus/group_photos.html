@@ -41,8 +41,8 @@
 		transition: transform 1s ease, opacity .5s ease-out;
 	}
 </style>
-<div class="well" style="text-align: center;">
-	<div class="grid" >
+<div style="text-align: center;">
+	<div>
 		<h2 align="left" style="color: #dc143c;">{% trans "Group photos" %}</h2>
 		<div class="hr"></div>&nbsp;		 
 		{% if photos %}
@@ -75,9 +75,9 @@
 				  {% for photo in photos %}
 					{% thumbnail photo.picture "800x600" crop="center" as im %}
 					  {% if forloop.counter == 1 %}
-					  <div class="carousel-item active"><div class="pagination-centered"> <a href="{{im.url}}}"><img class="d-block w-100" src="{{im.url}}" style=" width:auto; max-height:600px;height:60%; margin-left:auto;margin-right:auto"></a></div></div>
+					  <div class="carousel-item active bg-white"><div class="pagination-centered"> <a href="{{im.url}}}"><img class="d-block " src="{{im.url}}" style="max-width: 80%; max-height:60%; margin-left:auto;margin-right:auto"></a></div></div>
 					  {% else %}
-					  <div class="carousel-item"><div class="pagination-centered"><a href="{{im.url}}"><img class="d-block w-100" src="{{im.url}}" style=" width:auto; max-height:600px;height:60%; margin-left:auto;margin-right:auto"></a></div></div>
+					  <div class="carousel-item bg-white"><div class="pagination-centered"><a href="{{im.url}}"><img class="d-block " src="{{im.url}}" style="max-width: 80%; max-height:60%; margin-left:auto;margin-right:auto"></a></div></div>
 					  {% endif %}
 				  {% empty %}
 					<p class="text-error">Image missing</p>
