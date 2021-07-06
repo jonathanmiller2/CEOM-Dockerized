@@ -79,7 +79,7 @@
 			display: none;
 		}
 
-		.nav-link {
+		.main-menu-link {
 			color: #777777;
 			width: 123px;
 			text-align: center;
@@ -91,7 +91,7 @@
 			display: none;
 		}
 
-		.nav-link {
+		.main-menu-link {
 			color: #777777;
 			margin-left: 1em;
 		}
@@ -108,50 +108,50 @@
 <nav id="full-navbar" class="navbar navbar-expand mb-4 animate__animated animate__fadeIn">
 	<ul class="navbar-nav ml-5 mr-auto">
 		<li id="menu-home" class="nav-item{% if '/' == request.path %} active{% endif %}">
-			<a class="nav-link" href="/">
+			<a class="nav-link main-menu-link" href="/">
 				<span class="fas fa-home"></span>
 				{% trans "Home" %}
 			</a>
 		</li>
 		<li id="menu-about" class="nav-item{% if '/aboutus/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/aboutus/news">
+			<a class="nav-link main-menu-link" href="/aboutus/news">
 				<span class="fas fa-info-circle"></span> 
 				{% trans "About Us" %} 
 			</a>
 		</li>
 		<li id="menu-photos" class="nav-item{% if '/photos/' in request.path and '/outreach/' not in request.path %} active{% endif %}">
-			<a class="nav-link" href="/photos/">
+			<a class="nav-link main-menu-link" href="/photos/">
 				<span class="fas fa-camera"></span> 
 				{% trans "Photo" %}
 			</a>
 		</li>
 		<!--<li id="menu-inventory" {% if '/inventory/' in request.path %}class='active'{% endif %}><a href="/inventory/"><span class="icon-list-ul navbar-icon"></span> {% trans "Datasets" %} </a></li>-->
 		<li id="menu-vis" class="nav-item{% if '/modis/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/modis/visualization/">
+			<a class="nav-link main-menu-link" href="/modis/visualization/">
 				<span class="fas fa-globe-americas"></span> 
 				{% trans "MODIS" %}
 			</a>
 		</li>
 		<li id="menu-geohealth" class="nav-item{% if '/geohealth/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/geohealth/">
+			<a class="nav-link main-menu-link" href="/geohealth/">
 				<span class="fas fa-heartbeat"></span>
 				 {% trans "GeoHealth" %}
 			</a>
 		</li>
 		<li id="menu-outreach" class="nav-item{% if '/outreach/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/outreach/gisday/">
+			<a class="nav-link main-menu-link" href="/outreach/gisday/">
 				<span class="fas fa-rss"></span> 
 				{% trans "Outreach" %}
 			</a>
 		</li>
 		<li id="menu-water" class="nav-item{% if '/water/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/water/">
+			<a class="nav-link main-menu-link" href="/water/">
 				<span class="fa fa-tint"></span>
 				{% trans "Water" %}
 			</a>
 		</li>
 		<li id="menu-account" class="nav-item{% if '/accounts/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/accounts/">
+			<a class="nav-link main-menu-link" href="/accounts/">
 				<span class="fa fa-user"></span> 
 				{% trans "Account" %}
 			</a>
@@ -174,50 +174,50 @@
 	<button id="mobile-nav-btn" class="btn btn-dark ml-auto mr-5 my-2" type="button" data-toggle="collapse" data-target="#mobile-nav-body" aria-expanded="false" aria-controls="mobile-nav-body">Menu</button>
 	<ul id="mobile-nav-body" class="navbar-nav mx-5 mt-0 collapse">
 		<li id="menu-home" class="nav-item{% if '/' == request.path %} active{% endif %}">
-			<a class="nav-link" href="/">
+			<a class="nav-link main-menu-link" href="/">
 				<span class="fas fa-home"></span>
 				{% trans "Home" %}
 			</a>
 		</li>
 		<li id="menu-about" class="nav-item{% if '/aboutus/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/aboutus/news">
+			<a class="nav-link main-menu-link" href="/aboutus/news">
 				<span class="fas fa-info-circle"></span> 
 				{% trans "About Us" %} 
 			</a>
 		</li>
 		<li id="menu-photos" class="nav-item{% if '/photos/' in request.path and '/outreach/' not in request.path %} active{% endif %}">
-			<a class="nav-link" href="/photos/">
+			<a class="nav-link main-menu-link" href="/photos/">
 				<span class="fas fa-camera"></span> 
 				{% trans "Photo" %} 
 			</a>
 		</li>
 		<!--<li id="menu-inventory" {% if '/inventory/' in request.path %}class='active'{% endif %}><a href="/inventory/"><span class="icon-list-ul navbar-icon"></span> {% trans "Datasets" %} </a></li>-->
 		<li id="menu-vis" class="nav-item{% if '/modis/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/modis/visualization/">
+			<a class="nav-link main-menu-link" href="/modis/visualization/">
 				<span class="fas fa-globe-americas"></span> 
 				{% trans "MODIS" %}
 			</a>
 		</li>
 		<li id="menu-geohealth" class="nav-item{% if '/geohealth/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/geohealth/">
+			<a class="nav-link main-menu-link" href="/geohealth/">
 				<span class="fas fa-heartbeat"></span>
 				 {% trans "GeoHealth" %}
 			</a>
 		</li>
 		<li id="menu-gis" class="nav-item{% if '/outreach/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/outreach/gisday/">
+			<a class="nav-link main-menu-link" href="/outreach/gisday/">
 				<span class="fas fa-rss"></span> 
 				{% trans "Outreach" %}
 			</a>
 		</li>
 		<li id="menu-water" class="nav-item{% if '/water/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/water/">
+			<a class="nav-link main-menu-link" href="/water/">
 				<span class="fa fa-tint"></span>
 				{% trans "Water" %}
 			</a>
 		</li>
 		<li id="menu-account" class="nav-item{% if '/accounts/' in request.path %} active{% endif %}">
-			<a class="nav-link" href="/accounts/">
+			<a class="nav-link main-menu-link" href="/accounts/">
 				<span class="fa fa-user"></span> 
 				{% trans "Account" %}
 			</a>
