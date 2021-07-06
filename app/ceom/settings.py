@@ -192,8 +192,7 @@ INSTALLED_APPS = [
     'ceom.towers',
     'ceom.maps',
     'ceom.water',
-    #'aoitest',
-    #'poi',
+    'ceom.poi',
 
     
     #'olwidget',

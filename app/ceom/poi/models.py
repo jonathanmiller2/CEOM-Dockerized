@@ -18,7 +18,7 @@ class Pixel(models.Model):
     v = models.IntegerField(null=False, blank=False)
     col = models.IntegerField(null=False, blank=False)
     row = models.IntegerField(null=False, blank=False)
-    dataset = models.ForeignKey(PixelDataset, null=False, blank=False)
+    dataset = models.ForeignKey(PixelDataset, null=False, blank=False, on_delete=models.CASCADE)
     
     class Meta:
         unique_together = (('h', 'v','col','row','dataset'),)
@@ -27,19 +27,19 @@ class Pixel(models.Model):
         
 
 class PixelValidation(models.Model):
-    pixel = models.ForeignKey(Pixel, null=False, blank=False)
-    user = models.ForeignKey(User, null=False, blank=False)
-    date_done = models.DateField(auto_now=True, auto_now_add=False)
-    date_of_map = models.DateField(auto_now=True, auto_now_add=False)
+    pixel = models.ForeignKey(Pixel, null=False, blank=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
+    date_done = models.DateField(auto_now=True)
+    date_of_map = models.DateField()
     notes = models.TextField(blank=True)
-    photo_used = models.ForeignKey(Photo, null=True, blank=True)
+    photo_used = models.ForeignKey(Photo, null=True, blank=True, on_delete=models.CASCADE)
    
     def __str__(self):
         return '%s -- %s' % (self.pixel,self.user) 
 
 class PixelValidationLandcover(models.Model):
-    validation = models.ForeignKey(PixelValidation, null=False, blank=False)
-    category = models.ForeignKey(Category, null=False,blank=False)
+    validation = models.ForeignKey(PixelValidation, null=False, blank=False, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, null=False,blank=False, on_delete=models.CASCADE)
     percentage = models.IntegerField(null=False, blank=False)
 
     class Meta:
@@ -50,19 +50,20 @@ class PixelValidationLandcover(models.Model):
 class Research(models.Model):
     name = models.CharField(max_length=100,blank=False, null=False, unique=True)
     description = models.TextField(blank=False, null=False)
-    user = models.ForeignKey(User, null=False, blank=False)
-    created = models.DateField(auto_now=False, auto_now_add=True)
-    modified =  models.DateField(auto_now=True, auto_now_add=True)
+    user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
+    created = models.DateField(auto_now_add=True)
+    modified =  models.DateField(auto_now=True)
     order = models.IntegerField(null=True, blank = True)
     def __str__(self):
         return '%s' % (self.name)
+
 class ResearchPixel(models.Model):
-    pixel = models.ForeignKey(Pixel, null=False, blank=False)
-    research = models.ForeignKey(Research, null=False, blank=False)
-    user = models.ForeignKey(User, null=False, blank=False)
+    pixel = models.ForeignKey(Pixel, null=False, blank=False, on_delete=models.CASCADE)
+    research = models.ForeignKey(Research, null=False, blank=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
     private_id = models.CharField(max_length=30, null=True, blank = True)
-    created = models.DateField(auto_now=False, auto_now_add=True)
-    modified =  models.DateField(auto_now=True, auto_now_add=True)
+    created = models.DateField(auto_now_add=True)
+    modified =  models.DateField(auto_now=True)
     lat = models.FloatField(null=False, blank=False)
     lon = models.FloatField(null=False, blank=False)
     class Meta:

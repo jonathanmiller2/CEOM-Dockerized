@@ -1,20 +1,20 @@
 # Create your views here.
 from .models import *
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import Context, RequestContext, loader
 from .forms import AddPixelToResearchForm, ResearchForm,ResearchFormEdit
 from django.http import HttpResponse, HttpResponseRedirect
-import simplejson
+import json
 from django.db import connection
 from json import dumps, loads, JSONEncoder
 from django.core.serializers import serialize
-from math import floor, cos, radians,pi
+from math import floor, cos, radians, pi
 from django.db import connection
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 
 def home(request):
-    return render_to_response("poi/index.html", {}, context_instance=RequestContext(request))
+    return render(request, "poi/index.html")
 
 def wpixel(request):
 
@@ -44,7 +44,7 @@ def getPixelFromLatLon( lat, lon, res_id):
 def add_research_pixels(request):
    if (request.user.is_authenticated):
         try:
-            data=simplejson.loads(request.raw_post_data)
+            data=json.loads(request.raw_post_data)
             selected_project_id = int(data['projectId'])
             resolution_id = data['resolution']
             research = Research.objects.get(id=selected_project_id,user=request.user)
@@ -55,7 +55,7 @@ def add_research_pixels(request):
                     errormsg = {
                         'error': "1:User must be logged in and project must belong to him. Data must be included in an array " + str(pixels[line])
                     }
-                    return HttpResponse(simplejson.dumps(errormsg))
+                    return HttpResponse(json.dumps(errormsg))
             #All data is fine, now we need to save it (except for duplicates)
             duplicated = 0;
             pixel_dataset = PixelDataset.objects.get(id=resolution_id)
@@ -94,7 +94,7 @@ def add_research_pixels(request):
                 'saved': len(pixels)-duplicated,
                 'id':str(data['projectId']),
             } 
-            return HttpResponse(simplejson.dumps(successmsg))
+            return HttpResponse(json.dumps(successmsg))
         except Exception as e:
             # exc_type, exc_obj, exc_tb = sys.exc_info()
             # fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -109,7 +109,7 @@ def add_research_pixels(request):
                 'fname':str(fname),
                 'exc_tb.tb_lineno':str(exc_tb.tb_lineno),
             }
-            return HttpResponse(simplejson.dumps(errormsg))
+            return HttpResponse(json.dumps(errormsg))
 
 def my_custom_sql(sql, params):
     cursor = connection.cursor()
@@ -128,12 +128,12 @@ def get_research_pois(request,research_id):
     if request.user.is_authenticated():
         pois =  ResearchPixel.objects.filter(user=request.user,research_id=research_id)
         pois_serialized = loads(serialize('json', pois,  relations={'pixel':{'relations':('dataset',)},}))
-        return HttpResponse(simplejson.dumps(pois_serialized))
+        return HttpResponse(json.dumps(pois_serialized))
     else:
         errormsg = {
                 'error': "Must be logged in to retrieve this information"
             } 
-        return HttpResponse(simplejson.dumps(errormsg))
+        return HttpResponse(json.dumps(errormsg))
 @login_required
 def create_research(request):
     if request.method == 'POST':
@@ -224,10 +224,10 @@ def addPixelValidation(request):
         #     error = {
         #        'error': 'this API requires ajax and use its interface',
         #     }
-        #     return HttpResponse(simplejson.dumps(error))
+        #     return HttpResponse(json.dumps(error))
         #Read parameters    
         
-        data=simplejson.loads(request.raw_post_data)
+        data=json.loads(request.raw_post_data)
         resolution = data["resolution"];
         h = data["h"];
         v = data["v"];
@@ -249,24 +249,24 @@ def addPixelValidation(request):
             error = {
                'error': 'resolution not supported',
             }
-            return HttpResponse(simplejson.dumps(error))
+            return HttpResponse(json.dumps(error))
         #MAke sure that h,v,c, and r are in proper range
         if h<0 or h>35 or v<0 or v>17:
             error = {
                 'error': 'h or v values are out of range',
             }
-            return HttpResponse(simplejson.dumps(error))
+            return HttpResponse(json.dumps(error))
         if (c<0 or r<0  or (resolution==250 and (c>4800 or r>4800)) or (resolution==500 and (c>2400 or r>2400)) or (resolution==1000 and (c>1200 or r>1200))):
             error = {
                 'error': 'c or r values are out of range',
             }
-            return HttpResponse(simplejson.dumps(error))
+            return HttpResponse(json.dumps(error))
         #Make sure that at least one landover type was sent
         if (lc1_id==None and lc2_id==None and lc3_id==None):
             error = {
                 'error': 'no landcover type selected',
             }
-            return HttpResponse(simplejson.dumps(error))
+            return HttpResponse(json.dumps(error))
         
 
 
@@ -282,7 +282,7 @@ def addPixelValidation(request):
                 error = {
                     'error': 'Percentages of all landcover types must sum 100%',
                 }
-                return HttpResponse(simplejson.dumps(error))
+                return HttpResponse(json.dumps(error))
             
             try:
                 a=4
@@ -302,13 +302,13 @@ def addPixelValidation(request):
                 error = {
                     'error': 'landcover types must be different',
                 }
-                return HttpResponse(simplejson.dumps(error))
+                return HttpResponse(json.dumps(error))
             # The total percentage must be 100%
             if (lc1_p+lc2_p!=100):
                 error = {
                     'error': 'Percentages of all landcover types must sum 100%',
                 }
-                return HttpResponse(simplejson.dumps(error))
+                return HttpResponse(json.dumps(error))
             #Check if pixel exists in database
             try:
                 pix = Pixel.objects.get(h=h,v=v,col=c,row=r, dataset=dataset)
@@ -329,12 +329,12 @@ def addPixelValidation(request):
                 error = {
                     'error': 'landcover types must be different',
                 }
-                return HttpResponse(simplejson.dumps(error))
+                return HttpResponse(json.dumps(error))
             if (lc1_p+lc2_p+lc3_p!=100):
                 error = {
                     'error': 'Percentages of all three landcover types must sum 100%',
                 }
-                return HttpResponse(simplejson.dumps(error))
+                return HttpResponse(json.dumps(error))
 
             # pix = Pixel.objects.get(h=h,v=v=,col=c,row=r,dataset=dataset)
             try:
@@ -357,11 +357,11 @@ def addPixelValidation(request):
         msg = {
                 'success': 'Success adding pixel landcover validation',
             } 
-        return HttpResponse(simplejson.dumps(msg))
+        return HttpResponse(json.dumps(msg))
     except :
         exc_type, exc_obj, exc_tb = sys.exc_info()
         errormsg = {
                 'error': "Unknown error: %d %s, %s, %s" % (a,exc_type,exc_obj,exc_tb)
             } 
-        return HttpResponse(simplejson.dumps(errormsg))
+        return HttpResponse(json.dumps(errormsg))
 
