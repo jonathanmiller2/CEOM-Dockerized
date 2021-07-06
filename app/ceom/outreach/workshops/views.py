@@ -125,7 +125,6 @@ def workshop_registration(request, workshop_id):
         return render(request, 'workshops/not_found.html')
 
     #TODO: If we're passing the whole workshop, why do we need to pass the individual parts of the workshop?
-    #TODO: Why is show_registration always returning false? Remove it
     data['available_years'] = available_years
     data['workshop'] = workshop
     data['title'] = workshop.name

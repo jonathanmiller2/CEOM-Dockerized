@@ -2,7 +2,7 @@
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from ceom.aboutus.models import Post, Group, Person, GalleryPhoto
+from ceom.aboutus.models import Post, Person, GalleryPhoto
 from itertools import chain
 from operator import attrgetter
 from datetime import date
@@ -12,12 +12,11 @@ def news(request):
     return render(request, 'aboutus/news.html', context={'posts': posts})
 
 def people(request):
-    people = Person.objects.all().order_by('group__order', 'alumni_group__order','order', 'last_name')
-    return render(request, 'aboutus/people.html', context={
-        'people': people,
-        'cu':[1,2,3,4,5,6,7,8,9],
-        'alum':[10,11,12,13,14,15,16,17,18,19],
-    })
+    data = {}
+
+    data['people'] = Person.objects.all().order_by('category__order', 'order', 'last_name')
+    
+    return render(request, 'aboutus/people.html', context=data)
 
 def group_photos(request, selYear = None):
     available_years=GalleryPhoto.objects.all().values_list('year', flat=True).order_by('-year')

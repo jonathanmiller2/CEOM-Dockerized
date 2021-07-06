@@ -54,6 +54,15 @@
         position: absolute;
         bottom: 0;
     }
+
+    .category-label {
+        overflow: hidden;
+        white-space:nowrap;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+        display: block;
+        width: 150px;
+    }
 </style>
 
 {% load photos_tags %}
@@ -97,7 +106,7 @@
                 <li>{{photo.point|point2str}}</li>
                 {% endif %}
                 {% if photo.category %}
-                <li>{% trans photo.category.name %}</li>
+                <li class='category-label'>{% trans photo.category.name %}</li>
                 {% else %}
                 <li>{% trans "Category not set" %}</li>
                 {% endif %}

@@ -1,4 +1,4 @@
-from ceom.aboutus.models import Post, PostImage, Group, Person, GalleryPhoto
+from ceom.aboutus.models import Post, PostImage, Person, GalleryPhoto, Category
 from django.contrib import admin
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -23,12 +23,12 @@ class PostAdmin(admin.ModelAdmin):
 admin.site.register(Post, PostAdmin)
 
 class PersonAdmin(admin.ModelAdmin):
-	list_display = ('first_name', 'middle_name', 'last_name', 'title', 'group', 'link','date')
+	list_display = ('first_name', 'middle_name', 'last_name', 'title', 'category', 'date')
 	list_filter = ['date']
 	search_fields = ['title']
 	date_hierarchy = 'date'
 
-class GroupAdmin(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
 	list_display = ('name','order')
 
 class GalleryPhotoAdmin(admin.ModelAdmin):
@@ -38,5 +38,5 @@ class GalleryPhotoAdmin(admin.ModelAdmin):
 	
 admin.site.register(GalleryPhoto, GalleryPhotoAdmin)
 admin.site.register(Person, PersonAdmin)
-admin.site.register(Group, GroupAdmin)
+admin.site.register(Category, CategoryAdmin)
 

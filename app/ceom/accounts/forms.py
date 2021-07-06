@@ -230,7 +230,7 @@ class ProfileForm(InitModelForm):
     class Meta:
         model = Profile
         fields = (
-            'country',          #TODO: Why is listing the fields here nescessary? What does it do when we remove these?
+            'country',
             'affiliation',
             'address1',
             'address2',

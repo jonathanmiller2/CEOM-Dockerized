@@ -1,4 +1,3 @@
-#TODO: Are these imports necessary?
 from django.conf.urls import *
 from django.views.generic import TemplateView
 
@@ -29,12 +28,7 @@ urlpatterns = [
 	re_path(r'^(?P<year>[0-9]{4})/image-gallery', ceom.outreach.gisday.views.images),
     re_path(r'^(?P<year>[0-9]{4})/survey/', ceom.outreach.gisday.views.survey),
     re_path(r'^(?P<year>[0-9]{4})/survey', ceom.outreach.gisday.views.survey),
-    # re_path(r'^(?P<year>[0-9]{4})/demographic_survey', ceom.outreach.gisday.views.demographic_survey),
-
-	# TODO: Is this needed?
-	#(r'^(?P<year>[0-9]{4})/demograpichs_survey','demographic_survey),
     re_path(r'^(?P<year>[0-9]{4})/$', ceom.outreach.gisday.views.announcements),
     re_path(r'^(?P<year>[0-9]{4})/booth/$', ceom.outreach.gisday.views.booth),
     re_path(r'^(?P<year>[0-9]{4})/volunteer/$', ceom.outreach.gisday.views.volunteer),
 ]
-# [\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}

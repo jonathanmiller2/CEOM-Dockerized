@@ -10,7 +10,6 @@ services:
                       python manage.py migrate --noinput -v 1 && 
                       python manage.py check &&
                       python manage.py collectstatic --noinput &&
-                      python manage.py compilemessages &&
                       gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
                       
                       #     This is used to fix having multiple leaf nodes in the migration tree.
@@ -36,6 +35,7 @@ services:
                       
                       #      This is for the translation system.
                       #python manage.py makemessages --all &&
+                      #python manage.py compilemessages &&
 
                       #      Helpful for weird sync issues (such as django trying to delete tables that are already deleted)
                       #python manage.py migrate --fake
@@ -45,7 +45,7 @@ services:
     expose:
       - 8000
     env_file:
-      - ./.env.prod #TODO: RESTRICT HOSTNAME IN THE ENV FILE
+      - ./.env.prod
 
   nginx:
     container_name: ceom_nginx

@@ -1,7 +1,3 @@
-#TODO: Are these imports necessary?
-from django.conf.urls import *
-from django.views.generic import RedirectView
-
 from django.urls import re_path
 import ceom.photos.views
 
@@ -35,4 +31,5 @@ urlpatterns = [
     re_path(r'^gmapclusters.kml$', ceom.photos.views.gmapclusters),
     re_path(r'^gmapclusters.php$', ceom.photos.views.gmapclusters),
     re_path(r'^photos.json$', ceom.photos.views.photos_json),
+    re_path(r'^map_gallery.html$', ceom.photos.views.map_gallery),
 ]
