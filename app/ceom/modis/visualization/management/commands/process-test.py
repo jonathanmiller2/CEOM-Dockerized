@@ -2,7 +2,7 @@ import sys, os
 sys.path.append('/data1/pavel/dev/')
 import process
 from django.core.management.base import NoArgsCommand
-from ceom.visualization.models import TimeSeriesJob
+from ceom.modis.visualization.models import TimeSeriesJob
 from ceom.inventory.models import Dataset
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files import File

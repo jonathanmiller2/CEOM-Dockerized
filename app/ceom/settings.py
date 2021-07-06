@@ -179,8 +179,8 @@ INSTALLED_APPS = [
     'ceom.accounts',
     'ceom.photos',
     'ceom.publications',
-    'ceom.inventory',
-    'ceom.visualization',
+    'ceom.modis.inventory',
+    'ceom.modis.visualization',
     'ceom.geohealth',
     'ceom.pages',
     'ceom.birds',
@@ -192,8 +192,7 @@ INSTALLED_APPS = [
     'ceom.towers',
     'ceom.maps',
     'ceom.water',
-    #'aoitest',
-    #'poi',
+    'ceom.poi',
 
     
     #'olwidget',

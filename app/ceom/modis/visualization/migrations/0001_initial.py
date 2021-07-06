@@ -4,7 +4,7 @@ from django.conf import settings
 import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
-import ceom.visualization.models
+import ceom.modis.visualization.models
 import re
 
 
@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('sender', models.EmailField(blank=True, max_length=150, null=True, verbose_name='Additional sender')),
-                ('points', models.FileField(max_length=150, upload_to='visualization/timeseries/input', validators=[ceom.visualization.models.checkFormat], verbose_name='Upload csv file')),
+                ('points', models.FileField(max_length=150, upload_to='visualization/timeseries/input', validators=[ceom.modis.visualization.models.checkFormat], verbose_name='Upload csv file')),
                 ('result', models.FileField(blank=True, max_length=300, null=True, upload_to='visualization/timeseries/multi')),
                 ('years', models.CharField(max_length=200, validators=[django.core.validators.RegexValidator(re.compile('^\\d+(?:,\\d+)*\\Z'), code='invalid', message='Enter only digits separated by commas.')], verbose_name='Select years')),
                 ('completed', models.BooleanField(default=False)),

@@ -1,4 +1,4 @@
-from ceom.inventory.models import *
+from ceom.modis.inventory.models import *
 from django.contrib import admin
 
 class DatasetAdmin(admin.ModelAdmin):

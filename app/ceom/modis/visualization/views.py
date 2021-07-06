@@ -2,10 +2,10 @@ from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.files.base import ContentFile
-from ceom.inventory.models import Dataset
+from ceom.modis.inventory.models import Dataset
 from ceom.photos.models import Category, Photo
-from ceom.visualization.models import TimeSeriesJob,  SingleTimeSeriesJob #,Datainfo, Datatype
-from ceom.visualization.forms import ProductSelect, TimeSeriesJobForm
+from ceom.modis.visualization.models import TimeSeriesJob,  SingleTimeSeriesJob #,Datainfo, Datatype
+from ceom.modis.visualization.forms import ProductSelect, TimeSeriesJobForm
 
 #TODO: Are these imports necessary?
 #from django.template.context_processors import csrf

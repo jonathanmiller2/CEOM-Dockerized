@@ -80,7 +80,7 @@ def getuser(request):
 
 def ROI(request):
     t = loader.get_template('maps/roi.html')
-    c = RequestContext(request,{})
+    c = {}
     if request.method == 'POST':
         # do something here
         # For now print the form back
@@ -105,19 +105,19 @@ def ROI(request):
             v.user = getuser(request)
             v.save()
             xform = roiForm()
-            c = RequestContext(request,{'form':xform,'success_roi':True})
+            c = {'form':xform,'success_roi':True}
             return HttpResponse(t.render(c))
         else:
             return HttpResponse("Something went wrong. Please contact the administrator.")
     else:
         form = roiForm()
-        c = RequestContext(request,{'form':form})
+        c = {'form':form}
         return HttpResponse(t.render(c))
 
 
 def POI(request):
     t = loader.get_template('maps/poi.html')
-    c = RequestContext(request,{})
+    c = {}
     x_form = PoiForm()
     if request.method == 'POST':
         # do something here
@@ -129,10 +129,10 @@ def POI(request):
             v.user = getuser(request)
             v.save()
             xform = PoiForm()
-            c = RequestContext(request,{'form':xform,'success_poi':True})
+            c = {'form':xform,'success_poi':True}
             return HttpResponse(t.render(c))
     else:
-        c = RequestContext(request,{'form':x_form})
+        c = {'form':x_form}
         return HttpResponse(t.render(c))
 
 
@@ -140,21 +140,21 @@ def VIEW_ROI(request):
     t = loader.get_template('maps/viewroi.html')
     roi_data = roi.objects.all() # sending all objects and rendering them to HTML
     classification = Category.objects.all().order_by('order')
-    c = RequestContext(request,{'rois':roi_data, 'classif':classification})
+    c = {'rois':roi_data, 'classif':classification}
     return HttpResponse(t.render(c))
 
 
 def VIEW_POI(request):
     t = loader.get_template('maps/viewpoi.html')
     poi_data = poi.objects.all() # sending all objects and rendering them to HTML
-    c = RequestContext(request,{'pois':poi_data,})
+    c = {'pois':poi_data,}
     return HttpResponse(t.render(c))
 
 
 def VIEW_MAPS(request):
     t = loader.get_template('maps/map_gallery.html')
     maps = map_gallery.objects.all()
-    c = RequestContext(request,{'maps':maps})
+    c = {'maps':maps}
     return HttpResponse(t.render(c))
 
 def DETAIL_MAP(request, id):
@@ -171,7 +171,7 @@ def DETAIL_MAP(request, id):
             return HttpResponse("<b>Something wrong with the comment</b>")
     comment_form = CommentForm()
     comments = map_detail.comment.all()
-    c = RequestContext(request,{'x':map_detail, 'form':comment_form, 'comments':comments})
+    c = {'x':map_detail, 'form':comment_form, 'comments':comments}
     return HttpResponse(t.render(c))
 
 def ADD_MAPS(request):
@@ -184,13 +184,13 @@ def ADD_MAPS(request):
             v.user =  getuser(request)
             v.save()
             xform = map_gallery_form()
-            c = RequestContext(request,{'map_form':xform, 'SuccessForm':True})
+            c = {'map_form':xform, 'SuccessForm':True}
             return HttpResponse(t.render(c))
         else:
             return HttpResponse("<b>Something went wrong: Form not valid</b>")
     elif request.method == 'GET':
         form = map_gallery_form()
-        c = RequestContext(request,{'map_form':form})
+        c = {'map_form':form}
         return HttpResponse(t.render(c))
     else:
         return HttpResponse("<b>No GET or POST received</b>")
@@ -267,5 +267,5 @@ def filter_kml(request):
         return result
     else:
         x = roiForm()
-        c = RequestContext(request,{'form':x})
+        c = {'form':x}
         return HttpResponse(t.render(c))

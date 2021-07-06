@@ -1,4 +1,4 @@
-from ceom.visualization.models import *
+from ceom.modis.visualization.models import *
 from django.contrib import admin
 
 class TimeSeriesJobAdmin(admin.ModelAdmin):
