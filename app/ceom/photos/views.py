@@ -641,6 +641,7 @@ def edit(request, id):
                                 return redirect('/photos/user')
                     else:
                         return HttpResponseRedirect("/accounts/login")
+                return HttpResponseRedirect("/photos/browse/")
             else:
                 f = PhotoForm(instance=photo)
 
