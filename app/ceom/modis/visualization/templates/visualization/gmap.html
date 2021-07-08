@@ -515,7 +515,7 @@ var showResults = function(){
 {% block body_tag %}<body bgcolor="#FFFFFF">{% endblock %}
 {% block content %}
 
-<div class="span12 well">
+<div>
 	<div id="accordion">
 	  <h3 style="color:#999900;"><strong>{% trans "Instructions" %}</strong></h3>
 	  	<div>
@@ -544,95 +544,100 @@ var showResults = function(){
 	</div>
   <h2 style="color: #dc143c;">{% trans "Retrieve time series MODIS data for a single study site" %}</h2>
 
-	<legend><strong>{% trans "1a.Select an address or a Point on the Map / 1b.Enter the latitude & longitude information" %}</strong> </legend>
+	<legend><strong>{% trans "1a.Select an address or a Point on the Map" %}</strong> </legend>
 
-	<div id="div_address" class="span4"> 
-	     <p>{% trans "Enter the address" %}:</p>
-	    <input id="Taddress" type = "text" name = "address" class="span10">
-	    <button id="addresGo" onclick="showAddress();" class="span3 offset4">{% trans "Go" %}</button>
-	    <script type="text/javascript">
-	        $("#Taddress").keyup(function(event){
-	            if(event.keyCode == 13){
-	                $("#addresGo").click();
-	            }
-	        });
-	    </script>
-	</div>
-	<div class="span7">
-		<div class="span2">
-			<p>{% trans "Latitude" %}:</p>
-			<br \>
-			<p>{% trans "Longitude" %}:</p>
-		</div>
-		<div class="span9">	
-			<input id="LAT_DEG" class="span4" type="number" step="1" placeholder="Degrees">
-			<input id="LAT_MIN" class="span4" type="number" step="1" placeholder="Minutes">
-			<input id="LAT_SEC" class="span4" type="number" step="any" placeholder="Seconds">
-			<input id="LON_DEG" class="span4" type="number" step="1" placeholder="Degrees">
-			<input id="LON_MIN" class="span4" type="number" step="1" placeholder="Minutes">
-			<input id="LON_SEC" class="span4" type="number" step="any" placeholder="Seconds">
-		</div>
-		<div class="span1">
-			<br \>
-			<button onclick="enterCoordsDMS();">{% trans "Go" %}</button>
-		</div>
-		<div class="span12">
-			<p class="text-left span12"> {% trans "or enter <strong>Decimal degrees</strong> below:" %}</p>
-			<input id="LAT_DEC" class="span4 offset1" type="number" step="any" placeholder="Latitude">
-			<input id="LON_DEC" class="span4 offset1" type="number" step="any" placeholder="Longitude">
-			<button id="RedirectControl" onclick="enterCoordsLatLon();" name="RedirectControl">{% trans "Go" %}</button>
+	<div id="div_address"> 
+        <div class="row">
+            <label class="col-sm-2 my-1">Enter the address:</label>
+            <input class="form-control col-sm-3 mx-2 my-1" id="Taddress" type = "text" name = "address">
+            <button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1" id="addresGo" onclick="showAddress();" style="border-width: 1.6px;">{% trans "Go" %}</button>
+            <script type="text/javascript">
+                $("#Taddress").keyup(function(event){
+                    if(event.keyCode == 13){
+                        $("#addresGo").click();
+                    }
+                });
+            </script>
+	    </div>
+    </div>
+    <p><b>(OR)</b></p>
+	<div>
+        <legend class="pt-2"><strong>{% trans "1b.Enter the latitude & longitude information" %}</strong> </legend>
+		<div class="row">
+            <label class="col-sm-2 my-1 pt-1">Latitude:</label>
+            <input id="LAT_DEG" class="form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Degrees">
+            <input id="LAT_MIN" class="form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Minutes">
+			<input id="LAT_SEC" class="form-control col-sm-2 mx-2 my-1" type="number" step="any" placeholder="Seconds">
+        </div>
+        
+        <div class="row">
+            <label class="col-sm-2 my-1 pt-1">Longtitude:</label>
+            <input id="LON_DEG" class="form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Degrees">
+			<input id="LON_MIN" class="form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Minutes">
+			<input id="LON_SEC" class="form-control col-sm-2 mx-2 my-1" type="number" step="any" placeholder="Seconds">
+            <button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1" onclick="enterCoordsDMS();" style="border-width: 1.6px;">{% trans "Go" %}</button>
+        </div>
+        <label class="pt-2 my-1">or enter <strong>Decimal degrees</strong> below:</label>
+        <div class="row">
+			<input id="LAT_DEC" class="form-control col-sm-2 mx-2 my-1 offset1" type="number" step="any" placeholder="Latitude">
+			<input id="LON_DEC" class="form-control col-sm-2 mx-2 my-1 offset1" type="number" step="any" placeholder="Longitude">
+			<button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1"id="RedirectControl" onclick="enterCoordsLatLon();" name="RedirectControl" style="border-width: 1.6px;">Go</button>
 		</div>
 	</div>
 
-    <div class="span12 offset3" style="padding-top:10px;">
+    <div class="pt-2">
 	<p><b>(OR)</b></p>
     </div>
 	<legend class="text-left"><strong>{% trans "1c. Zoom-in the map and then click on a point of interest" %} </strong></legend>
-	<div id="div_gmap" class="span12">
+	<div id="div_gmap">
 		<div id="map" style="margin-left:auto;margin-right:auto;width: 90%; height: 450px"></div>
     </div>
 
-    <div id="div_gmap" class="span12">
-		<span class="span3"><input type="checkbox" id="auto_zoom" name="auto_zoom" checked/> Zoom to Modis Pixel   </span>
-     <div class="span3" id="resolution_disp" style="color:navy;" ><span style="background-color:white;">Current Resolution:</span></div>
-     <div class="span6">
-   <small><span style="color:blue;">Blue pixel : 250 M</span> |
-    <span style="color:red;">Red pixel : 500 M</span> |
-        <span style="color:green;">Green pixel : 1000 M/1 KM</span></small>
-    </div>
-    </div>
-	<legend class="text-left"><strong>{% trans "2. Select a product and year(s)" %} </strong></legend>
-        <div class="row-fluid">
-          <div class="span12" style="margin-left: 0;">
-              <div class="span2 offset1">
-                  <label>{% trans "Dataset" %}</label>
-                  <select id="datasetPane" class="span12" size="4"  disabled>
-                    {% for d in datasets %}
-                      <option value ="{{d|lower}}" npix="{{d.xdim}}" title="{{d.long_name}}">{{d|upper}}</option>
-                    {% endfor %}
-                  </select>
-              </div>
-              <div class="span5" id="Modis_long">
-                
-              </div>
-              <div class="span2 offset1" >
-                  <label>{% trans "Year" %}</label>
-                  <select id="yearsPane" class="span12" multiple="multiple" disabled>
-                      {% for y in years %}
-                      <option value="{{y}}">{{y}}</option>
-                      {% endfor %}
-                  </select>
-              </div>
-            <legend class="text-left"><strong>{% trans "3. Submit your request" %}</strong></legend>
-              
-            <div class="span3 offset4">
-                    <button class="btn btn-primary" onclick="showResults();">{% trans "Submit" %}</button>
-                    <button class="btn btn-info" onclick="resetValues();">{% trans "Reset" %}</button>
-
+    <div id="div_gmap">
+        <div class="row">
+            <div class="col-sm-3">
+                <input type="checkbox" id="auto_zoom" name="auto_zoom" checked/> Zoom to Modis Pixel</div>
+            <div class="col-sm-3" id="resolution_disp" style="color:navy;" ><label style="background-color:white;">Current Resolution:</label></div>
+            <div class="col-sm-5">
+                <small>
+                    <label style="color:blue;">Blue pixel : 250 M</label> |
+                    <label style="color:red;">Red pixel : 500 M</label> |
+                    <label style="color:green;">Green pixel : 1000 M/1 KM</label>
+                </small>
             </div>
+        </div>
+	<legend class="text-left"><strong>{% trans "2. Select a product and year(s)" %} </strong></legend>
+    <div>
+        <div class="row">
+            <div class="col-lg">
+                <label class="col-sm-1">{% trans "Dataset" %}</label>
+                <select id="datasetPane" class="form-control col-sm-6" size="4"  disabled>
+                    {% for d in datasets %}
+                    <option value ="{{d|lower}}" npix="{{d.xdim}}" title="{{d.long_name}}">{{d|upper}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="Modis_long">
+                
+            </div>
+            <div class="col-lg">
+                <label class="col-sm-1">{% trans "Year" %}</label>
+                <select id="yearsPane" class="form-control col-sm-6" multiple="multiple" disabled>
+                    {% for y in years %}
+                    <option value="{{y}}">{{y}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <legend class="text-left mt-2"><strong>{% trans "3. Submit your request" %}</strong></legend>
             
-           </div>
-         </div>
+        <div align="center" class="mr-5">
+                <button class="btn btn-primary" onclick="showResults();">{% trans "Submit" %}</button>
+                <button class="btn btn-info" onclick="resetValues();">{% trans "Reset" %}</button>
+        </div>
+        
+    
+        </div>
 
 </div>
 
