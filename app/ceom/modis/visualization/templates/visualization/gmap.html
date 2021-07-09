@@ -183,6 +183,15 @@
 
         return [degree, minute, second];
     }
+    function DMSChanged() {
+    ... get new DMS coords (just reading from the fields, not using (this.value)...
+
+    ... update Decimal degrees fields...
+
+    ...update map...
+    }
+
+
 </script>
 <script>
     var startLocation = {
@@ -220,8 +229,16 @@
 
         $('#LAT_DEC').val(lat)
         $('#LON_DEC').val(lon)
-    });
 
+        
+    });
+    
+    $("#LAT_DEG").change(DMSChanged)
+    $("#LAT_MIN").change(DMSChanged)
+    $("#LAT_SEC").change(DMSChanged)
+    $("#LON_DEG").change(DMSChanged)
+    $("#LON_MIN").change(DMSChanged)
+    $("#LON_SEC").change(DMSChanged)
     google.maps.event.addListener(marker, 'dragstart', function (evt) {
         $('#current').html('<p>Currently dragging marker...</p>')
     });
@@ -229,8 +246,21 @@
     map.setCenter(marker.position);
     marker.setMap(map);
 
-    $( "#current" ).change(function() {
-        console.log("changed");
+    $( "#LAT_DEG" ).change(function() {
+        console.log(this.value);
     });
+
+    function DMSChanged() {
+        console.log("a");
+    }
+
+    $("#LAT_DEG").change(DMSChanged)
+
+    function DMSChanged() {
+        console.log("b");
+    }
+
+    $("#LAT_MIN").change(DMSChanged)
+
 </script>
 {% endblock %}
