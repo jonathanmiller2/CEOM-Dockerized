@@ -582,74 +582,82 @@ def batchedit(request):
 def edit(request, id):
     if request.user.is_authenticated==False:
         return redirect('/photos/')
-    else:
-        photo = Photo.objects.get(pk=id)
-        if photo.user != request.user:
-            return redirect('/photos/')
-        if photo.status == 0:
-            return HttpResponse("<h2>Requested Photo Not Found</h2>")
+    
+    photo = Photo.objects.get(pk=id)
+    if photo.user != request.user and not request.user.is_superuser:
+        return redirect('/photos/')
+
+    if photo.status == 0:
+        return HttpResponse("<h2>Requested Photo Not Found</h2>")
+        
+    if request.method == 'POST':
+        photo = Photo.objects.get(id=id)
+        photo._lat = float(request.POST['lat'])
+        photo._lon = float(request.POST['lon'])
+
+        if(request.POST['alt']):
+            photo.alt = request.POST['alt']
         else:
-            if request.method == 'POST':
-                f = PhotoForm(request.POST, instance=photo)
-                if f.is_valid():
-                    new_photo = f.save(commit=False)
-                    if f.cleaned_data['point']:
-                        new_photo.point = f.cleaned_data['point']
-                    if f.cleaned_data['lon'] and f.cleaned_data['lon'] != photo.lon:
-                        new_photo.lon = f.cleaned_data['lon']
-                    if f.cleaned_data['lat'] and f.cleaned_data['lat'] != photo.lat:
-                        new_photo.lat = f.cleaned_data['lat']
+            photo.alt = None
 
-                    new_photo.save()
-                
-                if 'del' in request.POST:
-                    photo.status = 0
-                    photo.save()
+        photo.takendate = request.POST['takendate']
+        photo.dir_card = request.POST['dir_card']
+        photo.status = request.POST['status']
+
+        if(request.POST['category']):
+            photo.category = Category.objects.get(name=request.POST['category'])
+        else:
+            photo.category = None
+
+        photo.notes = request.POST['notes']
+        photo.save()
+
+        
+        if 'del' in request.POST:
+            photo.status = 0
+            photo.save()
+            return redirect('/photos/user')
+        
+        if 'Save_and_Goto_Next_Photo' in request.POST:
+            if request.user.is_authenticated:
+                base = Photo.objects.exclude(
+                    status=0
+                ).filter(
+                    uploaddate=photo.uploaddate, user=request.user
+                )
+                if base:
+                    try:
+                        nextphoto = base.filter(id__gt=photo.id).order_by('id')[0]
+                        url = "%s?ref=userph" % reverse('photo-edit', args=[nextphoto.id])
+                        return HttpResponseRedirect(url)
+                    except:
+                        return redirect('/photos/user')
+                else:
                     return redirect('/photos/user')
-                
-                if 'Save_and_Goto_Next_Photo' in request.POST:
-                    if request.user.is_authenticated:
-                        base = Photo.objects.exclude(
-                            status=0
-                        ).filter(
-                            uploaddate=photo.uploaddate, user=request.user
-                        )
-                        if base:
-                            try:
-                                nextphoto = base.filter(id__gt=photo.id).order_by('id')[0]
-                                url = "%s?ref=userph" % reverse('photo-edit', args=[nextphoto.id])
-                                return HttpResponseRedirect(url)
-                            except:
-                                return redirect('/photos/user')
-                        else:
-                            return redirect('/photos/user')
-                    else:
-                        return HttpResponseRedirect("/accounts/login")
-                if 'Save_and_Goto_Prev_Photo' in request.POST:
-                    if request.user.is_authenticated:
-                        base = Photo.objects.exclude(
-                            status=0
-                        ).filter(
-                            uploaddate=photo.uploaddate, user=request.user
-                        )
-                        if base:
-                            try:
-                                nextphoto = base.filter(id__lt=photo.id).order_by('-id')[0]
-                                url = "%s?ref=userph" % reverse('photo-edit', args=[nextphoto.id])
-                                return HttpResponseRedirect(url)
-                            except:
-                                return redirect('/photos/user')
-                    else:
-                        return HttpResponseRedirect("/accounts/login")
-                return HttpResponseRedirect("/photos/browse/")
             else:
-                f = PhotoForm(instance=photo)
+                return HttpResponseRedirect("/accounts/login")
+        if 'Save_and_Goto_Prev_Photo' in request.POST:
+            if request.user.is_authenticated:
+                base = Photo.objects.exclude(
+                    status=0
+                ).filter(
+                    uploaddate=photo.uploaddate, user=request.user
+                )
+                if base:
+                    try:
+                        nextphoto = base.filter(id__lt=photo.id).order_by('-id')[0]
+                        url = "%s?ref=userph" % reverse('photo-edit', args=[nextphoto.id])
+                        return HttpResponseRedirect(url)
+                    except:
+                        return redirect('/photos/user')
+            else:
+                return HttpResponseRedirect("/accounts/login")
+        return HttpResponseRedirect("/photos/browse/")
 
-            return render(request, 'photos/edit.html', {
-                'photo': photo,
-                'form': f,
-                'enable_bootstrap': False,
-            })
+    return render(request, 'photos/edit.html', {
+        'photo': photo,
+        'landcover_categories': Category.objects.all()
+    })
 
 def delete(request, id):
     photo = Photo.objects.get(pk=id)
