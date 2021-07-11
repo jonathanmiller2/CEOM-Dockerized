@@ -32,6 +32,8 @@ urlpatterns = [
     re_path(r'^timeseries/single/start/'+modis_re+'/', ceom.modis.visualization.views.launch_single_site_timeseries),
     re_path(r'^timeseries/single/start/c6/'+modis_re+'/', ceom.modis.visualization.views.launch_single_site_timeseries_c6),
 
+    re_path(r'^geocatter/$', ceom.modis.visualization.views.geocatter),
+
     
     # Now visualization works differently
     # (r'^ascii_'+modis_re+r'.txt$', ceom.modis.visualization.views.ascii'),

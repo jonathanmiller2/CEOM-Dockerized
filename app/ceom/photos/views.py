@@ -73,7 +73,10 @@ def home(request):
 
 
 def search_for_photos(request):
-    photos = Photo.objects.order_by('uploaddate').select_related("category").reverse()
+    if 'sort' in request.POST and request.POST['sort'] == 'taken':
+        photos = Photo.objects.order_by('takendate').select_related("category").reverse()
+    else:
+        photos = Photo.objects.order_by('uploaddate').select_related("category").reverse()
 
     if request.user.is_authenticated:
         photos = photos.filter(Q(status=1) | (Q(status=2) & Q(user=request.user)))
@@ -109,10 +112,10 @@ def search_for_photos(request):
                 bbox = Polygon.from_bbox((l, t, r ,b))
                 photos = photos.filter(point__bboverlaps=bbox)
 
-            if search.cleaned_data['date_min'] is not None and search.cleaned_data['date_min'] != datetime.datetime(1990,1,1):
+            if search.cleaned_data['date_min'] is not None and search.cleaned_data['date_min'] != "" and search.cleaned_data['date_min'] != datetime.datetime(1990,1,1):
                 dmin = search.cleaned_data['date_min']
                 photos = photos.filter(takendate__gt=dmin)
-            if search.cleaned_data['date_max'] is not None and search.cleaned_data['date_max'] != datetime.date.today():
+            if search.cleaned_data['date_max'] is not None and search.cleaned_data['date_min'] != "" and search.cleaned_data['date_max'] != datetime.date.today():
                 dmax = search.cleaned_data['date_max']
                 photos = photos.filter(takendate__lt=dmax)
 
@@ -145,8 +148,9 @@ def search_for_photos(request):
 
 
 def user_photos(request):
+    
     if request.user.is_authenticated:
-        base = Photo.objects.exclude(status=0)
+        base, search = search_for_photos(request)
 
         # if 'sort' in request.GET: #Sorts by Takendate
         #     dates = base.distinct('takendate').filter(user=request.user).order_by('-takendate')
@@ -154,18 +158,12 @@ def user_photos(request):
         #     dates = base.distinct('uploaddate').filter(user=request.user).order_by('-uploaddate')           
         
         data = {}
+        data['search'] = search
 
-        # if 'date' in request.GET:
-        if 'sort' in request.GET:
-            photos = base.filter(user=request.user).order_by('-takendate')
-            if len(photos)>0:
-                if photos[0].takendate:
-                    data['gallerytitle'] = photos[0].takendate
-        else:
-            photos = base.filter(user=request.user).order_by('-uploaddate')
-            if len(photos)>0:
-                if photos[0].uploaddate:
-                    data['gallerytitle'] = photos[0].uploaddate
+        photos = base.filter(user=request.user)
+        if len(photos)>0:
+            if photos[0].takendate:
+                data['gallerytitle'] = photos[0].takendate
         
         
         
@@ -511,7 +509,7 @@ def map_gallery(request):
     id = request.GET['ids']
     x_size = float(request.GET['x_size'])
     page = y_size = float(request.GET['y_size'])
-    ids = get_photos_id_from_cluster_photo_id(request, id,x_size,y_size)
+    ids = get_photos_id_from_cluster_photo_id(request, id, x_size,y_size)
     photos = Photo.objects.filter(id__in=ids.split(','))
 
     page = request.GET.get('page',1)
@@ -592,10 +590,11 @@ def edit(request, id):
         
     if request.method == 'POST':
         photo = Photo.objects.get(id=id)
-        photo._lat = float(request.POST['lat'])
-        photo._lon = float(request.POST['lon'])
+        if request.POST['lat'] and request.POST['lon']:
+            photo.lat = float(request.POST['lat'])
+            photo.lon = float(request.POST['lon'])
 
-        if(request.POST['alt']):
+        if request.POST['alt']:
             photo.alt = request.POST['alt']
         else:
             photo.alt = None
@@ -604,7 +603,7 @@ def edit(request, id):
         photo.dir_card = request.POST['dir_card']
         photo.status = request.POST['status']
 
-        if(request.POST['category']):
+        if request.POST['category']:
             photo.category = Category.objects.get(name=request.POST['category'])
         else:
             photo.category = None

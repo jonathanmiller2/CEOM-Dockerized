@@ -8,6 +8,8 @@ from ceom.photos.models import ContinentBuffered, CountryBuffered
 from django.forms.widgets import SelectDateWidget, Select, TextInput
 from django.utils.translation import ugettext_lazy as _
 
+from django.contrib.admin.widgets import AdminDateWidget
+
 from ceom.photos.models import DIR_CARD_CHOICES
 from ceom.photos.models import STATUS_CHOICES
 
@@ -35,6 +37,8 @@ class BatchEditForm(forms.Form):
     )
     feild_notes = forms.CharField(widget=forms.Textarea, required=False)
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class SearchForm(forms.Form):
     lon_min = forms.FloatField(max_value=180, min_value=-180, required=False)

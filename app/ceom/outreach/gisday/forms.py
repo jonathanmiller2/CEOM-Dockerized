@@ -86,3 +86,43 @@ class VisitorForm(ModelForm):
         if email != verifyemail:
             raise forms.ValidationError("Emails do not match")
         return verifyemail
+
+class PhotoForm(ModelForm):
+    captcha = CaptchaField()
+    #captcha = MathCaptchaField()
+
+    def __init__(self, *args, **kwargs):
+        super(PhotoForm, self).__init__(*args, **kwargs)
+        self.fields['verifyemail'] = forms.EmailField(label="verify email", required=True, max_length=60)
+        self.fields['year']=forms.ModelChoiceField(queryset=Year.objects.all(), widget=forms.HiddenInput())
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.layout = Layout(
+            Div(
+                Div(
+                    Div(
+                        'last_name','email','comment',Field('captcha', placeholder=" Enter Result"),
+                        style="font-size: 25px; font-weight: bold;"
+                        ,css_class="span6"
+                    ),
+                    Div(
+                        'first_name','verifyemail',
+                        style="font-size: 25px; font-weight: bold;"
+                        ,css_class="span6"
+                    ), css_class="span10"),
+                css_class='row-fluid'),
+        )
+    class Meta:
+        model = PhotoContestParticipant
+        exclude = ("user", "validated")
+
+    def clean_verifyemail(self):
+        try:
+            email = self.cleaned_data['email']
+            verifyemail = self.cleaned_data['verifyemail']
+
+            if email != verifyemail:
+                raise forms.ValidationError("Emails do not match")
+            return verifyemail
+        except:
+            raise forms.ValidationError("Emails do not match")

@@ -19,7 +19,7 @@
 	}
 </style>
 
-<h2 style="color: #dc143c;">{% trans "Edit Photo" %}</h2>
+<h2 style="color: #dc143c;">{% trans "Photo" %}</h2>
 <hr />
 <p>{% trans "Photo" %}</p>
 <a href='{{photo.file.url}}'>
@@ -153,8 +153,8 @@
 	});
 
 	function resetForm() {
-		let lat = {{photo.lat}} || 0;
-		let lon = {{photo.lon}} || 0;
+		let lat = {{photo.lat|default_if_none:0}};
+		let lon = {{photo.lon|default_if_none:0}};
 		let new_coords = {lat: lat, lng: lon};
 		marker.setPosition(new_coords);
 		map.setCenter(new_coords);

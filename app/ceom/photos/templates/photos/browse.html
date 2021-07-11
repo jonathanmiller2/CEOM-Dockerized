@@ -2,23 +2,10 @@
 {% load photos_tags %}
 {% load thumbnail %}
 {% load i18n %}
-{% block head_extra %}
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#id_date_min').datepicker().on('show', function () {
-            console.log('show');
-        });
-        $('#id_date_max').datepicker();
-    });
-</script>
-{{block.super}}
-{% endblock %}
 {% block sidebar_extra %}
 <nav class="card bg-light ml-5 mt-3 shadow-sm">
     {% include "photos/search_form.html" %}
 </nav>
-
-
 {% endblock %}
 
 {% block content %}

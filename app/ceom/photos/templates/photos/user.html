@@ -2,7 +2,12 @@
 {% load photos_tags %}
 {% load thumbnail %}
 {% load i18n %}
-{% block title %}{% trans "CEOM user photos" %} {% endblock %}
+
+{% block sidebar_extra %}
+<nav class="card bg-light ml-5 mt-3 shadow-sm">
+    {% include "photos/search_form.html" %}
+</nav>
+{% endblock %}
 
 {% block content %}
 <style>
@@ -50,6 +55,10 @@
         font-size: small;
     }
 
+    .title {
+        color: #0f4ba4
+    }
+
     .selectAll {
         display: inline;
     }
@@ -60,18 +69,8 @@
 </style>
 <nav>
     <!-- <div class='row-fluid'> -->
-    {% if photos %}
     {% if paginator %}
-    {% if 'sort' in request.get_full_path %}
-        <div class="row">
-            <a href='/photos/user/'> <h4 class="pull-left col-md-auto">{% trans "By date of Photo upload" %}</a> / {% trans "By date of Photo Taken" %}</h4>
-        </div>
-    {% else %}
-        <div class="row">
-            <h4 class="pull-left col-md-auto">{% trans "By date of Photo upload" %} / <a href='/photos/user/?sort=tk'>{% trans "By date of Photo Taken" %}</h4></a>
-        </div>
-    {% endif %}
-        
+    <h2 class="legend title">{% trans "Global Geo-Referenced Field Photo Library" %}</h2>
     <div class="container-fluid pt-2 pl-0">
         <div class="row justify-content-between mr-5">
             <div class="col-md-auto">
@@ -231,13 +230,6 @@
         </form>
         {% endif %}
     </div>
-    {% endif %}
-
-    {% if not photos %}
-    <p>{% trans "You don't seem to have any photos yet." %}</p>
-    <p><a href='{% url "upload" %}'>{% blocktrans %}Upload</a> some photos, and they will show up on this
-        page.{% endblocktrans %}</p>
-    {% endif %}
 </nav>
 <script>
     function ActionOnSubmit() {

@@ -75,9 +75,9 @@
 				  {% for photo in photos %}
 					{% thumbnail photo.picture "800x600" crop="center" as im %}
 					  {% if forloop.counter == 1 %}
-					  <div class="carousel-item active bg-white"><div class="pagination-centered"> <a href="{{im.url}}}"><img class="d-block " src="{{im.url}}" style="max-width: 80%; max-height:60%; margin-left:auto;margin-right:auto"></a></div></div>
+					  <div class="carousel-item active bg-dark"><div class="pagination-centered"> <a href="{{im.url}}}"><img class="d-block " src="{{im.url}}" style="max-width: 80%; max-height:60%; margin-left:auto;margin-right:auto"></a></div></div>
 					  {% else %}
-					  <div class="carousel-item bg-white"><div class="pagination-centered"><a href="{{im.url}}"><img class="d-block " src="{{im.url}}" style="max-width: 80%; max-height:60%; margin-left:auto;margin-right:auto"></a></div></div>
+					  <div class="carousel-item bg-dark"><div class="pagination-centered"><a href="{{im.url}}"><img class="d-block " src="{{im.url}}" style="max-width: 80%; max-height:60%; margin-left:auto;margin-right:auto"></a></div></div>
 					  {% endif %}
 				  {% empty %}
 					<p class="text-error">Image missing</p>

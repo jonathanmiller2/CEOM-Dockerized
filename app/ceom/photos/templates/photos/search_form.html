@@ -1,4 +1,6 @@
 {% load i18n %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ"></script>
+
 <script>
     var geocoder1 = null;
     var gotAddress = null;
@@ -164,10 +166,9 @@
         <div id="date" class="collapse">
             <div class="pt-2 pb-3">
                 <label><b>{% trans "Date from" %}</b></label>
-                {{ search.date_min }}
-                {{ search.lat_max.errors }}
+                <input type="date" name="date_min" placeholder="mm/dd/yyyy" class="form-control form-control-sm" id="id_date_min">
                 <label><b>{% trans "Date to" %}</b></label>
-                {{ search.date_max }}
+                <input type="date" name="date_max" placeholder="mm/dd/yyyy" class="form-control form-control-sm" id="id_date_max">
             </div>
         </div>
         <br>
@@ -266,6 +267,12 @@
             </div>
         </div>
         <br>
+        <legend class="text-center mb-0">{% trans "Sort By:" %}</legend>
+        <hr />
+        <select class="form-control form-control-sm" name="sort">
+            <option value="upload">Photo upload date</option>
+            <option value="taken">Photo taken date</option>
+        </select>
 
         <div class="d-flex row justify-content-around my-3">
             <div class="container">

@@ -1,41 +1,36 @@
 {% load i18n %}
 <li class='leftmenu-category nav-header'>
-    {%trans "Surface Water Body Data Product"%}
+    {%trans "MODIS data"%}
 </li>
 <li>
-    <a href="/water/overview/" class="btn btn-light btn-block rounded-0 p-0">
+    <a href="/modis/visualization/" class="btn btn-light btn-block rounded-0 p-0">
         <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Overview" %}</p>
     </a>
 </li>
 <li class='leftmenu-category nav-header'>
-    {%trans "Inventory (Data Products)"%}
+    {%trans "Inventory"%}
 </li>
 <li>
-    <a href="/water/CONUS-Water/" class="btn btn-light btn-block rounded-0 p-0">
-        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "CONUS-Water"%}</p>
+    <a href="/modis/data/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left"> {%trans "NASA data"%}</p>
     </a>
 </li>
 <li>
-    <a href="/water/GLOBAL-Water/" class="btn btn-light btn-block rounded-0 p-0">
-        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "GLOBAL-Water"%}</p>
+    <a href="/modis/data/#modisdata" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "CEOM data"%}</p>
     </a>
 </li>
 <li class='leftmenu-category nav-header'>
     {%trans "Visualization"%}
 </li>
 <li>
-    <a href="/water/33-year-wbfm/" class="btn btn-light btn-block rounded-0 p-0">
-        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "33-year Water Body Frequency Map"%}</p>
+    <a href="/modis/visualization/composite" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "Composite Image"%}</p>
     </a>
 </li>
 <li>
     <a href="/modis/visualization/olmap/" class="btn btn-light btn-block rounded-0 p-0">
-        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "Annual Water Body Frequency Map"%}</p>
-    </a>
-</li>
-<li>
-    <a href="/modis/visualization/olmap/" class="btn btn-light btn-block rounded-0 p-0">
-        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "33-year Good Observation Map"%}</p>
+        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "Vegetation Index Map"%}</p>
     </a>
 </li>
 <li class='leftmenu-category nav-header'>
@@ -57,5 +52,13 @@
 <li>
     <a href="/modis/visualization/timeseries/single/" class="btn btn-light btn-block rounded-0 p-0">
         <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Single Site history" %}</p>
+    </a>
+</li>
+<li class='leftmenu-category nav-header'>
+    {%trans "Other"%}
+</li>
+<li>
+    <a href="/modis/visualization/geocatter/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "GeoCatter" %}</p>
     </a>
 </li>

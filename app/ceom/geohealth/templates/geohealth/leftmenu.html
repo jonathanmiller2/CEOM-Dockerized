@@ -1,45 +1,25 @@
 {% load i18n %}
-<style>
-	a {
-		font-size: 11pt;
-		color: #4f85d1;
-	}
-
-	a > p {
-		font-size: 11pt;
-		color: #4f85d1;
-	}
-
-	.nav-header {
-        color: #999999;
-		font-weight: bold;
-		font-size: 8pt;
-		text-transform: uppercase;
-		margin: 1.5em 0em 0.25em 1.5em;
-    }
-</style>
-
-<li class='nav-header'>
+<li class='leftmenu-category nav-header'>
     {% trans "GeoHealth" %}
 </li>
 <li>
     <a href="/visualization/gemap/" class="btn btn-light btn-block rounded-0 p-0">
-        <p class="mx-4 m-0 text-left">{% trans "Google Earth browser" %}</p>
+        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Google Earth browser" %}</p>
     </a>
 </li>
-<li class='nav-header'>
+<li class='leftmenu-category nav-header'>
     {% trans "Wild birds" %}
 </li>      
 <li>
     <a href="/birds/" class="btn btn-light btn-block rounded-0 p-0">
-        <p class="mx-4 m-0 text-left">{% trans "Wild bird tracking data" %}</p>
+        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Wild bird tracking data" %}</p>
     </a>
 </li>
-<li class='nav-header'>
+<li class='leftmenu-category nav-header'>
     {% trans "Avian Influenza" %}
 </li> 
 <li>
     <a href="/h5n1/" class="btn btn-light btn-block rounded-0 p-0">
-        <p class="mx-4 m-0 text-left">{% trans "Avian Influenza tracking data" %}</p>
+        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Avian Influenza tracking data" %}</p>
     </a>
 </li>
