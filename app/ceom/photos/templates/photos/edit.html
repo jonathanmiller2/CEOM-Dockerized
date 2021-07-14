@@ -119,7 +119,7 @@
 
 	async function initMap()
 	{
-        let startLocation = {lat: {{photo.lat|default_if_none:0}}, lng: {{photo.lon|default_if_none:0}}};
+        let startLocation = {lat: parseFloat({{photo.lat|default_if_none:0}}), lng: parseFloat({{photo.lon|default_if_none:0}})};
 
 		mzs = new google.maps.MaxZoomService()
 		let zoomobj = await mzs.getMaxZoomAtLatLng(startLocation);
@@ -154,8 +154,8 @@
 	});
 
 	function resetForm() {
-		let lat = {{photo.lat|default_if_none:0}};
-		let lon = {{photo.lon|default_if_none:0}};
+		let lat = parseFloat({{photo.lat|default_if_none:0}});
+		let lon = parseFloat({{photo.lon|default_if_none:0}});
 		let new_coords = {lat: lat, lng: lon};
 		marker.setPosition(new_coords);
 		map.setCenter(new_coords);
@@ -167,7 +167,7 @@
 		$("#dir_card-input").val("{{photo.dir_card|default_if_none:""}}");
 		$("#status-input").val("{{photo.status}}");
 		$("#category-input").val("{{photo.category.name|default_if_none:""}}");
-		$("#notes-input").val("{{photo.notes|default_if_none:""}}");
+		$("#notes-input").val("{{photo.notes|default_if_none:""|escapejs}}");
 	}
 </script>
 {% endblock %}
