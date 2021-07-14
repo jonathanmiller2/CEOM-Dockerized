@@ -185,11 +185,11 @@
             </div>
             <div id="multi-edit-buttons">
                 <button id="mass-edit-button" type="button" class="btn btn-info">Batch edit</button>
-                <button class='btn btn-light' type="submit" formmethod="GET" formaction="/photos/edit/?next={{request.get_full_path}}">Detail edit</button>
+                <button class='btn btn-light' type="submit" formmethod="GET" formaction="/photos/detailedit/">Detail edit</button>
             </div>
-            <div id="mass-edit-container">
+            <div id="mass-edit-container" class='col-3'>
                 {{batch_edit_form}}
-                <input class='btn btn-light mt-3' type="submit" value="Batch Edit" formaction="/photos/batchedit/?next={{request.get_full_path}}">
+                <input class='btn btn-light mt-3' type="submit" value="Batch Edit" formaction="/photos/batchedit/">
             </div>
             <hr/>
 

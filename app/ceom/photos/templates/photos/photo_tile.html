@@ -117,7 +117,7 @@
                             <abbr title="{% trans 'View MODIS data for this photo. Click on this button and scroll down to the bottom of the page and to select appropriate dataset and year' %}">MODIS</abbr>
                         </a>
                      
-                        <a class='btn btn-light btn-outline-secondary btn-small tileButton' href="/photos/edit/?ids={{photo.id}}">{% trans "Edit" %}</a>
+                        <a class='btn btn-light btn-outline-secondary btn-small tileButton' href="/photos/edit/{{photo.id}}">{% trans "Edit" %}</a>
                         <a class='btn btn-danger btn-small tileButton' onclick="return confirm('Are you sure, you want to delete?');" href="/photos/delete/{{photo.id}}/?next={{request.get_full_path|urlencode}}">{% trans "Delete" %}</a>
                         
                         {% else %}

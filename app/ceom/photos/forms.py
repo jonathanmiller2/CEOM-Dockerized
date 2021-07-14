@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth.models import User
 from ceom.photos.models import Photo, Category
 from ceom.photos.models import ContinentBuffered, CountryBuffered
-from django.forms.widgets import SelectDateWidget, Select, TextInput
+from django.forms.widgets import SelectDateWidget, Select, TextInput, Textarea
 from django.utils.translation import ugettext_lazy as _
 
 from django.contrib.admin.widgets import AdminDateWidget
@@ -46,7 +46,7 @@ class BatchEditForm(forms.Form):
             }
         )
     )
-    field_notes = forms.CharField(required=False, widget=TextInput(
+    field_notes = forms.CharField(required=False, widget=Textarea(
             attrs={
                 'class':'form-control form-control-sm'
             },

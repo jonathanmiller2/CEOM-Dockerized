@@ -34,7 +34,7 @@
 <p>{% trans "Location" %}</p>
 <div id="map" class="mb-5" style="height: 500px"></div>
 
-<form method="post" action=".?editing_id={{current_id}}">{% csrf_token %}
+<form method="post">{% csrf_token %}
 	<table class='table'>
 		<tr>
 			<td class="field-height">{% trans "Latitude" %}</td>

@@ -208,8 +208,14 @@
                         value="{% trans 'Download' %}">{% trans 'Download' %}</button>
                 </div>
             </div>
-            {{batch_edit_form}}
-            <input class='btn' type="submit" value="batchedit" formaction="/photos/batchedit/?next={{request.get_full_path}}">
+            <div id="multi-edit-buttons">
+                <button id="mass-edit-button" type="button" class="btn btn-info">Batch edit</button>
+                <button class='btn btn-light' type="submit" formmethod="GET" formaction="/photos/detailedit/">Detail edit</button>
+            </div>
+            <div id="mass-edit-container" class='col-3'>
+                {{batch_edit_form}}
+                <input class='btn btn-light mt-3' type="submit" value="Batch Edit" formaction="/photos/batchedit/">
+            </div>
             <hr/>
 
             <div class="container-fluid">
@@ -221,5 +227,27 @@
         {% endif %}
     </div>
 </nav>
+
+<script>
+    $("#multi-edit-buttons").hide();
+    $("#mass-edit-container").hide();
+
+
+    var countChecked = function() {
+        var n = $( "input:checked" ).length;
+        if(n>1) { 
+            $("#multi-edit-buttons").show(200);
+        }
+        else { 
+            $("#multi-edit-buttons").hide(200);
+            $("#mass-edit-container").hide(200);
+        }
+    };
+    $("input[type=checkbox]").on("click", countChecked);
+
+    $("#mass-edit-button").click(function () {
+        $('#mass-edit-container').show()
+    })
+</script>
 
 {% endblock %}

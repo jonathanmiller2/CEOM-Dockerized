@@ -11,6 +11,7 @@ urlpatterns = [
 
     re_path(r'^download/$', ceom.photos.views.download),
     re_path(r'^batchedit/$', ceom.photos.views.batchedit),
+    re_path(r'^detailedit/$', ceom.photos.views.detailedit),
 
     re_path(r'^upload/$', ceom.photos.views.upload, name='upload'),
     re_path(r'^preload/$', ceom.photos.views.preload),
@@ -20,7 +21,7 @@ urlpatterns = [
     re_path(r'^mobile/upload/?$', ceom.photos.views.mobile_upload), #mobile upload view
 
     re_path(r'^view/(?P<id>\d+)/?$', ceom.photos.views.view, name="photo-view"),
-    re_path(r'^edit/$', ceom.photos.views.edit, name="photo-edit"),
+    re_path(r'^edit/(?P<id>\d+)/?$', ceom.photos.views.edit, name="photo-edit"),
     re_path(r'^delete/(?P<id>\d+)/?$', ceom.photos.views.delete, name="photo-del"),
     re_path(r'^exif/(?P<id>\d+)/?$', ceom.photos.views.exif),
 
