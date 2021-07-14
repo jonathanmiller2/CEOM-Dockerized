@@ -230,12 +230,6 @@
         let lon_min = parseFloat($('#LON_MIN').val() || 0);
         let lon_sec = parseFloat($('#LON_SEC').val() || 0);
 
-        console.log(lat_deg);
-        console.log(lat_min);
-        console.log(lat_sec);
-        console.log(lon_deg);
-        console.log(lon_min);
-        console.log(lon_sec);
         //... update Decimal degrees fields... // Remember to use JQuery $().value to update the Decimal Degrees field.
         let lat_dec = lat_deg + parseFloat(parseFloat(lat_min + (lat_sec / 60)) / 60);
         let lon_dec = lon_deg + parseFloat(parseFloat(lon_min + (lon_sec / 60)) / 60);
