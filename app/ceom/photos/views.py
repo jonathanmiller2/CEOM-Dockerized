@@ -235,7 +235,7 @@ def browse(request):
         paginator = None
         page_range = list(range(10))
     
-    print('238')
+    
     request.session['next'] = '/photos/browse/'
     return render(request, 'photos/browse.html', context={
         'photos': photos,
@@ -260,7 +260,7 @@ def map(request):
     if 'bbox' in request.GET:
         kml = gmapclusters(request, photos)
     
-    print('263')
+    
     request.session['next'] = '/photos/map/'
     return render(request, 'photos/map.html', context={
         'search': search,
@@ -449,11 +449,9 @@ def gmapclusters(request):
 
 
 def get_photos_id_from_cluster_photo_id(request, id, x_size=22.25, y_size=11.125):
-
     photos, search = search_for_photos(request)
     photos = photos.exclude(Q(point__bboverlaps=Point(0,0))|Q(point__isnull=True))
 
-   
     #QuerySet internals, could break on upgrade
     # Django 1.7+ fix
     compiler = photos.query.get_compiler(using='default')
@@ -543,7 +541,7 @@ def map_gallery(request):
         paginator = None
         page_range = range(10)
     
-    print('546')
+    
     request.session['next'] = '/photos/map/'
     return render(request, 'photos/browse_gallery_map.html', context={
         'photos': photos,
@@ -567,7 +565,6 @@ def view(request, id):
     })
 
 def batchedit(request):
-    print('570')
     if 'next' in request.GET:
         next = request.GET['next']
     elif 'next' in request.session:
@@ -710,7 +707,7 @@ def delete(request, id):
     photo = Photo.objects.get(pk=id)
     photo.status = 0
     photo.save()
-    print('687')
+    
     if 'next' in request.GET:
         return redirect(request.GET['next'])
     else:
