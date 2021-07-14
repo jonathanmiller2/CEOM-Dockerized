@@ -20,7 +20,7 @@ urlpatterns = [
     re_path(r'^mobile/upload/?$', ceom.photos.views.mobile_upload), #mobile upload view
 
     re_path(r'^view/(?P<id>\d+)/?$', ceom.photos.views.view, name="photo-view"),
-    re_path(r'^edit/(?P<id>\d+)/?$', ceom.photos.views.edit, name="photo-edit"),
+    re_path(r'^edit/$', ceom.photos.views.edit, name="photo-edit"),
     re_path(r'^delete/(?P<id>\d+)/?$', ceom.photos.views.delete, name="photo-del"),
     re_path(r'^exif/(?P<id>\d+)/?$', ceom.photos.views.exif),
 

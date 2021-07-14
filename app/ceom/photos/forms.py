@@ -30,12 +30,28 @@ class BatchEditForm(forms.Form):
             (1, 'Public',),
             (2, 'Private',)
         ),
-        initial='(Not Changed)', required = False
+        initial='(Not Changed)', 
+        required = False,
+        widget=Select(
+            attrs={
+                'class':'form-control form-control-sm'
+            },
+        )
     )
     category = forms.ModelChoiceField(
-        queryset=Category.objects.all(), empty_label="(Not Changed)", required=False
+        queryset=Category.objects.all(), empty_label="(Not Changed)", required=False,
+        widget=Select(
+            attrs={
+                'class':'form-control form-control-sm'
+            }
+        )
     )
-    feild_notes = forms.CharField(widget=forms.Textarea, required=False)
+    field_notes = forms.CharField(required=False, widget=TextInput(
+            attrs={
+                'class':'form-control form-control-sm'
+            },
+        )
+    )
 
 class DateInput(forms.DateInput):
     input_type = 'date'

@@ -34,7 +34,7 @@
 <p>{% trans "Location" %}</p>
 <div id="map" class="mb-5" style="height: 500px"></div>
 
-<form method="post">{% csrf_token %}
+<form method="post" action=".?editing_id={{current_id}}">{% csrf_token %}
 	<table class='table'>
 		<tr>
 			<td class="field-height">{% trans "Latitude" %}</td>
@@ -105,9 +105,10 @@
 			<td><textarea class="form-control" rows="5" id="notes-input" name="notes">{{photo.notes}}</textarea></td>
 		</tr>
 	</table>
-		<button class='btn btn-info mx-2' type="submit" name="Save_and_Goto_Prev_Photo">{% trans 'Save & Go To Previous Photo' %}</button>
 		<button class='btn btn-primary mx-2' type="submit" name="save">{% trans 'Save' %}</button>
+		{% if show_next %}
 		<button class='btn btn-info mx-2' type="submit" name="Save_and_Goto_Next_Photo">{% trans 'Save & Go To Next Photo' %}</button>
+		{% endif %}
 	<button class='btn btn-warning mx-2' type="button" onclick="resetForm()">{% trans 'Reset' %}</button>
 </form>
 
