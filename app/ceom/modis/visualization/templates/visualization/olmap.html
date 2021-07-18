@@ -77,7 +77,7 @@
                 </div>
                 <input type="hidden" class="form-control" name="map_num" value="1" />
                 <input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap();return false;"/>
-                <input type="button" class="btn btn-light btn-outline-secondary button" id= "synch-zoom" value="Synch Zoom" onclick="synch_zoom(1)";/>
+                <input type="button" class="btn btn-light btn-outline-secondary button" value="Synch Zoom" onclick="synch_zoom(mapArray[0][0])";/>
             </div>
         </div>
     </div>
@@ -120,7 +120,7 @@
                 </div>
                 <input type="hidden" class="form-control" name="map_num" value="1" />
                 <input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap();return false;"/>
-                <input type="button" class="btn btn-light btn-outline-secondary button" id="synch-zoom" value="Synch Zoom" onclick="synch_zoom(2)"/>
+                <input type="button" class="btn btn-light btn-outline-secondary button" value="Synch Zoom" onclick='synch_zoom(mapArray[1][0])';/>
                 <!-- onclick="javascript:synchZoom(this.form);return false;" -->
                 <!-- onclick=javascript:"synch_zoom(" + mapArray[1][0] + ")";return false -->
             </div>
@@ -198,21 +198,16 @@
     
     $('#add_map').click(function() {
         // Does every map need a different id?
-        map = new google.maps.Map($("#map"+mapCounter), myOptions);
-        mapArray.push([mapCounter, map]);
-        let div = '<div id=\'"map-" + mapCounter\'><div id="map-container"><div class="row ml-1"><div id="map" class="map" style="height:400px"><div id="legend2" class="legend"></div></div><div style="float:right"><label class="mt-4 mx-3">EVI</label></div><div class="pos-bar"><input class="pos" id="LAT2"><input class="pos" id="LON2"></div><div id="info" class="info"><div class="form-row"><div class="form-group col-2"><select class="form-control" name="products">{% for product in products %}<option selected>{{ product }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="days">{% for day in days %}<option selected>{{ day }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="years">{% for year in years %}<option selected>{{ year }}</option>{% endfor %}</select></div><input type="hidden" class="form-control" name="map_num" value="1" /><input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap();return false;"/><input type="button" class="btn btn-light btn-outline-secondary button" id="synch-zoom" value="Synch Zoom" onclick=\'javascript:"synch_zoom(" + mapArray[mapCounter - 1][0] + ")";return false\'/></div></div></div></div></div>'
+        let mapName = "map" + mapCounter;
+        console.log(mapName)
+        mapName = new google.maps.Map(document.getElementById("map"+mapCounter), myOptions);
+        mapArray.push([mapCounter, mapName]);
+        let div = '<div id=\'"map-" + mapCounter\'><div id="map-container"><div class="row ml-1"><div id="map" class="map" style="height:400px"><div id="legend2" class="legend"></div></div><div style="float:right"><label class="mt-4 mx-3">EVI</label></div><div class="pos-bar"><input class="pos" id="LAT2"><input class="pos" id="LON2"></div><div id="info" class="info"><div class="form-row"><div class="form-group col-2"><select class="form-control" name="products">{% for product in products %}<option selected>{{ product }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="days">{% for day in days %}<option selected>{{ day }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="years">{% for year in years %}<option selected>{{ year }}</option>{% endfor %}</select></div><input type="hidden" class="form-control" name="map_num" value="1" /><input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap();return false;"/><input type="button" class="btn btn-light btn-outline-secondary button" value="Synch Zoom" onclick=\'synch_zoom(mapArray[mapCounter - 1][0])\'/></div></div></div></div></div>'
         let chunk = $('#map-container').append(div);
         chunk.attr('id', 'map-' + idCounter);
-
-        console.log(mapCounter);
-        console.log(mapArray[mapCounter - 1][0])
-        //chunk.find("#sync-zoom-button").click(synch_zoom_function)
+ 
         ++idCounter;
         ++mapCounter;
     })
-
-
-
-    // Make sure to add the addListeners somewhere around here
 </script>
 {% endblock %}
