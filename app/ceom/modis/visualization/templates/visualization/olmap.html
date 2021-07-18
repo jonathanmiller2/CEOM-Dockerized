@@ -5,223 +5,7 @@
 {% block head_extra %}
  <!-- <script src="/media/js/modis.js" type="text/javascript"></script> -->
  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ" type="text/javascript"></script>
-  <!-- <script src='http://maps.google.com/maps/api/js?v=3&amp;sensor=false'></script> -->
-  <!-- <script type="text/javascript">
-        var maps = new Array();
-        var std_proj = new OpenLayers.Projection("EPSG:4326");
-        var control_map = 0;
-        var tile_size = 300;
-        //var rswms = "";
-        var rswms = "http://modis.ceom.ou.edu/modis.php";
-        //var rswms = "http://ceom-dev.ou.edu/wms/modis.php";
-        //var rswms = "/service/modis";
-        var cur_point = null;
-        
 
-        OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
-            defaultHandlerOptions: {
-                'single': true,
-                'double': true,
-                'pixelTolerance': 0,
-                'delay': 50
-            },
-
-            initialize: function(options) {
-                this.handlerOptions = OpenLayers.Util.extend(
-                    {}, this.defaultHandlerOptions
-                );
-                OpenLayers.Control.prototype.initialize.apply(
-                    this, arguments
-                ); 
-
-                this.handler = new OpenLayers.Handler.Click(
-                    this, {
-                        'click': this.onClick,
-                        'dblclick': this.onDblclick 
-                    }, this.handlerOptions
-                );
-            }, 
-
-
-            onClick: function(evt) {
-                cur_point = evt.object.getLonLatFromPixel(evt.xy);
-                for (var i = 0; i < maps.length; i++){
-                    maps[i].panTo(cur_point)
-                }
-            },
-
-            onDblclick: function(evt) {  
-                cur_point = evt.object.getLonLatFromPixel(evt.xy);
-                for (var i = 0; i < maps.length; i++){
-                    maps[i].panTo(cur_point)
-                }
-            } 
-
-        });
-  
-
-        function viewCurrentTS(){
-            if (cur_point == null)
-                alert("Click on the map to set your position");
-            else{
-                var p = cur_point.transform(maps[0].getProjectionObject(),std_proj);
-                timeSeries(p.lon,p.lat);
-            }
-        }
-        
-
-        function getLayers(){
-            var gphy = new OpenLayers.Layer.Google(
-                "Google Physical",
-                {type: google.maps.MapTypeId.TERRAIN}
-            );
-            var ghyb = new OpenLayers.Layer.Google(
-                "Google Hybrid",
-                {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20}
-            );
-            var layers = [gphy,ghyb];
-            
-
-            var datas = [{'name': 'chdn',    'long_name': 'Chicken density'},
-                     {'name': 'dudn',    'long_name': 'Duck density'},
-                     {'name': 'hpdn',    'long_name': 'Human Population'},
-                     {'name': 'dem',     'long_name': 'Elevation'},
-                     {'name': 'ncropn',  'long_name': 'Cropping intensity (new methid)'},
-                     {'name': 'ncropo',  'long_name': 'Cropping intensity (PNAS version)'},
-                     {'name': 'pnaspred','long_name': 'PNAS model predictions'},
-                     {'name': 'sapred',  'long_name': 'South Asia Model Predictions'},
-                     {'name': 'ccode',   'long_name': 'Country Code(categorical)'}];
-                     
-
-            for (var i = 0; i < datas.length; i++){
-                var l = new OpenLayers.Layer.WMS(datas[i].long_name, "/service/wms", 
-                                                 {layers: datas[i].name, transparent: 'true', format: "image/png"},
-                                                 {isBaseLayer: false, opacity: 0.9, visibility: false}
-                                                );
-                layers.push(l);
-            }
-            //var test = new OpenLayers.Layer.WMS( "TEST", "/wms/modis.php", {layers: "ncep", time:"2008-08-29"});
-            
-            return layers;
-            //return [jpl_wms, ghyb, yahoosat, yahoohyb];
-        }
-
-        function addMap(divname){
-
-            var options = {  
-                projection: "EPSG:4326",
-                displayProjection: "EPSG:4326",
-                units: "m"
-            };
-            var click = new OpenLayers.Control.Click({
-                        handlerOptions: {
-                            "single": true,
-                            "double": true
-                        }
-                    });
-
-            var map = new OpenLayers.Map(divname, options);
-
-            maps.push(map);
-            map.tileSize = new OpenLayers.Size(tile_size,tile_size);
-            
-
-            var layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
-                "http://labs.metacarta.com/wms/vmap0", {layers: 'basic'} );
-                
-
-
-            var day = "305";
-            var year = "2000";
-            var variable = "evi";
-            //var url = rswms + "/"+variable+"?day="+day+"&"+"year="+year+"&";
-            var url = rswms + "?prod="+variable+"&day="+day+"&"+"year="+year+"&";
-            
-
-            var modis = new OpenLayers.Layer.WMS( "MODIS WMS", url, {layers: ["TOP","BOT","ocean_mask"], isBaseLayer: true}, {'buffer':0});
-            //var mask = new OpenLayers.Layer.WMS( "Ocean Mask", url, {layers: "ocean_mask"}, {'buffer':0});
-            
-
-            map.addLayers([modis].concat(getLayers()));
-            map.setCenter(new OpenLayers.LonLat(0, 4), 2);
-            
-
-            map.addControl(click);
-            click.activate();
-
-            map.addControl(new OpenLayers.Control.MousePosition());
-            map.addControl(new OpenLayers.Control.LayerSwitcher());
-            //map.addControl(new OpenLayers.Control.PanZoomBar());
-
-            var legendURL = url+"version=1.1.1&request=getlegendgraphic&format=image/PNG&SERVICE=WMS&layer=TOP";
-            var legendHTML = '<a style="text-decoration: none;color: black;" target="_blank">'+variable.toUpperCase()+'</a><br/><img src="'+legendURL+'"/><br/>';
-            $("#"+divname+" .legend").html(legendHTML);
-        }
-        
-
-        function addMapDiv(){
-            var num = maps.length+1;
-            $("#content").append($('<div id="map'+num+'" class="map"><div id="legend'+num+'" class="legend"></div></div>'));
-
-            $("#content").append($("#info1").clone().attr("id","info"+num));
-            $("#info"+num+" input[name='map_num']").val(num);
-            return "map"+num;
-        }
-        
-
-        function init(){
-            addMap("map1");
-
-            addMapWindow();
-        }
-
-        function updateMap(form) {
-            var map_tmp, modis_tmp;
-            var map_num = form["map_num"].value;
-            var variable = form["products"].value;
-            var day = form["days"].value;
-            var year = form["years"].value;
-
-            map_tmp = maps[parseInt(map_num)-1];
-            modis_tmp = map_tmp.getLayersByName("MODIS WMS")[0];
-            modis_tmp = map_tmp.layers[0];
-            //modis_tmp.mergeNewParams({'day':day,'year':year,'prod':variable});
-            //var url = rswms + "/"+variable+"?day="+day+"&year="+year+"&";
-            var url = rswms + "?prod="+variable+"&day="+day+"&year="+year+"&";
-
-            map_tmp.removeLayer(modis_tmp);
-            modis_tmp = new OpenLayers.Layer.WMS( "MODIS WMS", url, {layers: ["TOP","BOT","ocean_mask"], isBaseLayer: "true"});
-            map_tmp.addLayer(modis_tmp);
-            map_tmp.setBaseLayer(modis_tmp);
-            
-
-            var legendURL = url+"version=1.1.1&request=getlegendgraphic&format=image/PNG&SERVICE=WMS&layer=TOP";
-            var legendHTML = '<a style="text-decoration: none;color: black;" target="_blank">'+variable.toUpperCase()+'</a><br/><img src="'+legendURL+'"/><br/>';
-            var legendDiv = document.getElementById('legend'+map_num);
-            legendDiv.innerHTML = legendHTML;
-        }
-        
-
-        function synchZoom(form) {
-            var map_tmp, modis_tmp;
-            var map_num = form["map_num"].value;
-            
-
-            map_tmp = maps[parseInt(map_num)-1];
-            modis_tmp = map_tmp.getLayersByName("MODIS WMS")[0];
-            
-
-            for (var i = 0; i < maps.length; i++){
-                maps[i].zoomTo(map_tmp.zoom)
-            }
-        }
-        function addMapWindow(){
-            addMap(addMapDiv());
-            return false;
-        }
-        
-
-</script> -->
 <style type="text/css">
 .map  {position: relative; width: 658px; height: 370px; top: 25px; left: 0px; border: solid #999999 1px;}
 .legend {position: absolute; top: 0px; left: 670px; text-align: left; z-index: 999999;}
@@ -234,24 +18,12 @@
 </style>
 {% endblock %}
 
-{% block body_tag %}<body bgcolor="#FFFFFF">{% endblock %}
-{% block sidebar %}
-{{block.super}}
-<!-- <nav class="card bg-light ml-5 shadow-sm">
-    <h4 style="margin-left: 15px; padding-bottom: 5px;">Controls</h4>
-    <p><a href='#' class='btn btn-primary btn-sm' onClick='addMapWindow();return false' style="margin-left: 15px;">Add map</a></p>
-    <p><a href='#' class='btn btn-primary btn-sm' onClick='viewCurrentTS();return false' style="margin-left: 15px; margin-right: 15px;">View MODIS time series data</a></p>
-    <p style="margin-left: 15px;">Click within any map window in order to synchronize map windows views to the same center position.</p>
-    <p style="margin-left: 15px;">To change map view independently drag the map or use select tool.</p>
-    <p style="margin-left: 15px;">To zoom all maps to the same altitude click the 'Synch Zoom' button.</p>
-</nav> -->
-{% endblock %}
 {% block content %}
 <h3>Multi-pane MODIS Browser</h3>
 <nav>
     <h4>Controls</h4>
     <div class="row ml-1 my-3">
-        <button id="add-map" type="button" onClick='addMapWindow();return false' class="btn btn-sm btn-primary mr-1">
+        <button id="add_map" type="button"  class="btn btn-sm btn-primary mr-1">
             <span>Add Map</span>
         </button>
         <button id="modis-data" type="button" onClick='viewCurrentTS();return false' class="btn btn-sm btn-primary">
@@ -266,14 +38,15 @@
         To zoom all maps to the same altitude click the 'Synch Zoom' button.
     </div>
 </nav>
+<div id="map-1">
     <div class="row ml-1">
+       
         <div id="map1" class="map" style="height: 400px"> 
             <div id="legend1" class="legend"></div>
         </div>
-        
+
         <div style="float:right">
             <label class="mt-4 mx-3">EVI</label>
-            <!-- <img src ="" class="evi"></div> -->
         </div>
         <div class="pos-bar">
             <input class="pos" id="LAT">
@@ -289,7 +62,7 @@
                     </select>
                 </div>
                 <div class="form-group col-2">
-                    <select class="form-control" name"days">
+                    <select class="form-control" name="days">
                         {% for day in days %}
                         <option selected>{{ day }}</option>
                         {% endfor %}
@@ -303,19 +76,20 @@
                     </select>
                 </div>
                 <input type="hidden" class="form-control" name="map_num" value="1" />
-                <input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap(this.form);return false;"/>
-                <input type="button" class="btn btn-light btn-outline-secondary button" value="Synch Zoom" onclick="javascript:synchZoom(this.form);return false;"/>
+                <input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap();return false;"/>
+                <input type="button" class="btn btn-light btn-outline-secondary button" id= "synch-zoom" value="Synch Zoom" onclick="synch_zoom(1)";/>
             </div>
         </div>
     </div>
+</div>
+<div id="map-2">
     <div class="row ml-1">
-        <div id="map2" class="map" style="height:400px">
-            <div id="legend2" class="legend"></div>
-        </div>
-        
+            <div id="map2" class="map" style="height:400px">
+                <div id="legend2" class="legend"></div>
+            </div>
+
         <div style="float:right">
             <label class="mt-4 mx-3">EVI</label>
-            <!-- <img src ="" class="evi"></div> -->
         </div>
         <div class="pos-bar">
             <input class="pos" id="LAT2">
@@ -331,7 +105,7 @@
                     </select>
                 </div>
                 <div class="form-group col-2">
-                    <select class="form-control" name"days">
+                    <select class="form-control" name="days">
                         {% for day in days %}
                         <option selected>{{ day }}</option>
                         {% endfor %}
@@ -345,76 +119,15 @@
                     </select>
                 </div>
                 <input type="hidden" class="form-control" name="map_num" value="1" />
-                <input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap(this.form);return false;"/>
-                <input type="button" class="btn btn-light btn-outline-secondary button" value="Synch Zoom" onclick="javascript:synchZoom(this.form);return false;"/>
+                <input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap();return false;"/>
+                <input type="button" class="btn btn-light btn-outline-secondary button" id="synch-zoom" value="Synch Zoom" onclick="synch_zoom(2)"/>
+                <!-- onclick="javascript:synchZoom(this.form);return false;" -->
+                <!-- onclick=javascript:"synch_zoom(" + mapArray[1][0] + ")";return false -->
             </div>
         </div>
     </div>
-
-<!-- This is a fix for the scroll issue on the openlayer map. Taken from: https://stackoverflow.com/questions/55955171/preventing-unable-to-preventdefault-inside-passive-event-listener-error-within -->
-<script>
-	const eventListenerOptionsSupported = () => {
-	  let supported = false;
-
-	  try {
-	    const opts = Object.defineProperty({}, 'passive', {
-	      get() {
-	        supported = true;
-	      }
-	    });
-
-	    window.addEventListener('test', null, opts);
-	    window.removeEventListener('test', null, opts);
-	  } catch (e) {}
-
-	  return supported;
-	}
-
-	const defaultOptions = {
-	  passive: false,
-	  capture: false
-	};
-	const supportedPassiveTypes = [
-	  'scroll', 'wheel',
-	  'touchstart', 'touchmove', 'touchenter', 'touchend', 'touchleave',
-	  'mouseout', 'mouseleave', 'mouseup', 'mousedown', 'mousemove', 'mouseenter', 'mousewheel', 'mouseover'
-	];
-	const getDefaultPassiveOption = (passive, eventName) => {
-	  if (passive !== undefined) return passive;
-
-	  return supportedPassiveTypes.indexOf(eventName) === -1 ? false : defaultOptions.passive;
-	};
-
-	const getWritableOptions = (options) => {
-	  const passiveDescriptor = Object.getOwnPropertyDescriptor(options, 'passive');
-
-	  return passiveDescriptor && passiveDescriptor.writable !== true && passiveDescriptor.set === undefined
-	    ? Object.assign({}, options)
-	    : options;
-	};
-
-	const overwriteAddEvent = (superMethod) => {
-	  EventTarget.prototype.addEventListener = function (type, listener, options) {
-	    const usesListenerOptions = typeof options === 'object' && options !== null;
-	    const useCapture          = usesListenerOptions ? options.capture : options;
-
-	    options         = usesListenerOptions ? getWritableOptions(options) : {};
-	    options.passive = getDefaultPassiveOption(options.passive, type);
-	    options.capture = useCapture === undefined ? defaultOptions.capture : useCapture;
-
-	    superMethod.call(this, type, listener, options);
-	  };
-
-	  EventTarget.prototype.addEventListener._original = superMethod;
-	};
-
-	const supportsPassive = eventListenerOptionsSupported();
-
-	if (supportsPassive) {
-	  const addEvent = EventTarget.prototype.addEventListener;
-	  overwriteAddEvent(addEvent);
-	}
-</script>
+</div>
+<div id="map-container"></div>
 <script>
     var startLocation = {
         lat: 0,
@@ -433,10 +146,7 @@
     map1.addListener("mouseover", (evt) => {
         let lat = evt.latLng.lat().toFixed(5);
         let lon = evt.latLng.lng().toFixed(5);
-        listener1 = google.maps.event.addListener(map1, 'bounds_changed', (function() {
-            map2.setCenter(map1.getCenter());
-            //map2.setZoom(map1.getZoom());
-        }));
+
         $('#LAT').val(lat)
         $('#LON').val(lon)
     });
@@ -458,34 +168,51 @@
     map2.addListener("mousemove", (evt) => {
         let lat = evt.latLng.lat().toFixed(5);
         let lon = evt.latLng.lng().toFixed(5);
-        listener2 = google.maps.event.addListener(map2, 'bounds_changed', (function() {
-            map1.setCenter(map2.getCenter());
-            //map1.setZoom(map2.getZoom());
-        }));
+        
         $('#LAT2').val(lat)
         $('#LON2').val(lon)
     });
 
-    let mapNum = 3;
+    let mapArray = [
+        [1, map1], 
+        [2, map2]
+    ];
+    let mapCounter = 3;
+    let idCounter = 3;
 
-    function synchZoom(form) {
-        var map_tmp, modis_tmp;
-        var map_num = form["map_num"].value;
-        
-
-        map_tmp = maps[parseInt(map_num)-1];
-        modis_tmp = map_tmp.getLayersByName("MODIS WMS")[0];
-        
-        for (var i = 0; i < maps.length; i++){
-            maps[i].setZoom(map_tmp.getZoom());
+    function synch_zoom(id) {
+        //get the zoom/center from the map with the id that was passed to the function
+        let center = mapArray[id - 1][1].getCenter();
+        let zoom = mapArray[id - 1][1].getZoom();
+        //for each (id,map) pair in the big map array:
+            //if the id isn't the same as the id that was passed to the function:
+            //sync the zoom/center of the map to the one we stored above
+        for(let i = 0; i < mapArray.length; i++) {
+            if(mapArray[i][0] != id) {
+                mapArray[i][1].setCenter(center);
+                mapArray[i][1].setZoom(zoom);
+            }
         }
     }
-    function addMapWindow(){
-        mapNum = new google.maps.Map($(mapNum), myOptions);
-        console.log("Add map")
-       
-        ++mapNum;
-        return false;
-    }
+   
+    
+    $('#add_map').click(function() {
+        // Does every map need a different id?
+        map = new google.maps.Map($("#map"+mapCounter), myOptions);
+        mapArray.push([mapCounter, map]);
+        let div = '<div id=\'"map-" + mapCounter\'><div id="map-container"><div class="row ml-1"><div id="map" class="map" style="height:400px"><div id="legend2" class="legend"></div></div><div style="float:right"><label class="mt-4 mx-3">EVI</label></div><div class="pos-bar"><input class="pos" id="LAT2"><input class="pos" id="LON2"></div><div id="info" class="info"><div class="form-row"><div class="form-group col-2"><select class="form-control" name="products">{% for product in products %}<option selected>{{ product }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="days">{% for day in days %}<option selected>{{ day }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="years">{% for year in years %}<option selected>{{ year }}</option>{% endfor %}</select></div><input type="hidden" class="form-control" name="map_num" value="1" /><input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap();return false;"/><input type="button" class="btn btn-light btn-outline-secondary button" id="synch-zoom" value="Synch Zoom" onclick=\'javascript:"synch_zoom(" + mapArray[mapCounter - 1][0] + ")";return false\'/></div></div></div></div></div>'
+        let chunk = $('#map-container').append(div);
+        chunk.attr('id', 'map-' + idCounter);
+
+        console.log(mapCounter);
+        console.log(mapArray[mapCounter - 1][0])
+        //chunk.find("#sync-zoom-button").click(synch_zoom_function)
+        ++idCounter;
+        ++mapCounter;
+    })
+
+
+
+    // Make sure to add the addListeners somewhere around here
 </script>
 {% endblock %}
