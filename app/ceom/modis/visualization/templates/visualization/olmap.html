@@ -7,7 +7,7 @@
  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ" type="text/javascript"></script>
 
 <style type="text/css">
-    .map  {position: relative; width: 658px; height: 370px; top: 25px; left: 0px; border: solid #999999 1px;}
+    .map  {position: relative; width: 658px; height: 400px; top: 25px; left: 0px; border: solid #999999 1px;}
     .legend {position: absolute; top: 0px; left: 670px; text-align: left; z-index: 999999;}
     .info  {position: relative; width: 658px; height: 50px; bottom: 5px; padding: 5px; background-color: #EEE; border: solid 1px #999999; text-align: left; display:inline-block;}
     #control {  position: absolute; top: 480px; left: 10px; z-index: 999999; }
@@ -38,10 +38,10 @@
         To zoom all maps to the same altitude click the 'Synch Zoom' button.
     </div>
 </nav>
-<div id="map-1">
+<div id="map-container">
     <div class="row ml-1">
         <div class="container">
-            <div id="map1" class="map" style="height: 400px"> 
+            <div id="map-1" class="map"> 
                 <div id="legend1" class="legend"></div>
             </div>
             <div class="pos-bar">
@@ -81,11 +81,10 @@
             <label class="mt-4 mx-3">EVI</label>
         </div>
     </div>
-</div>
-<div id="map-2">
+
     <div class="row ml-1">
         <div class="container">
-            <div id="map2" class="map" style="height:400px">
+            <div id="map-2" class="map">
                 <div id="legend2" class="legend"></div>
             </div>
             <div class="pos-bar">
@@ -128,7 +127,7 @@
         </div>
     </div>
 </div>
-<div id="map-container"></div>
+<br>
 <script>
     var startLocation = {
         lat: 0,
@@ -140,9 +139,9 @@
         gestureHandling: 'cooperative',
         mapTypeId: 'terrain',
     }
-    map1 = new google.maps.Map(document.getElementById('map1'), myOptions);
+    map1 = new google.maps.Map(document.getElementById('map-1'), myOptions);
    
-    map2 = new google.maps.Map(document.getElementById('map2'), myOptions)
+    map2 = new google.maps.Map(document.getElementById('map-2'), myOptions)
 
     map1.addListener("mouseover", (evt) => {
         let lat = evt.latLng.lat().toFixed(5);
@@ -198,12 +197,29 @@
    
     function addMap() {
         let mapName = "map" + mapCounter;
-        mapName = new google.maps.Map(document.getElementById("map"+mapCounter), myOptions);    // ERROR somewhere
-        mapArray.push([mapCounter, mapName]);
-        let div = '<div id=\'"map-" + mapCounter\'><div id="map-container"><div class="row ml-1"><div class="container"><div id="map" class="map" style="height:400px"><div id="legend2" class="legend"></div></div><div class="pos-bar"><input class="pos" id="LAT2"><input class="pos" id="LON2"></div><div id="info" class="info"><div class="form-row"><div class="form-group col-2"><select class="form-control" name="products">{% for product in products %}<option selected>{{ product }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="days">{% for day in days %}<option selected>{{ day }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="years">{% for year in years %}<option selected>{{ year }}</option>{% endfor %}</select></div><input type="hidden" class="form-control" name="map_num" value="1" /><input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap();return false;"/><input type="button" class="btn btn-light btn-outline-secondary button" value="Synch Zoom" onclick=\'synch_zoom(mapArray[mapCounter - 1][0])\'/></div></div></div></div><div style="float:right"><label class="mt-4 mx-3">EVI</label></div></div></div>'
+        let div = '<div class="row ml-1"><div class="container"><div id="map-' + idCounter + '" class="map"><div id="legend2" class="legend"></div></div><div class="pos-bar"><input class="pos" id="LAT' + idCounter + '"><input class="pos" id="LON' + idCounter + '"></div><div id="info" class="info"><div class="form-row"><div class="form-group col-2"><select class="form-control" name="products">{% for product in products %}<option selected>{{ product }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="days">{% for day in days %}<option selected>{{ day }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="years">{% for year in years %}<option selected>{{ year }}</option>{% endfor %}</select></div><input type="hidden" class="form-control" name="map_num" value="1" /><input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap();return false;"/><input type="button" class="btn btn-light btn-outline-secondary button" value="Synch Zoom" onclick=\'synch_zoom(mapArray[mapCounter - 1][1])\'/></div></div></div><div style="float:right"><label class="mt-4 mx-3">EVI</label></div></div>'
         let chunk = $('#map-container').append(div);
-        chunk.attr('id', 'map-' + idCounter);
- 
+        //chunk.attr('id', 'map-' + idCounter);
+        
+        mapName = new google.maps.Map($("#map-" + idCounter)[0], myOptions); 
+        
+        mapName.addListener("mouseover", (evt) => {
+            let lat = evt.latLng.lat().toFixed(5);
+            let lon = evt.latLng.lng().toFixed(5);
+            
+            $('#LAT' + idCounter).val(lat)
+            $('#LON' + idCounter).val(lon)
+        });
+        mapName.addListener("mousemove", (evt) => {
+            let lat = evt.latLng.lat().toFixed(5);
+            let lon = evt.latLng.lng().toFixed(5);
+            
+            $('#LAT' + idCounter).val(lat)
+            $('#LON' + idCounter).val(lon)
+        });
+        console.log('lat' + idCounter)
+        mapArray.push([mapCounter, mapName]);
+        
         ++idCounter;
         ++mapCounter;
     }
@@ -213,7 +229,7 @@
     //     console.log(mapName)
     //     mapName = new google.maps.Map(document.getElementById("map"+mapCounter), myOptions);
     //     mapArray.push([mapCounter, mapName]);
-    //     let div = '<div id=\'"map-" + mapCounter\'><div id="map-container"><div class="row ml-1"><div id="map" class="map" style="height:400px"><div id="legend2" class="legend"></div></div><div style="float:right"><label class="mt-4 mx-3">EVI</label></div><div class="pos-bar"><input class="pos" id="LAT2"><input class="pos" id="LON2"></div><div id="info" class="info"><div class="form-row"><div class="form-group col-2"><select class="form-control" name="products">{% for product in products %}<option selected>{{ product }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="days">{% for day in days %}<option selected>{{ day }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="years">{% for year in years %}<option selected>{{ year }}</option>{% endfor %}</select></div><input type="hidden" class="form-control" name="map_num" value="1" /><input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap();return false;"/><input type="button" class="btn btn-light btn-outline-secondary button" value="Synch Zoom" onclick=\'synch_zoom(mapArray[mapCounter - 1][0])\'/></div></div></div></div></div>'
+    //     let div = '<div id=\'"map-" + mapCounter\'><div id="map-container"><div class="row ml-1"><div id="map" class="map" style="height:400px"><div id="legend2" class="legend"></div></div><div style="float:right"><label class="mt-4 mx-3">EVI</label></div><div class="pos-bar"><input class="pos" id="LAT2"><input class="pos" id="LON2"></div><div id="info" class="info"><div class="form-row"><div class="form-group col-2"><select class="form-control" name="products">{% for product in products %}<option selected>{{ product }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="days">{% for day in days %}<option selected>{{ day }}</option>{% endfor %}</select></div><div class="form-group col-2"><select class="form-control" name="years">{% for year in years %}<option selected>{{ year }}</option>{% endfor %}</select></div><input type="hidden" class="form-control" name="map_num" value="1" /><input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="javascript:updateMap();return false;"/><input type="button" class="btn btn-light btn-outline-secondary button" value="Synch Zoom" onclick=\'synch_zoom(mapArray[mapCounter - 1][1])\'/></div></div></div></div></div>'
     //     let chunk = $('#map-container').append(div);
     //     chunk.attr('id', 'map-' + idCounter);
  
