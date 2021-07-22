@@ -112,7 +112,7 @@
                 <ul class="nav nav-pills">
                 {% for y in year_list %}
                     <li {% if year_int == y.year %}class='active'{% endif %}>
-                        <a href="/inventory/{{ds.name}}/{{y.year}}">{{ y.year }}</a>
+                        <a href="/inventory/{{ds.name}}/{{y.year}}/">{{ y.year }}</a>
                     </li>
                 {% endfor %}
                 </ul>

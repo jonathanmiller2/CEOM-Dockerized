@@ -9,10 +9,10 @@ class Dataset(models.Model):
     xdim = models.FloatField()
     ydim = models.FloatField()
     grid_size = models.FloatField()
-    projcode = models.IntegerField()
-    zonecode = models.IntegerField()
-    spherecode = models.IntegerField()
-    projparm = models.CharField(max_length=1000)
+    projcode = models.IntegerField(null=True, blank=True)
+    zonecode = models.IntegerField(null=True, blank=True)
+    spherecode = models.IntegerField(null=True, blank=True)
+    projparm = models.CharField(max_length=1000, null=True, blank=True)
     grid_name = models.CharField(max_length=100, null=True, blank=True)
     ordering = models.FloatField(null=True, blank=True)
     long_name = models.CharField(max_length=100, null=True, blank=True)
@@ -72,10 +72,10 @@ class Tile(models.Model):
         
 class File(models.Model):
     tile = models.ForeignKey(Tile, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, primary_key=True)
     year = models.IntegerField(null=True)
     day = models.IntegerField(null=True)
-    timestamp = models.IntegerField()
+    timestamp = models.BigIntegerField()
     dataset = models.ForeignKey(Dataset, null=True, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='Process')
     absolute_path = models.CharField(max_length = 300, null=False, default='N/A')
@@ -83,6 +83,6 @@ class File(models.Model):
         return self.name
 
 class Process(models.Model):
-    file = models.ForeignKey(File, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    file = models.ForeignKey(File, on_delete=models.DO_NOTHING)
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
     timestamp = models.DateTimeField('date processed', null=True, blank=True)

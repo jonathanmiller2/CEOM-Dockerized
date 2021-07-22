@@ -17,12 +17,14 @@ def remote_sensing_datasets(request):
     })
 
 def tilemap(request, dataset_id, year):
+    dataset = Dataset.objects.get(name__iexact=dataset_id)
+
     # Need to replace existing and dataset_list query. It is too slow... use subqueries and group by!!!  
     existing = File.objects.distinct().values('dataset')
     #existing = [mcd43a4,mod09a1,mod09ga,mod09q1,mod11a1,mod11a2,mod11c3,mod12q1,mod13a1,mod13a2,mod13c2,mod13q1,mod14a2,mod15a2,mod17a2,myd11a2,myd11c3,myd14a2]
     dataset_list = Dataset.objects.filter(name__in=existing)
     # dataset_list contains all the information of the product in the existing list above
-    year_list = File.objects.filter(dataset=dataset_id).distinct().order_by('year').values('year')
+    year_list = File.objects.filter(dataset=dataset).distinct().order_by('year').values('year')
     #year_list = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016]
 
     good_list = []
@@ -42,6 +44,14 @@ def tilemap(request, dataset_id, year):
     else:
         splittiles(46)
     
+    
+    print(dataset_id)
+    print(dataset_list)
+    print(good_list)
+    print(bad_list)
+    print(year)
+    print(year_list)
+
     return render(request, 'inventory/map.html', context={
         'dataset' : dataset_id,
         'dataset_list' : dataset_list,
@@ -123,9 +133,8 @@ def tile(request, x, y):
                 for t in sorted(tiles.keys()):
                     days = tiles[t]
                     days.sort()
-                    a = p.lower()
-                    dataset_day_res_dict[a]
-                    present, missing = parsePresentMissing(days,dataset_day_res_dict[p.lower()])
+                    dataset_day_res_dict[p]
+                    present, missing = parsePresentMissing(days,dataset_day_res_dict[p])
                     tile_list.append((t, {'ranges': present, 'missing': missing, 'total': len(days)}))
                 year_list.append((y, tile_list))
             result.append((p, year_list))
