@@ -71,22 +71,22 @@
     <legend class="pt-2"><strong>{% trans "1b.Enter the latitude & longitude information" %}</strong> </legend>
     <div class="row">
         <label class="col-sm-2 my-1 pt-1">Latitude:</label> <!-- DMS Lat -->
-        <input id="LAT_DEG" class="form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Degrees">
-        <input id="LAT_MIN" class="form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Minutes">
-        <input id="LAT_SEC" class="form-control col-sm-2 mx-2 my-1" type="number" step="any" placeholder="Seconds">
+        <input id="LAT_DEG" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Degrees">
+        <input id="LAT_MIN" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Minutes">
+        <input id="LAT_SEC" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="any" placeholder="Seconds">
     </div>
 
     <div class="row">
         <label class="col-sm-2 my-1 pt-1">Longitude:</label> <!-- DMS Lon -->
-        <input id="LON_DEG" class="form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Degrees">
-        <input id="LON_MIN" class="form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Minutes">
-        <input id="LON_SEC" class="form-control col-sm-2 mx-2 my-1" type="number" step="any" placeholder="Seconds">
+        <input id="LON_DEG" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Degrees">
+        <input id="LON_MIN" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Minutes">
+        <input id="LON_SEC" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="any" placeholder="Seconds">
         <button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1" onclick="enterCoordsDMS();" style="border-width: 1.6px;">{% trans "Go" %}</button>
     </div>
     <label class="pt-2 my-1">or enter <strong>Decimal degrees</strong> below:</label> <!-- decimal degrees -->
     <div class="row">
-        <input id="LAT_DEC" class="form-control col-sm-2 mx-2 my-1 offset1" type="number" step="any" placeholder="Latitude">
-        <input id="LON_DEC" class="form-control col-sm-2 mx-2 my-1 offset1" type="number" step="any" placeholder="Longitude">
+        <input id="LAT_DEC" class="DECField form-control col-sm-2 mx-2 my-1 offset1" type="number" step="any" placeholder="Latitude">
+        <input id="LON_DEC" class="DECField form-control col-sm-2 mx-2 my-1 offset1" type="number" step="any" placeholder="Longitude">
         <button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1" id="RedirectControl" onclick="enterCoordsLatLon();" name="RedirectControl" style="border-width: 1.6px;">Go</button>
     </div>
 </div>
@@ -96,8 +96,7 @@
 </div>
 <legend class="text-left"><strong>{% trans "1c. Zoom-in the map and then click on a point of interest" %} </strong></legend>
 
-<div id="map" class="mx-auto" style="width: 90%; height: 450px"></div>
-<div id="current"></div>
+<div id="map" class="mr-auto" style="width: 90%; height: 450px"></div>
 
 <div class="row">
     <div class="col-sm-3">
@@ -183,27 +182,19 @@
 
         return [degree, minute, second];
     }
-    function DMSChanged() {
-    ... get new DMS coords (just reading from the fields, not using (this.value)...
-
-    ... update Decimal degrees fields...
-
-    ...update map...
-    }
-
-
-</script>
-<script>
+    
     var startLocation = {
         lat: 0,
         lng: 0
     };
+
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 2,
         center: startLocation,
         gestureHandling: 'cooperative',
         mapTypeId: 'satellite',
     });
+    
     var marker = new google.maps.Marker({
         position: startLocation,
         map: map,
@@ -213,7 +204,6 @@
     google.maps.event.addListener(marker, 'dragend', function (evt) {
         let lat = evt.latLng.lat().toFixed(3);
         let lon = evt.latLng.lng().toFixed(3);
-        $('#current').html('<p>Marker dropped: Current Lat: ' + lat + ' Current Lng: ' + lon + '</p>')
         //.val instead of .html for the inputs here
 
         let dms_lat = toDMS(lat);
@@ -229,38 +219,46 @@
 
         $('#LAT_DEC').val(lat)
         $('#LON_DEC').val(lon)
+    });
 
-        
+    $(".DMSField").change(function() {
+        //... get new DMS coords (just reading from the fields, not using (this.value)...
+        let lat_deg = parseFloat($('#LAT_DEG').val() || 0);
+        let lat_min = parseFloat($('#LAT_MIN').val() || 0);
+        let lat_sec = parseFloat($('#LAT_SEC').val() || 0);
+        let lon_deg = parseFloat($('#LON_DEG').val() || 0);
+        let lon_min = parseFloat($('#LON_MIN').val() || 0);
+        let lon_sec = parseFloat($('#LON_SEC').val() || 0);
+
+        //... update Decimal degrees fields... // Remember to use JQuery $().value to update the Decimal Degrees field.
+        let lat_dec = lat_deg + parseFloat(parseFloat(lat_min + (lat_sec / 60)) / 60);
+        let lon_dec = lon_deg + parseFloat(parseFloat(lon_min + (lon_sec / 60)) / 60);
+        $('#LAT_DEC').val(lat_dec.toFixed(3))
+        $('#LON_DEC').val(lon_dec.toFixed(3))
+        //...update map...
+        marker.setPosition({ lat: lat_dec, lng: lon_dec });
     });
-    
-    $("#LAT_DEG").change(DMSChanged)
-    $("#LAT_MIN").change(DMSChanged)
-    $("#LAT_SEC").change(DMSChanged)
-    $("#LON_DEG").change(DMSChanged)
-    $("#LON_MIN").change(DMSChanged)
-    $("#LON_SEC").change(DMSChanged)
-    google.maps.event.addListener(marker, 'dragstart', function (evt) {
-        $('#current').html('<p>Currently dragging marker...</p>')
+
+    $(".DECField").change(function() {
+        let lat_dec = parseFloat($('#LAT_DEC').val() || 0);
+        let lon_dec = parseFloat($('#LON_DEC').val() || 0);
+
+        let dms_lat = toDMS(lat_dec);
+        let dms_lon = toDMS(lon_dec);
+
+        $('#LAT_DEG').val(dms_lat[0])
+        $('#LAT_MIN').val(dms_lat[1])
+        $('#LAT_SEC').val(dms_lat[2])
+        $('#LON_DEG').val(dms_lon[0])
+        $('#LON_MIN').val(dms_lon[1])
+        $('#LON_SEC').val(dms_lon[2])
+
+        marker.setPosition({ lat: lat_dec, lng: lon_dec});
     });
-    
+
+
+
     map.setCenter(marker.position);
     marker.setMap(map);
-
-    $( "#LAT_DEG" ).change(function() {
-        console.log(this.value);
-    });
-
-    function DMSChanged() {
-        console.log("a");
-    }
-
-    $("#LAT_DEG").change(DMSChanged)
-
-    function DMSChanged() {
-        console.log("b");
-    }
-
-    $("#LAT_MIN").change(DMSChanged)
-
 </script>
 {% endblock %}
