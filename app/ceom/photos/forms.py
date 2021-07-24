@@ -5,8 +5,10 @@ from django import forms
 from django.contrib.auth.models import User
 from ceom.photos.models import Photo, Category
 from ceom.photos.models import ContinentBuffered, CountryBuffered
-from django.forms.widgets import SelectDateWidget, Select, TextInput
+from django.forms.widgets import SelectDateWidget, Select, TextInput, Textarea
 from django.utils.translation import ugettext_lazy as _
+
+from django.contrib.admin.widgets import AdminDateWidget
 
 from ceom.photos.models import DIR_CARD_CHOICES
 from ceom.photos.models import STATUS_CHOICES
@@ -28,13 +30,31 @@ class BatchEditForm(forms.Form):
             (1, 'Public',),
             (2, 'Private',)
         ),
-        initial='(Not Changed)', required = False
+        initial='(Not Changed)', 
+        required = False,
+        widget=Select(
+            attrs={
+                'class':'form-control form-control-sm'
+            },
+        )
     )
     category = forms.ModelChoiceField(
-        queryset=Category.objects.all(), empty_label="(Not Changed)", required=False
+        queryset=Category.objects.all(), empty_label="(Not Changed)", required=False,
+        widget=Select(
+            attrs={
+                'class':'form-control form-control-sm'
+            }
+        )
     )
-    feild_notes = forms.CharField(widget=forms.Textarea, required=False)
+    field_notes = forms.CharField(required=False, widget=Textarea(
+            attrs={
+                'class':'form-control form-control-sm'
+            },
+        )
+    )
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class SearchForm(forms.Form):
     lon_min = forms.FloatField(max_value=180, min_value=-180, required=False)

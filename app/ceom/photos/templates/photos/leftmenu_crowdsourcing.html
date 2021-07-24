@@ -1,42 +1,23 @@
 {% load i18n %}
-<style>
-	a {
-		font-size: 11pt;
-		color: #4f85d1;
-	}
-
-	a > p {
-		font-size: 11pt;
-		color: #4f85d1;
-	}
-
-	.nav-header {
-        color: #999999;
-		font-weight: bold;
-		font-size: 8pt;
-		text-transform: uppercase;
-		margin: 1.5em 0em 0.25em 1.5em;
-    }
-</style>
 <nav class="card bg-light ml-5 mt-3 shadow-sm">
 	<ul class="p-0" style="list-style: none;">
-		<li class='nav-header'>
+		<li class='leftmenu-category nav-header'>
 		    {% trans "Crowdsourcing and Citizen Science Projects" %}
 		</li>
 
 		<li>
 		    <a href='https://picturepost.ou.edu/index.jsp' class="btn btn-light btn-block rounded-0 p-0">
-		        <p class="mx-4 m-0 text-left">{% trans "PicturePost" %}</p>
+		        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "PicturePost" %}</p>
 		    </a>
 		</li>
 		<li> 
 		    <a href='/photos/FieldPhoto' class="btn btn-light btn-block rounded-0 p-0">
-		        <p class="mx-4 m-0 text-left">{% trans "Field Photo Weekend" %}</p>
+		        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Field Photo Weekend" %}</p>
 		    </a>
 		</li>
 		<li> 
 		    <a href='https://americaview.org/program-areas/education/earth-observation-day/' class="btn btn-light btn-block rounded-0 p-0">
-		        <p class="mx-4 m-0 text-left">{% trans "Earth Observation Day" %}</p>
+		        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Earth Observation Day" %}</p>
 		    </a>
 		</li>
 	</ul>

@@ -11,6 +11,7 @@ urlpatterns = [
 
     re_path(r'^download/$', ceom.photos.views.download),
     re_path(r'^batchedit/$', ceom.photos.views.batchedit),
+    re_path(r'^detailedit/$', ceom.photos.views.detailedit),
 
     re_path(r'^upload/$', ceom.photos.views.upload, name='upload'),
     re_path(r'^preload/$', ceom.photos.views.preload),

@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.files.base import ContentFile
 from ceom.modis.inventory.models import Dataset
 from ceom.photos.models import Category, Photo
-from ceom.modis.visualization.models import TimeSeriesJob,  SingleTimeSeriesJob #,Datainfo, Datatype
+from ceom.modis.visualization.models import TimeSeriesJob,  SingleTimeSeriesJob, GeocatterPoint
 from ceom.modis.visualization.forms import ProductSelect, TimeSeriesJobForm
 from datetime import datetime, date, timedelta
 
@@ -618,3 +618,18 @@ def composite(request, year = None, julian_day = None):
             'sat_name': sat_name,
             }
         )
+
+
+def geocatter(request):
+    data = {}
+    data['category_list'] = Category.objects.all()
+
+    if request.method == 'POST' and 'category' in request.POST:
+        GeocatterPoint.objects.create(
+            lat = request.POST['lat'],
+            lon = request.POST['lon'],
+            category = Category.objects.get(name=request.POST['category'])
+        )
+        return HttpResponse()
+        
+    return render(request, 'visualization/geocatter.html', context=data)

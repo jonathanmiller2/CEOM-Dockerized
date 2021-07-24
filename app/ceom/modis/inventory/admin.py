@@ -2,20 +2,6 @@ from ceom.modis.inventory.models import *
 from django.contrib import admin
 
 class DatasetAdmin(admin.ModelAdmin):
-	# fieldsets = [
-	# 	(None, {'fields': ['name']}),
-	# 	(None, {'fields': ['grid_name']}),
-	# 	(None, {'fields': ['long_name']}),
-	# 	(None, {'fields': ['short_name']}),
-	# 	(None, {'fields': ['xdim']}),
-	# 	(None, {'fields': ['ydim']}),
-	# 	(None, {'fields': ['grid_size']}),
-	# 	(None, {'fields': ['projcode']}),
-	# 	(None, {'fields': ['zonecode']}),
-	# 	(None, {'fields': ['spherecode']}),
-	# 	(None, {'fields': ['projparm']}),
-	# 	(None, {'fields': ['ordering']}),
-	# ]
 	list_display = ('name', 'grid_name', 'long_name','day_res','xdim','ydim','is_global')
 	
 admin.site.register(Dataset, DatasetAdmin)

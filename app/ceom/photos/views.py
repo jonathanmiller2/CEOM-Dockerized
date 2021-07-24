@@ -73,8 +73,15 @@ def home(request):
 
 
 def search_for_photos(request):
-    photos = Photo.objects.order_by('uploaddate').select_related("category").reverse()
 
+    if 'sort' in request.POST:
+        photos = Photo.objects.select_related("category").order_by(request.POST['sort']).reverse()
+        request.session['sort'] = request.POST['sort']
+    elif 'sort' in request.session:
+        photos = Photo.objects.select_related("category").order_by(request.session['sort']).reverse()
+    else:
+        photos = Photo.objects.select_related("category").order_by('uploaddate').reverse()
+        
     if request.user.is_authenticated:
         photos = photos.filter(Q(status=1) | (Q(status=2) & Q(user=request.user)))
     else:
@@ -109,10 +116,10 @@ def search_for_photos(request):
                 bbox = Polygon.from_bbox((l, t, r ,b))
                 photos = photos.filter(point__bboverlaps=bbox)
 
-            if search.cleaned_data['date_min'] is not None and search.cleaned_data['date_min'] != datetime.datetime(1990,1,1):
+            if search.cleaned_data['date_min'] is not None and search.cleaned_data['date_min'] != "" and search.cleaned_data['date_min'] != datetime.datetime(1990,1,1):
                 dmin = search.cleaned_data['date_min']
                 photos = photos.filter(takendate__gt=dmin)
-            if search.cleaned_data['date_max'] is not None and search.cleaned_data['date_max'] != datetime.date.today():
+            if search.cleaned_data['date_max'] is not None and search.cleaned_data['date_min'] != "" and search.cleaned_data['date_max'] != datetime.date.today():
                 dmax = search.cleaned_data['date_max']
                 photos = photos.filter(takendate__lt=dmax)
 
@@ -145,8 +152,9 @@ def search_for_photos(request):
 
 
 def user_photos(request):
+    
     if request.user.is_authenticated:
-        base = Photo.objects.exclude(status=0)
+        base, search = search_for_photos(request)
 
         # if 'sort' in request.GET: #Sorts by Takendate
         #     dates = base.distinct('takendate').filter(user=request.user).order_by('-takendate')
@@ -154,18 +162,12 @@ def user_photos(request):
         #     dates = base.distinct('uploaddate').filter(user=request.user).order_by('-uploaddate')           
         
         data = {}
+        data['search'] = search
 
-        # if 'date' in request.GET:
-        if 'sort' in request.GET:
-            photos = base.filter(user=request.user).order_by('-takendate')
-            if len(photos)>0:
-                if photos[0].takendate:
-                    data['gallerytitle'] = photos[0].takendate
-        else:
-            photos = base.filter(user=request.user).order_by('-uploaddate')
-            if len(photos)>0:
-                if photos[0].uploaddate:
-                    data['gallerytitle'] = photos[0].uploaddate
+        photos = base.filter(user=request.user)
+        if len(photos)>0:
+            if photos[0].takendate:
+                data['gallerytitle'] = photos[0].takendate
         
         
         
@@ -200,10 +202,10 @@ def user_photos(request):
         
         
         data['checkbox'] = True
-        form_f = BatchEditForm()
+        data['batch_edit_form'] = BatchEditForm()
+        data['modis_timeseries'] = True
 
-        data.update({'form':form_f, 'modis_timeseries':True})
-
+        request.session['next'] = '/photos/user/'
         return render(request, 'photos/user.html', context=data)
     else:
         return HttpResponseRedirect("/accounts/login/")
@@ -232,13 +234,16 @@ def browse(request):
     else:
         paginator = None
         page_range = list(range(10))
-        
+    
+    
+    request.session['next'] = '/photos/browse/'
     return render(request, 'photos/browse.html', context={
         'photos': photos,
         'paginator' : paginator,
         'search': search,
         'ppp': ppp,
         'page_range': page_range,
+        'batch_edit_form': BatchEditForm(),
         'checkbox': True,
         'modis_timeseries': True,
     })
@@ -255,6 +260,8 @@ def map(request):
     if 'bbox' in request.GET:
         kml = gmapclusters(request, photos)
     
+    
+    request.session['next'] = '/photos/map/'
     return render(request, 'photos/map.html', context={
         'search': search,
         'cluster_kml':kml,
@@ -442,11 +449,9 @@ def gmapclusters(request):
 
 
 def get_photos_id_from_cluster_photo_id(request, id, x_size=22.25, y_size=11.125):
-
     photos, search = search_for_photos(request)
     photos = photos.exclude(Q(point__bboverlaps=Point(0,0))|Q(point__isnull=True))
 
-   
     #QuerySet internals, could break on upgrade
     # Django 1.7+ fix
     compiler = photos.query.get_compiler(using='default')
@@ -508,11 +513,12 @@ def photos_json(request):
 
 def map_gallery(request):
     photos, search = search_for_photos(request)
+
     id = request.GET['ids']
     x_size = float(request.GET['x_size'])
-    page = y_size = float(request.GET['y_size'])
-    ids = get_photos_id_from_cluster_photo_id(request, id,x_size,y_size)
-    photos = Photo.objects.filter(id__in=ids.split(','))
+    y_size = float(request.GET['y_size'])
+    ids = get_photos_id_from_cluster_photo_id(request, id, x_size,y_size)
+    photos = photos.filter(id__in=ids.split(','))
 
     page = request.GET.get('page',1)
     ppp = request.GET.get('ppp', 24)
@@ -535,12 +541,15 @@ def map_gallery(request):
         paginator = None
         page_range = range(10)
     
+    
+    request.session['next'] = '/photos/map/'
     return render(request, 'photos/browse_gallery_map.html', context={
         'photos': photos,
         'paginator' : paginator,
         'search': search,
         'ppp': ppp,
         'page_range': page_range,
+        'batch_edit_form': BatchEditForm(),
         'checkbox': True,
         'modis_timeseries': True
     })
@@ -556,6 +565,13 @@ def view(request, id):
     })
 
 def batchedit(request):
+    if 'next' in request.GET:
+        next = request.GET['next']
+    elif 'next' in request.session:
+        next = request.session['next']
+    else:
+        next = "/photos/"
+
     if request.method == 'POST':
         form = BatchEditForm(request.POST)
         ids = request.POST.getlist('ids')
@@ -563,8 +579,13 @@ def batchedit(request):
         #changed_fields = form.changed_data
         if form.is_valid():
             for p in photos:
-                if form.cleaned_data['feild_notes']:
-                    p.notes = form.cleaned_data['feild_notes']
+                if request.user.is_authenticated==False:
+                    return HttpResponseRedirect(next)
+                if p.user != request.user and not request.user.is_superuser:
+                    continue
+
+                if form.cleaned_data['field_notes']:
+                    p.notes = form.cleaned_data['field_notes']
                 if form.cleaned_data['category']:
                     p.category = form.cleaned_data['category']
                 if form.cleaned_data['status']:
@@ -573,88 +594,120 @@ def batchedit(request):
     else:
         form = BatchEditForm()
 
-    if ('next' in request.GET) and request.GET['next']!="":
-        return redirect(request.GET['next'])
-    else:
-        return redirect("/photos/user/")
+    return HttpResponseRedirect(next)
 
+
+def detailedit(request):
+    if 'ids' in request.GET:
+        ids = request.GET.getlist('ids')
+
+        valid_ids = []
+        for id in ids:
+            if Photo.objects.get(id=id).user == request.user or request.user.is_superuser:
+                valid_ids.append(id)
+
+        if len(valid_ids) > 0:
+            photo_id = valid_ids[0]
+            request.session['remaining_ids'] = valid_ids[1:]
+            return HttpResponseRedirect('/photos/edit/' + photo_id)
+    else:
+        while Photo.objects.get(id=request.session['remaining_ids'][0]).user != request.user and not request.user.is_superuser and len(request.session['remaining_ids']) > 0:
+            request.session['remaining_ids'] = request.session['remaining_ids'][1:]
+        
+        if len(request.session['remaining_ids']) > 0:
+            photo_id = request.session['remaining_ids'][0]
+            request.session['remaining_ids'] = request.session['remaining_ids'][1:]
+            return HttpResponseRedirect('/photos/edit/' + photo_id)
+        
+    if 'next' in request.GET:
+        next = request.GET['next']
+    elif 'next' in request.session:
+        next = request.session['next']
+    else:
+        next = "/photos/"
+    
+    return HttpResponseRedirect(next)
 
 def edit(request, id):
-    if request.user.is_authenticated==False:
-        return redirect('/photos/')
+    if 'next' in request.GET:
+        next = request.GET['next']
+    elif 'next' in request.session:
+        next = request.session['next']
     else:
-        photo = Photo.objects.get(pk=id)
-        if photo.user != request.user:
-            return redirect('/photos/')
-        if photo.status == 0:
-            return HttpResponse("<h2>Requested Photo Not Found</h2>")
+        next = '/photos/'
+
+    if request.user.is_authenticated==False:
+        return redirect(next)
+
+    photo = Photo.objects.get(id=id)
+    
+    if photo.user != request.user and not request.user.is_superuser:
+        return redirect(next)
+
+    if photo.status == 0:
+        return HttpResponse("<h2>Requested Photo Not Found</h2>")
+        
+    if request.method == 'POST':
+        if request.POST['lat'] and request.POST['lon']:
+            photo.lat = float(request.POST['lat'])
+            photo.lon = float(request.POST['lon'])
+
+        if request.POST['alt']:
+            photo.alt = request.POST['alt']
         else:
-            if request.method == 'POST':
-                f = PhotoForm(request.POST, instance=photo)
-                if f.is_valid():
-                    new_photo = f.save(commit=False)
-                    if f.cleaned_data['point']:
-                        new_photo.point = f.cleaned_data['point']
-                    if f.cleaned_data['lon'] and f.cleaned_data['lon'] != photo.lon:
-                        new_photo.lon = f.cleaned_data['lon']
-                    if f.cleaned_data['lat'] and f.cleaned_data['lat'] != photo.lat:
-                        new_photo.lat = f.cleaned_data['lat']
+            photo.alt = None
 
-                    new_photo.save()
-                
-                if 'del' in request.POST:
-                    photo.status = 0
-                    photo.save()
-                    return redirect('/photos/user')
-                
-                if 'Save_and_Goto_Next_Photo' in request.POST:
-                    if request.user.is_authenticated:
-                        base = Photo.objects.exclude(
-                            status=0
-                        ).filter(
-                            uploaddate=photo.uploaddate, user=request.user
-                        )
-                        if base:
-                            try:
-                                nextphoto = base.filter(id__gt=photo.id).order_by('id')[0]
-                                url = "%s?ref=userph" % reverse('photo-edit', args=[nextphoto.id])
-                                return HttpResponseRedirect(url)
-                            except:
-                                return redirect('/photos/user')
-                        else:
-                            return redirect('/photos/user')
-                    else:
-                        return HttpResponseRedirect("/accounts/login")
-                if 'Save_and_Goto_Prev_Photo' in request.POST:
-                    if request.user.is_authenticated:
-                        base = Photo.objects.exclude(
-                            status=0
-                        ).filter(
-                            uploaddate=photo.uploaddate, user=request.user
-                        )
-                        if base:
-                            try:
-                                nextphoto = base.filter(id__lt=photo.id).order_by('-id')[0]
-                                url = "%s?ref=userph" % reverse('photo-edit', args=[nextphoto.id])
-                                return HttpResponseRedirect(url)
-                            except:
-                                return redirect('/photos/user')
-                    else:
-                        return HttpResponseRedirect("/accounts/login")
-                return HttpResponseRedirect("/photos/browse/")
-            else:
-                f = PhotoForm(instance=photo)
+        if request.POST['takendate']:
+            photo.takendate = request.POST['takendate']
+        else:
+            photo.takendate = None
 
-            return render(request, 'photos/edit.html', {
-                'photo': photo,
-                'form': f,
-                'enable_bootstrap': False,
-            })
+        if request.POST['dir_card']:
+            photo.dir_card = request.POST['dir_card']
+        else:
+            photo.dir_card = None
+        
+        if request.POST['status']:
+            photo.status = request.POST['status']
+        else:
+            photo.statue = None
+
+        if request.POST['category']:
+            photo.category = Category.objects.get(name=request.POST['category'])
+        else:
+            photo.category = None
+
+        photo.notes = request.POST['notes']
+        photo.save()
+
+        
+        if 'del' in request.POST:
+            photo.status = 0
+            photo.save()
+            return HttpResponseRedirect(next)
+        
+        if 'Save_and_Goto_Next_Photo' in request.POST:
+            return HttpResponseRedirect("/photos/detailedit/")
+        
+        request.session['remaining_ids'] = []
+        return HttpResponseRedirect(next)
+
+    if 'remaining_ids' in request.session:
+        show_next = len(request.session['remaining_ids']) > 0
+    else:
+        show_next = False
+
+    return render(request, 'photos/edit.html', {
+        'photo': photo,
+        'show_next': show_next,
+        'landcover_categories': Category.objects.all()
+    })
 
 def delete(request, id):
     photo = Photo.objects.get(pk=id)
     photo.status = 0
     photo.save()
+    
     if 'next' in request.GET:
         return redirect(request.GET['next'])
     else:

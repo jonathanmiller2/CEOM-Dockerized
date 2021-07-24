@@ -1,28 +1,9 @@
-<style>
-	a {
-		font-size: 11pt;
-		color: #4f85d1;
-	}
-
-	a > p {
-		font-size: 11pt;
-		color: #4f85d1;
-	}
-
-	.nav-header {
-        color: #999999;
-		font-weight: bold;
-		font-size: 8pt;
-		text-transform: uppercase;
-		margin: 1.5em 0em 0.25em 1.5em;
-    }
-</style>
-<li class='nav-header'>
+<li class='leftmenu-category nav-header'>
 	GIS Day
 </li>
 <li>
 	<a href="/outreach/gisday/overview/" id="news" class="btn btn-light btn-block rounded-0 p-0">
-		<p class="ml-4 m-0 text-left">Overview </p>
+		<p class="leftmenu-text ml-4 m-0 text-left">Overview </p>
 	</a>
 <li>
 
@@ -30,78 +11,56 @@
 
 <li>
 	<a href="/outreach/gisday/{{year.date|date:'Y'}}/" data-toggle="collapse" data-target="#Y{{year.date|date:'Y'}}" class="btn btn-light btn-block rounded-0 p-0">
-		<p class="ml-4 m-0 text-left">GIS Day {{year.date|date:'Y'}}</p>
-	
-		<!-- <img src="/static/images/twitter_logo.png" style="width:25px;height:25px" onclick="window.location.href = 'https://twitter.com/@ougisday'"> -->
+		<p class="leftmenu-text ml-4 m-0 text-left">GIS Day {{year.date|date:'Y'}}</p>
 	</a>
 
 	<ul id="Y{{year.date|date:'Y'}}" style="list-style-type: none;" class="collapse {% if year.date|date:'Y' in request.path  %}show{% endif %}">
 		{% if not year.summary_hidden%}
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/summary">Summary</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/summary">Summary</a></li>
 		{% endif %}
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/announcements">Announcements</a></li>
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/aboutus/">Committee</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/announcements">Announcements</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/aboutus/">Committee</a></li>
 		{% if not year.agenda_hidden%}
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/agenda/">Agenda</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/agenda/">Agenda</a></li>
 		{% endif %}
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/logistics/">Logistics</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/logistics/">Logistics</a></li>
 		{% if not year.photo_contest_hidden%}
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/photo-contest/">Photo Contest</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/photo-contest/">Photo Contest</a></li>
 		{% endif %}
 		{% if not year.poster_contest_hidden%}
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/poster-contest/">Poster Registration</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/poster-contest/">Poster Registration</a></li>
 		{% endif %}
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/booth/">Exhibitor Registration</a></li>
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/guests/">Visitor Registration</a></li>
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/volunteer/">Volunteer Registration</a></li>
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/sponsors/">Sponsors</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/booth/">Exhibitor Registration</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/guests/">Visitor Registration</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/volunteer/">Volunteer Registration</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/sponsors/">Sponsors</a></li>
 		{% if not year.photo_gallery_hidden%}
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/photo-gallery">Photo gallery</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/photo-gallery">Photo gallery</a></li>
 		{% endif %}
 		{% if not year.image_gallery_hidden%}
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/image-gallery">Image gallery</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/image-gallery">Image gallery</a></li>
 		{% endif %}
 		{% if year.survey_open %}
-		<li><a href="/outreach/gisday/{{year.date|date:'Y'}}/survey/">Survey</a></li>
+		<li><a class="leftmenu-text" href="/outreach/gisday/{{year.date|date:'Y'}}/survey/">Survey</a></li>
 		{% endif %}
-
 	</ul>
-
 </li>
 {% endfor %}
-
-<!-- TODO: Figure out why 2012 isn't displayed the same way as all of the other years-->
-<!-- <li>
-	<a href="#" data-toggle="collapse" data-target="#twentytwelve" class="btn btn-light btn-block rounded-0 p-0">
-		<p class="ml-4 m-0 text-left">GIS Day 2012</p>
-	</a>
-	<ul id="twentytwelve" style="list-style-type: none;" class="collapse {% if '2012' in request.path %}show{% endif %}">
-		<li><a href="/gisday/2012/">Summary</a></li>
-		<li><a href="/gisday/2012/#Participation">Participation</a></li>
-		<li><a href="/gisday/2012/#Sponsorship">Sponsorship</a></li>
-		<li><a href="/gisday/2012/#Exhibitors">Exhibitors</a></li>
-		<li><a href="/gisday/2012/#Speakers">Speakers</a></li>
-		<li><a href="/gisday/2012/#Poster-Contest">Poster Contest</a></li>
-		<li><a href="/gisday/2012/#K-12-Participation">K-12 Participation </a></li>
-		<li><a href="/gisday/2012/#Organizing-Committee">Organizing Committee</a></li>
-		<li><a href="/gisday/2012/gallery">Photo Gallery</a></li>
-	</ul>
-</li> -->
-<li class="nav-header">
+<li class="leftmenu-category nav-header">
     Workshop
 </li>
 <li> 
     <a href='/outreach/workshops/overview/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="mx-4 m-0 text-left">Overview</p>
+        <p class="leftmenu-text mx-4 m-0 text-left">Overview</p>
     </a>
 </li>
 <li> 
     <a href='/outreach/workshops/current/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="mx-4 m-0 text-left">Current Workshops</p>
+        <p class="leftmenu-text mx-4 m-0 text-left">Current Workshops</p>
     </a>
 </li>
 <li> 
     <a href='/outreach/workshops/past/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="mx-4 m-0 text-left">Past Workshops</p>
+        <p class="leftmenu-text mx-4 m-0 text-left">Past Workshops</p>
     </a>
 </li>

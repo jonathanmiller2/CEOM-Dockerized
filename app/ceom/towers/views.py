@@ -1,4 +1,5 @@
 from django.template import Context, RequestContext, loader, Template
+from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -47,7 +48,6 @@ from django.utils.encoding import smart_str
 def tower_main(request):
 	x_axis = []
 	y_axis = []
-	t = loader.get_template('towers/base.html')
 	iget_data = phenocam.objects.values('sitename','takendate','gcc').all()
 	for x in iget_data:
 		x_val = x['sitename'].encode("ascii")+" "+str(x['takendate']).encode("ascii")
@@ -56,5 +56,4 @@ def tower_main(request):
 		x_axis.append(x_val)
 		y_axis.append(y_val)
 	x_axis = str(x_axis)
-	c = RequestContext(request,{'x_val':x_axis,'y_val':y_axis,})
-	return HttpResponse(t.render(c))
+	return render(request, 'towers/base.html', context={'x_val':x_axis,'y_val':y_axis,})

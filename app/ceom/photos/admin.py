@@ -19,12 +19,9 @@ def status_private(modeladmin, request, queryset):
 status_private.short_description = "Set status: Private"
 
 class PhotoAdmin(admin.GeoModelAdmin):
-    list_display = ("file","user","uploaddate","time","status")
+    list_display = ("id", "file","user","uploaddate","takendate","status")
     exclude = ("file_hash","source","_lon","_lat","datum","regionid",)
     actions = [status_deleted, status_public, status_private]
     search_fields = ['user__email', 'user__username']
-
-    def has_delete_permission(self, request, obj=None):
-        return False
 
 admin.site.register(Photo, PhotoAdmin)

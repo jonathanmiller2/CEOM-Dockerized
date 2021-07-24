@@ -5,7 +5,7 @@ from django.urls import re_path
 import ceom.modis.inventory.views
 
 urlpatterns = [
-    re_path(r'^(?P<dataset_id>m\w{5,6})/(?P<year>\d{4})/$', ceom.modis.inventory.views.tilemap),
+    re_path(r'^(?P<dataset_id>[mM]\w{5,6})/(?P<year>\d{4})/$', ceom.modis.inventory.views.tilemap),
     re_path(r'^tile-h(?P<x>\d+)v(?P<y>\d+)$', ceom.modis.inventory.views.tile),
     re_path(r'^tile-details-h(?P<x>\d+)v(?P<y>\d+)$', ceom.modis.inventory.views.tile_details),
 	re_path(r'^remote_sensing_datasets/', ceom.modis.inventory.views.remote_sensing_datasets),

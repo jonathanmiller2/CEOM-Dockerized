@@ -100,3 +100,10 @@ class TimeSeriesJob(models.Model):
     def toJSON(self):
         exclude_list = ['product','years','user','timestamp','']
         return json.dumps(dict([(attr, str(getattr(self, attr))) for attr in [f.name for f in self._meta.fields if f.name not in exclude_list]]))
+
+class GeocatterPoint(models.Model):
+    id = models.AutoField(primary_key=True)
+    date_categorized = models.DateTimeField(auto_now_add=True)
+    lon = models.FloatField()
+    lat = models.FloatField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)

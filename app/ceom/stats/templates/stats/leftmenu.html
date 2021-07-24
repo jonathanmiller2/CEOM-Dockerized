@@ -1,54 +1,34 @@
 {% load i18n %}
-<style>
-	a {
-		font-size: 11pt;
-		color: #4f85d1;
-	}
-
-	a > p {
-		font-size: 11pt;
-		color: #4f85d1;
-	}
-
-	.nav-header {
-        color: #999999;
-		font-weight: bold;
-		font-size: 8pt;
-		text-transform: uppercase;
-		margin: 1.5em 0em 0.25em 1.5em;
-    }
-</style>
-
-<li class='nav-header'>User Statistics</li>
+<li class='leftmenu-category nav-header'>User Statistics</li>
 <li {% if request.path == '/stats/' %}class='active' {%endif%}>
     <a href='/stats/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="ml-4 m-0 text-left">New User Registration</p>
+        <p class="leftmenu-text ml-4 m-0 text-left">New User Registration</p>
     </a>
 </li>
 <li {% if request.path == '/stats/cumm/' %}class='active' {%endif%}>
     <a href='/stats/cumm/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="ml-4 m-0 text-left">Cummulative Users</p>
+        <p class="leftmenu-text ml-4 m-0 text-left">Cummulative Users</p>
     </a>
 </li>
 <li {% if request.path == '/stats/mont/2007/2016/' %}class='active' {%endif%}>
     <a href='/stats/mont/2007/2016/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="ml-4 m-0 text-left">Users By Month</p>
+        <p class="leftmenu-text ml-4 m-0 text-left">Users By Month</p>
     </a>
 </li>
-<li class='nav-header'>Photos Statistics</li>
+<li class='leftmenu-category nav-header'>Photos Statistics</li>
 <li {% if request.path == '/stats/phot/2007/2016/' %}class='active' {%endif%}>
     <a href='/stats/phot/2007/2016/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="ml-4 m-0 text-left">Photos By Month</p>
+        <p class="leftmenu-text ml-4 m-0 text-left">Photos By Month</p>
     </a>
 </li>
 <li {% if request.path == '/stats/phot/cumm/' %}class='active' {%endif%}>
     <a href='/stats/phot/cumm/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="ml-4 m-0 text-left">Photos Total</p>
+        <p class="leftmenu-text ml-4 m-0 text-left">Photos Total</p>
     </a>
 </li>
-<li class='nav-header'>Define Your Criteria</li>
+<li class='leftmenu-category nav-header'>Define Your Criteria</li>
 <li {% if request.path == '/stats/search_form/' %}class='active' {%endif%}>
     <a href='/stats/search_form/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="ml-4 m-0 text-left">Search Form</p>
+        <p class="leftmenu-text ml-4 m-0 text-left">Search Form</p>
     </a>
 </li>

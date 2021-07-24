@@ -2,23 +2,10 @@
 {% load photos_tags %}
 {% load thumbnail %}
 {% load i18n %}
-{% block head_extra %}
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#id_date_min').datepicker().on('show', function () {
-            console.log('show');
-        });
-        $('#id_date_max').datepicker();
-    });
-</script>
-{{block.super}}
-{% endblock %}
 {% block sidebar_extra %}
 <nav class="card bg-light ml-5 mt-3 shadow-sm">
     {% include "photos/search_form.html" %}
 </nav>
-
-
 {% endblock %}
 
 {% block content %}
@@ -170,14 +157,14 @@
         </div>
 
         {% if checkbox %}
-        <form method='post' name="download" action="/photos/download/">
+        <form method='post' name="download" action="/photos/download/">{% csrf_token %}
             {% endif %}
             <div class="row justify-content-between mr-5">
                 {% if checkbox %}
 
                 <div class="col-md-auto selectAll" style="display: inline;">
                     <b class="font" style="vertical-align: 2.2px;">Select All: </b>
-                    <input type="checkbox" name="selector" value="Off" onclick="selectAll(event);">
+                    <input type="checkbox" name="selector" onclick="selectAll(event);">
                 </div>
 
                 <div class="row mx-2">
@@ -195,16 +182,15 @@
 
                     <button type="submit" class='col-md-auto btn btn-primary menu-field m-1' value="{% trans 'Download' %}">{% trans 'Download' %}</button>
                 </div>
-
             </div>
-            <input type='button' class="btn btn-info batch" id='hideshow' value='Click Here to Batch Edit Selected Photos'>
-
-            <div id="batchedit-fade">
-                {% csrf_token %}
-                <table>{{form.as_table|safe}}</table>
-                <input class='btn' type="submit" value="batchedit" formaction="/photos/batchedit/?next={{request.get_full_path}}">
+            <div id="multi-edit-buttons">
+                <button id="mass-edit-button" type="button" class="btn btn-info">Batch edit</button>
+                <button class='btn btn-light' type="submit" formmethod="GET" formaction="/photos/detailedit/">Detail edit</button>
             </div>
-
+            <div id="mass-edit-container" class='col-3'>
+                {{batch_edit_form}}
+                <input class='btn btn-light mt-3' type="submit" value="Batch Edit" formaction="/photos/batchedit/">
+            </div>
             <hr/>
 
             <div class="container-fluid">
@@ -212,50 +198,31 @@
                 {% include "photos/photo_tile.html" %}
                 {% endfor %}
             </div>
-
-
         </form>
         {% endif %}
     </div>
 </nav>
 
 <script>
-    //**************************************************************
-    //(BATCHEDITING STUFF)
-    //***********************BEGIN**********************************
-    //this code is for div showing on hideshow button click
-    var countChecked = function () {
-        var n = $("input:checked").length;
-        if (n > 1) {
-            if ($("#batchedit-fade").is(':hidden')) {
-                $("#hideshow").show(200);
-            }
-        } else {
-            $("#hideshow").hide(200);
-            $("#batchedit-fade").hide(200);
+    $("#multi-edit-buttons").hide();
+    $("#mass-edit-container").hide();
+
+
+    var countChecked = function() {
+        var n = $( "input:checked" ).length;
+        if(n>1) { 
+            $("#multi-edit-buttons").show(200);
+        }
+        else { 
+            $("#multi-edit-buttons").hide(200);
+            $("#mass-edit-container").hide(200);
         }
     };
-
-    countChecked();
     $("input[type=checkbox]").on("click", countChecked);
-    $('#batchedit-fade').hide(); //initially hide div on first page load
-    $("#hideshow").hide(); //hide button on first page load
 
-    //below code is for hideshow button
-    jQuery(document).ready(function () {
-        jQuery('#hideshow').live('click', function (event) {
-            jQuery('#batchedit-fade').toggle('show');
-            $("#hideshow").hide();
-        });
-    });
-    //***************************END**********************************
-    //****************************************************************
-</script>
-<script>
-    $(document).ready(function () {
-        // $(":checkbox").wrap("<span style='background-color:green'>");//removed green background
-        $(":checkbox").wrap("<span style='background-color'>");
-    });
+    $("#mass-edit-button").click(function () {
+        $('#mass-edit-container').show()
+    })
 </script>
 
 {% endblock %}

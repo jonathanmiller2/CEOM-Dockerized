@@ -1,123 +1,173 @@
 {% extends "photos/base.html" %}
 {% load photos_tags i18n %}
 {% load thumbnail %}
-{% block head_extra %}
-{{block.super}}
-{{ form.media }}
-<style type="text/css">
-table td {
-    border-top: none;
-    width:100px;
-}
 
-.table th, .table td { 
-     border-top: none; 
-     width:100px;
- }
-
-.grp-help {
-	max-width: 758px;
-	padding: 5px 0 0;
-	color: #9a9a9a;
-	font-size: 11px;
-	line-height: 13px;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-   -webkit-appearance: none;
-   margin: 0;
-}
-input[type="number"] {
-   -moz-appearance: textfield;
-}
-
-</style>
-<script type="text/javascript">
-$(document).ready(function(){
-	$('#id_takendate').datepicker();
-});
-
-function wkt(){};
-</script>
-{% endblock %}
 {% block content %}
-<div class="well">
-    <div class="grid">
-		<h2 style="color: #dc143c;">{% trans "Edit Photo" %}</h2>
-		<div class="hr"></div>&nbsp;
 
-		<form method="post">{% csrf_token %}
-			<table class='table' style="max-width:700px;">
-				<tr>
-					<td>{% trans "Photo" %}</td>
-					<td>
-						<a href='{{photo.file.url}}'>
-						{% if photo.file|photoexists %}
-							{% thumbnail photo.file "300x300" as im %}
-								<img class="thumb" src='{{im.url}}' alt='{{photo.name}} thumbnail '>
-							{% endthumbnail %}
-						{% else %}
-				            <img class="thumb" src='' alt='Image not available' style="width:300px;height:300px;">
-			            {% endif %}
-						</a>
-					</td>
-				</tr>
-				<tr>
-					<td>{% trans "Location" %}</td>
-					<td>{{form.point}}</td>
-					<td>{{form.point.errors}}</td>
-				<small><tr style="width:100%;"><td></td><td style="top:-10px;" class="grp-help">({% trans "In Latitude and Longitude, " %} {{form.lat.help_text}})</td></tr></small>
-				<tr>
-					<td>{% trans "Latitude" %}</td>
-					<td>{{form.lat}} {% trans "Decimal degrees" %}.</td>
-					<td>{{form.lat.errors}}</td>
-				</tr>
-				<tr>
-					<td>{% trans "Longitude" %}</td>
-					<td>{{form.lon}} {% trans "Decimal degrees" %}.</td>
-					<td>{{form.lon.errors}}</td>
-				</tr>
-				
-				<tr>
-					<td>{% trans "Altitude" %}</td>
-					<td>{{form.alt}} {% trans "Meters" %}.</td>
-					<td>{{form.alt.errors}}</td>
-				</tr>
-				<tr>
-					<td>{% trans "Taken Date" %}</td>
-					<td>{{form.takendate}}</td>
-					<td>{{form.takendate.errors}}</td>
-				</tr>
-				<tr>
-					<td>{% trans "Direction" %}</td>
-					<td>{{form.dir_card}} {% trans "Cardinal direction" %}.<!-- Currently <b><pre>{{form.instance.get_dir_card_display}}({{form.dir_card.value}})={{photo.dir_card}}</pre></b>--></td>
-					<td>{{form.dir_card.errors}}</td>
-				</tr>
-				<tr>
-					<td>{% trans "Status" %}</td>
-					<td>{{form.status}}</td>
-					<td>{{form.status.errors}}</td>
-				</tr>
-				<tr>
-					<td>{% trans "Category" %}</td>
-					<td>{{form.category}}</td>
-					<td>{{form.category.errors}}</td>
-				</tr>
-				<tr>
-					<td>{% trans "Field Notes" %}</td>
-					<td>{{form.notes}}</td>
-					<td>{{form.notes.errors}}</td>
-				</tr>
-			</table>
-			{% if 'ref' in request.GET %}
-				<button class='btn btn-info mx-2' type="submit" name="Save_and_Goto_Prev_Photo">{% trans 'Save & Go To Previous Photo' %}</button>
-			{% endif %}
-				<button class='btn btn-primary mx-2' type="submit" name="save">{% trans 'Save' %}</button>
-			{% if 'ref' in request.GET %}
-				<button class='btn btn-info mx-2' type="submit" name="Save_and_Goto_Next_Photo">{% trans 'Save & Go To Next Photo' %}</button>
-			{% endif %}
-		</form>
-	</div>
-</div>
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=initMap"></script>
+
+<style>
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+  		-webkit-appearance: none;
+  		margin: 0;
+	}
+
+	.field-height {
+		line-height: calc(1.5em + .75rem + 2px);
+		vertical-align: middle;
+	}
+</style>
+
+<h2 style="color: #dc143c;">{% trans "Photo" %}</h2>
+<hr />
+<p>{% trans "Photo" %}</p>
+<a href='{{photo.file.url}}'>
+	{% if photo.file|photoexists %}
+		{% thumbnail photo.file "300x300" as im %}
+			<img class="mb-4" src='{{im.url}}' alt='{{photo.name}} thumbnail '>
+		{% endthumbnail %}
+	{% else %}
+		<img class="thumb" src='' alt='Image not available' style="width:300px;height:300px;">
+	{% endif %}
+</a>
+<p>{% trans "Location" %}</p>
+<div id="map" class="mb-5" style="height: 500px"></div>
+
+<form method="post">{% csrf_token %}
+	<table class='table'>
+		<tr>
+			<td class="field-height">{% trans "Latitude" %}</td>
+			<td class="input-group">
+				<input type="number" class="form-control col-md-2 coord-input" id="lat-input" name="lat" step="any" value="{{photo.lat|default_if_none:""}}">
+				<span class="field-height ml-2">{% trans "(In decimal degrees)" %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="field-height">{% trans "Longitude" %}</td>
+			<td class="input-group">
+				<input type="number" class="form-control col-md-2 coord-input" id="lon-input" name="lon" step="any" value="{{photo.lon|default_if_none:""}}">
+				<span class="field-height ml-2">{% trans "(In decimal degrees)" %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="field-height">{% trans "Altitude" %}</td>
+			<td class="input-group">
+				<input type="number" class="form-control col-md-2" id="alt-input" name="alt" step="any" value="{{photo.alt|default_if_none:""}}">
+				<span class="field-height ml-2">{% trans "(In meters)" %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="field-height">{% trans "Taken Date" %}</td>
+			<td><input type="date" class="form-control col-md-2" id="takendate-input" name="takendate" value="{{photo.takendate | date:"Y-m-d"}}"></td>
+		</tr>
+		<tr>
+			<td class="field-height">{% trans "Direction" %}</td>
+			<td><select name="dir_card" id="dir_card-input" class="form-control col-md-2" id="dir_card">
+				<option></option>
+				<option value="N" {% if photo.dir_card == "N" %}selected{% endif %}>North</option>
+				<option value="NNE" {% if photo.dir_card == "NNE" %}selected{% endif %}>NNE</option>
+				<option value="NE" {% if photo.dir_card == "NE" %}selected{% endif %}>NE</option>
+				<option value="ENE" {% if photo.dir_card == "ENE" %}selected{% endif %}>ENE</option>
+				<option value="E" {% if photo.dir_card == "E" %}selected{% endif %}>East</option>
+				<option value="ESE" {% if photo.dir_card == "ESE" %}selected{% endif %}>ESE</option>
+				<option value="SE" {% if photo.dir_card == "SE" %}selected{% endif %}>SE</option>
+				<option value="SSE" {% if photo.dir_card == "SSE" %}selected{% endif %}>SSE</option>
+				<option value="S" {% if photo.dir_card == "S" %}selected{% endif %}>South</option>
+				<option value="SSW" {% if photo.dir_card == "SSW" %}selected{% endif %}>SSW</option>
+				<option value="SW" {% if photo.dir_card == "SW" %}selected{% endif %}>SW</option>
+				<option value="WSW" {% if photo.dir_card == "WSW" %}selected{% endif %}>WSW</option>
+				<option value="W" {% if photo.dir_card == "W" %}selected{% endif %}>West</option>
+				<option value="WNW" {% if photo.dir_card == "WNW" %}selected{% endif %}>WNW</option>
+				<option value="NW" {% if photo.dir_card == "NW" %}selected{% endif %}>NW</option>
+				<option value="NNW" {% if photo.dir_card == "NNW" %}selected{% endif %}>NNW</option>
+			  </select>
+			</td>
+		</tr>
+		<tr>
+			<td class="field-height">{% trans "Status" %}</td>
+			<td><select id="status-input" name="status" class="form-control col-md-2">
+				<option value="1" {% if photo.status == 1 %}selected{% endif %}>Public</option>
+				<option value="2" {% if photo.status == 2 %}selected{% endif %}>Private</option>
+			</select></td>
+		</tr>
+		<tr>
+			<td class="field-height">{% trans "Category" %}</td>
+			<td><select class="form-control col-md-2" id="category-input" name="category">
+			<option></option>
+			{% for category in landcover_categories %}
+				<option {% ifequal photo.category.name category.name %}selected{% endifequal %}>{{ category.name }}</option>
+			{% endfor %}
+			</select></td>
+		</tr>
+		<tr>
+			<td>{% trans "Field Notes" %}</td>
+			<td><textarea class="form-control" rows="5" id="notes-input" name="notes">{{photo.notes}}</textarea></td>
+		</tr>
+	</table>
+		<button class='btn btn-primary mx-2' type="submit" name="save">{% trans 'Save' %}</button>
+		{% if show_next %}
+		<button class='btn btn-info mx-2' type="submit" name="Save_and_Goto_Next_Photo">{% trans 'Save & Go To Next Photo' %}</button>
+		{% endif %}
+	<button class='btn btn-warning mx-2' type="button" onclick="resetForm()">{% trans 'Reset' %}</button>
+</form>
+
+
+<script>
+	let marker = null;
+	let map = null;
+
+	async function initMap()
+	{
+        let startLocation = {lat: parseFloat({{photo.lat|default_if_none:0}}), lng: parseFloat({{photo.lon|default_if_none:0}})};
+
+		mzs = new google.maps.MaxZoomService()
+		let zoomobj = await mzs.getMaxZoomAtLatLng(startLocation);
+        
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: zoomobj.zoom,
+          center: startLocation,
+          gestureHandling: 'cooperative',
+          mapTypeId: 'satellite',
+          draggableCursor: 'crosshair',
+        });
+
+		marker = new google.maps.Marker({
+			position: startLocation,
+			map,
+			draggable:true,
+			title: "Photo Location"
+		});
+
+		google.maps.event.addListener(marker, 'dragend', function (evt) {
+			$("#lat-input").val((evt.latLng.lat()).toFixed(10));
+			$("#lon-input").val((evt.latLng.lng()).toFixed(10));
+		});
+    }
+
+	$(".coord-input").change(function () {
+		let lat = parseFloat($("#lat-input").val())
+		let lon = parseFloat($("#lon-input").val())
+		let new_coords = {lat: lat, lng: lon};
+		marker.setPosition(new_coords);
+		map.setCenter(new_coords);
+	});
+
+	function resetForm() {
+		let lat = parseFloat({{photo.lat|default_if_none:0}});
+		let lon = parseFloat({{photo.lon|default_if_none:0}});
+		let new_coords = {lat: lat, lng: lon};
+		marker.setPosition(new_coords);
+		map.setCenter(new_coords);
+		$("#lat-input").val(lat);
+		$("#lon-input").val(lon);
+
+		$("#alt-input").val("{{photo.alt|default_if_none:""}}");
+		$("#takendate-input").val("{{photo.takendate| date:"Y-m-d" | default_if_none:""}}");
+		$("#dir_card-input").val("{{photo.dir_card|default_if_none:""}}");
+		$("#status-input").val("{{photo.status}}");
+		$("#category-input").val("{{photo.category.name|default_if_none:""}}");
+		$("#notes-input").val("{{photo.notes|default_if_none:""|escapejs}}");
+	}
+</script>
 {% endblock %}
