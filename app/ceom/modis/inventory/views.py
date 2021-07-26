@@ -63,6 +63,8 @@ def tilemap(request, dataset_id, year):
     })
     
 def tile(request, x, y):
+
+    #TODO: Why are there two files named the same thing?
     def daystoranges( days,day_res):
         l = []
         if len(days) > 0:

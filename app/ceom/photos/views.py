@@ -766,7 +766,7 @@ def download(request):
                     row = [p.id,str(p.file.name),p.lon,p.lat,p.alt,p.category,str(notes)]
                 pass
             w.writerow(row)
-            ziphandle.write(p.file.file.name, os.path.basename(p.file.name))
+            ziphandle.write(str(p.file.file.name), str(os.path.basename(p.file.name)))
 
         metadata.flush()
         ziphandle.writestr("files.csv",metadata.getvalue())
