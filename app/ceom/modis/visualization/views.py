@@ -6,17 +6,17 @@ from ceom.modis.inventory.models import Dataset
 from ceom.photos.models import Category, Photo
 from ceom.modis.visualization.models import TimeSeriesJob,  SingleTimeSeriesJob, GeocatterPoint
 from ceom.modis.visualization.forms import ProductSelect, TimeSeriesJobForm
+from datetime import datetime, date, timedelta
 
 #TODO: Are these imports necessary?
 #from django.template.context_processors import csrf
 
 import numpy, math
-import  os, re, datetime, glob, sys
+import  os, re, glob, sys
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Need to change to include new celery script
 # import process
 
-import datetime
 import csv
 import json as simplejson 
 from django.contrib.auth.models import User
@@ -68,7 +68,7 @@ def index(request):
 @login_required()
 def gmap(request):
     datasets = Dataset.objects.filter(is_global=False).order_by('name')
-    years = [y for y in range (2000,datetime.date.today().year +1)]
+    years = [y for y in range (2000,date.today().year +1)]
     return render(request, 'visualization/gmap.html', context={
         'datasets':datasets,
         'years':years,
@@ -79,7 +79,7 @@ def gmap1(request, lat, lon):
     lon = float(lon)
     lat = float(lat)
     datasets = Dataset.objects.filter(is_global=False).order_by('name')
-    years = [y for y in range (2000,datetime.date.today().year +1)]
+    years = [y for y in range (2000,date.today().year +1)]
 
     return render(request, 'visualization/gmap.html', context={
         'datasets':datasets,
@@ -94,7 +94,15 @@ def manual(request):
 
 def olmap(request):
     form = ProductSelect()
-    return render(request, 'visualization/olmap.html', context={"product_form":form})
+    products = ['EVI', 'LSWI', 'NDSI', 'NDVI', 'NDWI', 'SNOW']
+    days = list(range(1, 362, 8))
+    years = list(range(2000, datetime.now().year+1))
+    return render(request, 'visualization/olmap.html', context={
+        "product_form":form,
+        "products": products,
+        "days": days,
+        "years": years,
+    })
 
 def gemap(request):
     # ds = Datainfo.objects.all().order_by('label')
@@ -108,11 +116,11 @@ def indices_kml(request):
     timespans = []
     for y in range(2002,2003):
         for d in range(1,96,8):
-            time = datetime.date(y,1,1) + datetime.timedelta(d-1)
+            time = date(y,1,1) + timedelta(d-1)
             timespans.append({'layers':"TOP%2CBOT%2Cocean_mask",
                              'params':"year=%d&day=%d&prod=evi"%(y,d),
                              'begin':time,
-                             'end':time+datetime.timedelta(d+6) })
+                             'end':time+timedelta(d+6) })
 
     #test = points[0].kml
     return render(request, 'kml/wrap_wms_time.kml', context={'timespans' : timespans, 'host':request.META['HTTP_HOST']}, content_type = "application/vnd.google-earth.kml+xml")
@@ -122,11 +130,11 @@ def evi_kml(request):
     timespans = []
     for y in range(2002,2003):
         for d in range(1,96,8):
-            time = datetime.date(y,1,1) + datetime.timedelta(d-1)
+            time = date(y,1,1) + timedelta(d-1)
             timespans.append({'layers':"TOP%2CBOT%2Cocean_mask",
                              'params':"year=%d&day=%d&prod=evi"%(y,d),
                              'begin':time,
-                             'end':time+datetime.timedelta(d+6) })
+                             'end':time+timedelta(d+6) })
 
     #test = points[0].kml
     return render(request, 'kml/wrap_wms_time.kml', context={'timespans' : timespans, 'host':request.META['HTTP_HOST']}, content_type="application/vnd.google-earth.kml+xml")
