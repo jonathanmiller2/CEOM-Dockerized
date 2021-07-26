@@ -3,7 +3,7 @@
 {% block title %} {% trans "CEOM MODIS timeseries Single Site" %} {% endblock %}
 
 {% block head_extra %}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ" type="text/javascript"></script>
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=init"></script>
 
 
 
@@ -58,10 +58,8 @@
         <input class="form-control col-sm-3 mx-2 my-1" id="Taddress" type="text" name="address">
         <button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1" id="addresGo" onclick="showAddress();" style="border-width: 1.6px;">{% trans "Go" %}</button>
         <script type="text/javascript">
-            $("#Taddress").keyup(function (event) {
-                if (event.keyCode == 13) {
-                    $("#addresGo").click();
-                }
+            $.get("https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ", function( data ) {
+                console.log( "Data Loaded: " + data );
             });
         </script>
     </div>
@@ -69,6 +67,12 @@
 <p><b>(OR)</b></p>
 <div>
     <legend class="pt-2"><strong>{% trans "1b.Enter the latitude & longitude information" %}</strong> </legend>
+    <div class="row">
+        <label class="col-sm-2"></label>
+        <label class="col-sm-2 mx-2" style="text-align:center">Degrees</label>
+        <label class="col-sm-2 mx-2" style="text-align:center">Minutes</label>
+        <label class="col-sm-2 mx-2" style="text-align:center">Seconds</label>
+    </div>
     <div class="row">
         <label class="col-sm-2 my-1 pt-1">Latitude:</label> <!-- DMS Lat -->
         <input id="LAT_DEG" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Degrees">
@@ -85,7 +89,9 @@
     </div>
     <label class="pt-2 my-1">or enter <strong>Decimal degrees</strong> below:</label> <!-- decimal degrees -->
     <div class="row">
+        <label class="col-sm-2 my-1 pt-1">Latitude:</label>
         <input id="LAT_DEC" class="DECField form-control col-sm-2 mx-2 my-1 offset1" type="number" step="any" placeholder="Latitude">
+        <label class="col-sm-2 my-1 mx-2 pt-1">Longitude:</label>
         <input id="LON_DEC" class="DECField form-control col-sm-2 mx-2 my-1 offset1" type="number" step="any" placeholder="Longitude">
         <button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1" id="RedirectControl" onclick="enterCoordsLatLon();" name="RedirectControl" style="border-width: 1.6px;">Go</button>
     </div>
@@ -188,77 +194,84 @@
         lng: 0
     };
 
-    map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 2,
-        center: startLocation,
-        gestureHandling: 'cooperative',
-        mapTypeId: 'satellite',
-    });
+    function init() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 2,
+            center: startLocation,
+            gestureHandling: 'cooperative',
+            mapTypeId: 'satellite',
+        });
+
+        var marker = new google.maps.Marker({
+            position: startLocation,
+            map: map,
+            draggable: true,
+        });
+
+        google.maps.event.addListener(marker, 'dragend', function (evt) {
+            let lat = evt.latLng.lat().toFixed(3);
+            let lon = evt.latLng.lng().toFixed(3);
+            //.val instead of .html for the inputs here
+
+            let dms_lat = toDMS(lat);
+            let dms_lon = toDMS(lon);
+
+            $('#LAT_DEG').val(dms_lat[0])
+            $('#LAT_MIN').val(dms_lat[1])
+            $('#LAT_SEC').val(dms_lat[2])
+
+            $('#LON_DEG').val(dms_lon[0])
+            $('#LON_MIN').val(dms_lon[1])
+            $('#LON_SEC').val(dms_lon[2])
+
+            $('#LAT_DEC').val(lat)
+            $('#LON_DEC').val(lon)
+        });
+
+        $(".DMSField").change(function() {
+            //... get new DMS coords (just reading from the fields, not using (this.value)...
+            let lat_deg = parseFloat($('#LAT_DEG').val() || 0);
+            let lat_min = parseFloat($('#LAT_MIN').val() || 0);
+            let lat_sec = parseFloat($('#LAT_SEC').val() || 0);
+            let lon_deg = parseFloat($('#LON_DEG').val() || 0);
+            let lon_min = parseFloat($('#LON_MIN').val() || 0);
+            let lon_sec = parseFloat($('#LON_SEC').val() || 0);
+
+            //... update Decimal degrees fields... // Remember to use JQuery $().value to update the Decimal Degrees field.
+            let lat_dec = lat_deg + parseFloat(parseFloat(lat_min + (lat_sec / 60)) / 60);
+            let lon_dec = lon_deg + parseFloat(parseFloat(lon_min + (lon_sec / 60)) / 60);
+            $('#LAT_DEC').val(lat_dec.toFixed(3))
+            $('#LON_DEC').val(lon_dec.toFixed(3))
+            //...update map...
+            marker.setPosition({ lat: lat_dec, lng: lon_dec });
+        });
+
+        $(".DECField").change(function() {
+            let lat_dec = parseFloat($('#LAT_DEC').val() || 0);
+            let lon_dec = parseFloat($('#LON_DEC').val() || 0);
+
+            let dms_lat = toDMS(lat_dec);
+            let dms_lon = toDMS(lon_dec);
+
+            $('#LAT_DEG').val(dms_lat[0])
+            $('#LAT_MIN').val(dms_lat[1])
+            $('#LAT_SEC').val(dms_lat[2])
+            $('#LON_DEG').val(dms_lon[0])
+            $('#LON_MIN').val(dms_lon[1])
+            $('#LON_SEC').val(dms_lon[2])
+
+            marker.setPosition({ lat: lat_dec, lng: lon_dec});
+        });
+
+
+
+        map.setCenter(marker.position);
+        marker.setMap(map);
+    }
     
-    var marker = new google.maps.Marker({
-        position: startLocation,
-        map: map,
-        draggable: true,
-    });
+    
+    
 
-    google.maps.event.addListener(marker, 'dragend', function (evt) {
-        let lat = evt.latLng.lat().toFixed(3);
-        let lon = evt.latLng.lng().toFixed(3);
-        //.val instead of .html for the inputs here
-
-        let dms_lat = toDMS(lat);
-        let dms_lon = toDMS(lon);
-
-        $('#LAT_DEG').val(dms_lat[0])
-        $('#LAT_MIN').val(dms_lat[1])
-        $('#LAT_SEC').val(dms_lat[2])
-
-        $('#LON_DEG').val(dms_lon[0])
-        $('#LON_MIN').val(dms_lon[1])
-        $('#LON_SEC').val(dms_lon[2])
-
-        $('#LAT_DEC').val(lat)
-        $('#LON_DEC').val(lon)
-    });
-
-    $(".DMSField").change(function() {
-        //... get new DMS coords (just reading from the fields, not using (this.value)...
-        let lat_deg = parseFloat($('#LAT_DEG').val() || 0);
-        let lat_min = parseFloat($('#LAT_MIN').val() || 0);
-        let lat_sec = parseFloat($('#LAT_SEC').val() || 0);
-        let lon_deg = parseFloat($('#LON_DEG').val() || 0);
-        let lon_min = parseFloat($('#LON_MIN').val() || 0);
-        let lon_sec = parseFloat($('#LON_SEC').val() || 0);
-
-        //... update Decimal degrees fields... // Remember to use JQuery $().value to update the Decimal Degrees field.
-        let lat_dec = lat_deg + parseFloat(parseFloat(lat_min + (lat_sec / 60)) / 60);
-        let lon_dec = lon_deg + parseFloat(parseFloat(lon_min + (lon_sec / 60)) / 60);
-        $('#LAT_DEC').val(lat_dec.toFixed(3))
-        $('#LON_DEC').val(lon_dec.toFixed(3))
-        //...update map...
-        marker.setPosition({ lat: lat_dec, lng: lon_dec });
-    });
-
-    $(".DECField").change(function() {
-        let lat_dec = parseFloat($('#LAT_DEC').val() || 0);
-        let lon_dec = parseFloat($('#LON_DEC').val() || 0);
-
-        let dms_lat = toDMS(lat_dec);
-        let dms_lon = toDMS(lon_dec);
-
-        $('#LAT_DEG').val(dms_lat[0])
-        $('#LAT_MIN').val(dms_lat[1])
-        $('#LAT_SEC').val(dms_lat[2])
-        $('#LON_DEG').val(dms_lon[0])
-        $('#LON_MIN').val(dms_lon[1])
-        $('#LON_SEC').val(dms_lon[2])
-
-        marker.setPosition({ lat: lat_dec, lng: lon_dec});
-    });
-
-
-
-    map.setCenter(marker.position);
-    marker.setMap(map);
+    
 </script>
 {% endblock %}
