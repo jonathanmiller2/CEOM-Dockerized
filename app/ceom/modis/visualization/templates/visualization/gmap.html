@@ -181,6 +181,7 @@
     })
 </script>
 <script>
+    // ------------------------------------------------------------------------------------------------------------------------------------------------------------- TODO: Delete this later
     function toDMS(decimalVal) {
         var degree = Math.trunc(decimalVal);
         var minute = Math.trunc((decimalVal - degree) * 60);
@@ -189,20 +190,56 @@
         return [degree, minute, second];
     }
     
-    var startLocation = {
+    let startLocation = {
         lat: 0,
         lng: 0
     };
 
+    
+    var radians = function(x){
+        return x * Math.PI / 180.0; 
+    };
+
+    var degrees = function(x){
+        return x * 180.0 / Math.PI;
+    };
+    let map, marker;
+    let polygon, polygon2, polygon3;
+    // -------------------------------------------------------------------------- INIT ------------------------------------------------------------------------------ TODO: Delete this later
     function init() {
-        var map = new google.maps.Map(document.getElementById('map'), {
+        map =  new google.maps.Map(document.getElementById('map'), { // Remember to remove the "var" here. It's not a new variable at this line anymore.
             zoom: 2,
             center: startLocation,
             gestureHandling: 'cooperative',
             mapTypeId: 'satellite',
-        });
-
-        var marker = new google.maps.Marker({
+        });;
+        let box = latlon2pixel(78,-43, 2400.0);
+        let box2 = latlon2pixel(78, -43, 4800.0);
+        let box3 = latlon2pixel(78, -43, 1200.0);
+        
+        polygon = new google.maps.Polygon({ 
+            paths: box,
+            strokeColor: "#FF3300",                 
+            strokeOpacity: 0.9,
+            strokeWeight: 2,                                 
+            fillOpacity: 0.1,                 
+        });;
+        polygon2 = new google.maps.Polygon({ 
+            paths: box2,
+            strokeColor: "#12246B",                 
+            strokeOpacity: 0.9,
+            strokeWeight: 2,                                 
+            fillOpacity: 0.1,                 
+        });;
+        polygon3 = new google.maps.Polygon({ 
+            paths: box2,
+            strokeColor: "#75FF30",                 
+            strokeOpacity: 0.8,
+            strokeWeight: 2,                                 
+            fillOpacity: 0.1,                 
+        });;
+     
+        marker = new google.maps.Marker({
             position: startLocation,
             map: map,
             draggable: true,
@@ -211,7 +248,6 @@
         google.maps.event.addListener(marker, 'dragend', function (evt) {
             let lat = evt.latLng.lat().toFixed(3);
             let lon = evt.latLng.lng().toFixed(3);
-            //.val instead of .html for the inputs here
 
             let dms_lat = toDMS(lat);
             let dms_lon = toDMS(lon);
@@ -226,6 +262,29 @@
 
             $('#LAT_DEC').val(lat)
             $('#LON_DEC').val(lon)
+            marker.setPosition({lat: evt.latLng.lat(), lng: evt.latLng.lng()});
+            updatePixelDisplay(map, marker, lat, lon);
+        });
+
+        google.maps.event.addListener(map, 'click', function (evt) {
+            let lat = evt.latLng.lat().toFixed(3);
+            let lon = evt.latLng.lng().toFixed(3);
+
+            let dms_lat = toDMS(lat);
+            let dms_lon = toDMS(lon);
+
+            $('#LAT_DEG').val(dms_lat[0])
+            $('#LAT_MIN').val(dms_lat[1])
+            $('#LAT_SEC').val(dms_lat[2])
+
+            $('#LON_DEG').val(dms_lon[0])
+            $('#LON_MIN').val(dms_lon[1])
+            $('#LON_SEC').val(dms_lon[2])
+
+            $('#LAT_DEC').val(lat)
+            $('#LON_DEC').val(lon)
+            marker.setPosition({lat: evt.latLng.lat(), lng: evt.latLng.lng()});
+            updatePixelDisplay(map, marker, lat, lon);
         });
 
         $(".DMSField").change(function() {
@@ -243,7 +302,8 @@
             $('#LAT_DEC').val(lat_dec.toFixed(3))
             $('#LON_DEC').val(lon_dec.toFixed(3))
             //...update map...
-            marker.setPosition({ lat: lat_dec, lng: lon_dec });
+            marker.setPosition({lat: lat_dec, lng: lon_dec});
+            updatePixelDisplay(map, marker, lat_dec, lon_dec);
         });
 
         $(".DECField").change(function() {
@@ -260,18 +320,91 @@
             $('#LON_MIN').val(dms_lon[1])
             $('#LON_SEC').val(dms_lon[2])
 
-            marker.setPosition({ lat: lat_dec, lng: lon_dec});
+            marker.setPosition({lat: lat_dec, lng: lon_dec});
+            updatePixelDisplay(map, marker, lat_dec, lon_dec); 
         });
-
-
-
-        map.setCenter(marker.position);
+        
         marker.setMap(map);
+        polygon.setMap(map);
+        polygon2.setMap(map);
+        polygon3.setMap(map);
     }
-    
-    
-    
 
+    async function updatePixelDisplay(map, marker, lat, lng) { //This function shouldn't return anything, it should just move the polygon
+        let box = latlon2pixel(lat, lng, 2400.0);
+        let box2 = latlon2pixel(lat, lng, 4800.0);
+        let box3 = latlon2pixel(lat, lng, 1200.0);
+        polygon.setPath(box);
+        polygon2.setPath(box2);
+        polygon3.setPath(box3);
+        if($("#auto_zoom").is(":checked")) {
+            let mzs = new google.maps.MaxZoomService();
+            let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+            map.setZoom(Math.min(zoomobj.zoom, 15));
+            map.setCenter(marker.getPosition())
+        }
+    }
+
+    // Sinusoidal Grid: 0-35h (horizontal) & 0-17v (vertical)
+    // g : the pixel number from the starting point (0) (=global), xi : pixel x inside a tile, npix : number of pixels
+
+    let sin2latlon = function(ih, iv, xi, yi, npix) {
+        let cons =(36.0 * npix)/(2.0 * Math.PI);
+        let yg = iv * npix + yi;
+        let xg = ih * npix + xi;
+
+        let lat = degrees((9.0 * npix) - yg) / cons; 
+        let lon = degrees(xg - 18.0 * npix) / (cons * Math.cos(radians(lat)));
+        
+        return {lat:lat, lon:lon};
+    };
     
+    let latlon2sin = function(lat, lon, npix) {
+        let cons =(36.0 * npix)/(2.0 * Math.PI);
+        let yg = 9.0 * npix - radians(cons * lat);
+        let xg = radians(cons*lon*Math.cos(radians(lat))) + 18.0 * npix;
+
+        let ih = Math.floor(xg/npix);
+        let iv = Math.floor(yg/npix);
+
+        let x = xg-ih*npix;
+        let y = yg-iv*npix;
+
+        let xi = Math.floor(x);
+        let yi = Math.floor(y);
+
+        return {h: ih, v: iv, x: xi, y: yi};
+    };
+    
+    let latlon2pixel = function(lat, lon, npix){
+        let sin = latlon2sin(lat, lon, npix);
+        let ih = sin.h, iv = sin.v, xi = sin.x, yi = sin.y;
+        let bbox = [];
+        let p;
+       
+        p = sin2latlon(ih, iv, xi + 0, yi + 0, npix);
+        bbox.push({lat: p.lat, lng: p.lon});
+        p = sin2latlon(ih, iv, xi + 0, yi + 1, npix);
+        bbox.push({lat: p.lat, lng: p.lon});
+        p = sin2latlon(ih, iv, xi + 1, yi + 1, npix);
+        bbox.push({lat: p.lat, lng: p.lon});
+        p = sin2latlon(ih, iv, xi + 1, yi + 0, npix);
+        bbox.push({lat: p.lat, lng: p.lon});
+        return bbox;
+    };
+
+    function getTile(lon, lat){
+        var bbox = latlon2pixel(lat, lon);
+        var projto = map.getProjectionObject();
+
+        var points = [];
+        for (var i = 0; i < bbox.length; i++){
+            points.push(new OpenLayers.Geometry.Point(bbox[i][0],bbox[i][1]));
+        }
+
+        var geom = new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(points));
+        return geom.transform(proj, projto);
+    }
+
 </script>
 {% endblock %}
