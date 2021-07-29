@@ -50,7 +50,7 @@
 </div>
 <h2 style="color: #dc143c;">{% trans "Retrieve time series MODIS data for a single study site" %}</h2>
 
-<legend><strong>{% trans "1a.Select an address or a Point on the Map" %}</strong> </legend>
+<legend><strong>{% trans "1a. Select an address or a Point on the Map" %}</strong> </legend>
 
 <div id="div_address">
     <div class="row">
@@ -61,7 +61,7 @@
 </div>
 <p><b>(OR)</b></p>
 <div>
-    <legend class="pt-2"><strong>{% trans "1b.Enter the latitude & longitude information" %}</strong> </legend>
+    <legend class="pt-2"><strong>{% trans "1b. Enter the latitude & longitude information" %}</strong> </legend>
     <div class="row">
         <label class="col-sm-2"></label>
         <label class="col-sm-2 mx-2" style="text-align:center">Degrees</label>
@@ -69,14 +69,14 @@
         <label class="col-sm-2 mx-2" style="text-align:center">Seconds</label>
     </div>
     <div class="row">
-        <label class="col-sm-2 my-1 pt-1">Latitude:</label> <!-- DMS Lat -->
+        <label class="col-sm-2 my-1 pt-1" style="text-align:center">Latitude:</label> <!-- DMS Lat -->
         <input id="LAT_DEG" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Degrees">
         <input id="LAT_MIN" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Minutes">
         <input id="LAT_SEC" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="any" placeholder="Seconds">
     </div>
 
     <div class="row">
-        <label class="col-sm-2 my-1 pt-1">Longitude:</label> <!-- DMS Lon -->
+        <label class="col-sm-2 my-1 pt-1" style="text-align:center">Longitude:</label> <!-- DMS Lon -->
         <input id="LON_DEG" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Degrees">
         <input id="LON_MIN" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Minutes">
         <input id="LON_SEC" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="any" placeholder="Seconds">
@@ -84,9 +84,9 @@
     </div>
     <label class="pt-2 my-1">or enter <strong>Decimal degrees</strong> below:</label> <!-- decimal degrees -->
     <div class="row">
-        <label class="col-sm-2 my-1 pt-1">Latitude:</label>
+        <label class="col-sm-2 my-1 pt-1" style="text-align:center">Latitude:</label>
         <input id="LAT_DEC" class="DECField form-control col-sm-2 mx-2 my-1 offset1" type="number" step="any" placeholder="Latitude">
-        <label class="col-sm-2 my-1 mx-2 pt-1">Longitude:</label>
+        <label class="col-sm-2 my-1 mx-2 pt-1" style="text-align:center">Longitude:</label>
         <input id="LON_DEC" class="DECField form-control col-sm-2 mx-2 my-1 offset1" type="number" step="any" placeholder="Longitude">
         <button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1" id="RedirectControl" onclick="enterCoordsLatLon();" name="RedirectControl" style="border-width: 1.6px;">Go</button>
     </div>
@@ -141,8 +141,6 @@
     </div>
 </div>
 
-
-
 {% if photoRedirect %}
 <input id="lonRedirect" type=hidden value={{lonRedirect}}></input>
 <input id="latRedirect" type=hidden value={{latRedirect}}></input>
@@ -168,7 +166,6 @@
     })
 </script>
 <script>
-    // ------------------------------------------------------------------------------------------------------------------------------------------------------------- TODO: Delete this later
     function toDMS(decimalVal) {
         var degree = Math.trunc(decimalVal);
         var minute = Math.trunc((decimalVal - degree) * 60);
@@ -182,7 +179,6 @@
         lng: 0
     };
 
-    
     var radians = function(x){
         return x * Math.PI / 180.0; 
     };
@@ -192,42 +188,36 @@
     };
     let map, marker;
     let polygon, polygon2, polygon3;
-    // -------------------------------------------------------------------------- INIT ------------------------------------------------------------------------------ TODO: Delete this later
+
     function init() {
-        map =  new google.maps.Map(document.getElementById('map'), { // Remember to remove the "var" here. It's not a new variable at this line anymore.
+        map =  new google.maps.Map(document.getElementById('map'), { 
             zoom: 2,
             center: startLocation,
             gestureHandling: 'cooperative',
             mapTypeId: 'satellite',
-        });;
-        let box = latlon2pixel(78,-43, 2400.0);
-        let box2 = latlon2pixel(78, -43, 4800.0);
-        let box3 = latlon2pixel(78, -43, 1200.0);
+        });
         
         polygon = new google.maps.Polygon({ 
-            paths: box,
             strokeColor: "#FF3300",                 
             strokeOpacity: 0.9,
             strokeWeight: 2,                                 
             fillOpacity: 0,
             clickable: false,                 
-        });;
+        });
         polygon2 = new google.maps.Polygon({ 
-            paths: box2,
             strokeColor: "Blue",                 
             strokeOpacity: 0.9,
             strokeWeight: 2,                                 
             fillOpacity: 0,
             clickable: false,                 
-        });;
+        });
         polygon3 = new google.maps.Polygon({ 
-            paths: box2,
             strokeColor: "#75FF30",                 
             strokeOpacity: 0.8,
             strokeWeight: 2,                                 
             fillOpacity: 0,
             clickable: false,                 
-        });;
+        });
      
         marker = new google.maps.Marker({
             position: startLocation,
@@ -235,7 +225,7 @@
             draggable: true,
         });
 
-        google.maps.event.addListener(marker, 'dragend', function (evt) {
+        google.maps.event.addListener(marker, 'dragend', async function (evt) {
             let lat = evt.latLng.lat().toFixed(3);
             let lon = evt.latLng.lng().toFixed(3);
 
@@ -253,10 +243,16 @@
             $('#LAT_DEC').val(lat)
             $('#LON_DEC').val(lon)
             marker.setPosition({lat: evt.latLng.lat(), lng: evt.latLng.lng()});
-            updatePixelDisplay(map, marker, lat, lon);
+            if($("#auto_zoom").is(":checked")) {
+                let mzs = new google.maps.MaxZoomService();
+                let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+                map.setZoom(Math.min(zoomobj.zoom, 15));
+                map.setCenter(marker.getPosition())
+            }
+            updatePixelDisplay(lat, lon);
         });
 
-        google.maps.event.addListener(map, 'click', function (evt) {
+        google.maps.event.addListener(map, 'click', async function (evt) {
             let lat = evt.latLng.lat().toFixed(3);
             let lon = evt.latLng.lng().toFixed(3);
 
@@ -274,10 +270,16 @@
             $('#LAT_DEC').val(lat)
             $('#LON_DEC').val(lon)
             marker.setPosition({lat: evt.latLng.lat(), lng: evt.latLng.lng()});
-            updatePixelDisplay(map, marker, lat, lon);
+            if($("#auto_zoom").is(":checked")) {
+                let mzs = new google.maps.MaxZoomService();
+                let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+                map.setZoom(Math.min(zoomobj.zoom, 15));
+                map.setCenter(marker.getPosition())
+            }
+            updatePixelDisplay(lat, lon);
         });
 
-        $(".DMSField").change(function() {
+        $(".DMSField").change(async function() {
             //... get new DMS coords (just reading from the fields, not using (this.value)...
             let lat_deg = parseFloat($('#LAT_DEG').val() || 0);
             let lat_min = parseFloat($('#LAT_MIN').val() || 0);
@@ -293,10 +295,16 @@
             $('#LON_DEC').val(lon_dec.toFixed(3))
             //...update map...
             marker.setPosition({lat: lat_dec, lng: lon_dec});
-            updatePixelDisplay(map, marker, lat_dec, lon_dec);
-        });
+            if($("#auto_zoom").is(":checked")) {
+                let mzs = new google.maps.MaxZoomService();
+                let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+                map.setZoom(Math.min(zoomobj.zoom, 15));
+                map.setCenter(marker.getPosition())
+            }
+            updatePixelDisplay(lat_dec, lon_dec);
+        });       
 
-        $(".DECField").change(function() {
+        $(".DECField").change(async function() {
             let lat_dec = parseFloat($('#LAT_DEC').val() || 0);
             let lon_dec = parseFloat($('#LON_DEC').val() || 0);
 
@@ -311,7 +319,13 @@
             $('#LON_SEC').val(dms_lon[2])
 
             marker.setPosition({lat: lat_dec, lng: lon_dec});
-            updatePixelDisplay(map, marker, lat_dec, lon_dec); 
+            if($("#auto_zoom").is(":checked")) {
+                let mzs = new google.maps.MaxZoomService();
+                let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+                map.setZoom(Math.min(zoomobj.zoom, 15));
+                map.setCenter(marker.getPosition())
+            }
+            updatePixelDisplay(lat_dec, lon_dec); 
         });
         
         marker.setMap(map);
@@ -320,11 +334,11 @@
         polygon3.setMap(map);
         const geocoder = new google.maps.Geocoder();
         document.getElementById("addressGo").addEventListener("click", () => {
-            geocodeAddress(marker, geocoder, map, polygon, polygon2, polygon3);
+            geocodeAddress(geocoder);
         });
     }
 
-    function geocodeAddress(marker, geocoder, resultsMap, polygon1, polygon2, polygon3) {
+    function geocodeAddress(geocoder) {
         const address = document.getElementById("Taddress").value;
         geocoder
             .geocode({ address: address })
@@ -346,26 +360,20 @@
 
                 $('#LAT_DEC').val(lat);
                 $('#LON_DEC').val(lon);
-                updatePixelDisplay(resultsMap, marker, lat, lon);
+                updatePixelDisplay(lat, lon);
             })
             .catch((e) =>
             alert("Geocode was not successful for the following reason: " + e)
             );        
     }
 
-    async function updatePixelDisplay(map, marker, lat, lng) { //This function shouldn't return anything, it should just move the polygon
+    function updatePixelDisplay(lat, lng) {
         let box = latlon2pixel(lat, lng, 2400.0);
         let box2 = latlon2pixel(lat, lng, 4800.0);
         let box3 = latlon2pixel(lat, lng, 1200.0);
         polygon.setPath(box);
         polygon2.setPath(box2);
         polygon3.setPath(box3);
-        if($("#auto_zoom").is(":checked")) {
-            let mzs = new google.maps.MaxZoomService();
-            let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
-            map.setZoom(Math.min(zoomobj.zoom, 15));
-            map.setCenter(marker.getPosition())
-        }
     }
 
     // Sinusoidal Grid: 0-35h (horizontal) & 0-17v (vertical) | g : the pixel number from the starting point (0) (=global) | xi : pixel x inside a tile | npix : number of pixels
@@ -414,18 +422,48 @@
         return bbox;
     };
 
-    function getTile(lon, lat){
-        var bbox = latlon2pixel(lat, lon);
-        var projto = map.getProjectionObject();
+    async function enterCoordsDMS() {
+        let lat_deg = parseFloat($('#LAT_DEG').val() || 0);
+        let lat_min = parseFloat($('#LAT_MIN').val() || 0);
+        let lat_sec = parseFloat($('#LAT_SEC').val() || 0);
+        let lon_deg = parseFloat($('#LON_DEG').val() || 0);
+        let lon_min = parseFloat($('#LON_MIN').val() || 0);
+        let lon_sec = parseFloat($('#LON_SEC').val() || 0);
 
-        var points = [];
-        for (var i = 0; i < bbox.length; i++){
-            points.push(new OpenLayers.Geometry.Point(bbox[i][0],bbox[i][1]));
-        }
-
-        var geom = new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(points));
-        return geom.transform(proj, projto);
+        let lat_dec = lat_deg + parseFloat(parseFloat(lat_min + (lat_sec / 60)) / 60);
+        let lon_dec = lon_deg + parseFloat(parseFloat(lon_min + (lon_sec / 60)) / 60);
+        $('#LAT_DEC').val(lat_dec.toFixed(3))
+        $('#LON_DEC').val(lon_dec.toFixed(3))
+      
+        marker.setPosition({lat: lat_dec, lng: lon_dec});
+        updatePixelDisplay(lat_dec, lon_dec);
+        
+        let mzs = new google.maps.MaxZoomService();
+        let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+        map.setZoom(Math.min(zoomobj.zoom, 15));
+        map.setCenter(marker.getPosition());
     }
+    async function enterCoordsLatLon() {
+        let lat_dec = parseFloat($('#LAT_DEC').val() || 0);
+        let lon_dec = parseFloat($('#LON_DEC').val() || 0);
 
+        let dms_lat = toDMS(lat_dec);
+        let dms_lon = toDMS(lon_dec);
+
+        $('#LAT_DEG').val(dms_lat[0])
+        $('#LAT_MIN').val(dms_lat[1])
+        $('#LAT_SEC').val(dms_lat[2])
+        $('#LON_DEG').val(dms_lon[0])
+        $('#LON_MIN').val(dms_lon[1])
+        $('#LON_SEC').val(dms_lon[2])
+
+        marker.setPosition({lat: lat_dec, lng: lon_dec});
+        updatePixelDisplay(lat_dec, lon_dec);
+        
+        let mzs = new google.maps.MaxZoomService();
+        let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+        map.setZoom(Math.min(zoomobj.zoom, 15));
+        map.setCenter(marker.getPosition())
+    }
 </script>
 {% endblock %}
