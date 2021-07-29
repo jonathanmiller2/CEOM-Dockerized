@@ -56,12 +56,7 @@
     <div class="row">
         <label class="col-sm-2 my-1">Enter the address:</label>
         <input class="form-control col-sm-3 mx-2 my-1" id="Taddress" type="text" name="address">
-        <button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1" id="addresGo" onclick="showAddress();" style="border-width: 1.6px;">{% trans "Go" %}</button>
-        <script type="text/javascript">
-            $.get("https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ", function( data ) {
-                console.log( "Data Loaded: " + data );
-            });
-        </script>
+        <button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1" id="addressGo" style="border-width: 1.6px;">{% trans "Go" %}</button>
     </div>
 </div>
 <p><b>(OR)</b></p>
@@ -107,7 +102,6 @@
 <div class="row">
     <div class="col-sm-3">
         <input type="checkbox" id="auto_zoom" name="auto_zoom" checked /> Zoom to Modis Pixel</div>
-    <div class="col-sm-3" id="resolution_disp" style="color:navy;"><label style="background-color:white;">Current Resolution:</label></div>
     <div class="col-sm-5">
         <small>
             <label style="color:blue;">Blue pixel : 250 M</label> |
@@ -168,13 +162,6 @@
             var newname = $(this).find("option:selected").attr("value");
             var longname = $(this).find("option:selected").attr("title");
             console.log(newpix);
-            if (newpix == 1200.00) {
-                $("#resolution_disp").html("<span style=\"background-color:white;\">Current Resolution: 1 KM</span>")
-            } else if (newpix == 2400.00) {
-                $("#resolution_disp").html("<span style=\"background-color:white;\">Current Resolution: 500 M</span>")
-            } else if (newpix == 4800.00) {
-                $("#resolution_disp").html("<span style=\"background-color:white;\">Current Resolution: 250 M</span>")
-            }
             $("#Modis_long").html("<b>About:</b><br/>" + longname + "<br/>For more infomation click on this link<br/><a href=https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/" + newname + ">" + newname + "<a/>");
             handlefeatures(newpix);
         })
@@ -222,21 +209,24 @@
             strokeColor: "#FF3300",                 
             strokeOpacity: 0.9,
             strokeWeight: 2,                                 
-            fillOpacity: 0.1,                 
+            fillOpacity: 0,
+            clickable: false,                 
         });;
         polygon2 = new google.maps.Polygon({ 
             paths: box2,
-            strokeColor: "#12246B",                 
+            strokeColor: "Blue",                 
             strokeOpacity: 0.9,
             strokeWeight: 2,                                 
-            fillOpacity: 0.1,                 
+            fillOpacity: 0,
+            clickable: false,                 
         });;
         polygon3 = new google.maps.Polygon({ 
             paths: box2,
             strokeColor: "#75FF30",                 
             strokeOpacity: 0.8,
             strokeWeight: 2,                                 
-            fillOpacity: 0.1,                 
+            fillOpacity: 0,
+            clickable: false,                 
         });;
      
         marker = new google.maps.Marker({
@@ -328,6 +318,39 @@
         polygon.setMap(map);
         polygon2.setMap(map);
         polygon3.setMap(map);
+        const geocoder = new google.maps.Geocoder();
+        document.getElementById("addressGo").addEventListener("click", () => {
+            geocodeAddress(marker, geocoder, map, polygon, polygon2, polygon3);
+        });
+    }
+
+    function geocodeAddress(marker, geocoder, resultsMap, polygon1, polygon2, polygon3) {
+        const address = document.getElementById("Taddress").value;
+        geocoder
+            .geocode({ address: address })
+            .then(({ results }) => {
+                marker.setPosition(results[0].geometry.location);
+                let lat = results[0].geometry.location.lat().toFixed(3);
+                let lon = results[0].geometry.location.lng().toFixed(3);
+              
+                let dms_lat = toDMS(parseFloat(lat));
+                let dms_lon = toDMS(parseFloat(lon));
+                
+                $('#LAT_DEG').val(dms_lat[0]);
+                $('#LAT_MIN').val(dms_lat[1]);
+                $('#LAT_SEC').val(dms_lat[2]);
+
+                $('#LON_DEG').val(dms_lon[0]);
+                $('#LON_MIN').val(dms_lon[1]);
+                $('#LON_SEC').val(dms_lon[2]);
+
+                $('#LAT_DEC').val(lat);
+                $('#LON_DEC').val(lon);
+                updatePixelDisplay(resultsMap, marker, lat, lon);
+            })
+            .catch((e) =>
+            alert("Geocode was not successful for the following reason: " + e)
+            );        
     }
 
     async function updatePixelDisplay(map, marker, lat, lng) { //This function shouldn't return anything, it should just move the polygon
@@ -345,9 +368,7 @@
         }
     }
 
-    // Sinusoidal Grid: 0-35h (horizontal) & 0-17v (vertical)
-    // g : the pixel number from the starting point (0) (=global), xi : pixel x inside a tile, npix : number of pixels
-
+    // Sinusoidal Grid: 0-35h (horizontal) & 0-17v (vertical) | g : the pixel number from the starting point (0) (=global) | xi : pixel x inside a tile | npix : number of pixels
     let sin2latlon = function(ih, iv, xi, yi, npix) {
         let cons =(36.0 * npix)/(2.0 * Math.PI);
         let yg = iv * npix + yi;
