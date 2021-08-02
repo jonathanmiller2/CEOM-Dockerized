@@ -140,7 +140,7 @@
         <button class="btn btn-info" onclick="resetValues();">{% trans "Reset" %}</button>
     </div>
 </div>
-
+<div id="data-output"></div>
 {% if photoRedirect %}
 <input id="lonRedirect" type=hidden value={{lonRedirect}}></input>
 <input id="latRedirect" type=hidden value={{latRedirect}}></input>
@@ -150,22 +150,8 @@
 <input id="conditionReload" type=hidden value="true"></input>
 {%endif%}
 <script>
-    $(document).ready(function () {
-        //if($("#LON_DEC").value!=null){
-        // enterCoordsLatLon();
-        //}
-        $("#datasetPane").change(function () {
-            self = this;
-            var newpix = $(this).find("option:selected").attr("npix");
-            var newname = $(this).find("option:selected").attr("value");
-            var longname = $(this).find("option:selected").attr("title");
-            console.log(newpix);
-            $("#Modis_long").html("<b>About:</b><br/>" + longname + "<br/>For more infomation click on this link<br/><a href=https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/" + newname + ">" + newname + "<a/>");
-            handlefeatures(newpix);
-        })
-    })
-</script>
-<script>
+    $('#datasetPane').prop("disabled", false);
+    $('#yearsPane').prop("disabled", false);
     function toDMS(decimalVal) {
         var degree = Math.trunc(decimalVal);
         var minute = Math.trunc((decimalVal - degree) * 60);
@@ -361,6 +347,7 @@
                 $('#LAT_DEC').val(lat);
                 $('#LON_DEC').val(lon);
                 updatePixelDisplay(lat, lon);
+                map.setCenter(marker.getPosition());
             })
             .catch((e) =>
             alert("Geocode was not successful for the following reason: " + e)
@@ -465,5 +452,70 @@
         map.setZoom(Math.min(zoomobj.zoom, 15));
         map.setCenter(marker.getPosition())
     }
+
+    var showResults = function(){
+        var selectedYears = $('#yearsPane').val();
+        var selectedDataset = $('#datasetPane').val();
+        var lat = parseFloat(marker.position.lat());
+        var lon = parseFloat(marker.position.lng());
+       
+        if(lat.length == 0 || lon.length == 0){
+            alert('Please follow steps 1 and 2 to pick a point');
+            return ;
+        }else if (selectedDataset==null){
+            alert('Please select a dataset');
+            return ;
+        }else if (selectedYears?.length == 0){
+            alert('Please select the desired years for the dataset');
+            return ;
+        }
+
+        //All data is correct, generating links
+        showData(lon, lat, selectedYears, selectedDataset);
+    }
+
+    var showData = function(lon, lat, year, prod){
+        
+        if(lat.length == 0 || lon.length == 0){
+            alert('Please pick a point');
+        }else{
+            var str = "<hr><div>";
+            str +=    "<dl class='dl-horizontal'>"
+            var filename = prod+"_"+year+"_"+jQuery.trim(lat)+"_"+jQuery.trim(lon); 
+            
+            str += "<div class='row'><dt>Latitude:</dt><dd class='pl-2'>" + lat+"</dd></div>";
+            str += "<div class='row'><dt>Longitude:</dt><dd class='pl-2'>" + lon+"</dd></div>";
+            str += "<div class='row'><dt>Product:</dt><dd class='pl-2'>"+ prod+"</dd></div>";
+            str += "<div class='row'><dt>Years:</dt><dd class='pl-2'>"+ year+"</dd></div>";
+           
+            str += "<div class='row'><dt>Start task(C5)</dt><dd class='pl-2'><a class=\"btn btn-primary\" href=\"/visualization/timeseries/single/start/"+filename+"/\">COLLECTION 5 </a></dd><br></div>";
+            str += "<div class='row'><dt>Start task(C6)</dt><dd class='pl-2'><a class=\"btn btn-primary\" href=\"/visualization/timeseries/single/start/c6/"+filename+"/\">COLLECTION 6 </a></dd></div>";
+            str += "</dl></div>";
+    
+            $('#data-output').append(str);
+
+            $('#data-output a').click(function(){
+                window.open(this.href);
+                return false;
+            });
+        }
+    };
+
+    var resetValues = function(){
+        vectors.removeAllFeatures();
+        $("#datasetPane").prop('disabled', true);
+        $("#datasetPane").val([]);
+        $("#yearsPane").prop('disabled', true);
+        $("#yearsPane").val([]);
+        $('#LAT_DEG').val("");
+        $('#LAT_MIN').val("");
+        $('#LAT_SEC').val("");
+        $('#LON_DEG').val("");
+        $('#LON_MIN').val("");
+        $('#LON_SEC').val("");
+        $('#LAT_DEC').val("");
+        $('#LON_DEC').val("");
+    }
+
 </script>
 {% endblock %}
