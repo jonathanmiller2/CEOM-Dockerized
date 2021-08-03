@@ -11,6 +11,7 @@ services:
                       python manage.py check &&
                       python manage.py collectstatic --noinput &&
                       python manage.py compilemessages &&
+                      celery -A ceom worker -l DEBUG --detach &&
                       gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
                       
                       #     This can be used to make a development superuser for testing. See .env.dev for login info.
@@ -62,7 +63,7 @@ services:
 
     #TODO: Figure out how to avoid containers running as root
     #user: ceomuser
-
+  
     volumes: 
       - ./app/ceom/static/:/ceom/static/
       - dev_media:/ceom/media/
@@ -73,6 +74,12 @@ services:
     depends_on:
       - web
   
+  redis:
+    container_name: ceom_redis
+    image: redis
+
+    ports:
+      - 6379:6379
 volumes:
   dev_psql:
   dev_media:

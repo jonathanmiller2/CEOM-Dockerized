@@ -7,6 +7,7 @@ from ceom.photos.models import Category, Photo
 from ceom.modis.visualization.models import TimeSeriesJob,  SingleTimeSeriesJob, GeocatterPoint
 from ceom.modis.visualization.forms import ProductSelect, TimeSeriesJobForm
 from datetime import datetime, date, timedelta
+from ceom.celery import debug_task
 
 #TODO: Are these imports necessary?
 #from django.template.context_processors import csrf
@@ -23,7 +24,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 # Celery tasks
-from ceom.celeryq.tasks import get_modis_raw_data, latlon2sin
+from ceom.modis.visualization.tasks import get_modis_raw_data, add
+#from ceom.celeryq.tasks import get_modis_raw_data, latlon2sin
 from ceom.celeryq.tasks_multi import multiple_site_modis,terminate_task
 
 ## testing the new celery task for collection-6 data
@@ -38,7 +40,6 @@ from django.conf import settings
 import csv
 import uuid
 import subprocess
-
 
 
 def latlon2sin(lat,lon,modis='mod09a1',npix=2400.0):
@@ -205,14 +206,18 @@ def launch_single_site_timeseries_c6(request, lat, lon, dataset, years, product=
 
 @login_required()
 def launch_single_site_timeseries(request, lat, lon, dataset, years, product=None):
+    print("THIS IS THE TOP PART IN VIEW")
+    result = add.delay(1000, 6000)
+    print(result.get())
+
     years_formated = [int(year) for year in years.split(',')]
     dataset_freq_in_days = 8
-    try:
-        dataset = Dataset.objects.get(name=dataset)
-        dataset_npix = dataset.xdim #2400 for mod09a1
-        dataset_freq_in_days = dataset.day_res # 8 for mod09a1
-    except Exception as e:
-        return HttpResponse("An error occurred. If you did not modify the URL please contact the web administrator")
+    # try:
+    dataset = Dataset.objects.get(name__iexact=dataset)
+    dataset_npix = dataset.xdim #2400 for mod09a1
+    dataset_freq_in_days = dataset.day_res # 8 for mod09a1
+    # except Exception as e:
+    #     return HttpResponse("An error occurred. If you did not modify the URL please contact the web administrator TOAST")
 
     csv_folder = TIMESERIES_LOCATION
     lon=float(lon)
@@ -220,10 +225,11 @@ def launch_single_site_timeseries(request, lat, lon, dataset, years, product=Non
     dataset_npix = int(dataset_npix)
     ih,iv,xi,yi,folder = latlon2sin(lat,lon,dataset,dataset_npix)
     
-
     vi=False
     media_timeseries = os.path.join(settings.MEDIA_URL,'visualization','timeseries','single')
+    print("SEE THIS")
     task_id = get_modis_raw_data.delay(csv_folder,media_timeseries,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)
+    print("SKIPPED")
 
     job = SingleTimeSeriesJob(lat=lat,lon=lon,user=request.user,years=years,product=dataset,task_id=task_id,col=xi,row=yi,tile=folder)
     job.save()

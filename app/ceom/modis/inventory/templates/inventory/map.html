@@ -104,15 +104,15 @@
 <div class='row-fluid' style='height: 800px;'>
     <h3>{% trans "Dataset" %}</h3>
 
-    <ul>
+    <ul class="nav nav-pills">
     {% for ds in dataset_list %}
         {% ifequal dataset ds.name %}
-            <li><a href="/inventory/{{ds.name}}/{{2000}}">{{ds.name|upper}}</a> {{ ds.long_name}}
+            <li class="nav-item"><a href="/inventory/{{ds.name}}/{{2000}}">{{ds.name|upper}}</a> {{ ds.long_name}}
             {% if year_list %}
                 <ul class="nav nav-pills">
                 {% for y in year_list %}
-                    <li {% if year_int == y.year %}class='active'{% endif %}>
-                        <a href="/inventory/{{ds.name}}/{{y.year}}/">{{ y.year }}</a>
+                    <li class="nav-item {% if year_int == y.year %}active{% endif %}">
+                        <a class="nav-link {% if year_int == y.year %}active{% endif %}" href="/inventory/{{ds.name}}/{{y.year}}/">{{ y.year }}</a>
                     </li>
                 {% endfor %}
                 </ul>

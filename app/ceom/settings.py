@@ -243,13 +243,7 @@ LOGGING = {
        },
    }
 }
-#ALLOWED_HOSTS = [*] 
-#BROKER_HOST = "localhost"
-#BROKER_PORT = 5672
-#BROKER_USER = "guest"
-#BROKER_PASSWORD = "guest"
-#BROKER_VHOST = "/"
-#THUMBNAIL_DEBUG=True
+
 THUMBNAIL_DEBUG = True
 # REST_FRAMEWORK = {
 #     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
@@ -283,5 +277,5 @@ DBGETTEXT_SPLIT_SENTENCES=False
 FEEDBACK_EMAIL = "jonathan.g.miller@ou.edu;jonathanmiller2@hotmail.com"
 
 #Celery
-CELERY_BROKER_URL = "redis://redis:6379"
-CELERY_RESULT_BACKEND = "redis://redis:6379"
+CELERY_BROKER_URL = "redis://ceom_redis:6379"
+CELERY_RESULT_BACKEND = "redis://ceom_redis:6379"
