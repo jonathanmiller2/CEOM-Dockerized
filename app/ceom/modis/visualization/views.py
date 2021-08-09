@@ -7,7 +7,6 @@ from ceom.photos.models import Category, Photo
 from ceom.modis.visualization.models import TimeSeriesJob,  SingleTimeSeriesJob, GeocatterPoint
 from ceom.modis.visualization.forms import ProductSelect, TimeSeriesJobForm
 from datetime import datetime, date, timedelta
-from ceom.celery import debug_task
 
 #TODO: Are these imports necessary?
 #from django.template.context_processors import csrf
@@ -24,7 +23,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 # Celery tasks
-from ceom.modis.visualization.tasks import get_modis_raw_data, add
+from ceom.celeryq.tasks import get_modis_raw_data
 #from ceom.celeryq.tasks import get_modis_raw_data, latlon2sin
 from ceom.celeryq.tasks_multi import multiple_site_modis,terminate_task
 
@@ -207,8 +206,6 @@ def launch_single_site_timeseries_c6(request, lat, lon, dataset, years, product=
 @login_required()
 def launch_single_site_timeseries(request, lat, lon, dataset, years, product=None):
     print("THIS IS THE TOP PART IN VIEW")
-    result = add.delay(1000, 6000)
-    print(result.get())
 
     years_formated = [int(year) for year in years.split(',')]
     dataset_freq_in_days = 8
@@ -228,12 +225,12 @@ def launch_single_site_timeseries(request, lat, lon, dataset, years, product=Non
     vi=False
     media_timeseries = os.path.join(settings.MEDIA_URL,'visualization','timeseries','single')
     print("SEE THIS")
-    task_id = get_modis_raw_data.delay(csv_folder,media_timeseries,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)
-    print("SKIPPED")
+    task_id = get_modis_raw_data.delay(csv_folder,media_timeseries,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)     
+    print("SKIPPED", csv_folder)
 
     job = SingleTimeSeriesJob(lat=lat,lon=lon,user=request.user,years=years,product=dataset,task_id=task_id,col=xi,row=yi,tile=folder)
     job.save()
-    return redirect(to='/visualization/timeseries/single/t=%s'%task_id)
+    return redirect(to='/modis/visualization/timeseries/single/t=%s/'%task_id)
 
 # This page will host all single timeseries from a user
 @login_required()

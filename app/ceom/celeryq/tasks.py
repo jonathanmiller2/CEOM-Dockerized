@@ -1,5 +1,6 @@
 
 from celery import shared_task
+from celery import states
 import time
 import random
 import os, sys
@@ -145,6 +146,8 @@ def save_data(data,csv_folder,task_id,metadata):
     years = ",".join([str(year) for year in metadata['years']])
     filename = metadata['dataset']+"_lat_"+str(str(metadata['lat']))+"_lon_"+str(str(metadata['lon']))+'_years_'+years+'.csv'
     full_path = os.path.join(csv_folder,filename)
+    if not os.path.exists(csv_folder):
+        os.makedirs(csv_folder)
     f = open(full_path,'w')
     header = get_header(data,metadata['dataset'])
     f.write(','.join([h[1] for h in header])+'\n')
@@ -169,10 +172,12 @@ def save_data(data,csv_folder,task_id,metadata):
 def get_modis_raw_data(self,csv_folder,media_base_url,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days):
     # Get the list days we need to retreive its value, each one of
     # them will be send as an independent task to get their value
+    print("THIS IS GET MODIS RAW DATA")
     time_ini = time.time() # Initial time to extract execution time
     metadata = get_location_metadata(lat,lon,dataset,dataset_npix,years) # metadata of the selected site
+    print("METADATA:",metadata)
     # Set task initial state to started
-    get_modis_raw_data.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
+    get_modis_raw_data.update_state(state=states.STARTED, meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
     num_tasks = len(years) # Number of tasks to perform
     multi_day = (int(dataset_freq_in_days)!=1)
     # Send all tasks to queue and store their queing id in a double dictionary (year-->day-->task_id) object

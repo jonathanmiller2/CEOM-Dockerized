@@ -1,5 +1,4 @@
 {% extends "visualization/base.html" %}
-{% load dajaxice_templatetags %}
 
 {% block content %}
 <div class="span12">
@@ -65,7 +64,6 @@
 
 {% block js_code %}
 
-  {% dajaxice_js_import %}
   <script type="text/javascript">
    // Variables
     var taskFound = {% if found %} true {% else %} false {% endif %};
