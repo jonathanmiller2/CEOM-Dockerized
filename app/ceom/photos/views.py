@@ -732,7 +732,7 @@ def download(request):
 
     # return HttpResponse(json.dumps({'request':request.POST}))
     import zipfile, os, tempfile
-    from io import StringIO
+    from io import StringIO, BytesIO
 
     work_dir = get_work_dir(request)
     ids = request.POST.getlist('ids')
@@ -742,7 +742,7 @@ def download(request):
     if request.POST['format'] != 'csv':
         photos = photos.exclude(Q(point__bboverlaps=Point(0,0))|Q(point__isnull=True))
 
-    zipf = StringIO()
+    zipf = BytesIO()
     ziphandle = zipfile.ZipFile(zipf, mode="w")
     metadata = StringIO()
 
@@ -754,7 +754,7 @@ def download(request):
             notes = smart_str(p.notes)
             row = ['','','','','','','']
             try:
-                row = [p.id,p.file.name.encode('utf-8'),p.lon,p.lat,p.alt,p.category,notes.encode('utf-8')]
+                row = [p.id,p.file.name,p.lon,p.lat,p.alt,p.category,notes]
             except:
                 if p.category != None and notes != None:
                     row = [p.id,str(p.file.name),p.lon,p.lat,p.alt,p.category,str(notes)]
@@ -766,7 +766,7 @@ def download(request):
                     row = [p.id,str(p.file.name),p.lon,p.lat,p.alt,p.category,str(notes)]
                 pass
             w.writerow(row)
-            ziphandle.write(p.file.file.name, os.path.basename(p.file.name))
+            ziphandle.write(p.file.file.name, arcname=os.path.basename(p.file.name))
 
         metadata.flush()
         ziphandle.writestr("files.csv",metadata.getvalue())

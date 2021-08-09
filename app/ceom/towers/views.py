@@ -50,7 +50,7 @@ def tower_main(request):
 	y_axis = []
 	iget_data = phenocam.objects.values('sitename','takendate','gcc').all()
 	for x in iget_data:
-		x_val = x['sitename'].encode("ascii")+" "+str(x['takendate']).encode("ascii")
+		x_val = x['sitename']+" "+str(x['takendate'])
 		#x_val = str(x_val)
 		y_val = float(x['gcc'])
 		x_axis.append(x_val)

@@ -11,7 +11,6 @@ services:
                       python manage.py check &&
                       python manage.py collectstatic --noinput &&
                       python manage.py compilemessages &&
-                      celery -A ceom worker -l DEBUG --detach &&
                       gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
                       
                       #     This can be used to make a development superuser for testing. See .env.dev for login info.
@@ -44,6 +43,8 @@ services:
       - ./.env.dev
     depends_on:
       - db
+      - celery
+      - redis
 
   db:
     container_name: ceom_db
@@ -80,6 +81,28 @@ services:
 
     ports:
       - 6379:6379
+
+  celery:
+    container_name: ceom_celery
+    build:
+      context: .
+      dockerfile: ./celery/Dockerfile
+
+    command: bash -c "celery -A ceom worker -l DEBUG"
+                       
+    volumes:
+      - dev_media:/code/app/ceom/media/
+      - /data/satellite/:/data/satellite/
+    expose:
+      - 8000
+    env_file:
+      - ./.env.dev     
+
+    depends_on: 
+      - redis
+                      
+
+
 volumes:
   dev_psql:
   dev_media:
