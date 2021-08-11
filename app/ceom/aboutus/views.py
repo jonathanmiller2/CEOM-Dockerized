@@ -7,7 +7,18 @@ from itertools import chain
 from operator import attrgetter
 from datetime import date
 
+from django.core.mail import send_mail #TODO: Remove this
+
 def news(request):
+
+    #TODO: Remove this. This is just testing sending emails.
+    send_mail(
+        'Toast Subject',
+        'Toast Content',
+        'ceomsupport@ou.edu',
+        ['jonathanmiller2@hotmail.com']
+    )
+
     posts = Post.objects.all().order_by("-date")
     return render(request, 'aboutus/news.html', context={'posts': posts})
 
