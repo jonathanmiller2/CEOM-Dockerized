@@ -1,4 +1,3 @@
 0 3 * * 0 $HOME/.profile; /usr/local/bin/python /code/manage.py update_datasets >> /code/cron.log 2>&1
 
-
 # cron requires blank last line
