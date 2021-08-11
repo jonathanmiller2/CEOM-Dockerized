@@ -32,6 +32,10 @@ class Command(BaseCommand):
         for dataset in datasets:
             dir = dataset.location
 
+            if not dir or len(dir) == 0:
+                print(f"No specified location for dataset {dataset.name}")
+                continue
+
             if not os.path.exists(dir):
                 raise CommandError(f'Data location "{dir}" for dataset {dataset.name} does not exist.')
 
