@@ -91,6 +91,7 @@ services:
     command: bash -c "celery -A ceom worker -l DEBUG"
                        
     volumes:
+      - ./app:/code/app/
       - dev_media:/code/app/ceom/media/
       - /data/satellite/:/data/satellite/
     expose:

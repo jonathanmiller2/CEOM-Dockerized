@@ -456,8 +456,8 @@
     var showResults = function(){
         var selectedYears = $('#yearsPane').val();
         var selectedDataset = $('#datasetPane').val();
-        var lat = parseFloat(marker.position.lat());
-        var lon = parseFloat(marker.position.lng());
+        var lat = parseFloat(marker.position.lat()).toFixed(3);
+        var lon = parseFloat(marker.position.lng()).toFixed(3);
        
         if(lat.length == 0 || lon.length == 0){
             alert('Please follow steps 1 and 2 to pick a point');
