@@ -19,11 +19,6 @@ from django.contrib import messages
 
 import django
 
-#TODO: REMOVE THIS MAIL STUFF VVV
-from django.core.mail import send_mail
-from django.conf import settings
-
-
 def index(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('/accounts/profile/')
@@ -135,14 +130,3 @@ def profile_edit(request):
         'user_form' : user_form, 
         'profile_form': profile_form
     })
-
-def send_test_email(request):
-    send_mail(
-        'Subject here',
-        'Here is the message.',
-        'from@example.com',
-        ['jonathan.g.miller@ou.edu'],
-        fail_silently=False,
-    )
-
-    return HttpResponse('jah man')   

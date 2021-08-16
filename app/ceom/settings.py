@@ -30,18 +30,12 @@ DATABASES = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-#https://support.google.com/a/answer/176600?hl=en
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_HOST = '0.0.0.0'
-#EMAIL_USE_TLS = True
-#EMAIL_PORT = 587
-#EMAIL_HOST_USER =
-#EMAIL_HOST_PASSWORD = 
-
-#WARNING: THIS MIGHT NEED TO BE UNCOMMENTED IF GEOS ERRORS OCCUR
-#THIS IS A NOTE TO FUTURE JONATHAN
-#IF YOU SEE THIS I FORGOT ABOUT IT
-#GEOS_LIBRARY_PATH = '/usr/lib/x86_64-linux-gnu/libgeos_c.so'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'relay.ou.edu'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "ceomsupport@ou.edu"
+DEFAULT_FROM_EMAIL = "ceomsupport@ou.edu"
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
