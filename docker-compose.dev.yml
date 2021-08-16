@@ -14,6 +14,7 @@ services:
                       touch /code/cron.log &&
                       printenv | grep -v "no_proxy" >> /etc/environment &&
                       cron &&
+                      python manage.py createsuperuser --noinput &&
                       gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
                       
                       #     This can be used to make a development superuser for testing. See .env.dev for login info.
@@ -51,7 +52,7 @@ services:
 
   db:
     container_name: ceom_db
-    image: postgis/postgis
+    build: ./db
 
     env_file:
       - ./.env.db
