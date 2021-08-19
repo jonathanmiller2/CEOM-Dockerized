@@ -188,13 +188,12 @@ INSTALLED_APPS = [
     'ceom.water',
     'ceom.poi',
 
+    'raster',
     
     #'olwidget',
     'tinymce', #Cool Text editor
     'crispy_forms', # Cool forms rendered
     #TODO: Remove all references to crispy forms. Unnescessary dependency. 
-
-
 ]
 
 AUTH_PROFILE_MODULE = 'accounts.Profile'
@@ -204,6 +203,8 @@ CRISPY_FAIL_SILENTLY = False
 
 TINYMCE_COMPRESSOR = True
 TINYMCE_FILEBROWSER = True
+
+RASTER_USE_CELERY = True
 
 GRAPPELLI_ADMIN_TITLE = "CEOM Administration Site"
 
