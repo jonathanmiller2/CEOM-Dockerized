@@ -1,5 +1,6 @@
 
 from celery import shared_task
+from celery import states
 import time
 import random
 import os, sys
@@ -14,7 +15,7 @@ from ceom.celeryq.modis.headers import get_modis_header
 from collections import OrderedDict
 
 from celery import group
-
+from django.conf import settings
 try:
     from . import database
 except Exception as e:
@@ -87,10 +88,7 @@ def get_data(tasks):
                 data[year].update(bands_dict) #Merge the partial year dict into the global year dict
                 task.forget() #Remove partial info from backend because it is no longer necessary
     return data
-
-def process_data(data,dataset):
-    return gap_fill(data,dataset)
-
+ 
 def send_tasks(function, params_dict):
     tasks =  {}
     for year,chunks in params_dict.items():
@@ -102,7 +100,7 @@ def send_tasks(function, params_dict):
 def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chunks=5):
     task_params = dict([(year,{}) for year in years])
     current_year = datetime.datetime.now().year
-    current_doy = datetime.datetime.now().timetuple().tm_yday
+    current_day = datetime.datetime.now().timetuple().tm_yday
     for year in years:
         days = [i+1 for i in range(0,366) if i % dataset_freq_in_days==0]
         if year not in list(range(2000,current_year+1)):
@@ -110,7 +108,7 @@ def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chun
         if year == 2000:
             days = [day for day in days if day > 56 ] # Modis has no days before this date
         elif year == current_year:
-            days = [day for day in days if day <= current_doy ] # Cannot get future dates
+            days = [day for day in days if day <= current_day ] # Cannot get future dates
         for day in days:
             chunk = ((day-1)/dataset_freq_in_days) % num_chunks
             if chunk not in task_params[year]:
@@ -144,13 +142,16 @@ def get_header(data,dataset):
 def save_data(data,csv_folder,task_id,metadata):
     years = ",".join([str(year) for year in metadata['years']])
     filename = metadata['dataset']+"_lat_"+str(str(metadata['lat']))+"_lon_"+str(str(metadata['lon']))+'_years_'+years+'.csv'
-    full_path = os.path.join(csv_folder,filename)
+    full_dir = os.path.join(settings.BASE_DIR, csv_folder)
+    full_path = os.path.join(settings.BASE_DIR,csv_folder,filename)
+    if not os.path.exists(full_dir):
+        os.makedirs(full_dir)
     f = open(full_path,'w')
     header = get_header(data,metadata['dataset'])
     f.write(','.join([h[1] for h in header])+'\n')
     for year in data:
         for day in sorted([int(day) for day in data[year]]):
-            if data[year][str(day)] and len(data[year][str(day)]) == len(header):
+            if data[year][str(day)] and len(data[year][str(day)]) == len(header):   
                 line=[]
                 for x in range(0,len(header)):
                     if data[year][str(day)][header[x][0]]:
@@ -166,13 +167,13 @@ def save_data(data,csv_folder,task_id,metadata):
 
 
 @shared_task(bind=True)
-def get_modis_raw_data(self,csv_folder,media_base_url,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days):
+def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days):
     # Get the list days we need to retreive its value, each one of
     # them will be send as an independent task to get their value
     time_ini = time.time() # Initial time to extract execution time
     metadata = get_location_metadata(lat,lon,dataset,dataset_npix,years) # metadata of the selected site
     # Set task initial state to started
-    get_modis_raw_data.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
+    get_modis_raw_data.update_state(state=states.STARTED, meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
     num_tasks = len(years) # Number of tasks to perform
     multi_day = (int(dataset_freq_in_days)!=1)
     # Send all tasks to queue and store their queing id in a double dictionary (year-->day-->task_id) object
@@ -186,19 +187,18 @@ def get_modis_raw_data(self,csv_folder,media_base_url,lat,lon,dataset,years,data
     monitor_tasks(tasks,self,metadata)
     data  = get_data(tasks)
     print('Processing data')
-    data = process_data(data,dataset)
+    data = gap_fill(data,dataset)
     print ('saving data')
     filename = save_data(data,csv_folder,get_modis_raw_data.request.id,metadata)
     try:
         db = database.pgDatabase()
-        db.updateCompletedSingleTimeSeriestask(get_modis_raw_data.request.id,os.path.join(media_base_url,filename),)
+        db.updateCompletedSingleTimeSeriestask(get_modis_raw_data.request.id,os.path.join(csv_folder,filename),)
     except Exception as e:
         print(('Error : %s' % e.message))
         pass
     return {'filename':filename,'metadata':metadata,}
 
 # ------------------------------------- PROCESSING SCRIPT PART ----------------------------
-MODIS_FOLDER_PATH = "/data/ifs/modis/datasets/"
 
 import multiprocessing as mp
 def make_serializable_dict(mydict):
@@ -213,15 +213,18 @@ def extract_day_data(col,row,dataset,year,day,tile):
         print(("Getting day: %d" % day))
         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*.hdf$")
         items = (dataset, year, tile, year, day)
-        search = MODIS_FOLDER_PATH+"%s/%d/%s/*%d%03d*.hdf" % items
+        search = os.path.join(settings.MODIS_DATASETS_PATH, "%s/%d/%s/*%d%03d*.hdf" % items)
+        print("SEARCH", search)
         flist = glob.glob(search)
+        print("FLIST", flist)
         data = {}
-
+        print("RMATCH", r.match(flist[0]))
         if len(flist) > 0 and r.match(flist[0]) is not None:
             fn = flist[0]
             pixel_values = None
             try:
                 pixel_values = get_pixel_value(fn,col,row)
+                print("UPDATED PIXEL VALUES:", pixel_values)
             except Exception as e:
                 print(("Error retrieving pixel values for file: %s %s " % (fn,e.message)))
 

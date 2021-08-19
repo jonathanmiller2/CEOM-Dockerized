@@ -14,7 +14,9 @@ services:
                       touch /code/cron.log &&
                       printenv | grep -v "no_proxy" >> /etc/environment &&
                       cron &&
-                      python manage.py createsuperuser --noinput &&
+                      pip uninstall gdal --yes &&
+                      pip install numpy &&
+                      pip install gdal==2.4 &&
                       gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
                       
                       #     This can be used to make a development superuser for testing. See .env.dev for login info.
@@ -92,7 +94,10 @@ services:
       context: .
       dockerfile: ./celery/Dockerfile
 
-    command: bash -c "celery -A ceom worker -l DEBUG"
+    command: bash -c "pip uninstall gdal --yes &&
+                      pip install numpy &&
+                      pip install gdal==2.4 &&
+                      celery -A ceom worker -l DEBUG"
                        
     volumes:
       - ./app:/code/app/

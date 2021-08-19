@@ -456,8 +456,8 @@
     var showResults = function(){
         var selectedYears = $('#yearsPane').val();
         var selectedDataset = $('#datasetPane').val();
-        var lat = parseFloat(marker.position.lat());
-        var lon = parseFloat(marker.position.lng());
+        var lat = parseFloat(marker.position.lat()).toFixed(3);
+        var lon = parseFloat(marker.position.lng()).toFixed(3);
        
         if(lat.length == 0 || lon.length == 0){
             alert('Please follow steps 1 and 2 to pick a point');
@@ -488,10 +488,9 @@
             str += "<div class='row'><dt>Product:</dt><dd class='pl-2'>"+ prod+"</dd></div>";
             str += "<div class='row'><dt>Years:</dt><dd class='pl-2'>"+ year+"</dd></div>";
            
-            str += "<div class='row'><dt>Start task(C5)</dt><dd class='pl-2'><a class=\"btn btn-primary\" href=\"/visualization/timeseries/single/start/"+filename+"/\">COLLECTION 5 </a></dd><br></div>";
+            str += "<div class='row'><dt>Start task(C5)</dt><dd class='pl-2'><a class=\"btn btn-primary\" href=\"/modis/visualization/timeseries/single/start/"+filename+"/\">COLLECTION 5 </a></dd><br></div>";
             str += "<div class='row'><dt>Start task(C6)</dt><dd class='pl-2'><a class=\"btn btn-primary\" href=\"/visualization/timeseries/single/start/c6/"+filename+"/\">COLLECTION 6 </a></dd></div>";
             str += "</dl></div>";
-    
             $('#data-output').append(str);
 
             $('#data-output a').click(function(){
