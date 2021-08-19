@@ -142,9 +142,10 @@ def get_header(data,dataset):
 def save_data(data,csv_folder,task_id,metadata):
     years = ",".join([str(year) for year in metadata['years']])
     filename = metadata['dataset']+"_lat_"+str(str(metadata['lat']))+"_lon_"+str(str(metadata['lon']))+'_years_'+years+'.csv'
+    full_dir = os.path.join(settings.BASE_DIR, csv_folder)
     full_path = os.path.join(settings.BASE_DIR,csv_folder,filename)
-    if not os.path.exists(csv_folder):
-        os.makedirs(csv_folder)
+    if not os.path.exists(full_dir):
+        os.makedirs(full_dir)
     f = open(full_path,'w')
     header = get_header(data,metadata['dataset'])
     f.write(','.join([h[1] for h in header])+'\n')
@@ -211,11 +212,13 @@ def extract_day_data(col,row,dataset,year,day,tile):
         multi_day = True
         print(("Getting day: %d" % day))
         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*.hdf$")
-        items = (dataset.lower(), year, tile, year, day) # TODO: Converted to lowercase just for now
+        items = (dataset, year, tile, year, day)
         search = os.path.join(settings.MODIS_DATASETS_PATH, "%s/%d/%s/*%d%03d*.hdf" % items)
+        print("SEARCH", search)
         flist = glob.glob(search)
+        print("FLIST", flist)
         data = {}
-
+        print("RMATCH", r.match(flist[0]))
         if len(flist) > 0 and r.match(flist[0]) is not None:
             fn = flist[0]
             pixel_values = None

@@ -1,9 +1,10 @@
 from ceom.celeryq.modis.special_products import mod09a1
 from collections import  OrderedDict
 import datetime
+from osgeo import gdal
 REAL_DATE_BAND_NAME = 'sur_refl_day_of_year'
 try:
-    from osgeo import gdal
+    
     from osgeo.gdalconst import GA_ReadOnly
 except:
     pass
