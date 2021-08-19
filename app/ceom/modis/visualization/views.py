@@ -7,7 +7,6 @@ from ceom.photos.models import Category, Photo
 from ceom.modis.visualization.models import TimeSeriesJob,  SingleTimeSeriesJob, GeocatterPoint
 from ceom.modis.visualization.forms import ProductSelect, TimeSeriesJobForm
 from datetime import datetime, date, timedelta
-from ceom.celery import debug_task
 
 #TODO: Are these imports necessary?
 #from django.template.context_processors import csrf
@@ -24,7 +23,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 # Celery tasks
-from ceom.modis.visualization.tasks import get_modis_raw_data, add
+from ceom.celeryq.tasks import get_modis_raw_data
 #from ceom.celeryq.tasks import get_modis_raw_data, latlon2sin
 from ceom.celeryq.tasks_multi import multiple_site_modis,terminate_task
 
@@ -150,7 +149,7 @@ def kml(request, name):
 
     return render(request, 'kml/main.kml', context= {'styles':styles, 'geometries':objects}, mimetype="application/vnd.google-earth.kml+xml")
 
-TIMESERIES_LOCATION = os.path.join(settings.BASE_DIR,settings.MEDIA_ROOT,'visualization','timeseries','single')
+TIMESERIES_LOCATION = os.path.join('media','visualization','timeseries','single')
 
 @login_required()
 def timeseries_single_progress(request, task_id):
@@ -160,6 +159,11 @@ def timeseries_single_progress(request, task_id):
         task_db = SingleTimeSeriesJob.objects.get(task_id=task_id)
         if task_db.user != request.user:
             raise Exception('User does not own the task')
+
+        filepath = str(task_db.result)
+        if filepath[0] != '/':
+            filepath = '/' + filepath
+        
         c = {"job_id":task_db.id,
             "task_id":task_id,
             "found":True,
@@ -171,7 +175,7 @@ def timeseries_single_progress(request, task_id):
             'col':task_db.col,
             'tile':task_db.tile,
             'years':task_db.years,
-            'file': settings.MEDIA_URL+'visualization/timeseries_single/'+str(task_db.result)}
+            'file': filepath}
     except Exception as e:
         c = {"task_id":task_id,"found":False}
     
@@ -206,9 +210,6 @@ def launch_single_site_timeseries_c6(request, lat, lon, dataset, years, product=
 
 @login_required()
 def launch_single_site_timeseries(request, lat, lon, dataset, years, product=None):
-    print("THIS IS THE TOP PART IN VIEW")
-    result = add.delay(1000, 6000)
-    print(result.get())
 
     years_formated = [int(year) for year in years.split(',')]
     dataset_freq_in_days = 8
@@ -218,22 +219,18 @@ def launch_single_site_timeseries(request, lat, lon, dataset, years, product=Non
     dataset_freq_in_days = dataset.day_res # 8 for mod09a1
     # except Exception as e:
     #     return HttpResponse("An error occurred. If you did not modify the URL please contact the web administrator TOAST")
-
-    csv_folder = TIMESERIES_LOCATION
     lon=float(lon)
     lat = float(lat)
     dataset_npix = int(dataset_npix)
     ih,iv,xi,yi,folder = latlon2sin(lat,lon,dataset,dataset_npix)
-    
+    print("IH:",ih,"IV:", iv,"XI:", xi,"YI:", yi,"FOLDER:", folder)
     vi=False
-    media_timeseries = os.path.join(settings.MEDIA_URL,'visualization','timeseries','single')
-    print("SEE THIS")
-    task_id = get_modis_raw_data.delay(csv_folder,media_timeseries,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)
-    print("SKIPPED")
+    print("TIME",TIMESERIES_LOCATION)
+    task_id = get_modis_raw_data.delay(TIMESERIES_LOCATION,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)     
 
     job = SingleTimeSeriesJob(lat=lat,lon=lon,user=request.user,years=years,product=dataset,task_id=task_id,col=xi,row=yi,tile=folder)
     job.save()
-    return redirect(to='/visualization/timeseries/single/t=%s'%task_id)
+    return redirect(to='/modis/visualization/timeseries/single/t=%s/'%task_id)
 
 # This page will host all single timeseries from a user
 @login_required()
@@ -520,7 +517,7 @@ def graph(request, lat, lon, modis, years, band, product=None):
     response = HttpResponse('Under construction')
     return response
 
-MULTIPLE_TIMESERIES_LOCATION = os.path.join(settings.BASE_DIR,settings.MEDIA_ROOT,'visualization','timeseries','multi')
+MULTIPLE_TIMESERIES_LOCATION = os.path.join(settings.MEDIA_ROOT,'visualization','timeseries','multi')
 
 @login_required
 def multiple(request):

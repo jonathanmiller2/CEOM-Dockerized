@@ -7,7 +7,7 @@ WORKDIR /code
 COPY . .
 
 RUN apt-get update
-RUN apt-get install binutils libproj-dev gdal-bin gettext libgettextpo-dev cron netcat -y
+RUN apt-get install binutils libproj-dev libgdal-dev gdal-bin gettext libgettextpo-dev cron netcat -y
 
 #Install dependencies
 RUN pip install --upgrade pip
