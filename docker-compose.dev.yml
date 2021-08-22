@@ -14,9 +14,6 @@ services:
                       touch /code/cron.log &&
                       printenv | grep -v "no_proxy" >> /etc/environment &&
                       cron &&
-                      pip uninstall gdal --yes &&
-                      pip install numpy &&
-                      pip install gdal==2.4 &&
                       gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
                       
                       #     This can be used to make a development superuser for testing. See .env.dev for login info.

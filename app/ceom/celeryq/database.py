@@ -1,17 +1,18 @@
 import psycopg2
+import os
 
 class pgDatabase:
 
-    dbname = 'ceom'
-    user = 'ceom'
-    host = 'db'
-    password = '30mfadmin'
+    dbname = os.environ.get("SQL_DATABASE", default="ceom"),
+    user = os.environ.get("SQL_USER", default="ceom"),
+    host = os.environ.get("SQL_HOST", default="db"),
+    password = os.environ.get("SQL_PASSWORD", default="password"),
 
     def __init__(self):
         try:
-            self.conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'"%(self.dbname,self.user,self.host,self.password))
+            self.conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'" % (self.dbname, self.user, self.host, self.password))
         except Exception as e :
-            print(("Error: %s" % e.message))
+            print(e)
             raise Exception("Unnable to connect to database")
 
         self.cur = self.conn.cursor()

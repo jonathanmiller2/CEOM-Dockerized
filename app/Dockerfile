@@ -11,7 +11,9 @@ RUN apt-get install binutils libproj-dev libgdal-dev gdal-bin gettext libgettext
 
 #Install dependencies
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN pip install --no-cache-dir GDAL==2.4
 
 #Cron
 COPY crontab /etc/cron.d/cron-python

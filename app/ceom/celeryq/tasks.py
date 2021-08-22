@@ -17,7 +17,7 @@ from collections import OrderedDict
 from celery import group
 from django.conf import settings
 try:
-    from . import database
+    from ceom.celeryq import database
 except Exception as e:
     print(e)
     print("Database.py not found. disregard if it is a worker process")
@@ -194,7 +194,7 @@ def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,datase
         db = database.pgDatabase()
         db.updateCompletedSingleTimeSeriestask(get_modis_raw_data.request.id,os.path.join(csv_folder,filename),)
     except Exception as e:
-        print(('Error : %s' % e.message))
+        print(e)
         pass
     return {'filename':filename,'metadata':metadata,}
 
@@ -226,7 +226,7 @@ def extract_day_data(col,row,dataset,year,day,tile):
                 pixel_values = get_pixel_value(fn,col,row)
                 print("UPDATED PIXEL VALUES:", pixel_values)
             except Exception as e:
-                print(("Error retrieving pixel values for file: %s %s " % (fn,e.message)))
+                print(("Error retrieving pixel values for file: %s %s " % (fn,e)))
 
             data = process.get_dates(pixel_values,year,day,multi_day)
             if products.dataset_is_available(dataset):
@@ -238,7 +238,7 @@ def extract_day_data(col,row,dataset,year,day,tile):
             data = None
         return data
     except Exception as e:
-        print(("Exception at year %d day %d: %s" % (year,day,e.message)))
+        print(("Exception at year %d day %d: %s" % (year,day,e)))
         return None
 
 @shared_task(time_limit=50)
