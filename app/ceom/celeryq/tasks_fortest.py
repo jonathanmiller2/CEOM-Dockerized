@@ -192,11 +192,7 @@ def get_modis_raw_data(self,csv_folder,media_base_url,lat,lon,dataset,years,data
     # x tasks_params[2009][x][days]
     for x in list(tasks_params[2009].keys()):
         debug("task_params 2009 "+str(x), tasks_params[2009][x]['days'])
-    print("Sending tasks to queue:")
     tasks = send_tasks(get_modis_year_data,tasks_params)
-    # tasks = send_tasks(get_modis_year_data.delay,tasks_params)
-    print('Monitoring tasks')
-    # monitor_tasks(tasks,self,metadata)
     data  = get_data(tasks)
     debug("data_after_tasks", data)
     debug("length of initial data", len(data[2009]))
@@ -207,10 +203,7 @@ def get_modis_raw_data(self,csv_folder,media_base_url,lat,lon,dataset,years,data
         if data[2009][x] is None:
                debug_lis.append(str(x))
     debug("List of debug_lis", debug_lis)
-    print('Processing data')
     data = process_data(data,dataset)
-    print(len(data[2009]))
-    print('saving data')
     filename = save_data(data,csv_folder,get_modis_raw_data.request.id,metadata)
     try:
         db = database.pgDatabase()

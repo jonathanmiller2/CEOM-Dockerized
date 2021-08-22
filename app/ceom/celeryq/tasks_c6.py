@@ -170,7 +170,6 @@ def get_modis_raw_data_c6(self,csv_folder,media_base_url,lat,lon,dataset,years,d
     time_ini = time.time() # Initial time to extract execution time
     metadata = get_location_metadata(lat,lon,dataset,dataset_npix,years) # metadata of the selected site
     # Set task initial state to started
-    #print metadata
     get_modis_raw_data_c6.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
     num_tasks = len(years) # Number of tasks to perform
     multi_day = (int(dataset_freq_in_days)!=1)
@@ -179,15 +178,10 @@ def get_modis_raw_data_c6(self,csv_folder,media_base_url,lat,lon,dataset,years,d
     # Create parameter list for all years
     chunks = 12
     tasks_params = split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,chunks)
-    print("Sending tasks to queue:")
     tasks = send_tasks(get_modis_year_data_c6.delay,tasks_params)
-    print('Monitoring tasks')
     monitor_tasks(tasks,self,metadata)
     data  = get_data(tasks)
-    print('Processing data')
     data = process_data(data,dataset)
-    #print data
-    print('saving data')
     filename = save_data(data,csv_folder,get_modis_raw_data_c6.request.id,metadata)
     try:
         db = database.pgDatabase()
@@ -210,7 +204,6 @@ def make_serializable_dict(mydict):
 def extract_day_data(col,row,dataset,year,day,tile):
     try:
         multi_day = True
-        print(("Getting day: %d" % day))
         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*.hdf$")
         items = (dataset, year, tile, year, day)
         search = MODIS_FOLDER_PATH+"%s/%d/%s/*%d%03d*.hdf" % items
@@ -256,7 +249,6 @@ if __name__ == "__main__":
     dataset_npix = 1200
     csv_folder = '/webapps/ceom_admin/celeryq/tests'
     pixel_val = get_modis_raw_data_c6.delay(csv_folder,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days)
-    print((pixel_val.result))
 
 def terminate_task(task_id):
     app.control.revoke(task_id, terminate=True)

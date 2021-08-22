@@ -19,7 +19,6 @@ class pgDatabase:
 
     def execute(self, query):
         try:
-            # print query
             self.cur.execute(query)
         except:
             raise Exception("Error with query: %s"%query)

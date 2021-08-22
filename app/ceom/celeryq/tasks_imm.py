@@ -47,8 +47,6 @@ def monitor_tasks(tasks,fun,metadata):
         finished = started = retry = error = pending = 0
         for year,chunks in tasks.items():
             for chunk, task in chunks.items():
-                print("task_debug:")
-                print(task.state)
                 num_tasks+=1
                 state = task.state
                 finished += state=='SUCCESS' # When task finished
@@ -93,11 +91,6 @@ def get_data(tasks):
     return data
 
 def process_data(data,dataset):
-	print("iam in PROCESS DATA ******************")
-	print("data:")
-	#print data
-	print("dataset:")
-	print(dataset)
 	return gap_fill(data,dataset)
 
 def send_tasks(function, params_dict):
@@ -179,9 +172,7 @@ def get_modis_raw_data(self,csv_folder,media_base_url,lat,lon,dataset,years,data
     # Get the list days we need to retreive its value, each one of
     # them will be send as an independent task to get their value
     time_ini = time.time() # Initial time to extract execution time
-    print("get_modis_raw_data:")
     metadata = get_location_metadata(lat,lon,dataset,dataset_npix,years) # metadata of the selected site
-    print(metadata)
     # Set task initial state to started
     get_modis_raw_data.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
     num_tasks = len(years) # Number of tasks to perform
@@ -191,16 +182,10 @@ def get_modis_raw_data(self,csv_folder,media_base_url,lat,lon,dataset,years,data
     # Create parameter list for all years
     chunks = 12
     tasks_params = split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,chunks)
-    print("Sending tasks to queue:")
     tasks = send_tasks(get_modis_year_data.delay,tasks_params)
-    # tasks = send_tasks(get_modis_year_data,tasks_params)
-    print('Monitoring tasks')
-    # remove comments later
     monitor_tasks(tasks,self,metadata)
     data  = get_data(tasks)
-    print('Processing data')
     data = process_data(data,dataset)
-    print('saving data')
     filename = save_data(data,csv_folder,get_modis_raw_data.request.id,metadata)
     try:
         db = database.pgDatabase()
@@ -221,17 +206,13 @@ def make_serializable_dict(mydict):
     return serialized_dict
 
 def extract_day_data(col,row,dataset,year,day,tile):
-    print("I'm in extract_day_data:")
     try:
         multi_day = False
-        print("Getting day: %d" % day)
         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*.hdf$")
         items = (dataset, year, tile, year, day)
         search = MODIS_FOLDER_PATH+"%s/%d/%s/*%d%03d*.hdf" % items
         flist = glob.glob(search)
         data = {}
-        print("file list debug")
-        print(flist)
         if len(flist) > 0 and r.match(flist[0]) is not None:
             fn = flist[0]
             pixel_values = None
@@ -256,7 +237,6 @@ def extract_day_data(col,row,dataset,year,day,tile):
 
 @app.task(time_limit=50)
 def get_modis_year_data( params_dict):
-    print("I'm in get_modis_year_data:")
     p = params_dict
     results = {p['year']:{}}
     for day in p['days']:
@@ -281,9 +261,7 @@ if __name__ == "__main__":
     csv_folder = '/webapps/ceom_admin/celeryq/tests'
     # pixel_val = get_modis_raw_data.delay(csv_folder,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days)
     pixel_val = get_modis_raw_data(csv_folder,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days)
-    print("i entered main and returning just none:")
-    print(pixel_val)
-    # print pixel_val.result
+
 
 def terminate_task(task_id):
     app.control.revoke(task_id, terminate=True)
