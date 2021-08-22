@@ -19,7 +19,6 @@ from django.conf import settings
 try:
     from . import database
 except Exception as e:
-    print(e)
     print("Database.py not found. disregard if it is a worker process")
 
 def get_location_metadata(lat,lon,dataset,dataset_npix,years):
@@ -181,14 +180,10 @@ def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,datase
     # Create parameter list for all years
     chunks = 12
     tasks_params = split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,chunks)
-    print("Sending tasks to queue:")
     tasks = send_tasks(get_modis_year_data.delay,tasks_params)
-    print('Monitoring tasks')
     monitor_tasks(tasks,self,metadata)
     data  = get_data(tasks)
-    print('Processing data')
     data = gap_fill(data,dataset)
-    print ('saving data')
     filename = save_data(data,csv_folder,get_modis_raw_data.request.id,metadata)
     try:
         db = database.pgDatabase()
@@ -210,21 +205,16 @@ def make_serializable_dict(mydict):
 def extract_day_data(col,row,dataset,year,day,tile):
     try:
         multi_day = True
-        print(("Getting day: %d" % day))
         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*.hdf$")
         items = (dataset, year, tile, year, day)
         search = os.path.join(settings.MODIS_DATASETS_PATH, "%s/%d/%s/*%d%03d*.hdf" % items)
-        print("SEARCH", search)
         flist = glob.glob(search)
-        print("FLIST", flist)
         data = {}
-        print("RMATCH", r.match(flist[0]))
         if len(flist) > 0 and r.match(flist[0]) is not None:
             fn = flist[0]
             pixel_values = None
             try:
                 pixel_values = get_pixel_value(fn,col,row)
-                print("UPDATED PIXEL VALUES:", pixel_values)
             except Exception as e:
                 print(("Error retrieving pixel values for file: %s %s " % (fn,e.message)))
 
@@ -259,7 +249,6 @@ if __name__ == "__main__":
     dataset_npix = 1200
     csv_folder = '/webapps/ceom_admin/celeryq/tests'
     pixel_val = get_modis_raw_data.delay(csv_folder,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days)
-    print((pixel_val.result))
 
 def terminate_task(task_id):
     app.control.revoke(task_id, terminate=True)

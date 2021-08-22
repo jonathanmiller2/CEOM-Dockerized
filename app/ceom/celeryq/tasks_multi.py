@@ -240,14 +240,10 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
             # Create parameter list for all years
             chunks = 12
             tasks_params = split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,chunks)
-            print(("Sending tasks to queue site %d of %d:" %(site_cont,total_sites)))
             tasks = send_tasks(get_modis_year_data.delay,tasks_params)
-            print('Monitoring tasks')
             monitor_single_site_tasks(tasks,metadata)
             data  = get_data(tasks)
-            print('Processing data')
             data = process_data(data,dataset)
-            print('saving data')
             file_url = save_data_multi(data,site_id,dataset,csv_folder,filename,years,site_cont==1)
             file_result = os.path.join(media_base_url,file_url)
         updateDB(task_id,file_result,message,site_cont,total_sites,False,False)
@@ -269,7 +265,6 @@ def make_serializable_dict(mydict):
 def extract_day_data(col,row,dataset,year,day,tile):
     try:
         multi_day = False
-        print(("Getting day: %d" % day))
         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*.hdf$")
         items = (dataset, year, tile, year, day)
         search = MODIS_FOLDER_PATH+"%s/%d/%s/*%d%03d*.hdf" % items
@@ -319,4 +314,3 @@ if __name__ == "__main__":
     input_file = '/webapps/ceom_admin/celeryq/test_multi.csv'
     media_base_url ='/media/'
     pixel_val = multiple_site_modis.delay(input_file,csv_folder,media_base_url,dataset,years,dataset_npix,dataset_freq_in_days)
-    print((pixel_val.result))

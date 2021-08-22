@@ -37,7 +37,6 @@ def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,datase
     num_tasks = 0 # Number of tasks to perform
     # multi_day is used to know erther the field real_date will be in modis bands
     multi_day = (int(dataset_freq_in_days)!=1)
-    print("Sending tasks to queue:")
     tasks={}
     num_errors = {} # Number of times the task failes <= MAX_ERRORS
     fatal_failures = {} # Tasks that failed MAX_ERRORS times and won't be rerunned
@@ -54,7 +53,6 @@ def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,datase
             tasks[year][day] = get_modis_day_data.delay(ih, iv, xi, yi, folder,dataset,year,day,vi,multi_day)
             num_errors[year][day] = fatal_failures[year][day] = 0
     get_modis_raw_data.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':num_tasks,'started':True,'metadata':metadata})
-    print("Monitoring tasks:")
     for i in range(0,NUM_STEPS):
         finished = started = retry = error = pending = 0
         for year,days_dict in list(tasks.items()):
@@ -137,7 +135,6 @@ def get_band_names_list_from_dict(dict_sample):
 
 def save_data_to_csv(data, header, filepath):
     try:
-        print(filepath)
         f = open( filepath, 'w' )
         # Write header
         header_titles = [ header_tuple[1] for header_tuple in header]
@@ -208,7 +205,6 @@ if __name__ == "__main__":
     dataset_npix = 1200
     csv_folder = '/webapps/ceom_admin/celeryq/tests'
     pixel_val = get_modis_raw_data.delay(csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days,vi)
-    print(pixel_val.result)
 
 # For testing purposes (worker)
 # if __name__ == "__main__":
