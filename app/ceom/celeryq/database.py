@@ -10,10 +10,10 @@ class pgDatabase:
 
     def __init__(self):
         try:
-            self.conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s'" % (self.dbname, self.user, self.host, self.password))
+            self.conn = psycopg2.connect(f"dbname='{self.dbname[0]}' user='{self.user[0]}' host='{self.host[0]}' password='{self.password[0]}'")
         except Exception as e :
             print(e)
-            raise Exception("Unnable to connect to database")
+            raise Exception("Unable to connect to database")
 
         self.cur = self.conn.cursor()
 

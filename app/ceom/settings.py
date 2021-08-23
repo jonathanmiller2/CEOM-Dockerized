@@ -189,6 +189,7 @@ INSTALLED_APPS = [
     'ceom.maps',
     'ceom.water',
     'ceom.poi',
+    'ceom.celeryq',
 
     'raster',
     

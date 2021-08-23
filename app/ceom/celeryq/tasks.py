@@ -16,10 +16,7 @@ from collections import OrderedDict
 
 from celery import group
 from django.conf import settings
-try:
-    from ceom.celeryq import database
-except Exception as e:
-    print("Database.py not found. disregard if it is a worker process")
+from ceom.celeryq import database
 
 def get_location_metadata(lat,lon,dataset,dataset_npix,years):
     ih, iv, xi, yi, folder = latlon2sin(float(lat), float(lon), dataset, dataset_npix)
