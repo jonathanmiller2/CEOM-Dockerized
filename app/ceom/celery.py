@@ -13,7 +13,7 @@ app.autodiscover_tasks()
 
 @shared_task(bind=True)
 def test_shared_tasks(self):
-    print('Shared tasks are working')
+    print('Shared tasks are working') #TODO: This still needs to be tested. Does this task have to run before MODIS tasks work?
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):

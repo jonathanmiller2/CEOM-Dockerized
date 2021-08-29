@@ -8,9 +8,7 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
 
-    command: bash -c "echo YOOOOOOO &&
-                      python manage.py makemigrations &&
-                      echo YOOOOOOO2 &&
+    command: bash -c "python manage.py makemigrations &&
                       python manage.py migrate --noinput -v 1 && 
                       python manage.py check &&
                       python manage.py collectstatic --noinput &&
