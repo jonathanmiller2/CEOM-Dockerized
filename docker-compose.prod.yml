@@ -4,16 +4,15 @@ services:
 
   web:
     container_name: ceom_web
-    build: ./app
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
 
     command: bash -c "python manage.py makemigrations &&
                       python manage.py migrate --noinput -v 1 && 
                       python manage.py check &&
                       python manage.py collectstatic --noinput &&
                       python manage.py compilemessages &&
-                      touch /code/cron.log &&
-                      printenv | grep -v "no_proxy" >> /etc/environment &&
-                      cron &&
                       gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
                       
                       #     This is used to fix having multiple leaf nodes in the migration tree.
@@ -40,8 +39,8 @@ services:
                       #      Helpful for weird sync issues (such as django trying to delete tables that are already deleted)
                       #python manage.py migrate --fake
     volumes: 
-      - ./app:/code
-      - /data/web/ceom/media/:/code/ceom/media/
+      - ./app:/code/app/
+      - /data/web/ceom/media/:/code/app/ceom/media/
       - /data/satellite/:/data/satellite/
     expose:
       - 8000
@@ -83,7 +82,7 @@ services:
       context: .
       dockerfile: ./celery/Dockerfile
 
-    command: bash -c "celery -A ceom worker -l DEBUG"
+    command: bash -c "celery -A ceom worker -B -l DEBUG"
 
     volumes:
       - ./app:/code/app/

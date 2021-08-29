@@ -228,8 +228,16 @@ def launch_single_site_timeseries(request, lat, lon, dataset, years, product=Non
     print("TIME",TIMESERIES_LOCATION)
     task_id = get_modis_raw_data.delay(TIMESERIES_LOCATION,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)     
 
+    print("toast 231")
+
     job = SingleTimeSeriesJob(lat=lat,lon=lon,user=request.user,years=years,product=dataset,task_id=task_id,col=xi,row=yi,tile=folder)
+
+    print("toast 235")
+
     job.save()
+
+    print("toast 239")
+
     return redirect(to='/modis/visualization/timeseries/single/t=%s/'%task_id)
 
 # This page will host all single timeseries from a user

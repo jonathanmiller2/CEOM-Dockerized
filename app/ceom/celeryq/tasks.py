@@ -1,4 +1,3 @@
-
 from celery import shared_task
 from celery import states
 import time
@@ -164,6 +163,7 @@ def save_data(data,csv_folder,task_id,metadata):
 
 @shared_task(bind=True)
 def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days):
+    print("toast 166")
     # Get the list days we need to retreive its value, each one of
     # them will be send as an independent task to get their value
     time_ini = time.time() # Initial time to extract execution time

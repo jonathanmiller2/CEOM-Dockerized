@@ -303,14 +303,3 @@ def get_modis_year_data( params_dict):
     for day in p['days']:
         results[p['year']][day] = extract_day_data(p['col'],p['row'],p['dataset'],p['year'],day,p['tile'])
     return results
-
-# For testing purposes (multiple site control)
-if __name__ == "__main__":
-    dataset= 'mod11a1'
-    dataset_freq_in_days=1
-    years = list(range(2014,2015))
-    dataset_npix = 1200
-    csv_folder = '/webapps/ceom_admin/celeryq/tests'
-    input_file = '/webapps/ceom_admin/celeryq/test_multi.csv'
-    media_base_url ='/media/'
-    pixel_val = multiple_site_modis.delay(input_file,csv_folder,media_base_url,dataset,years,dataset_npix,dataset_freq_in_days)
