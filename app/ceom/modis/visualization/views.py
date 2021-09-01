@@ -17,8 +17,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Need to change to include new celery script
 # import process
 
-import csv
-import json as simplejson 
+import csv, json
+from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
@@ -39,6 +39,11 @@ from django.conf import settings
 import csv
 import uuid
 import subprocess
+
+ERROR_NOT_EXIST_MESSAGE = 'Could not retrieve task. It may not exist or may have expired.'
+FAILURE_MESSAGE = 'We are sorry, but an error occured while processing the task. Please contact the administrator.'
+PENDING_MESSAGE = 'Waiting in queue... (If it takes too long please contact the administrator)'
+PROCESSING_MESSAGE = 'Processing...'
 
 
 def latlon2sin(lat,lon,modis='mod09a1',npix=2400.0):
@@ -161,7 +166,7 @@ def timeseries_single_progress(request, task_id):
             raise Exception('User does not own the task')
 
         filepath = str(task_db.result)
-        if filepath[0] != '/':
+        if filepath and filepath[0] != '/':
             filepath = '/' + filepath
         
         c = {"job_id":task_db.id,
@@ -271,6 +276,47 @@ def read_from_csv(absolute_path):
                     raw_dict[header[col]] = row[col]
                 data.append(raw_dict)
     return data
+
+def get_task_progress(request,task_id):
+    try:
+        task_db = SingleTimeSeriesJob.objects.get(task_id=task_id)
+        if not task_db.completed:
+            task = AsyncResult(str(task_id))
+            if task.result is None:
+                return JsonResponse({'not_found':True,'message':ERROR_NOT_EXIST_MESSAGE})
+            if task.status=="FAILURE":
+                return JsonResponse({'failure':True,'message':FAILURE_MESSAGE})
+            elif task.status=="STARTED":
+                # Task is still running
+                data = {
+                    'progress':True,
+                    'completed':task.result['completed'],
+                    'errors': task.result['error'],
+                    'total':task.result['total'],
+                    'message': PROCESSING_MESSAGE,
+                    }
+                return JsonResponse(data)
+        else:
+            url = str(task_db.result)
+            if url and url[0] != '/':
+                url = '/' + url
+
+            return JsonResponse({
+                'success':True, 
+                'url': url,
+                })
+    except Exception as e:
+        return JsonResponse({'failure':True,'message':'Unhandled exception: %s' % e})
+
+def get_multiple_task_progress(request,tasks_ids):
+    try:
+        if not tasks_ids:
+            raise Exception('Task List is empty')
+        tasks = TimeSeriesJob.objects.filter(Q(user=request.user)&Q(reduce(lambda x, y: x | y, [Q(id__contains=task_id) for task_id in tasks_ids])))
+        tasks_dict = [(t.toJSON()) for t in tasks]
+        return JsonResponse({'tasks':tasks_dict,'success':True})
+    except Exception as e:
+        return JsonResponse({'success':False,'message':'Unhandled exception: %s' % e})
 
 
 def timeseries_single_chart(request,task_id):

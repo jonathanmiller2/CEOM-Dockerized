@@ -1,12 +1,13 @@
 {% extends "visualization/base.html" %}
 
 {% block content %}
-<div class="span12">
+
+<p>{{file}}</p>
+<div class="col-12">
   	<h2 style="color: #dc143c;">Single Site Timeseries Request</h2>
 
-      <div id="errorPanel" class="well {% if found %}hide{% endif %}">
+      <div id="errorPanel" class="{% if found %}d-none{% endif %}">
       <p class="text-danger"> Timeseries task not found or expired. If you just created the task, wait some time until that task gets into the queue or <a class="btn btn-primary" onclick="location.reload();">reload</a></p>
-      <p id="numRetries">Checking if task exists (0/10)...</p>
       </div>
 
       <div id="dataPanel"  class="well span10 offset1 {%if not found %}hide{% endif %}">
@@ -40,27 +41,26 @@
         <div id="resultsDiv" class="text-center">
           <a id="downloadButton" class="btn btn-primary" href="{{file}}"><i class="icon-download-alt"></i> Download</a>
           <a class="btn btn-primary" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
-          <a href="/visualization/timeseries/single/del={{job_id}}" class="btn btn-danger"><i class="icon-trash"></i> Delete</a>
+          <a href="/modis/visualization/timeseries/single/del={{job_id}}/" class="btn btn-danger"><i class="icon-trash"></i> Delete</a>
         </div>
         {% else %}
         <p id='infoMessage' class="text-center text-info">Contacting server...</p>
-        <div class="span-12 text-center"><a href="/visualization/timeseries/single/del={{job_id}}" class="btn btn-danger"><i class="icon-trash"></i> Cancel</a></div>
-        <div id ='progressDiv' class="span12 text-center">          
-            <div id="progress_bars"class="progress progress-striped active">
-                <div id="completed-bar" class="bar bar-success" style="width: 0%;"></div>
-                <div id="remaining-bar" class="bar bar-warning" style="width: 0%;"></div>
-                <div id="error-bar" class="bar bar-danger" style="width: 100%;"></div>
+        <div id ='progressDiv' class="col-12 text-center">          
+            <div id="progress_bars" class="progress">
+                <div id="completed-bar" class="progress-bar progress-bar-striped bg-success" style="width: 0%;"></div>
+                <div id="remaining-bar" class="progress-bar progress-bar-striped bg-warning" style="width: 0%;"></div>
+                <div id="error-bar" class="progress-bar progress-bar-striped bg-danger" style="width: 100%;"></div>
             </div>
         </div>
-        <div id="resultsDiv" class="hide text-center">
+        <div id="resultsDiv" class="hide text-center mt-2">
           <a id="downloadButton" class="btn btn-primary" href="{{file}}"><i class="icon-download-alt"></i> Download</a>
           <a class="btn btn-primary" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
+          <a href="/modis/visualization/timeseries/single/del={{job_id}}/" class="btn btn-danger"><i class="icon-trash"></i> Cancel</a>
         </div>
         {% endif %}
         
       </div>
 </div>
-{% endblock %}
 
 {% block js_code %}
 
@@ -119,6 +119,9 @@
         clearInterval(intervalID);
         file_url = data['url']
         $( "#infoMessage" ).text("Data ready to download")
+        $("#completed-bar").css("width","100%");
+        $("#remaining-bar").css("width","0%");
+        $("#error-bar").css("width","0%");
         console.log(file_url)
         showResults(file_url)
       }else if (data.not_found){
@@ -144,15 +147,18 @@
     }
     
     var checkProgress = function(){
-      Dajaxice.visualization.get_task_progress(checkState,{'task_id':task_id});
-      
+      $.ajax({
+        url: "/modis/visualization/timeseries/single/progress/t={{task_id}}/",
+        success: function (result) {
+          checkState(result)
+        }
+      })
     }
-
-
     // Main
     {% if not completed and found %}
     var delay = 1000
     intervalID = window.setInterval(checkProgress, delay);
     {% endif %}
   </script>
+{% endblock %}
 {% endblock %}
