@@ -7,7 +7,12 @@ from itertools import chain
 from operator import attrgetter
 from datetime import date
 
+from ceom.celery import debug_normal_task, debug_shared_task
+
 def news(request):
+    debug_shared_task.delay()
+    debug_normal_task.delay()
+
     posts = Post.objects.all().order_by("-date")
     return render(request, 'aboutus/news.html', context={'posts': posts})
 

@@ -8,7 +8,8 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
 
-    command: bash -c "python manage.py makemigrations &&
+    command: bash -c "pip install django-raster/ &&
+                      python manage.py makemigrations &&
                       python manage.py migrate --noinput -v 1 && 
                       python manage.py check &&
                       python manage.py collectstatic --noinput &&

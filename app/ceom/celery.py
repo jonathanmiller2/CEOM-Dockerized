@@ -11,10 +11,22 @@ app = Celery("ceom")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
 
+@app.task(bind=True)
+def debug_normal_task(self):
+    print('Hello World')
+
 @shared_task(bind=True)
-def test_shared_tasks(self):
-    print('Shared tasks are working') #TODO: This still needs to be tested. Does this task have to run before MODIS tasks work?
+def debug_shared_task(self):
+    print('Hello World')
+
+
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(crontab(minute=0, hour=3, day_of_week='sunday'), update_datasets.s(), name='Weekly dataset update')
+
+
+    #TODO: Always comment this out in production!
+    sender.add_periodic_task(crontab(minute=25, hour=20, day_of_week='monday'), update_datasets.s(), name='Debug dataset update') 
+
+    
