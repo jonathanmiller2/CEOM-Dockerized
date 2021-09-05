@@ -16,6 +16,7 @@ from collections import OrderedDict
 from celery import group
 from django.conf import settings
 from ceom.celeryq import database
+from ceom.celery import app
 
 def get_location_metadata(lat,lon,dataset,dataset_npix,years):
     ih, iv, xi, yi, folder = latlon2sin(float(lat), float(lon), dataset, dataset_npix)
@@ -161,7 +162,7 @@ def save_data(data,csv_folder,task_id,metadata):
     return filename
 
 
-@shared_task(bind=True)
+@app.task(bind=True)
 def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days):
     print("toast 166")
     # Get the list days we need to retreive its value, each one of
@@ -228,8 +229,8 @@ def extract_day_data(col,row,dataset,year,day,tile):
         print(("Exception at year %d day %d: %s" % (year,day,e)))
         return None
 
-@shared_task(time_limit=50)
-def get_modis_year_data( params_dict):
+@app.task()
+def get_modis_year_data(params_dict):
     p = params_dict
     results = {p['year']:{}}
     for day in p['days']:
