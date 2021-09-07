@@ -1,7 +1,7 @@
 from django.conf.urls import *
 from django.views.generic import TemplateView
 
-from django.urls import re_path
+from django.urls import re_path, path
 import ceom.modis.inventory.views
 
 urlpatterns = [
@@ -14,4 +14,5 @@ urlpatterns = [
 	re_path(r'^country_gis_data/', TemplateView.as_view(template_name="/inventory/under_construction.html")),
 	re_path(r'^subcountry_gis_data/', TemplateView.as_view(template_name="/inventory/under_construction.html")),
 	re_path(r'^$', ceom.modis.inventory.views.remote_sensing_datasets),
+	path('toast_tile/<int:z>/<int:x>/<int:y>', ceom.modis.inventory.views.toast_tile)
 ]
