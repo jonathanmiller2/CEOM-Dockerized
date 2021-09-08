@@ -1,6 +1,3 @@
 [submodule "app/django-raster"]
 	path = app/django-raster
 	url = https://github.com/jonathanmiller2/django-raster
-[submodule "app/--force"]
-	path = app/--force
-	url = https://github.com/jonathanmiller2/django-raster
