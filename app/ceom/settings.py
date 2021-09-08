@@ -73,6 +73,7 @@ USE_I18N = True
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), "media/")
 
 MODIS_DATASETS_PATH =  "/data/satellite/modis/version006/datasets_006/"
+MODIS_PRODUCTS_PATH =  "/data/satellite/modis/version006/products_006/"
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).

@@ -223,7 +223,7 @@ def launch_single_site_timeseries(request, lat, lon, dataset, years, product=Non
     dataset_npix = dataset.xdim #2400 for mod09a1
     dataset_freq_in_days = dataset.day_res # 8 for mod09a1
     # except Exception as e:
-    #     return HttpResponse("An error occurred. If you did not modify the URL please contact the web administrator TOAST")
+    #     return HttpResponse("An error occurred. If you did not modify the URL please contact the web administrator")
     lon=float(lon)
     lat = float(lat)
     dataset_npix = int(dataset_npix)
