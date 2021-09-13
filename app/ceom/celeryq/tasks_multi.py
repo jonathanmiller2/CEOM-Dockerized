@@ -11,6 +11,7 @@ from ceom.celeryq.modis.aux_functions import latlon2sin
 from ceom.celeryq.modis.process import get_pixel_value,get_band_names,gap_fill
 from ceom.celeryq.modis.headers import get_modis_header
 from collections import OrderedDict
+from ceom.celery import app
 
 try:
     from . import database
