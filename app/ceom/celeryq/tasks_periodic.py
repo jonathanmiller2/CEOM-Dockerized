@@ -1,10 +1,10 @@
-from celery import shared_task
+from ceom.celery import app
 from django.db import IntegrityError
 import os, datetime, random
 
 from django.conf import settings
 
-@shared_task
+@app.task
 def update_datasets():
     #This import has to be done when this function gets called, as it requires that the Django apps be loaded, which isn't completed when the above imports run.
     from ceom.modis.inventory.models import File, Dataset, Tile
