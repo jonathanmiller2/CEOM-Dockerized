@@ -141,14 +141,13 @@
     </div>
 </div>
 <div id="data-output"></div>
-{% if photoRedirect %}
-<input id="lonRedirect" type=hidden value={{lonRedirect}}></input>
-<input id="latRedirect" type=hidden value={{latRedirect}}></input>
+<!-- {% if photoRedirect %}
 <script type="text/javascript">
+
     autoRedirectWork();
 </script>
 <input id="conditionReload" type=hidden value="true"></input>
-{%endif%}
+{%endif%} -->
 <script>
     $('#datasetPane').prop("disabled", false);
     $('#yearsPane').prop("disabled", false);
@@ -322,6 +321,27 @@
         document.getElementById("addressGo").addEventListener("click", () => {
             geocodeAddress(geocoder);
         });
+
+        {% if photoRedirect %}
+        let latRe = {{latRedirect}}
+        let lonRe = {{lonRedirect}}
+        $('#LAT_DEC').val(latRe.toFixed(3));
+        $('#LON_DEC').val(lonRe.toFixed(3));
+        let dms_lat_re = toDMS(latRe);
+        let dms_lon_re = toDMS(lonRe);
+
+        $('#LAT_DEG').val(dms_lat_re[0]);
+        $('#LAT_MIN').val(dms_lat_re[1]);
+        $('#LAT_SEC').val(dms_lat_re[2]);
+
+        $('#LON_DEG').val(dms_lon_re[0]);
+        $('#LON_MIN').val(dms_lon_re[1]);
+        $('#LON_SEC').val(dms_lon_re[2]);
+
+        marker.setPosition({lat: latRe, lng: lonRe});
+        map.setCenter(marker.getPosition());
+        updatePixelDisplay(latRe, lonRe);
+        {% endif %}
     }
 
     function geocodeAddress(geocoder) {
@@ -488,7 +508,7 @@
             str += "<div class='row'><dt>Product:</dt><dd class='pl-2'>"+ prod+"</dd></div>";
             str += "<div class='row'><dt>Years:</dt><dd class='pl-2'>"+ year+"</dd></div>";
            
-            str += "<div class='row'><dt>Start task(C5)</dt><dd class='pl-2'><a class=\"btn btn-primary\" href=\"/modis/visualization/timeseries/single/start/"+filename+"/\">COLLECTION 5 </a></dd><br></div>";
+            str += "<div class='row'><dd><a class=\"btn btn-primary\" href=\"/modis/visualization/timeseries/single/start/"+filename+"/\">Start Task</a></dd><br></div>";
             str += "</dl></div>";
             $('#data-output').append(str);
 
