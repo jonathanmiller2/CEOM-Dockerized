@@ -41,6 +41,7 @@ services:
       - /docker-projects/django-raster/:/django-raster/
       - dev_media:/code/app/ceom/media/
       - /data/satellite/:/data/satellite/
+      - /data/satellite/:/code/app/ceom/media/satellite/
     expose:
       - 8000
     env_file:
