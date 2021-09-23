@@ -27,8 +27,6 @@ from ceom.celeryq.tasks import get_modis_raw_data
 #from ceom.celeryq.tasks import get_modis_raw_data, latlon2sin
 from ceom.celeryq.tasks_multi import multiple_site_modis,terminate_task
 
-## testing the new celery task for collection-6 data
-from ceom.celeryq.tasks_c6 import get_modis_raw_data_c6, latlon2sin
 
 from celery.result import AsyncResult
 
@@ -186,32 +184,6 @@ def timeseries_single_progress(request, task_id):
     
     return render(request, 'visualization/single_site_timeseries.html', context=c)
 
-## TEMP FOR COLLECTION-6 DATASET
-@login_required()
-def launch_single_site_timeseries_c6(request, lat, lon, dataset, years, product=None):
-    years_formated = [int(year) for year in years.split(',')]
-    dataset_freq_in_days = 8
-    try:
-        dataset = Dataset.objects.get(name=dataset)
-        dataset_npix = dataset.xdim #2400 for mod09a1
-        dataset_freq_in_days = dataset.day_res # 8 for mod09a1
-    except Exception as e:
-        return HttpResponse("An error occurred. If you did not modify the URL please contact the web administrator")
-
-    csv_folder = TIMESERIES_LOCATION
-    lon=float(lon)
-    lat = float(lat)
-    dataset_npix = int(dataset_npix)
-    ih,iv,xi,yi,folder = latlon2sin(lat,lon,dataset,dataset_npix)
-    
-
-    vi=False
-    media_timeseries = os.path.join(settings.MEDIA_URL,'visualization','timeseries','single')
-    task_id = get_modis_raw_data_c6.delay(csv_folder,media_timeseries,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)
-
-    job = SingleTimeSeriesJob(lat=lat,lon=lon,user=request.user,years=years,product=dataset,task_id=task_id,col=xi,row=yi,tile=folder)
-    job.save()
-    return redirect(to='/visualization/timeseries/single/t=%s'%task_id)
 
 @login_required()
 def launch_single_site_timeseries(request, lat, lon, dataset, years, product=None):
