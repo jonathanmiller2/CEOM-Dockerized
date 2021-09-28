@@ -13,7 +13,6 @@ services:
                       python manage.py migrate --noinput -v 1 && 
                       python manage.py check &&
                       python manage.py collectstatic --noinput &&
-                      python manage.py compilemessages &&
                       supervisord -n"
                       
                       #     This can be used to make a development superuser for testing. See .env.dev for login info.
@@ -35,13 +34,12 @@ services:
                       
                       #      This is for the translation system.
                       #python manage.py makemessages --all &&
+                      #python manage.py compilemessages &&
 
     volumes:
       - ./app:/code/app/
-      - /docker-projects/django-raster/:/django-raster/
       - dev_media:/code/app/ceom/media/
       - /data/satellite/:/data/satellite/
-      - /data/satellite/:/code/app/ceom/media/satellite/
     expose:
       - 8000
     env_file:
