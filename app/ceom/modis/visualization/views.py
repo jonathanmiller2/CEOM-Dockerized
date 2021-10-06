@@ -608,7 +608,7 @@ def multiple_add(request):
             dataset = form.cleaned_data['product']
 
             task_id = multiple_site_modis.delay(points,csv_folder,media_timeseries,dataset.name,years,dataset.xdim,dataset.day_res)
-            job.task_id = task_id
+            job.task_id = str(task_id)
             job.save()
             
             return HttpResponseRedirect('/visualization/multiple/')
