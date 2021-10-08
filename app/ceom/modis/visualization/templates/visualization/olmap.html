@@ -1,4 +1,4 @@
-    {% extends "visualization/base.html" %}
+{% extends "visualization/base.html" %}
 
 {% block title %} Data Visualization {% endblock %}
 
@@ -154,7 +154,8 @@
 
                 console.log("z", zoom, "x", coord.x, "y", coord.y)
 
-                url = "/inventory/toast_tile/" + zoom + "/" + coord.x + "/" + coord.y
+                //url = "/inventory/toast_tile/" + zoom + "/" + coord.x + "/" + coord.y
+                url = "/raster/tiles/yeep/" + zoom + "/" + coord.x + "/" + coord.y + ".png"
                 console.log(url)
                 return (url)
             },
