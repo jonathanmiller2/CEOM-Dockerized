@@ -47,7 +47,6 @@ services:
     env_file:
       - ./.env.prod
     depends_on:
-      - celery
       - redis
 
   nginx:
