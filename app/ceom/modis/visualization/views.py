@@ -223,16 +223,27 @@ def timeseries_single_history(request):
     user_tasks = SingleTimeSeriesJob.objects.filter(user=request.user).order_by('-created')
     paginator = Paginator(user_tasks, 25) # Show 25 jobs per page
 
-    page = request.GET.get('page')
-    try:
-        jobs = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        jobs = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        jobs = paginator.page(paginator.num_pages)
-    return render(request, 'visualization/single_timeseries_history.html', context={"jobs": jobs})
+    page = request.GET.get('page',1)
+    if page != "all":
+        try:
+            jobs = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            jobs = paginator.page(int(page))
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            jobs = paginator.page(paginator.num_pages)
+
+        page = int(page)
+        page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
+    else:
+        paginator = None
+        page_range = list(range(10))
+    page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
+    return render(request, 'visualization/single_timeseries_history.html', context={
+        "jobs": jobs,
+        'page_range': page_range,
+        })
 
 def read_from_csv(absolute_path):
     header=None
@@ -605,7 +616,7 @@ def multiple_add(request):
             dataset = form.cleaned_data['product']
 
             task_id = multiple_site_modis.delay(points,csv_folder,media_timeseries,dataset.name,years,dataset.xdim,dataset.day_res)
-            job.task_id = task_id
+            job.task_id = str(task_id)
             job.save()
             
             return HttpResponseRedirect('/visualization/multiple/')

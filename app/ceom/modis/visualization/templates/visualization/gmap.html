@@ -339,6 +339,7 @@
         $('#LON_SEC').val(dms_lon_re[2]);
 
         marker.setPosition({lat: latRe, lng: lonRe});
+        map.setZoom(15);
         map.setCenter(marker.getPosition());
         updatePixelDisplay(latRe, lonRe);
         {% endif %}

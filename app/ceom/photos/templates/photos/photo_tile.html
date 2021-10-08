@@ -11,7 +11,7 @@
         justify-content: center;
     }
     
-    #modis {
+    .modis {
         height:25px; 
         width:26%; 
         font-size: xx-small; 
@@ -113,15 +113,20 @@
                 <li style="padding-top:4px">
                     {% if modis_timeseries %}
                         {% if photo.user == request.user or request.user.is_superuser %}
-                        <a id="modis" class="btn btn-light btn-small btn-outline-dark btn3d" href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
+                        {% if photo.lon and photo.lat %}
+                        <a class="modis btn btn-light btn-small btn-outline-dark btn3d" href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
                             <abbr title="{% trans 'View MODIS data for this photo. Click on this button and scroll down to the bottom of the page and to select appropriate dataset and year' %}">MODIS</abbr>
                         </a>
-                     
+                        {% else %}
+                        <a class="modis btn btn-light btn-small btn-outline-dark disabled">
+                            <abbr title="{% trans 'View MODIS data for this photo. Click on this button and scroll down to the bottom of the page and to select appropriate dataset and year' %}" style="text-decoration: none;">MODIS</abbr>
+                        </a>
+                        {% endif %}
                         <a class='btn btn-light btn-outline-secondary btn-small tileButton' href="/photos/edit/{{photo.id}}">{% trans "Edit" %}</a>
                         <a class='btn btn-danger btn-small tileButton' onclick="return confirm('Are you sure, you want to delete?');" href="/photos/delete/{{photo.id}}/?next={{request.get_full_path|urlencode}}">{% trans "Delete" %}</a>
                         
                         {% else %}
-                            <a id="modis" class="btn btn-light btn-small btn-outline-dark btn3d" href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
+                            <a class="modis btn btn-light btn-small btn-outline-dark btn3d" href="/modis/visualization/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
                                 <abbr title="{% trans 'View MODIS data for this photo. Click on this button and scroll down to the bottom of the page and to select appropriate dataset and year' %}">MODIS</abbr>
                             </a>
                         {% endif %}
