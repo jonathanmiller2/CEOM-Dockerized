@@ -16,8 +16,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.forms import ValidationError
 from django.contrib import messages
-
-import django
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     if request.user.is_authenticated:
@@ -49,8 +48,8 @@ def logout(request):
     logout(request)
     return HttpResponseRedirect('/')
 
+@csrf_exempt
 def mobile_login(request):
-
     try:
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
 
@@ -63,7 +62,7 @@ def mobile_login(request):
     except Exception as e:
         return HttpResponse('ERROR: ' + str(e), status=500)
 
-
+@csrf_exempt
 def register(request):
     if request.method == 'POST':
         user_form = RegistrationForm(request.POST)
