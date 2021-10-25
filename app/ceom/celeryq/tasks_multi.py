@@ -13,9 +13,10 @@ from ceom.celeryq.modis.headers import get_modis_header
 from collections import OrderedDict
 from ceom.celery import app
 
+from django.conf import settings
 try:
     from . import database
-except:
+except Exception as e:
     print("Database.py not found. disregard if it is a worker process")
 
 def get_location_metadata(lat,lon,dataset,dataset_npix,years):
@@ -32,7 +33,7 @@ def get_location_metadata(lat,lon,dataset,dataset_npix,years):
     return metadata
 
 def monitor_single_site_tasks(tasks,metadata):
-    # MAX_ERRORS = 3
+    MAX_ERRORS = 3
     MAX_SECONDS= 200 # seconds
     TIME_CHECK = 1 # seconds
     NUM_STEPS = int(MAX_SECONDS/TIME_CHECK)
@@ -56,8 +57,8 @@ def monitor_single_site_tasks(tasks,metadata):
                 #     elif not fatal_failures[year][day]:
                 #         fatal_failures[year][day] = 1
                 #         fatal_failures_counter+=1
-        # progress = int((float(finished + error)/num_tasks)*100)
-        # print ("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d ") % (progress,finished, error, retry, started, pending)
+        progress = int((float(finished + error)/num_tasks)*100)
+        print ("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d ") % (progress,finished, error, retry, started, pending)
         if finished + error == num_tasks:
             break
         time.sleep(TIME_CHECK)
@@ -84,8 +85,8 @@ def get_data(tasks):
                 task.forget() #Remove partial info from backend because it is no longer necessary
     return data
 
-def process_data(data,dataset):
-    return gap_fill(data,dataset)
+# def process_data(data,dataset):
+#     return gap_fill(data,dataset)
 
 def send_tasks(function, params_dict):
     tasks =  {}
@@ -98,7 +99,7 @@ def send_tasks(function, params_dict):
 def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chunks=5):
     task_params = dict([(year,{}) for year in years])
     current_year = datetime.datetime.now().year
-    current_doy = datetime.datetime.now().timetuple().tm_yday
+    current_day = datetime.datetime.now().timetuple().tm_yday
     for year in years:
         days = [i+1 for i in range(0,366) if i % dataset_freq_in_days==0]
         if year not in list(range(2000,current_year+1)):
@@ -106,7 +107,7 @@ def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chun
         if year == 2000:
             days = [day for day in days if day > 56 ] # Modis has no days before this date
         elif year == current_year:
-            days = [day for day in days if day <= current_doy ] # Cannot get future dates
+            days = [day for day in days if day <= current_day ] # Cannot get future dates
         for day in days:
             chunk = ((day-1)/dataset_freq_in_days) % num_chunks
             if chunk not in task_params[year]:
@@ -166,6 +167,8 @@ def get_file_name(dataset,years):
     return timestr
 
 def read_input_file(file_path):
+    print("DIR", os.listdir(os.path.dirname(file_path)))
+    print("DIR2", os.path.dirname(file_path))
     f = open(file_path,'r')
     line_cont = 0
     input_sites = OrderedDict()
@@ -211,12 +214,14 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
     task_id = multiple_site_modis.request.id
     file_result = ''
     message = ''
+    print("=============================================================",input_file)
+    print("=============================================================")
     try:
         try:
             input_sites = read_input_file(input_file)
         except Exception as e :
             # Set error to the task in the db (Wrong input file)
-            print(("Exception reading input file: %s" % str(e.message)))
+            #print(("Exception reading input file: ", str(e.message)))
             updateDB(task_id,file_result,str(e.message),0,total_sites,True,False)
             return None;
         time_ini = time.time() # Initial time to extract execution time
@@ -244,7 +249,7 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
             tasks = send_tasks(get_modis_year_data.delay,tasks_params)
             monitor_single_site_tasks(tasks,metadata)
             data  = get_data(tasks)
-            data = process_data(data,dataset)
+            data = gap_fill(data,dataset)
             file_url = save_data_multi(data,site_id,dataset,csv_folder,filename,years,site_cont==1)
             file_result = os.path.join(media_base_url,file_url)
         updateDB(task_id,file_result,message,site_cont,total_sites,False,False)
@@ -254,7 +259,6 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
         updateDB(task_id,file_result,str(e.message),0,0,True,False)
 
 # ------------------------------------- PROCESSING SCRIPT PART ----------------------------
-MODIS_FOLDER_PATH = "/data/ifs/modis/datasets/"
 
 import multiprocessing as mp
 def make_serializable_dict(mydict):
@@ -268,7 +272,7 @@ def extract_day_data(col,row,dataset,year,day,tile):
         multi_day = False
         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*.hdf$")
         items = (dataset, year, tile, year, day)
-        search = MODIS_FOLDER_PATH+"%s/%d/%s/*%d%03d*.hdf" % items
+        search = os.path.join(settings.MODIS_DATASETS_PATH, "%s/%d/%s/*%d%03d*.hdf" % items)
         flist = glob.glob(search)
         data = {}
 
@@ -304,14 +308,3 @@ def get_modis_year_data( params_dict):
     for day in p['days']:
         results[p['year']][day] = extract_day_data(p['col'],p['row'],p['dataset'],p['year'],day,p['tile'])
     return results
-
-# For testing purposes (multiple site control)
-if __name__ == "__main__":
-    dataset= 'mod11a1'
-    dataset_freq_in_days=1
-    years = list(range(2014,2015))
-    dataset_npix = 1200
-    csv_folder = '/webapps/ceom_admin/celeryq/tests'
-    input_file = '/webapps/ceom_admin/celeryq/test_multi.csv'
-    media_base_url ='/media/'
-    pixel_val = multiple_site_modis.delay(input_file,csv_folder,media_base_url,dataset,years,dataset_npix,dataset_freq_in_days)

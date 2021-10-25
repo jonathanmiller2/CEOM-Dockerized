@@ -239,17 +239,6 @@ def get_modis_year_data( params_dict):
         results[p['year']][day] = extract_day_data(p['col'],p['row'],p['dataset'],p['year'],day,p['tile'])
     return results
 
-# For testing purposes (control)
-if __name__ == "__main__":
-    lat =  43.587495
-    lon = -102.828119
-    dataset= 'mod09a1'
-    dataset_freq_in_days=8
-    years = list(range(2000,2015))
-    dataset_npix = 1200
-    csv_folder = '/webapps/ceom_admin/celeryq/tests'
-    pixel_val = get_modis_raw_data.delay(csv_folder,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days)
-
 def terminate_task(task_id):
     app.control.revoke(task_id, terminate=True)
 

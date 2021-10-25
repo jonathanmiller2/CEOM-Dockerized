@@ -551,6 +551,9 @@ MULTIPLE_TIMESERIES_LOCATION = os.path.join(settings.MEDIA_ROOT,'visualization',
 @login_required
 def multiple(request):
     user_tasks = TimeSeriesJob.objects.filter(user=request.user).order_by('-timestamp')
+    too_many_tasks = False
+    if len(user_tasks)>=2:
+        too_many_tasks = True
     paginator = Paginator(user_tasks, 25) # Show 25 jobs per page
 
     page = request.GET.get('page')
@@ -563,7 +566,7 @@ def multiple(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         jobs = paginator.page(paginator.num_pages)
     task_in_progress = any([job.working for job in jobs])
-    return render(request, 'visualization/multiple.html', context={"task_in_progress":task_in_progress, 'jobs':jobs})
+    return render(request, 'visualization/multiple.html', context={"task_in_progress":task_in_progress, 'jobs':jobs, "too_many_tasks":too_many_tasks})
 @login_required
 def multiple_del(request,del_id):
     tsj = TimeSeriesJob.objects.filter(user=request.user,id=del_id)
@@ -592,10 +595,7 @@ def single_del(request,del_id):
 def multiple_add(request):
     user_pending_jobs=TimeSeriesJob.objects.filter(user=request.user,completed=False,working=False,error=False)
     if len(user_pending_jobs)>=2:
-        message="You can only have a maximum of two pending jobs in the queue. Please wait at least for the first to finish or cancel any of them."
-        user_timeseries = TimeSeriesJob.objects.filter(user=request.user).order_by('-timestamp')
-        return render(request, 'visualization/multiple.html', context={"title":"Multiple Points Time Series Tool", 'timeseries':user_timeseries,"message":message})
-   
+        return HttpResponseRedirect('/visualization/multiple/')
     if request.method == 'POST':
         form = TimeSeriesJobForm(request.POST, request.FILES)
         if form.is_valid():
