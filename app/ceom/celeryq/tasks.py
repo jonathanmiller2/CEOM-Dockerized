@@ -1,4 +1,3 @@
-
 from celery import shared_task
 from celery import states
 import time
@@ -16,10 +15,8 @@ from collections import OrderedDict
 
 from celery import group
 from django.conf import settings
-try:
-    from . import database
-except Exception as e:
-    print("Database.py not found. disregard if it is a worker process")
+from ceom.celeryq import database
+from ceom.celery import app
 
 def get_location_metadata(lat,lon,dataset,dataset_npix,years):
     ih, iv, xi, yi, folder = latlon2sin(float(lat), float(lon), dataset, dataset_npix)
@@ -165,8 +162,9 @@ def save_data(data,csv_folder,task_id,metadata):
     return filename
 
 
-@shared_task(bind=True)
+@app.task(bind=True)
 def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days):
+    print("toast 166")
     # Get the list days we need to retreive its value, each one of
     # them will be send as an independent task to get their value
     time_ini = time.time() # Initial time to extract execution time
@@ -189,7 +187,7 @@ def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,datase
         db = database.pgDatabase()
         db.updateCompletedSingleTimeSeriestask(get_modis_raw_data.request.id,os.path.join(csv_folder,filename),)
     except Exception as e:
-        print(('Error : %s' % e.message))
+        print(e)
         pass
     return {'filename':filename,'metadata':metadata,}
 
@@ -216,7 +214,7 @@ def extract_day_data(col,row,dataset,year,day,tile):
             try:
                 pixel_values = get_pixel_value(fn,col,row)
             except Exception as e:
-                print(("Error retrieving pixel values for file: %s %s " % (fn,e.message)))
+                print(("Error retrieving pixel values for file: %s %s " % (fn,e)))
 
             data = process.get_dates(pixel_values,year,day,multi_day)
             if products.dataset_is_available(dataset):
@@ -228,11 +226,11 @@ def extract_day_data(col,row,dataset,year,day,tile):
             data = None
         return data
     except Exception as e:
-        print(("Exception at year %d day %d: %s" % (year,day,e.message)))
+        print(("Exception at year %d day %d: %s" % (year,day,e)))
         return None
 
-@shared_task(time_limit=50)
-def get_modis_year_data( params_dict):
+@app.task()
+def get_modis_year_data(params_dict):
     p = params_dict
     results = {p['year']:{}}
     for day in p['days']:

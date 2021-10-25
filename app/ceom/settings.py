@@ -73,6 +73,7 @@ USE_I18N = True
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), "media/")
 
 MODIS_DATASETS_PATH =  "/data/satellite/modis/version006/datasets_006/"
+MODIS_PRODUCTS_PATH =  "/data/satellite/modis/version006/products_006/"
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -189,14 +190,14 @@ INSTALLED_APPS = [
     'ceom.maps',
     'ceom.water',
     'ceom.poi',
+    'ceom.celeryq',
 
+    'raster',
     
     #'olwidget',
     'tinymce', #Cool Text editor
     'crispy_forms', # Cool forms rendered
     #TODO: Remove all references to crispy forms. Unnescessary dependency. 
-
-
 ]
 
 AUTH_PROFILE_MODULE = 'accounts.Profile'
@@ -206,6 +207,8 @@ CRISPY_FAIL_SILENTLY = False
 
 TINYMCE_COMPRESSOR = True
 TINYMCE_FILEBROWSER = True
+
+#RASTER_USE_CELERY = True
 
 GRAPPELLI_ADMIN_TITLE = "CEOM Administration Site"
 

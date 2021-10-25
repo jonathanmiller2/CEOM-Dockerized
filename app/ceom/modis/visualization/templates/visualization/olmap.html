@@ -1,4 +1,4 @@
-    {% extends "visualization/base.html" %}
+{% extends "visualization/base.html" %}
 
 {% block title %} Data Visualization {% endblock %}
 
@@ -144,6 +144,27 @@
     function init() {
         let map1 = new google.maps.Map(document.getElementById('map-1'), myOptions);
         let map2 = new google.maps.Map(document.getElementById('map-2'), myOptions);
+
+        const moonMapType = new google.maps.ImageMapType({
+            getTileUrl: function(coord, zoom) {
+                if(coord.y > (2 ** zoom) - 1 || coord.y < 0)
+                {
+                    return ""
+                }
+
+                console.log("z", zoom, "x", coord.x, "y", coord.y)
+
+                //url = "/inventory/toast_tile/" + zoom + "/" + coord.x + "/" + coord.y
+                url = "/raster/tiles/yeep/" + zoom + "/" + coord.x + "/" + coord.y + ".png"
+                console.log(url)
+                return (url)
+            },
+            maxZoom: 6,
+            name: "bred"
+        });
+
+        map1.mapTypes.set("bred", moonMapType);
+        map1.setMapTypeId("bred");
 
         map1.addListener("mouseover", (e) => update_coord_display(e, 1));
         map1.addListener("mousemove", (e) => update_coord_display(e, 1));

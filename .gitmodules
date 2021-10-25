@@ -1,0 +1,3 @@
+[submodule "app/django-raster"]
+	path = app/django-raster
+	url = https://github.com/jonathanmiller2/django-raster

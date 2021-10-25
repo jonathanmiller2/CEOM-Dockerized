@@ -4,17 +4,16 @@ services:
 
   web:
     container_name: ceom_web
-    build: ./app
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
 
-    command: bash -c "python manage.py makemigrations &&
+    command: bash -c "pip install django-raster/ &&
+                      python manage.py makemigrations &&
                       python manage.py migrate --noinput -v 1 && 
                       python manage.py check &&
                       python manage.py collectstatic --noinput &&
-                      python manage.py compilemessages &&
-                      touch /code/cron.log &&
-                      printenv | grep -v "no_proxy" >> /etc/environment &&
-                      cron &&
-                      gunicorn ceom.wsgi:application --bind 0.0.0.0:8000"
+                      supervisord -n"
                       
                       #     This is used to fix having multiple leaf nodes in the migration tree.
                       #     Replaces the first line in the command list.
@@ -40,15 +39,14 @@ services:
                       #      Helpful for weird sync issues (such as django trying to delete tables that are already deleted)
                       #python manage.py migrate --fake
     volumes: 
-      - ./app:/code
-      - /data/web/ceom/media/:/code/ceom/media/
+      - ./app:/code/app/
+      - /data/web/ceom/media/:/code/app/ceom/media/
       - /data/satellite/:/data/satellite/
     expose:
       - 8000
     env_file:
       - ./.env.prod
     depends_on:
-      - celery
       - redis
 
   nginx:
@@ -61,7 +59,6 @@ services:
     #user: ceomuser
 
     volumes:
-      - ./app:/code/app/
       - ./app/ceom/static/:/ceom/static/
       - /data/web/ceom/media/:/ceom/media/
 
@@ -77,21 +74,3 @@ services:
 
     ports:
       - 6379:6379
-
-  celery:
-    container_name: ceom_celery
-    build:
-      context: .
-      dockerfile: ./celery/Dockerfile
-
-    command: bash -c "celery -A ceom worker -l DEBUG"
-
-    volumes:
-      - /data/web/ceom/media/:/code/app/ceom/media/
-      - /data/satellite/:/data/satellite/
-    expose:
-      - 8000
-    env_file:
-      - ./.env.prod   
-    depends_on: 
-      - redis
