@@ -58,7 +58,7 @@ def monitor_single_site_tasks(tasks,metadata):
                 #         fatal_failures[year][day] = 1
                 #         fatal_failures_counter+=1
         progress = int((float(finished + error)/num_tasks)*100)
-        print ("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d ") % (progress,finished, error, retry, started, pending)
+        print ("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d " % (progress,finished, error, retry, started, pending)) #This fixed the tuple issue
         if finished + error == num_tasks:
             break
         time.sleep(TIME_CHECK)
@@ -98,6 +98,7 @@ def send_tasks(function, params_dict):
 
 def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chunks=5):
     task_params = dict([(year,{}) for year in years])
+    print("TASKS PARAMS INSIDE SPLIT_TASKS_IN_CHUNKS") # prints out
     current_year = datetime.datetime.now().year
     current_day = datetime.datetime.now().timetuple().tm_yday
     for year in years:
@@ -111,18 +112,40 @@ def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chun
         for day in days:
             chunk = ((day-1)/dataset_freq_in_days) % num_chunks
             if chunk not in task_params[year]:
+                #print("IF???")
                 task_params[year][chunk] = {
                     'col' :     metadata['col'],
                     'row' :     metadata['row'],
                     'tile':     metadata['tile'],
                     'dataset':  metadata['dataset'],
-                    'year':     year,
+                    'year':     year, # Right format?
                     'dataset_freq_in_days': dataset_freq_in_days,
                     'multi_day': multi_day,
-                    'days': [day,]
+                    'days': [day], # TUPLE?
                 }
+                #print("Days", days)
+                #[1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97, 105, 113, 121, 129, 137, 145, 153, 161, 169, 177, 185, 193, 201, 209, 217, 225, 233, 241, 249, 257, 265, 273, 281, 289, 297, 305, 313, 321, 329, 337, 345, 353, 361]
+                #print("Day", day)
             else:
+                #print("ELSE???")
                 task_params[year][chunk]['days']+=[day]
+        print("TAKS PARAMS RIGHT BEFORE RETURNING", task_params)
+        # Prints: {2003: {0.0: {'col': 1962, 'row': 2289, 'tile': 'h21v06', 'dataset': 'MOD09A1', 'year': 2003, 
+        # 'dataset_freq_in_days': 8, 'multi_day': True, 'days': [1, 97, 193, 289]}, 
+        # 1.0: {'col': 1962, 'row': 2289, 'tile': 'h21v06', 'dataset': 'MOD09A1', 'year': 2003, 'dataset_freq_in_days': 8, 'multi_day': True, 
+        # 'days': [9, 105, 201, 297]}, 2.0: {'col': 1962, 'row': 2289, 'tile': 'h21v06', 'dataset': 'MOD09A1', 'year': 2003, 'dataset_freq_in_days': 8, 
+        # 'multi_day': True, 'days': [17, 113, 209, 305]}, 3.0: {'col': 1962, 'row': 2289, 'tile': 'h21v06', 'dataset': 'MOD09A1', 'year': 2003, 
+        # 'dataset_freq_in_days': 8, 'multi_day': True, 'days': [25, 121, 217, 313]}, 4.0: {'col': 1962, 'row': 2289, 'tile': 'h21v06', 'dataset': 'MOD09A1', 
+        # 'year': 2003, 'dataset_freq_in_days': 8, 'multi_day': True, 'days': [33, 129, 225, 321]}, 5.0: {'col': 1962, 'row': 2289, 'tile': 'h21v06', 
+        # 'dataset': 'MOD09A1', 'year': 2003, 'dataset_freq_in_days': 8, 'multi_day': True, 'days': [41, 137, 233, 329]}, 6.0: {'col': 1962, 'row': 2289, 
+        # 'tile': 'h21v06', 'dataset': 'MOD09A1', 'year': 2003, 'dataset_freq_in_days': 8, 'multi_day': True, 'days': [49, 145, 241, 337]}, 7.0: 
+        # {'col': 1962, 'row': 2289, 'tile': 'h21v06', 'dataset': 'MOD09A1', 'year': 2003, 'dataset_freq_in_days': 8, 'multi_day': True, 
+        # 'days': [57, 153, 249, 345]}, 8.0: {'col': 1962, 'row': 2289, 'tile': 'h21v06', 'dataset': 'MOD09A1', 'year': 2003, 'dataset_freq_in_days': 8, 
+        # 'multi_day': True, 'days': [65, 161, 257, 353]}, 9.0: {'col': 1962, 'row': 2289, 'tile': 'h21v06', 'dataset': 'MOD09A1', 'year': 2003, 
+        # 'dataset_freq_in_days': 8, 'multi_day': True, 'days': [73, 169, 265, 361]}, 10.0: {'col': 1962, 'row': 2289, 'tile': 'h21v06', 'dataset': 'MOD09A1', 
+        # 'year': 2003, 'dataset_freq_in_days': 8, 'multi_day': True, 'days': [81, 177, 273]}, 11.0: {'col': 1962, 'row': 2289, 'tile': 'h21v06', 
+        # 'dataset': 'MOD09A1', 'year': 2003, 'dataset_freq_in_days': 8, 'multi_day': True, 'days': [89, 185, 281]}}}
+        print("==============================")
     return task_params
 
 def get_header(data,dataset):
@@ -140,7 +163,11 @@ def get_header(data,dataset):
 
 def save_data_multi(data,site_id,dataset,csv_folder,filename,years,write_header=False):
     years = ",".join([str(year) for year in years])
+    full_dir = os.path.join(csv_folder)
     full_path = os.path.join(csv_folder,filename)
+    print("CSVFOLDER?", csv_folder) #/code/app/ceom/media/visualization/timeseries/multi
+    if not os.path.exists(full_dir):
+        os.makedirs(full_dir)
     f = open(full_path,'a+')
     header = get_header(data,dataset)
     if write_header:
@@ -204,7 +231,7 @@ def updateDB(task_id,result,message,progress,total_sites,error=False,working=Tru
         completed = total_sites==progress
         db.updateMultipleSiteTimeSeries(task_id,result,message,progress,total_sites,completed,error,working)
     except Exception as e:
-        print(('Error : %s' % e.message))
+        print(('Error : %s' % e))
         pass   
 @shared_task(time_limit=7200)
 def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,dataset_npix,dataset_freq_in_days):
@@ -219,6 +246,7 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
     try:
         try:
             input_sites = read_input_file(input_file)
+            print("TRY in MULTIPLE SITE MODIS") # Prints out
         except Exception as e :
             # Set error to the task in the db (Wrong input file)
             #print(("Exception reading input file: ", str(e.message)))
@@ -230,8 +258,9 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
         updateDB(task_id,file_result,message,0,total_sites,False,True)
         filename = get_file_name(dataset,years)
         site_cont=0
-
+        print("BEFORE FOR IN MULTIPLE SITE MODIS") # Prints out
         for site_id,site_data in list(input_sites.items()):
+            print("INSIDE FOR IN MULTIPLE SITE MODIS") # Prints out
             multiple_site_modis.update_state(state='STARTED', meta={'completed': site_cont,'error':0,'total':total_sites,'started':True})
             updateDB(task_id,file_result,message,site_cont,total_sites,False,True)
             site_cont+=1
@@ -252,11 +281,13 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
             data = gap_fill(data,dataset)
             file_url = save_data_multi(data,site_id,dataset,csv_folder,filename,years,site_cont==1)
             file_result = os.path.join(media_base_url,file_url)
+            print("MEDIA BASE URL?", media_base_url) #/media/visualization/timeseries/multi
+            print("FILE URL?", file_url)
         updateDB(task_id,file_result,message,site_cont,total_sites,False,False)
         time_exec = time.time()-time_ini
         return {'filename':file_url,'exec_time':time_exec}
     except Exception as e:
-        updateDB(task_id,file_result,str(e.message),0,0,True,False)
+        updateDB(task_id,file_result,str(e),0,0,True,False)
 
 # ------------------------------------- PROCESSING SCRIPT PART ----------------------------
 

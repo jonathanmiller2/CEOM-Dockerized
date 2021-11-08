@@ -610,7 +610,7 @@ def multiple_add(request):
             job = form.save_data(request.user,'')
 
             csv_folder = MULTIPLE_TIMESERIES_LOCATION
-            media_timeseries = os.path.join(settings.MEDIA_URL,'visualization','timeseries','multi')
+            media_timeseries = os.path.join('visualization','timeseries','multi')
             years = [int(y) for y in form.cleaned_data['years'].split(',')]
             points = job.points.file.name
             dataset = form.cleaned_data['product']
