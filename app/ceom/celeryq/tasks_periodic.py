@@ -77,3 +77,26 @@ def update_datasets():
                         f.write(f"New file: {absolute_path}\n")
 
             f.write(self.style.SUCCESS(f'Ingesting successful: {dir}\n'))
+
+@app.task
+def update_rasters():
+    #TODO: Add entries to database for all products, layers, dates, and let celery process them
+    #note, this will take 600,000 years
+
+    #This import has to be done when this function gets called, as it requires that the Django apps be loaded, which isn't completed when the above imports run.
+    from raster.models import RasterProduct, RasterLayer
+
+    with open('celerybeat.log', 'a') as f:
+        year = 2010
+        day = 1
+
+        product = RasterProduct.objects.get(name__iexact="EVI")
+        
+        datecode = str(year) + str(day).zfill(3)
+        mosaic_name = f"{datecode}.tif"
+
+        product_name = product.name.lower()
+        mosaic_dir = os.path.join(settings.MEDIA_ROOT, "raster_mosaics/", product_name + "/")
+        location = f"{mosaic_dir}{mosaic_name}"
+
+        RasterLayer.objects.create(product=product, year=year, day=day, location=location)

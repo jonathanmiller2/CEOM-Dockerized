@@ -278,3 +278,6 @@ FEEDBACK_EMAIL = "jonathan.g.miller@ou.edu;jonathanmiller2@hotmail.com"
 #Celery
 CELERY_BROKER_URL = "redis://ceom_redis:6379"
 CELERY_RESULT_BACKEND = "redis://ceom_redis:6379"
+
+CELERY_TASK_TIME_LIMIT = 60 * 60
+CELERY_TASK_SOFT_TIME_LIMIT= 30 * 60
