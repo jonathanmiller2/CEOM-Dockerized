@@ -2,11 +2,13 @@ from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.files.base import ContentFile
+from django.db.models import Q
 from ceom.modis.inventory.models import Dataset
 from ceom.photos.models import Category, Photo
 from ceom.modis.visualization.models import TimeSeriesJob,  SingleTimeSeriesJob, GeocatterPoint
 from ceom.modis.visualization.forms import ProductSelect, TimeSeriesJobForm
 from datetime import datetime, date, timedelta
+from functools import reduce
 
 #TODO: Are these imports necessary?
 #from django.template.context_processors import csrf
@@ -205,15 +207,10 @@ def launch_single_site_timeseries(request, lat, lon, dataset, years, product=Non
     print("TIME",TIMESERIES_LOCATION)
     task_id = get_modis_raw_data.delay(TIMESERIES_LOCATION,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)     
 
-    print("toast 231")
-
     job = SingleTimeSeriesJob(lat=lat,lon=lon,user=request.user,years=years,product=dataset,task_id=task_id,col=xi,row=yi,tile=folder)
-
-    print("toast 235")
 
     job.save()
 
-    print("toast 239")
 
     return redirect(to='/modis/visualization/timeseries/single/t=%s/'%task_id)
 
@@ -291,16 +288,17 @@ def get_task_progress(request,task_id):
     except Exception as e:
         return JsonResponse({'failure':True,'message':'Unhandled exception: %s' % e})
 
-def get_multiple_task_progress(request,tasks_ids):
+def get_multiple_task_progress(request):
+    tasks_ids = request.GET.getlist('task_id_array[]')
     try:
         if not tasks_ids:
             raise Exception('Task List is empty')
-        tasks = TimeSeriesJob.objects.filter(Q(user=request.user)&Q(reduce(lambda x, y: x | y, [Q(id__contains=task_id) for task_id in tasks_ids])))
+        tasks = TimeSeriesJob.objects.filter(Q(user=request.user)&Q(reduce(lambda x, y: x | y, [Q(id=task_id) for task_id in tasks_ids])))
         tasks_dict = [(t.toJSON()) for t in tasks]
         return JsonResponse({'tasks':tasks_dict,'success':True})
     except Exception as e:
         return JsonResponse({'success':False,'message':'Unhandled exception: %s' % e})
-
+    return HttpResponse()
 
 def timeseries_single_chart(request,task_id):
     # # absolute_path = '/webapps/ceom_admin/ceom-prod/ceom/media/visualization/timeseries/single/a00ad01b-397c-432b-adc7-d88194b47477.csv'
@@ -565,16 +563,28 @@ def multiple(request):
     paginator = Paginator(user_tasks, 25) # Show 25 jobs per page
 
     page = request.GET.get('page')
-    try:
-        jobs = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        jobs = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        jobs = paginator.page(paginator.num_pages)
+    if page != "all":
+        try:
+            jobs = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            jobs = paginator.page(int(page))
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            jobs = paginator.page(paginator.num_pages)
+        page = int(page)
+        page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
+    else:
+        paginator = None
+        page_range = list(range(10))
+    page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
     task_in_progress = any([job.working for job in jobs])
-    return render(request, 'visualization/multiple.html', context={"task_in_progress":task_in_progress, 'jobs':jobs, "too_many_tasks":too_many_tasks})
+    return render(request, 'visualization/multiple.html', context={
+        "task_in_progress":task_in_progress,
+        'jobs':jobs, 
+        "too_many_tasks":too_many_tasks,
+        'page_range': page_range    
+    })
 @login_required
 def multiple_del(request,del_id):
     tsj = TimeSeriesJob.objects.filter(user=request.user,id=del_id)

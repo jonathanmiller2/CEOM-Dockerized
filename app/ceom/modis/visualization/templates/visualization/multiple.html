@@ -1,11 +1,10 @@
 {% extends "visualization/base.html" %}
-{% load crispy_forms_tags %}
 
 {% load i18n %}
 {% block title %} {% trans "CEOM MODIS timeseries Multiple Site" %} {% endblock %}
 
 {% block content %}
-<div class="span12 well">
+<div>
  <h2 style="color: #dc143c;">{% trans "MODIS time series request history for multiple sites" %}</h2>
  {% if message %}
    <div class="alert alert-error">
@@ -13,26 +12,88 @@
     <strong>{% trans "Warning!" %} </strong>{{message}}
   </div>
    {% endif %}
-   <button class="btn btn-success" onclick="location.href = '/visualization/multiple_add/';" {% if too_many_tasks %}disabled{% endif %}><i class="icon-plus-sign "></i>{% trans "Add request" %}</button>
-   {% if too_many_tasks %}
-    <h5 style="color: #dc143c;" class="text-center">You can only have up to two pending tasks on the queue. Please wait for the first task to be finished or delete one of them to continue.</h5>
+   <button class="btn btn-success" onclick="location.href = '/visualization/multiple_add/';" {% if task_in_progress %}disabled{% endif %}><i class="icon-plus-sign "></i>{% trans "Add request" %}</button>
+   {% if task_in_progress %}
+    <h6 style="color: #dc143c;" class="text-left mt-2">Please wait for the current pending tasks to be completed.</h6>
    {% endif %}
-   <div class="span12 text-center"> 
-  {% if jobs.has_previous %}
-    <a class="btn btn-primary" href="?page=1"><i class="icon-chevron-left"></i><i class="icon-chevron-left"></i></a>
-  {% endif %}
-  {% if jobs.has_previous %}
-    <a class="btn btn-primary" href="?page={{ jobs.previous_page_number }}"><i class="icon-chevron-left"></i></a>
-  {% endif %}
-  
-   Page {{jobs.number}}  of {{jobs.paginator.num_pages}}
-  {% if jobs.has_next %}
-    <a class="btn btn-primary"href="?page={{ jobs.next_page_number }}"><i class="icon-chevron-right"></i></a>
-  {% endif %}
- {% if jobs.has_next %}
-    <a class="btn btn-primary"href="?page={{jobs.paginator.num_pages}}"><i class="icon-chevron-right"></i><i class="icon-chevron-right"></i></a>
-  {% endif %}
-    </div>
+   <div class='mt-3 d-flex justify-content-center'>
+   <div class="pagination">
+    <nav aria-label="Page navigation">
+        <ul class="pagination pagination-sm">
+            {% if jobs.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1&amp;ppp={{ppp}}" area-label="Previous">
+                    <span aria-hidden="true"> &laquo;&laquo;</span>
+                    <span class="sr-only">PreviousX2</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ jobs.previous_page_number }}&amp;ppp={{ppp}}">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#" area-label="Previous">
+                    <span aria-hidden="true"> &laquo;&laquo;</span>
+                    <span class="sr-only">PreviousX2</span>
+                </a>
+            </li>
+            <li class="page-item disabled">
+                <a class="page-link" href="#">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            {% endif %}
+            {% for n in page_range %}
+            {% if jobs.number != n %}
+            <li class="page-item"><a class="page-link" href="?page={{n}}&amp;ppp={{ppp}}">
+                    <span aria-hidden="true">{{n}}</span>
+                    <span class="sr-only">{{n}}</span></a>
+            </li>
+            {% elif jobs.number == n %}
+            <li class="page-item active"><a class="page-link" href='#'>{{n}}
+                    <span class="sr-only">{{n}}</span></a>
+            </li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href='#'>{{n}}
+                    <!-- <span aria-hidden="true">{{n}}</span> -->
+                    <span class="sr-only">{{n}}</span>
+                </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if jobs.has_next %}
+            <li class="page-item"><a class="page-link"
+                    href="?page={{ jobs.next_page_number }}&amp;ppp={{ppp}}">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link"
+                    href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                    <span class="sr-only">NextX2</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+            <li class="page-item disabled"><a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                    <span class="sr-only">NextX2</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+</div>
     <hr>
     <table class="table table-bordered table-striped">
       <thead>
@@ -74,14 +135,14 @@
         <span class="text-success">Complete</span>
       {% elif row.working %}
       
-        <div class="span-2 text-left">
+        <div class="text-left">
           <i class="icon-cog  icon-2x icon-spin text-left"></i>
           <span id="progressVerbose_{{row.id}}">{{row.progress}}</span> / {{row.total_sites}}
         </div>
-         <div class="progress progress-striped active span-8 ">
-            <div id="progressBar_{{row.id}}"class="bar" style="width: {{row.calculate_progress_percentage}}%;"></div>
-          </div>
-
+        <div class="progress progress-striped active">
+          <div id="progressBar_{{row.id}}"class="progress-bar" style="width: {{row.calculate_progress_percentage}}%;"></div>
+        </div>
+        
       {% elif row.error %}
          <i class="icon-2x icon-exclamation-sign text-error"></i>
       {% else %}
@@ -98,7 +159,40 @@
  </table>
    
 </div>
-
+<script>
+  var updateInterfaceProgress = function(taskId,progress,total){
+    $("#progressVerbose_"+taskId).html(progress.toString())
+    var percent = (parseInt(progress)/parseInt(total))*100
+    $("#progressBar_"+taskId).css('width', percent+"%");
+  }
+  var updateInterfaceCompleted = function(taskId,result){
+    $("#statusContainer_"+taskId).html('<i class="icon-check  icon-2x text-success"></i>')
+    $("#statusContainer_"+taskId).html('<span id="complete" class="text-success">Complete</span>')
+    $("#result_"+taskId).html('<a href="/media/'+encodeURIComponent(result)+'"> result </a>')
+  }
+  var tasksInProgressList = [{% for t in jobs %}{% if t.working %}{{t.id}},{% endif %}{% endfor %}]
+ 
+  let request_task_progress = function(tasks_ids) {
+    
+    encoded_array = $.param({task_id_array: tasks_ids})
+    $.ajax({
+      url: '/visualization/get_multiple_task_progress/?' + encoded_array,
+      type: 'GET',
+      success: function (msg) {
+        msg.tasks.forEach(function(item, index) {
+          parsed_item = JSON.parse(item)
+          if(parsed_item.completed == "True") {
+            updateInterfaceCompleted(parsed_item.id, parsed_item.result)
+          }
+          else {
+            updateInterfaceProgress(parsed_item.id, parsed_item.progress, parsed_item.total_sites)
+          }
+        });
+      }
+    })
+  }
+  setInterval(request_task_progress, 10000, tasksInProgressList)
+</script>
 {% endblock %}
 
 
@@ -107,12 +201,10 @@
 <script type="text/javascript">
   var tasksInProgressList=[{% for t in jobs %}{% if t.working %}{{t.id}},{% endif %}{% endfor %}]
   var intervalID;
-  console.log(tasksInProgressList)
 
   var updateInterfaceProgress = function(taskId,progress,total){
     $("#progressVerbose_"+taskId).html(progress.toString())
     var percent = (parseInt(progress)/parseInt(total))*100
-    console.log("#progressBar_"+taskId)
     $("#progressBar_"+taskId).animate({width: percent+"%"},750);
   }
   var updateInterfaceCompleted = function(taskId,result){
@@ -124,42 +216,5 @@
     $('#example').tooltip(options)
     $("#result_"+taskId).html('<a href="'+result+'"> Partial result </a>')
   }
-
-  var updateProgress = function(data){
-    var tasks = data.tasks;
-    for(var i=0; i< tasks.length;i++){
-      var task = JSON.parse(tasks[i])
-      if (task.completed=='True'){
-        // console.log('Updating completed')
-        // console.log(task)
-        // console.log('--------')
-        updateInterfaceCompleted(task.id,task.result)
-        var ind = tasksInProgressList.indexOf(parseInt(task['id']))
-        if ( ~ind ) tasksInProgressList.splice(ind,1)
-      } else if (task.error=='True'){
-        // console.log('Updating error')
-        // console.log(task)
-        // console.log('--------')
-        updateInterfaceError(task.id,task.result,task.message)
-      } else {
-        // console.log('Updating progress')
-        // console.log(task)
-        // console.log('--------')
-        updateInterfaceProgress(task.id,task.progress,task.total_sites)
-      }
-    }
-    if (tasksInProgressList.length==0)
-      clearInterval(intervalID); 
-  }
-
-  var checkProgress = function(){
-      Dajaxice.visualization.get_multiple_task_progress(updateProgress,{'tasks_ids':tasksInProgressList});
-
-    }
-    // Main
-    {% if task_in_progress %}
-    var delay = 1000
-    intervalID = window.setInterval(checkProgress, delay);
-    {% endif %}
 </script>
 {% endblock %}

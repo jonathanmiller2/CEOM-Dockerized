@@ -33,7 +33,7 @@ urlpatterns = [
     re_path(r'^timeseries/single/progress/t=(?P<task_id>.+)/$', ceom.modis.visualization.views.get_task_progress),
 
     re_path(r'^geocatter/$', ceom.modis.visualization.views.geocatter),
-
+    re_path(r'^get_multiple_task_progress/$', ceom.modis.visualization.views.get_multiple_task_progress),
     
     # Now visualization works differently
     # (r'^ascii_'+modis_re+r'.txt$', ceom.modis.visualization.views.ascii'),
