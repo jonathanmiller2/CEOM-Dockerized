@@ -236,9 +236,9 @@ def timeseries_single_history(request):
     else:
         paginator = None
         page_range = list(range(10))
-    page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
     return render(request, 'visualization/single_timeseries_history.html', context={
         "jobs": jobs,
+        'paginator': paginator,
         'page_range': page_range,
         })
 
@@ -562,7 +562,7 @@ def multiple(request):
         too_many_tasks = True
     paginator = Paginator(user_tasks, 25) # Show 25 jobs per page
 
-    page = request.GET.get('page')
+    page = request.GET.get('page',1)
     if page != "all":
         try:
             jobs = paginator.page(page)
@@ -577,11 +577,11 @@ def multiple(request):
     else:
         paginator = None
         page_range = list(range(10))
-    page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
     task_in_progress = any([job.working for job in jobs])
     return render(request, 'visualization/multiple.html', context={
         "task_in_progress":task_in_progress,
         'jobs':jobs, 
+        'paginator': paginator,
         "too_many_tasks":too_many_tasks,
         'page_range': page_range    
     })
