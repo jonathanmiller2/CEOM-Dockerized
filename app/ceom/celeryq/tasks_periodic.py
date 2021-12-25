@@ -1,6 +1,6 @@
 from ceom.celery import app
 from django.db import IntegrityError
-import os, datetime, random
+import os, glob, datetime, random, time
 
 from django.conf import settings
 
@@ -87,16 +87,38 @@ def update_rasters():
     from raster.models import RasterProduct, RasterLayer
 
     with open('celerybeat.log', 'a') as f:
-        year = 2010
-        day = 1
+        products = RasterProduct.objects.all()
 
-        product = RasterProduct.objects.get(name__iexact="EVI")
-        
-        datecode = str(year) + str(day).zfill(3)
-        mosaic_name = f"{datecode}.tif"
+        for product in products:
+            #Ensure product location ends with a slash
+            product_location = os.path.join(product.location, '')
 
-        product_name = product.name.lower()
-        mosaic_dir = os.path.join(settings.MEDIA_ROOT, "raster_mosaics/", product_name + "/")
-        location = f"{mosaic_dir}{mosaic_name}"
+            #Get unique datecodes (e.g. 2012049)
+            product_filepaths = glob.glob(f"{product_location}*/*/*{product.name.lower()}.tif")
+            datecodes = set()
 
-        RasterLayer.objects.create(product=product, year=year, day=day, location=location)
+            for product_filepath in product_filepaths:
+                product_filename = os.path.basename(product_filepath)
+                #MOD09A1.A2010073.h12v13.006.2015206114038.evi.tif
+                
+                datecode = product_filename.split('.')[1]
+                #A2010073
+
+                datecode = "".join(filter(str.isdigit, datecode)) # (filters all non-numerics)
+                #2010073
+
+                datecodes.add(datecode)
+            
+            for datecode in datecodes:
+                year = datecode[:4]
+                day = datecode[4:]
+                
+                mosaic_name = f"{datecode}.tif"
+                mosaic_dir = os.path.join(settings.MEDIA_ROOT, "raster_mosaics/", product.name + "/")
+                mosaic_location = f"{mosaic_dir}{mosaic_name}"
+
+                if not RasterLayer.objects.filter(product=product, year=year, day=day).exists():
+                    f.write(f"New layer for product {product.name},  year: {year},  day: {day}")
+                    new_layer = RasterLayer.objects.create(product=product, year=year, day=day, location=mosaic_location, max_zoom=settings.RASTER_MAP_MAX_ZOOM)
+
+                    time.sleep(60 * 5) #Give the raster time to process. This could be done better by using threading and waiting for the raster to be done processing, but a simple delay works for this script
