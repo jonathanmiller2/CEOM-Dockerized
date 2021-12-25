@@ -147,6 +147,7 @@
 
         const moonMapType = new google.maps.ImageMapType({
             getTileUrl: function(coord, zoom) {
+                
                 if(coord.y > (2 ** zoom) - 1 || coord.y < 0)
                 {
                     return ""
@@ -155,7 +156,7 @@
                 console.log("z", zoom, "x", coord.x, "y", coord.y)
 
                 //url = "/inventory/toast_tile/" + zoom + "/" + coord.x + "/" + coord.y
-                url = "/raster/tiles/yeep/" + zoom + "/" + coord.x + "/" + coord.y + ".png"
+                url = "/raster/tiles/evi/2010/233/" + zoom + "/" + coord.x + "/" + coord.y + ".png"
                 console.log(url)
                 return (url)
             },
