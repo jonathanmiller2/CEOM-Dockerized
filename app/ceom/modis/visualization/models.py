@@ -22,11 +22,11 @@ MAX_BLANK_ROWS=100
 MAX_SITES_PER_FILE=100
 def checkFormat(document):
     try:
-        dialect = csv.Sniffer().sniff(document.read(1024))
+        dialect = csv.Sniffer().sniff(document.read(1024).decode('utf-8'))
         document.seek(0, 0)
     except csv.Error:
         raise ValidationError('fNot a valid CSV file')
-    reader = csv.reader(document.read().splitlines(), dialect)
+    reader = csv.reader(document.read().decode('utf-8').splitlines(), dialect)
     i=1
     blank_rows=0
     for y_index, row in enumerate(reader):

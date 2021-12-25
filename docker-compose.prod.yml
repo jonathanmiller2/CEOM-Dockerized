@@ -47,7 +47,6 @@ services:
     env_file:
       - ./.env.prod
     depends_on:
-      - celery
       - redis
 
   nginx:
@@ -74,4 +73,8 @@ services:
     image: redis
 
     ports:
+<<<<<<< HEAD
       - 6379:6379
+=======
+      - 6379:6379
+>>>>>>> 604ee824f1905a39aacc59fb0fe7bdc111d4c659
