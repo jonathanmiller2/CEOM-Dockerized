@@ -5,8 +5,9 @@ from django.core.files.base import ContentFile
 from ceom.modis.inventory.models import Dataset
 from ceom.photos.models import Category, Photo
 from ceom.modis.visualization.models import TimeSeriesJob,  SingleTimeSeriesJob, GeocatterPoint
-from ceom.modis.visualization.forms import ProductSelect, TimeSeriesJobForm
+from ceom.modis.visualization.forms import TimeSeriesJobForm
 from datetime import datetime, date, timedelta
+from raster.models import RasterProduct, RasterLayer
 
 #TODO: Are these imports necessary?
 #from django.template.context_processors import csrf
@@ -96,15 +97,25 @@ def manual(request):
     return render(request, 'visualization/manual.html')
 
 def olmap(request):
-    form = ProductSelect()
-    products = ['EVI', 'LSWI', 'NDSI', 'NDVI', 'NDWI', 'SNOW']
-    days = list(range(1, 362, 8))
-    years = list(range(2000, datetime.now().year+1))
+    products = RasterProduct.objects.all()
+
+    options = {}
+
+    for product in products:
+        prod_dict = {}
+
+        years = RasterLayer.objects.filter(product=product).values_list('year', flat=True).distinct().order_by('year')
+
+        for year in years:
+            days = RasterLayer.objects.filter(year=year).values_list('day', flat=True).distinct().order_by('day')
+            prod_dict[year] = list(days)
+        
+        options[product.name] = prod_dict
+
+    options = json.dumps(options)
+
     return render(request, 'visualization/olmap.html', context={
-        "product_form":form,
-        "products": products,
-        "days": days,
-        "years": years,
+        "mapOptions": options,
     })
 
 def gemap(request):
@@ -200,20 +211,11 @@ def launch_single_site_timeseries(request, lat, lon, dataset, years, product=Non
     lat = float(lat)
     dataset_npix = int(dataset_npix)
     ih,iv,xi,yi,folder = latlon2sin(lat,lon,dataset,dataset_npix)
-    print("IH:",ih,"IV:", iv,"XI:", xi,"YI:", yi,"FOLDER:", folder)
     vi=False
-    print("TIME",TIMESERIES_LOCATION)
     task_id = get_modis_raw_data.delay(TIMESERIES_LOCATION,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)     
 
-    print("toast 231")
-
     job = SingleTimeSeriesJob(lat=lat,lon=lon,user=request.user,years=years,product=dataset,task_id=task_id,col=xi,row=yi,tile=folder)
-
-    print("toast 235")
-
     job.save()
-
-    print("toast 239")
 
     return redirect(to='/modis/visualization/timeseries/single/t=%s/'%task_id)
 
@@ -301,258 +303,6 @@ def get_multiple_task_progress(request,tasks_ids):
     except Exception as e:
         return JsonResponse({'success':False,'message':'Unhandled exception: %s' % e})
 
-
-def timeseries_single_chart(request,task_id):
-    # # absolute_path = '/webapps/ceom_admin/ceom-prod/ceom/media/visualization/timeseries/single/a00ad01b-397c-432b-adc7-d88194b47477.csv'
-    # # data = read_from_csv(absolute_path)
-    # # query=None
-    # # for row in data:
-    # #     for key, value in data.items():
-    # #         if query is None:
-    # #             query = Q(**{key + "__icontains" : value})
-    # #         else:
-    # #             query |= Q(**{key + "__icontains" : value})
-    # # rainpivotdata = \
-    # #     DataPool(
-    # #        series=
-    # #         [{'options': {
-    # #            'source': query},
-    # #           'terms': [
-    # #             'Date',
-    # #             'GF_NDVI',
-    # #             'GF_EVI']}
-    # #          ])
-
-    # # #Step 2: Create the PivotChart object
-    # # rainpivcht = \
-    # #     Chart(
-    # #         datasource = rainpivotdata,
-    # #         series_options =
-    # #             [{'options':{
-    # #               'type': 'line',
-    # #               'stacking': False},
-    # #             'terms':{
-    # #               'Date': [
-    # #                 'GF_NDVI',
-    # #                 'GF_EVI']
-    # #               }}],
-    # #         chart_options =
-    # #           {'title': {
-    # #                'text': 'Weather Data of Boston and Houston'},
-    # #            'xAxis': {
-    # #                 'title': {
-    # #                    'text': 'Month number'}}})
-
-    # # #Step 3: Send the PivotChart object to the template.
-    # t = loader.get_template('visualization/single_site_timeseries_chart.html')
-    # c = RequestContext(request, {})
-    # return HttpResponse(t.render(c))
-    # return render_to_response({'rainpivchart': rainpivcht})
-    return HttpResponse('Under construction')
-
-def csv_content(request, lat, lon, modis, years, product=None):
-    # ds = Dataset.objects.filter(name=modis)[0]
-    # response = HttpResponse(process.ascii(lat, lon, modis, years, ',',npix=int(ds.xdim)))
-    # response["Content-Disposition"]= "attachment"
-    # return response
-    response = HttpResponse('Under construction')
-    return response
-
-def csv_products(request, lat, lon, modis, years, product=None):
-    # ds = Dataset.objects.filter(name=modis)[0]
-    # raw_csv = process.ascii(lat, lon, modis, years, ',',npix=int(ds.xdim))
-    # products_csv = process.csv_add_products(raw_csv)
-    # filename = modis+'_prod_'+years+"_lat_"+str(lat)+"_lon_"+str(lon)
-    # response = HttpResponse(content_type='text/csv')
-    # response['Content-Disposition'] = 'attachment; filename="'+filename+'.csv"'
-    # my_writer = csv.writer(response)
-    # lines = str.splitlines(products_csv)
-
-    # for line in lines:
-    #     data_to_write = str.split(line,',')
-    #     my_writer.writerow(data_to_write)
-    response = HttpResponse('Under construction')
-    return response
-
-def csv_products_graphs(request, lat, lon, modis, years, product=None):
-    # ds = Dataset.objects.filter(name=modis)[0]
-    # raw_csv = process.ascii(lat, lon, modis, years, ',',npix=int(ds.xdim))
-    # products_csv = process.csv_add_products(raw_csv)
-    # filename = modis+'_prod_'+years+"_lat_"+str(lat)+"_lon_"+str(lon)
-    # response = HttpResponse(content_type='text/csv')
-    # response['Content-Disposition'] = 'attachment; filename="'+filename+'.csv"'
-    # my_writer = csv.writer(response)
-    
-    # lines = str.splitlines(products_csv)
-    # lines = map(lambda x: str.split(x,','),lines)
-    # for line in lines:
-    #     data_to_write=[]
-    #     for i in xrange(0,len(line)):
-    #         if 'Date' in lines[0][i] or 'GF_' in line[i]:
-    #             data_to_write.append(line[i])
-    #         elif 'GF_' in lines[0][i]:
-    #             value = float(line[i])
-    #             value = max(value,float(-1.0))
-    #             value = min(value,float(1.0))
-    #             data_to_write.append(value)
-    #     my_writer.writerow(data_to_write)
-    response = HttpResponse('Under construction')
-    return response
-
-def graphlist(request, lat, lon, modis, years, product=None):
-    # year_r = years.split(',')
-    # year = year_r[0]
-
-    # ds = Dataset.objects.filter(name=modis)[0]
-    # npix = int(ds.xdim)
-
-    # ih, iv, xi, yi, folder = process.latlon2sin(float(lat), float(lon),modis,npix)
-    # files = glob.glob("/data/vol01/modis/%s/%s/%s/*.hdf" % (modis, year, folder))
-    # if len(files) > 0:
-    #     files.sort()
-    #     f = nio.open_file(files[0])
-    #     keys = f.variables.keys()
-    #     keys.reverse()
-    #     f.close()
-
-    #     t = loader.get_template('visualization/graph.html')
-    #     c = RequestContext(request, {"lat": lat,
-    #                  "lon": lon,
-    #                  "modis": modis,
-    #                  "tile": folder,
-    #                  "row": yi,
-    #                  "col": xi,
-    #                  "years": years,
-    #                  "keys": keys,
-    #                 })
-
-    #     return HttpResponse(t.render(c))
-    # else:
-    #     t = loader.get_template('base.html')
-    #     c = RequestContext(request, {'content_raw': "Data not found"})
-    #     return HttpResponse(t.render(c))
-    response = HttpResponse('Under construction')
-    return response
-
-def graphlist_js(request, lat, lon, modis, years, product=None):
-    # year_r = years.split(',')
-    # year = year_r[0]
-
-    # ds = Dataset.objects.filter(name=modis)[0]
-    # npix = int(ds.xdim)
-
-    # ih, iv, xi, yi, folder = process.latlon2sin(float(lat), float(lon),modis,npix)
-    # files = glob.glob("/data/vol01/modis/%s/%s/%s/*.hdf" % (modis, year, folder))
-    # if len(files) > 0:
-    #     files.sort()
-    #     f = nio.open_file(files[0])
-    #     keys = f.variables.keys()
-    #     keys.reverse()
-    #     f.close()
-
-    #     visibility = str(map(lambda x: "refl_b" in x, keys)+[False])
-
-    #     t = loader.get_template('visualization/graph-js.html')
-    #     c = RequestContext(request, {"lat": lat,
-    #                  "lon": lon,
-    #                  "modis": modis,
-    #                  "tile": folder,
-    #                  "row": yi,
-    #                  "col": xi,
-    #                  "years": years,
-    #                  "keys": keys,
-    #                  "visibility": visibility })
-
-    #     return HttpResponse(t.render(c))
-    # else:
-    #     t = loader.get_template('base.html')
-    #     c = RequestContext(request, {'content_raw': "Data not found"})
-    #     return HttpResponse(t.render(c))
-    response = HttpResponse('Under construction')
-    return response
-
-def graphlist_js_prod(request, lat, lon, modis, years, product=None):
-    # ds = Dataset.objects.filter(name=modis)[0]
-    # npix = int(ds.xdim)
-    # ih, iv, xi, yi, folder = process.latlon2sin(float(lat), float(lon),modis,npix)
-    # keys = ["Date","Surface_reflectance_for_band_1","Surface_reflectance_for_band_2","Surface_reflectance_for_band_3","Surface_reflectance_for_band_4","Surface_reflectance_for_band_5","Surface_reflectance_for_band_6","Surface_reflectance_for_band_7","Surface_reflectance_500m_quality_control_flags","Solar_zenith","View_zenith","Relative_azimuth","Surface_reflectance_500m_state_flags","Surface_reflectance_day_of_year","actual_date","red","nir1","blue","green","nir2","swir1","swir2","NDVI","EVI","LSWI","NDSI","NDWI1200","sur_refl_state_500m","MOD35 cloud","cloud shadow","land/water flag","aerosol quantity","cirrus detected","internal cloud algorithm flag","internal fire algorithm flag","MOD35 snow/ice flag","Pixel is adjacent to cloud","BRDF correction performed","internal snow algorithm flag","Gap_fill_applied","GF_NDVI","GF_EVI","GF_LSWI","GF_NDSI","GF_NDWI1200"]
-    # visibility = str(map(lambda x: "GF_" in x, keys))
-    # t = loader.get_template('visualization/graph-js2.html')
-    # c = RequestContext(request, {"lat": lat,
-    #                 "lon": lon,
-    #                 "modis": modis,
-    #                 "tile": folder,
-    #                 "row": yi,
-    #                 "col": xi,
-    #                 "years": years,
-    #                 "keys": keys,
-    #                 "visibility": visibility,})
-
-    # return HttpResponse(t.render(c))
-    response = HttpResponse('Under construction')
-    return response
-    
-def graph(request, lat, lon, modis, years, band, product=None):
-
-    # from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-    # from matplotlib.figure import Figure
-    # from matplotlib.dates import DateFormatter
-    # from matplotlib.ticker import FixedLocator
-
-    # ds = Dataset.objects.filter(name=modis)[0]
-    # npix = int(ds.xdim)
-    # year_r = years.split(',')
-    # ih, iv, xi, yi, folder = process.latlon2sin(float(lat), float(lon), modis, npix)
-    # values = {}
-
-    # #Collect data from HDF files, by date
-    # for year in year_r:
-    #     flist = glob.glob("/data/vol01/modis/%s/%s/%s/*.hdf" % (modis, year, folder))
-    #     if len(flist) > 0:
-    #         flist.sort()
-    #         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*")
-
-    #         x=[]
-    #         y=[]
-
-    #         for fn in flist:
-    #             m = r.match(fn)
-    #             if m is not None:
-    #                 x.append(int(m.group('day')))
-    #                 fh = nio.open_file(fn)
-    #                 y.append(int(fh.variables[band][yi][xi]))
-    #                 fh.close()
-
-    #         values[int(year)] = {'x':x,'y':y}
-
-
-    # if len(values) > 0:
-    #         fig=Figure(figsize=(9,5), edgecolor='w', facecolor='w')
-    #         ax=fig.add_subplot(111, title="Band: "+band)
-    #         ax.set_xlabel("day")
-    #         if (band[-3:-1] == 'b0'):
-    #             ax.set_ylabel("reflectance")
-
-    #         for year in sorted(values.keys()):
-    #             ax.plot(values[year]['x'], values[year]['y'],'o-',label=str(year))
-
-    #         ax.legend(loc='best')
-    #         ax.set_xlim([1,361])
-    #         ax.xaxis.set_major_locator(FixedLocator(range(1,362,8)))
-    #         for tick in ax.xaxis.get_major_ticks():
-    #             tick.label1.set(rotation=90, fontsize=10)
-    #         ax.grid(b=True)
-    #         #ax.set(edgecolor='w')
-    #         canvas=FigureCanvas(fig)
-    #         response=HttpResponse(content_type='image/png')
-    #         canvas.print_png(response)
-    #         return response
-    # else:
-    #     t = loader.get_template('base.html')
-    #     c = RequestContext(request, {'content_raw': "Data not found"})
-    #     return HttpResponse(t.render(c))
-    response = HttpResponse('Under construction')
-    return response
 
 MULTIPLE_TIMESERIES_LOCATION = os.path.join(settings.MEDIA_ROOT,'visualization','timeseries','multi')
 

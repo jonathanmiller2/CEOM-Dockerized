@@ -78,7 +78,7 @@ def update_datasets():
 
             f.write(self.style.SUCCESS(f'Ingesting successful: {dir}\n'))
 
-@app.task
+@app.task(soft_time_limit=7*24*60*60, time_limit=7*24*60*60)
 def update_rasters():
     #TODO: Add entries to database for all products, layers, dates, and let celery process them
     #note, this will take 600,000 years
@@ -113,12 +113,12 @@ def update_rasters():
                 year = datecode[:4]
                 day = datecode[4:]
                 
-                mosaic_name = f"{datecode}.tif"
-                mosaic_dir = os.path.join(settings.MEDIA_ROOT, "raster_mosaics/", product.name + "/")
+                mosaic_name = f"{product.name.lower()}-{datecode}.tif"
+                mosaic_dir = os.path.join(settings.MEDIA_ROOT, "raster_mosaics/", product.name + "/" + year + "/")
                 mosaic_location = f"{mosaic_dir}{mosaic_name}"
 
                 if not RasterLayer.objects.filter(product=product, year=year, day=day).exists():
                     f.write(f"New layer for product {product.name},  year: {year},  day: {day}")
-                    new_layer = RasterLayer.objects.create(product=product, year=year, day=day, location=mosaic_location, max_zoom=settings.RASTER_MAP_MAX_ZOOM)
+                    new_layer = RasterLayer.objects.create(product=product, year=year, day=day, location=mosaic_location, max_zoom=settings.RASTER_MAP_MAX_ZOOM, store_reprojected=False)
 
                     time.sleep(60 * 5) #Give the raster time to process. This could be done better by using threading and waiting for the raster to be done processing, but a simple delay works for this script
