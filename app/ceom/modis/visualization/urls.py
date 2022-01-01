@@ -28,7 +28,6 @@ urlpatterns = [
     re_path(r'^timeseries/single/add/$', ceom.modis.visualization.views.gmap),
     re_path(r'^timeseries/single/del=(?P<del_id>[0-9]+)/$', ceom.modis.visualization.views.single_del),
     re_path(r'^timeseries/single/t=(?P<task_id>.+)/$', ceom.modis.visualization.views.timeseries_single_progress),
-    re_path(r'^timeseries/single/graphs/t=(?P<task_id>.+)/$', ceom.modis.visualization.views.timeseries_single_chart),
     re_path(r'^timeseries/single/start/'+modis_re+'/', ceom.modis.visualization.views.launch_single_site_timeseries),
     re_path(r'^timeseries/single/progress/t=(?P<task_id>.+)/$', ceom.modis.visualization.views.get_task_progress),
 

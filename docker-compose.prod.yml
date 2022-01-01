@@ -21,7 +21,7 @@ services:
 
                       #     This can be used to keep the web container open when it errors. Useful for poking around inside the container when it's broken. 
                       #     To be placed as last command in command list.
-                      #tail -F anything"
+                      #touch anything && tail -F anything"
 
                       #     Alternate webserver that can be used instead of gunicorn.
                       #     Replaces gunicorn line in command list.
