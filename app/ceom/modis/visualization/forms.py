@@ -48,13 +48,6 @@ PRODUCTS = list(map(makeChoice, ('evi', 'lswi', 'ndsi', 'ndvi', 'ndwi', 'snow'))
 DAYS = list(map(makeChoice, list(range(1, 362, 8))))
 YEARS = list(map(makeChoice, list(range(2000, now.year+1))))
 
-class ProductSelect(forms.Form):
-    products = forms.ChoiceField(choices=PRODUCTS, widget=Select(attrs={'class': 'span2'}))
-    days = forms.ChoiceField(choices=DAYS, initial=49, widget=Select(attrs={'class': 'span2'}))
-    years = forms.ChoiceField(choices=YEARS, widget=Select(attrs={'class': 'span2'}))
-
-
-
 
 class TimeSeriesJobForm(forms.ModelForm):
     years = forms.MultipleChoiceField(widget=forms.SelectMultiple,choices=YEARS)

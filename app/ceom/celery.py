@@ -20,6 +20,6 @@ def setup_periodic_tasks(sender, **kwargs):
 
     #Note: Errors here will not print. You will need to try/except and manually print the error
 
-    sender.add_periodic_task(crontab(minute=1, hour=20, day_of_week='monday'), update_datasets.s(), name='Dataset update')
+    sender.add_periodic_task(crontab(minute=1, hour=7, day_of_week='saturday'), update_datasets.s(), name='Dataset update')
 
-    #sender.add_periodic_task(crontab(minute='*/5'), update_rasters.s(), name='Raster update') 
+    sender.add_periodic_task(crontab(minute=1, hour=7, day_of_week='sunday'), update_rasters.s(), name='Raster update')
