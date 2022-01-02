@@ -73,7 +73,7 @@
 <div class='photo-tile'>
     <div class='row-fluid container' id="tile-container">
         <div class="row pull-left" style="padding-bottom: 2px;">
-            <a href='/photos/view/{{photo.pk}}/' {% if '/photos/photos.html' in request.path %} target="_blank" {%endif%} class="thumbnail" >
+            <a href='/photos/view/{{photo.pk}}/' target="_blank" class="thumbnail" >
 
                 {% if photo.file|photoexists %}
                     {% thumbnail photo.file "150x150" as im %} 

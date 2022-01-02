@@ -15,6 +15,11 @@ services:
                       python manage.py collectstatic --noinput &&
                       supervisord -n"
                       
+                      # python manage.py makemigrations &&
+                      # python manage.py migrate --noinput -v 1 && 
+                      # python manage.py check &&
+                      # python manage.py collectstatic --noinput &&
+
                       #     This can be used to make a development superuser for testing. See .env.dev for login info.
                       #     To be placed after the migrations in the command list.
                       #python manage.py createsuperuser --noinput &&
