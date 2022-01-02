@@ -16,9 +16,10 @@ app.autodiscover_tasks()
 def setup_periodic_tasks(sender, **kwargs):
     #This import has to be done when this function gets called, otherwise it is a circular import. 
     #This file runs update_datasets in tasks_periodic.py below. Tasks_periodic.py needs to import the above app variable. Circular.
-    from ceom.celeryq.tasks_periodic import update_datasets
+    from ceom.celeryq.tasks_periodic import update_datasets, update_rasters
 
-    #TODO: Always comment this out in production!
-    sender.add_periodic_task(crontab(minute=25, hour=20, day_of_week='monday'), update_datasets.s(), name='Debug dataset update') 
+    #Note: Errors here will not print. You will need to try/except and manually print the error
 
-    
+    sender.add_periodic_task(crontab(minute=1, hour=7, day_of_week='saturday'), update_datasets.s(), name='Dataset update')
+
+    sender.add_periodic_task(crontab(minute=1, hour=7, day_of_week='sunday'), update_rasters.s(), name='Raster update')

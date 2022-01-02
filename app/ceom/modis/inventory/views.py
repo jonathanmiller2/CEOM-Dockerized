@@ -43,14 +43,6 @@ def tilemap(request, dataset_id, year):
         splittiles(45)
     else:
         splittiles(46)
-    
-    
-    print(dataset_id)
-    print(dataset_list)
-    print(good_list)
-    print(bad_list)
-    print(year)
-    print(year_list)
 
     return render(request, 'inventory/map.html', context={
         'dataset' : dataset_id,
