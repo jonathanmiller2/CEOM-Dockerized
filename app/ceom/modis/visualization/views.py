@@ -578,6 +578,7 @@ def multiple(request):
         paginator = None
         page_range = list(range(10))
     task_in_progress = any([job.working for job in jobs])
+    
     return render(request, 'visualization/multiple.html', context={
         "task_in_progress":task_in_progress,
         'jobs':jobs, 
