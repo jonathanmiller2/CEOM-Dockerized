@@ -58,7 +58,6 @@ def monitor_single_site_tasks(tasks,metadata):
                 #         fatal_failures[year][day] = 1
                 #         fatal_failures_counter+=1
         progress = int((float(finished + error)/num_tasks)*100)
-        print ("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d " % (progress,finished, error, retry, started, pending)) #This fixed the tuple issue
         if finished + error == num_tasks:
             break
         time.sleep(TIME_CHECK)
@@ -170,8 +169,6 @@ def get_file_name(dataset,years):
     return timestr
 
 def read_input_file(file_path):
-    print("DIR", os.listdir(os.path.dirname(file_path)))
-    print("DIR2", os.path.dirname(file_path))
     f = open(file_path,'r')
     line_cont = 0
     input_sites = OrderedDict()
