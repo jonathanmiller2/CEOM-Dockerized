@@ -2,11 +2,14 @@ from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.files.base import ContentFile
+from django.db.models import Q
 from ceom.modis.inventory.models import Dataset
 from ceom.photos.models import Category, Photo
 from ceom.modis.visualization.models import TimeSeriesJob,  SingleTimeSeriesJob, GeocatterPoint
 from ceom.modis.visualization.forms import TimeSeriesJobForm
 from datetime import datetime, date, timedelta
+
+from functools import reduce
 from raster.models import RasterProduct, RasterLayer
 
 #TODO: Are these imports necessary?
@@ -216,7 +219,6 @@ def launch_single_site_timeseries(request, lat, lon, dataset, years, product=Non
 
     job = SingleTimeSeriesJob(lat=lat,lon=lon,user=request.user,years=years,product=dataset,task_id=task_id,col=xi,row=yi,tile=folder)
     job.save()
-
     return redirect(to='/modis/visualization/timeseries/single/t=%s/'%task_id)
 
 # This page will host all single timeseries from a user
@@ -241,9 +243,9 @@ def timeseries_single_history(request):
     else:
         paginator = None
         page_range = list(range(10))
-    page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
     return render(request, 'visualization/single_timeseries_history.html', context={
         "jobs": jobs,
+        'paginator': paginator,
         'page_range': page_range,
         })
 
@@ -293,35 +295,52 @@ def get_task_progress(request,task_id):
     except Exception as e:
         return JsonResponse({'failure':True,'message':'Unhandled exception: %s' % e})
 
-def get_multiple_task_progress(request,tasks_ids):
+def get_multiple_task_progress(request):
+    tasks_ids = request.GET.getlist('task_id_array[]')
     try:
         if not tasks_ids:
             raise Exception('Task List is empty')
-        tasks = TimeSeriesJob.objects.filter(Q(user=request.user)&Q(reduce(lambda x, y: x | y, [Q(id__contains=task_id) for task_id in tasks_ids])))
+        tasks = TimeSeriesJob.objects.filter(Q(user=request.user)&Q(reduce(lambda x, y: x | y, [Q(id=task_id) for task_id in tasks_ids])))
         tasks_dict = [(t.toJSON()) for t in tasks]
         return JsonResponse({'tasks':tasks_dict,'success':True})
     except Exception as e:
         return JsonResponse({'success':False,'message':'Unhandled exception: %s' % e})
-
+    return HttpResponse()
 
 MULTIPLE_TIMESERIES_LOCATION = os.path.join(settings.MEDIA_ROOT,'visualization','timeseries','multi')
 
 @login_required
 def multiple(request):
     user_tasks = TimeSeriesJob.objects.filter(user=request.user).order_by('-timestamp')
+    too_many_tasks = False
+    if len(user_tasks)>=2:
+        too_many_tasks = True
     paginator = Paginator(user_tasks, 25) # Show 25 jobs per page
 
-    page = request.GET.get('page')
-    try:
-        jobs = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        jobs = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        jobs = paginator.page(paginator.num_pages)
+    page = request.GET.get('page',1)
+    if page != "all":
+        try:
+            jobs = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            jobs = paginator.page(int(page))
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            jobs = paginator.page(paginator.num_pages)
+        page = int(page)
+        page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
+    else:
+        paginator = None
+        page_range = list(range(10))
     task_in_progress = any([job.working for job in jobs])
-    return render(request, 'visualization/multiple.html', context={"task_in_progress":task_in_progress, 'jobs':jobs})
+    
+    return render(request, 'visualization/multiple.html', context={
+        "task_in_progress":task_in_progress,
+        'jobs':jobs, 
+        'paginator': paginator,
+        "too_many_tasks":too_many_tasks,
+        'page_range': page_range    
+    })
 @login_required
 def multiple_del(request,del_id):
     tsj = TimeSeriesJob.objects.filter(user=request.user,id=del_id)
@@ -350,17 +369,14 @@ def single_del(request,del_id):
 def multiple_add(request):
     user_pending_jobs=TimeSeriesJob.objects.filter(user=request.user,completed=False,working=False,error=False)
     if len(user_pending_jobs)>=2:
-        message="You can only have a maximum of two pending jobs in the queue. Please wait at least for the first to finish or cancel any of them."
-        user_timeseries = TimeSeriesJob.objects.filter(user=request.user).order_by('-timestamp')
-        return render(request, 'visualization/multiple.html', context={"title":"Multiple Points Time Series Tool", 'timeseries':user_timeseries,"message":message})
-   
+        return HttpResponseRedirect('/visualization/multiple/')
     if request.method == 'POST':
         form = TimeSeriesJobForm(request.POST, request.FILES)
         if form.is_valid():
             job = form.save_data(request.user,'')
 
             csv_folder = MULTIPLE_TIMESERIES_LOCATION
-            media_timeseries = os.path.join(settings.MEDIA_URL,'visualization','timeseries','multi')
+            media_timeseries = os.path.join('visualization','timeseries','multi')
             years = [int(y) for y in form.cleaned_data['years'].split(',')]
             points = job.points.file.name
             dataset = form.cleaned_data['product']

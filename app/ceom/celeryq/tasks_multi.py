@@ -13,9 +13,10 @@ from ceom.celeryq.modis.headers import get_modis_header
 from collections import OrderedDict
 from ceom.celery import app
 
+from django.conf import settings
 try:
     from . import database
-except:
+except Exception as e:
     print("Database.py not found. disregard if it is a worker process")
 
 def get_location_metadata(lat,lon,dataset,dataset_npix,years):
@@ -32,7 +33,7 @@ def get_location_metadata(lat,lon,dataset,dataset_npix,years):
     return metadata
 
 def monitor_single_site_tasks(tasks,metadata):
-    # MAX_ERRORS = 3
+    MAX_ERRORS = 3
     MAX_SECONDS= 200 # seconds
     TIME_CHECK = 1 # seconds
     NUM_STEPS = int(MAX_SECONDS/TIME_CHECK)
@@ -56,8 +57,7 @@ def monitor_single_site_tasks(tasks,metadata):
                 #     elif not fatal_failures[year][day]:
                 #         fatal_failures[year][day] = 1
                 #         fatal_failures_counter+=1
-        # progress = int((float(finished + error)/num_tasks)*100)
-        # print ("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d ") % (progress,finished, error, retry, started, pending)
+        progress = int((float(finished + error)/num_tasks)*100)
         if finished + error == num_tasks:
             break
         time.sleep(TIME_CHECK)
@@ -84,8 +84,8 @@ def get_data(tasks):
                 task.forget() #Remove partial info from backend because it is no longer necessary
     return data
 
-def process_data(data,dataset):
-    return gap_fill(data,dataset)
+# def process_data(data,dataset):
+#     return gap_fill(data,dataset)
 
 def send_tasks(function, params_dict):
     tasks =  {}
@@ -98,7 +98,7 @@ def send_tasks(function, params_dict):
 def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chunks=5):
     task_params = dict([(year,{}) for year in years])
     current_year = datetime.datetime.now().year
-    current_doy = datetime.datetime.now().timetuple().tm_yday
+    current_day = datetime.datetime.now().timetuple().tm_yday
     for year in years:
         days = [i+1 for i in range(0,366) if i % dataset_freq_in_days==0]
         if year not in list(range(2000,current_year+1)):
@@ -106,7 +106,7 @@ def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chun
         if year == 2000:
             days = [day for day in days if day > 56 ] # Modis has no days before this date
         elif year == current_year:
-            days = [day for day in days if day <= current_doy ] # Cannot get future dates
+            days = [day for day in days if day <= current_day ] # Cannot get future dates
         for day in days:
             chunk = ((day-1)/dataset_freq_in_days) % num_chunks
             if chunk not in task_params[year]:
@@ -115,10 +115,10 @@ def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chun
                     'row' :     metadata['row'],
                     'tile':     metadata['tile'],
                     'dataset':  metadata['dataset'],
-                    'year':     year,
+                    'year':     year, 
                     'dataset_freq_in_days': dataset_freq_in_days,
                     'multi_day': multi_day,
-                    'days': [day,]
+                    'days': [day], 
                 }
             else:
                 task_params[year][chunk]['days']+=[day]
@@ -139,7 +139,10 @@ def get_header(data,dataset):
 
 def save_data_multi(data,site_id,dataset,csv_folder,filename,years,write_header=False):
     years = ",".join([str(year) for year in years])
+    full_dir = os.path.join(csv_folder)
     full_path = os.path.join(csv_folder,filename)
+    if not os.path.exists(full_dir):
+        os.makedirs(full_dir)
     f = open(full_path,'a+')
     header = get_header(data,dataset)
     if write_header:
@@ -201,7 +204,7 @@ def updateDB(task_id,result,message,progress,total_sites,error=False,working=Tru
         completed = total_sites==progress
         db.updateMultipleSiteTimeSeries(task_id,result,message,progress,total_sites,completed,error,working)
     except Exception as e:
-        print(('Error : %s' % e.message))
+        print(('Error : %s' % e))
         pass   
 @shared_task(time_limit=7200)
 def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,dataset_npix,dataset_freq_in_days):
@@ -216,7 +219,7 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
             input_sites = read_input_file(input_file)
         except Exception as e :
             # Set error to the task in the db (Wrong input file)
-            print(("Exception reading input file: %s" % str(e.message)))
+            #print(("Exception reading input file: ", str(e.message)))
             updateDB(task_id,file_result,str(e.message),0,total_sites,True,False)
             return None;
         time_ini = time.time() # Initial time to extract execution time
@@ -225,7 +228,6 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
         updateDB(task_id,file_result,message,0,total_sites,False,True)
         filename = get_file_name(dataset,years)
         site_cont=0
-
         for site_id,site_data in list(input_sites.items()):
             multiple_site_modis.update_state(state='STARTED', meta={'completed': site_cont,'error':0,'total':total_sites,'started':True})
             updateDB(task_id,file_result,message,site_cont,total_sites,False,True)
@@ -244,17 +246,16 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
             tasks = send_tasks(get_modis_year_data.delay,tasks_params)
             monitor_single_site_tasks(tasks,metadata)
             data  = get_data(tasks)
-            data = process_data(data,dataset)
+            data = gap_fill(data,dataset)
             file_url = save_data_multi(data,site_id,dataset,csv_folder,filename,years,site_cont==1)
             file_result = os.path.join(media_base_url,file_url)
         updateDB(task_id,file_result,message,site_cont,total_sites,False,False)
         time_exec = time.time()-time_ini
         return {'filename':file_url,'exec_time':time_exec}
     except Exception as e:
-        updateDB(task_id,file_result,str(e.message),0,0,True,False)
+        updateDB(task_id,file_result,str(e),0,0,True,False)
 
 # ------------------------------------- PROCESSING SCRIPT PART ----------------------------
-MODIS_FOLDER_PATH = "/data/ifs/modis/datasets/"
 
 import multiprocessing as mp
 def make_serializable_dict(mydict):
@@ -268,7 +269,7 @@ def extract_day_data(col,row,dataset,year,day,tile):
         multi_day = False
         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*.hdf$")
         items = (dataset, year, tile, year, day)
-        search = MODIS_FOLDER_PATH+"%s/%d/%s/*%d%03d*.hdf" % items
+        search = os.path.join(settings.MODIS_DATASETS_PATH, "%s/%d/%s/*%d%03d*.hdf" % items)
         flist = glob.glob(search)
         data = {}
 
