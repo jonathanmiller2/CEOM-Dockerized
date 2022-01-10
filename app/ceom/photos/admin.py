@@ -25,3 +25,10 @@ class PhotoAdmin(admin.GeoModelAdmin):
     search_fields = ['user__email', 'user__username']
 
 admin.site.register(Photo, PhotoAdmin)
+
+class CategoryVoteAdmin(admin.GeoModelAdmin):
+    readonly_fields = (
+        'user', 'category', 'photo'
+    )
+
+admin.site.register(CategoryVote, CategoryVoteAdmin)
