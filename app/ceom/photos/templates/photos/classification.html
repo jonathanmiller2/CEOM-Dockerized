@@ -40,23 +40,22 @@
 
 <form method="post">{% csrf_token %}
 	<input type="hidden" name="photoid" value={{photo.id}}>
-	<table class='table'>
-		<tr>
-			<td class="field-height">{% trans "Category" %}</td>
-			<td><select class="form-control col-md-2" id="category-input" name="categoryid">
+		<div class="row mb-3">
+			<p class="col-md-2">{% trans "Category" %}</p>
+			<select class="form-control col-md-2" id="category-input" name="categoryid">
 				<option></option>
 				{% for category in landcover_categories %}
 					<option {% ifequal photo.category.name category.name %}selected{% endifequal %} value={{category.id}}>{{ category.name }}</option>
 				{% endfor %}
-			</select></td>
-		</tr>
-	</table>
+			</select>
+		</div>
 	<button class='btn btn-primary mx-2' type="submit" name="save">{% trans 'Save' %}</button>
 	<button class='btn btn-warning mx-2' type="button" onclick="resetForm()">{% trans 'Reset' %}</button>
 	<button class='btn btn-dark mx-2' type="button" onClick="window.location.href=window.location.href;">{% trans 'Skip' %}</button>
 </form>
-
-
+<hr class="mb-5"/>
+<p>{% trans "Landcover Classes Explanation" %}</p>
+<img class="mb-4" src='/static/images/1-IGBP-land-cover-classification-scheme.png'>
 
 {% else %}
 <p>{% trans "No photos left" %}</p>
