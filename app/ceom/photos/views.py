@@ -1088,6 +1088,7 @@ def classification(request):
     
     unclassified_category = Category.objects.get(name__iexact='Unclassified')
     users_voted_photos = CategoryVote.objects.filter(user=request.user).values_list('photo')
+    user_vote_count = len(users_voted_photos)
     photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=True) | Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
 
     #If there are no photos that are geolocated, unclassified, and public
@@ -1099,7 +1100,7 @@ def classification(request):
     if photo_set.count() <= 0:
         return render(request, 'photos/classification.html')
 
-
+    data['score'] = user_vote_count
     data['photo'] = photo_set[0]
     data['landcover_categories'] = Category.objects.all()
     return render(request, 'photos/classification.html', context=data)

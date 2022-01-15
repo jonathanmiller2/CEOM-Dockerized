@@ -23,6 +23,8 @@
 
 <h2 style="color: #dc143c;">{% trans "Classify Photo" %}</h2>
 <hr />
+<p>{% blocktrans %} You have helped classified {{score}} photos. {% endblocktrans %}</p>
+<hr />
 <p>{% trans "Photo" %}</p>
 <a href='{{photo.file.url}}'>
 	{% if photo.file|photoexists %}
@@ -52,6 +54,8 @@
 	<button class='btn btn-primary mx-2' type="submit" name="save">{% trans 'Save' %}</button>
 	<button class='btn btn-warning mx-2' type="button" onclick="resetForm()">{% trans 'Reset' %}</button>
 </form>
+
+
 
 {% else %}
 <p>{% trans "No photos left" %}</p>
