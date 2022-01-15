@@ -1,50 +1,50 @@
 {% load i18n %}
 <li class='leftmenu-category nav-header'>
-    {% trans "Photos Actions" %}
+    Photos Actions
 </li>
 <li> 
     <a href='/photos/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Overview" %}</p>
+        <p class="leftmenu-text mx-4 m-0 text-left">Overview</p>
     </a>
 </li>
 <li> 
 
     <a href='/photos/browse/' class=" btn btn-light btn-block rounded-0 p-0">
-        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Browse" %}</p>
+        <p class="leftmenu-text mx-4 m-0 text-left">Browse</p>
     </a>
  
 </li>
 <!-- {% if request.path == '/photos/map/' %}active{% endif %}  -->
 <li> 
     <a href='/photos/map/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Map" %}</p>
+        <p class="leftmenu-text mx-4 m-0 text-left">Map</p>
     </a>
 </li>
 {% if request.user.is_authenticated %}
     <li> 
         <a href='/photos/user/' class="btn btn-light btn-block rounded-0 p-0">
-            <p class="leftmenu-text mx-4 m-0 text-left mx-4 m-0 text-left">{% trans "My Photos" %}</p>
+            <p class="leftmenu-text mx-4 m-0 text-left mx-4 m-0 text-left">My Photos</p>
         </a>
     </li>
     <li> 
         <a href='/photos/upload/' class="btn btn-light btn-block rounded-0 p-0">
-            <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Upload" %}</p>
+            <p class="leftmenu-text mx-4 m-0 text-left">Upload</p>
         </a>
     </li>
     <li> 
         <a href='/accounts/logout/' class="btn btn-light btn-block rounded-0 p-0">
-            <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Log out" %}</p>
+            <p class="leftmenu-text mx-4 m-0 text-left">Log out</p>
         </a>
     </li>
 {% else %}
     <li> 
         <a href='/accounts/login/?next={{request.path}}' class="btn btn-light btn-block rounded-0 p-0">
-            <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Log in" %}</p>
+            <p class="leftmenu-text mx-4 m-0 text-left">Log in</p>
         </a>
     </li>
     <li> 
         <a href='/accounts/register/' class="btn btn-light btn-block rounded-0 p-0">
-            <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Register" %}</p>
+            <p class="leftmenu-text mx-4 m-0 text-left">Register</p>
         </a>
     </li>
 {% endif %}
@@ -52,7 +52,15 @@
 {% if user.is_staff %}
 <li>
     <a href="/admin/photos/" class="btn btn-light btn-block rounded-0 p-0">
-        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Admin Site" %}</p>
+        <p class="leftmenu-text mx-4 m-0 text-left">Admin Site</p>
     </a>
 </li>
 {% endif %}
+<li class='leftmenu-category nav-header'>
+    Maps
+</li>
+<li> 
+    <a href='/photos/map_validation/' class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">Map Validation</p>
+    </a>
+</li>
