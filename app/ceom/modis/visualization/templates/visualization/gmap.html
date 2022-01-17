@@ -16,41 +16,41 @@
 
 
 <div id="accordion">
-    <h3 style="color:#999900;"><strong>{% trans "Instructions" %}</strong></h3>
+    <h3 style="color:#999900;"><strong>Instructions</strong></h3>
 
-    <p>{% trans "Here you can retrieve time series MODIS data for a single study site, in other words, the time series MODIS data from one MODIS pixel that contains your study site. The data you get are in ASCII text file and Microsoft Excel *.csv file." %} </p>
+    <p>Here you can retrieve time series MODIS data for a single study site, in other words, the time series MODIS data from one MODIS pixel that contains your study site. The data you get are in ASCII text file and Microsoft Excel *.csv file. </p>
     <ol>
         <li>
-            <p>{% trans "<strong>Define the location </strong> of your study site" %}</p>
+            <p><strong>Define the location </strong> of your study site</p>
             <ul>
                 <li>
-                    <p>{% trans "Enter an address (e.g., street address, or city, or state)" %}</p>
+                    <p>Enter an address (e.g., street address, or city, or state)</p>
                 </li>
                 <li>
-                    <p>{% trans "Enter latitude and longitude of your study using Degree, Minute and Second Units" %}</p>
+                    <p>Enter latitude and longitude of your study using Degree, Minute and Second Units</p>
                 </li>
                 <li>
-                    <p>{% trans "Enter latitude and longitude of your study using Decimal degree Unit" %}</p>
+                    <p>Enter latitude and longitude of your study using Decimal degree Unit</p>
                 </li>
             </ul>
             <p><b>(OR)</b></p>
-            <p><strong>{% trans "Zoom-in the Google map</strong> and then <strong>click on a point</strong> of interest to adjust the location if required." %}<br \>
-                    <small>{% trans "Note: The rectangle in Google Map is the boundary of one MODIS pixel, and the red dot is the location of your study site within the MODIS pixel." %}</small>
+            <p><strong>Zoom-in the Google map</strong> and then <strong>click on a point</strong> of interest to adjust the location if required.<br \>
+                    <small>Note: The rectangle in Google Map is the boundary of one MODIS pixel, and the red dot is the location of your study site within the MODIS pixel.</small>
             </p>
         </li>
         <li>
-            <p><strong>{% trans "Select product and year(s)" %}</strong><br \>
-                <small>{% trans "You may choose one MODIS product over one year or several years." %}</small> </p>
+            <p><strong>Select product and year(s)</strong><br \>
+                <small>You may choose one MODIS product over one year or several years.</small> </p>
         </li>
         <li>
-            <p>{% trans "<strong> Submit</strong> your request. <small> Note: Upon submitting make sure you have done all previous steps or an error message will appear </small>" %} </p>
+            <p><strong> Submit</strong> your request. <small> Note: Upon submitting make sure you have done all previous steps or an error message will appear </small></p>
         </li>
     </ol>
 
 </div>
-<h2 style="color: #dc143c;">{% trans "Retrieve time series MODIS data for a single study site" %}</h2>
+<h2 style="color: #dc143c;">Retrieve time series MODIS data for a single study site</h2>
 
-<legend><strong>{% trans "1a. Select an address or a Point on the Map" %}</strong> </legend>
+<legend><strong>1a. Select an address or a Point on the Map</strong> </legend>
 
 <div id="div_address">
     <div class="row">
@@ -61,7 +61,7 @@
 </div>
 <p><b>(OR)</b></p>
 <div>
-    <legend class="pt-2"><strong>{% trans "1b. Enter the latitude & longitude information" %}</strong> </legend>
+    <legend class="pt-2"><strong>1b. Enter the latitude & longitude information</strong> </legend>
     <div class="row">
         <label class="col-sm-2"></label>
         <label class="col-sm-2 mx-2" style="text-align:center">Degrees</label>
@@ -95,7 +95,7 @@
 <div class="pt-2">
     <p><b>(OR)</b></p>
 </div>
-<legend class="text-left"><strong>{% trans "1c. Zoom-in the map and then click on a point of interest" %} </strong></legend>
+<legend class="text-left"><strong>1c. Zoom-in the map and then click on a point of interest </strong></legend>
 
 <div id="map" class="mr-auto" style="width: 90%; height: 450px"></div>
 
@@ -110,11 +110,11 @@
         </small>
     </div>
 </div>
-<legend class="text-left"><strong>{% trans "2. Select a product and year(s)" %} </strong></legend>
+<legend class="text-left"><strong>2. Select a product and year(s) </strong></legend>
 <div>
     <div class="row">
         <div class="col-lg">
-            <label class="col-sm-1">{% trans "Dataset" %}</label>
+            <label class="col-sm-1">Dataset</label>
             <select id="datasetPane" class="form-control col-sm-6" size="4" disabled>
                 {% for d in datasets %}
                 <option value="{{d|lower}}" npix="{{d.xdim}}" title="{{d.long_name}}">{{d|upper}}</option>
@@ -125,7 +125,7 @@
 
         </div>
         <div class="col-lg">
-            <label class="col-sm-1">{% trans "Year" %}</label>
+            <label class="col-sm-1">Year</label>
             <select id="yearsPane" class="form-control col-sm-6" multiple="multiple" disabled>
                 {% for y in years %}
                 <option value="{{y}}">{{y}}</option>
@@ -133,11 +133,11 @@
             </select>
         </div>
     </div>
-    <legend class="text-left mt-2"><strong>{% trans "3. Submit your request" %}</strong></legend>
+    <legend class="text-left mt-2"><strong>3. Submit your request</strong></legend>
 
     <div align="center" class="mr-5">
-        <button class="btn btn-primary" onclick="showResults();">{% trans "Submit" %}</button>
-        <button class="btn btn-info" onclick="resetValues();">{% trans "Reset" %}</button>
+        <button class="btn btn-primary" onclick="showResults();">Submit</button>
+        <button class="btn btn-info" onclick="resetValues();">Reset</button>
     </div>
 </div>
 <div id="data-output"></div>
