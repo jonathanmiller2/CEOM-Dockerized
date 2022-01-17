@@ -1,0 +1,110 @@
+{% extends "photos/base.html" %}
+
+{% load i18n %}
+{% block sidebar_extra %}
+<nav class="card bg-light ml-5 mt-3 shadow-sm">
+    {% include "photos/search_form.html" %}
+</nav>
+{% endblock %}
+
+{% block content %}
+<style>
+    .menu-field {
+        font-size: small;
+        height: 22px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .control-group {
+        display: inline-flex;
+    }
+
+    .font {
+        font-size: 9pt;
+        color: #555;
+    }
+
+    .title {
+        color: #0f4ba4;
+    }
+
+    .batch {
+        width: initial;
+        font-size: small;
+    }
+    #map {
+           height: 768px;
+    }
+    @media screen and (min-width:575px) and (max-width: 1250px) {
+
+        .title {
+            font-size: min(max(3.9vw, 10px), 30px);
+        }
+        .content {
+            padding-left: 5%;
+        }
+    }
+
+    @media screen and (max-width:575px) {
+
+        .title {
+            font-size: min(max(3.8vw, 23px), 30px);
+        }
+        .content {
+            padding-left: 5%;
+        }
+    }    
+</style>
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=initMap"></script>
+<nav>
+    <h2 class="legend title">Map Validation</h2>
+    
+    <div class="my-2">
+        <strong style="font-size:large">Select a region by adjusting the rectangle tool on the map. </strong>
+        <br>
+        <strong style="font-size:large">Click the "Download CSV" button below to retrieve geographical data of photos in the selected area. </strong>
+    </div>
+    <div>
+        <button class="btn btn-success mb-2" onclick="validation_csv()"><i class="icon-plus-sign "></i>Download CSV</button>
+    </div>
+    <div id="map"></div>
+</nav>
+<script>
+    let boxCoordinates;
+    let map;
+    let rectangle;
+    	
+	function initMap() 
+	{
+        var startLocation = {lat: 0, lng: 0};
+        
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: startLocation,
+          gestureHandling: 'cooperative',
+          mapTypeId: 'satellite',
+        });
+        var bounds = {
+            north: 10.599,
+            south: -10.490,
+            east: 10.443,
+            west: -15.649
+        };
+
+        // Define a rectangle and set its editable property to true.
+        rectangle = new google.maps.Rectangle({
+            bounds: bounds,
+            editable: true,
+            draggable: true
+        });
+
+        rectangle.setMap(map);
+      
+    }
+    function validation_csv() {
+        box_coordinates = rectangle.getBounds();
+        window.location='/photos/validation_data/?u=' + box_coordinates["Ab"]["h"] + '&r=' + box_coordinates["Ra"]["h"] + '&d=' + box_coordinates["Ab"]["g"] + '&l=' + box_coordinates["Ra"]["g"];
+    }
+</script>
+{% endblock %}
