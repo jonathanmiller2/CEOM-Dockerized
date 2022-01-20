@@ -618,6 +618,16 @@ def batchedit(request):
 
     return HttpResponseRedirect(next)
 
+def batchdelete(request):
+    ids = request.POST.getlist('ids')
+    photos = Photo.objects.filter(id__in=ids)
+
+    for p in photos:
+        if p.has_change_permission(request):
+            p.status = 0
+            p.save()
+
+    return redirect("/photos/browse/")
 
 def detailedit(request):
     if 'ids' in request.GET:
@@ -727,8 +737,10 @@ def edit(request, id):
 
 def delete(request, id):
     photo = Photo.objects.get(pk=id)
-    photo.status = 0
-    photo.save()
+
+    if photo.has_change_permission(request):
+        photo.status = 0
+        photo.save()
     
     if 'next' in request.GET:
         return redirect(request.GET['next'])
