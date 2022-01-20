@@ -627,8 +627,6 @@ def batchdelete(request):
             p.status = 0
             p.save()
 
-    print(request.POST['next'])
-
     if 'next' in request.POST:
         return redirect(request.POST['next'])
     else:
