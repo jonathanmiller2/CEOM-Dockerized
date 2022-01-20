@@ -182,6 +182,8 @@
 
                     <button type="submit" class='col-md-auto btn btn-primary menu-field m-1' value="{% trans 'Download' %}">{% trans 'Download' %}</button>
                 </div>
+                
+                <input type="hidden" name="next" value="{{request.path}}">
             </div>
             <div id="multi-edit-buttons">
                 <button id="mass-edit-button" type="button" class="btn btn-info">Batch edit</button>
