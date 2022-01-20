@@ -627,7 +627,12 @@ def batchdelete(request):
             p.status = 0
             p.save()
 
-    return redirect("/photos/browse/")
+    print(request.POST['next'])
+
+    if 'next' in request.POST:
+        return redirect(request.POST['next'])
+    else:
+        return redirect("/photos/user/")
 
 def detailedit(request):
     if 'ids' in request.GET:
@@ -743,6 +748,10 @@ def delete(request, id):
         photo.save()
     
     if 'next' in request.GET:
+        # Fix for photo tiles in the map gallery. You can only redirect to the map, not to the map gallery
+        if "/photos/map_gallery" in request.GET["next"]:
+            return redirect('/photos/map/')    
+
         return redirect(request.GET['next'])
     else:
         return redirect("/photos/user/")
