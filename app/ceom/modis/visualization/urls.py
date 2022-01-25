@@ -47,6 +47,9 @@ urlpatterns = [
     re_path(r'^composite/(?P<year>\d{4})/(?P<julian_day>\d*)/$', ceom.modis.visualization.views.composite),
     re_path(r'^composite', ceom.modis.visualization.views.composite),
 
+    re_path(r'^tropomi/', ceom.modis.visualization.views.tropomi),
+    re_path(r'^tropomi/(?P<lat>-?\d+(\.\d+)?)_(?P<lon>-?\d+(\.\d+)?)', ceom.modis.visualization.views.tropomi1),
+
 
 # r'mod=\d+_h=\d+_v=\d+_r=\d+_c=\d+_lc1=\d+;\d(?:_lc2=\d+;\d+)?(?:_lc3=\d+;\d+)?$'
     #(r'.*', ceom.visualization.views.down'),
