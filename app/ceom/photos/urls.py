@@ -27,6 +27,7 @@ urlpatterns = [
 
     re_path(r'^map_validation/$', ceom.photos.views.map_validation),
     re_path(r'^validation_data/$', ceom.photos.views.validation_data),
+    re_path(r'^classification/$', ceom.photos.views.classification),
 
     #Data feeds
     re_path(r'^data.kml$', ceom.photos.views.kml),

@@ -434,3 +434,9 @@ def degCard(val):
             'W', 'WNW', 'NW', 'NNW',
     )
     return vals[int((((val + 11.25) / 22.5) % 16))]
+
+
+class CategoryVote(models.Model):
+    user = models.ForeignKey(User, db_column='userid', on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(Category, db_column='categoryid', on_delete=models.CASCADE)
+    photo = models.ForeignKey(Photo, db_column='photoid', on_delete=models.CASCADE)

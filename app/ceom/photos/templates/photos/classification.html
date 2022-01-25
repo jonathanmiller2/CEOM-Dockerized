@@ -1,0 +1,101 @@
+{% extends "photos/base.html" %}
+{% load photos_tags i18n %}
+{% load thumbnail %}
+
+{% block content %}
+
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=initMap"></script>
+
+<style>
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+  		-webkit-appearance: none;
+  		margin: 0;
+	}
+
+	.field-height {
+		line-height: calc(1.5em + .75rem + 2px);
+		vertical-align: middle;
+	}
+</style>
+
+{% if photo %}
+
+<h2 style="color: #dc143c;">{% trans "Classify Photo" %}</h2>
+<hr />
+<p>{% blocktrans %} You have helped classified {{score}} photos. {% endblocktrans %}</p>
+<hr />
+<p>{% trans "Photo" %}</p>
+<a href='{{photo.file.url}}'>
+	{% if photo.file|photoexists %}
+		{% thumbnail photo.file "800x800" as im %}
+			<img class="mb-4" src='{{im.url}}' alt='{{photo.name}} thumbnail '>
+		{% endthumbnail %}
+	{% else %}
+		<img class="thumb" src='' alt='Image not available' style="width:300px;height:300px;">
+	{% endif %}
+</a>
+<p>{% trans "Location" %}</p>
+<div id="map" class="mb-5" style="height: 500px"></div>
+
+<form method="post">{% csrf_token %}
+	<input type="hidden" name="photoid" value={{photo.id}}>
+		<div class="row mb-3">
+			<p class="col-md-2">{% trans "Category" %}</p>
+			<select class="form-control col-md-2" id="category-input" name="categoryid">
+				<option></option>
+				{% for category in landcover_categories %}
+					<option {% ifequal photo.category.name category.name %}selected{% endifequal %} value={{category.id}}>{{ category.name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	<button class='btn btn-primary mx-2' type="submit" name="save">{% trans 'Save' %}</button>
+	<button class='btn btn-warning mx-2' type="button" onclick="resetForm()">{% trans 'Reset' %}</button>
+	<button class='btn btn-dark mx-2' type="button" onClick="window.location.href=window.location.href;">{% trans 'Skip' %}</button>
+</form>
+<hr class="mb-5"/>
+<p>{% trans "Landcover Classes Explanation" %}</p>
+<img class="mb-4" src='/static/images/1-IGBP-land-cover-classification-scheme.png'>
+
+{% else %}
+<p>{% trans "No photos left" %}</p>
+{% endif %}
+
+<script>
+	let marker = null;
+	let map = null;
+
+	async function initMap()
+	{
+        let startLocation = {lat: parseFloat({{photo.lat|default_if_none:0}}), lng: parseFloat({{photo.lon|default_if_none:0}})};
+
+		mzs = new google.maps.MaxZoomService()
+		let zoomobj = await mzs.getMaxZoomAtLatLng(startLocation);
+        
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: zoomobj.zoom,
+          center: startLocation,
+          gestureHandling: 'cooperative',
+          mapTypeId: 'satellite',
+          draggableCursor: 'crosshair',
+        });
+
+		marker = new google.maps.Marker({
+			position: startLocation,
+			map,
+			title: "Photo Location"
+		});
+    }
+
+
+	function resetForm() {
+		let lat = parseFloat({{photo.lat|default_if_none:0}});
+		let lon = parseFloat({{photo.lon|default_if_none:0}});
+		let new_coords = {lat: lat, lng: lon};
+		marker.setPosition(new_coords);
+		map.setCenter(new_coords);
+
+		$("#category-input").val("{{photo.category.name|default_if_none:""}}");
+	}
+</script>
+{% endblock %}
