@@ -1129,13 +1129,23 @@ def classification(request):
     unclassified_category = Category.objects.get(name__iexact='Unclassified')
     users_voted_photos = CategoryVote.objects.filter(user=request.user).values_list('photo')
     user_vote_count = len(users_voted_photos)
-    photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=True) | Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
+    # photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=True) | Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
 
-    #If there are no photos that are geolocated, unclassified, and public
-    if photo_set.count() <= 0:
-        #Then just show a photo that is geolocated, classified, and public
-        photo_set = Photo.objects.filter(point__isnull=False).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
+    # #If there are no photos that are geolocated, unclassified, and public
+    # if photo_set.count() <= 0:
+    #     #Then just show a photo that is geolocated, classified, and public
+    #     photo_set = Photo.objects.filter(point__isnull=False).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
     
+    
+    #TEMPORARY FOR DAVID! 
+
+    photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=False) & ~Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
+
+    #If there are no photos that are geolocated, classified, and public
+    if photo_set.count() <= 0:
+        #Then just show a photo that is geolocated, unclassified, and public
+        photo_set = Photo.objects.filter(point__isnull=False).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
+
     #If there are still no photos
     if photo_set.count() <= 0:
         return render(request, 'photos/classification.html')
