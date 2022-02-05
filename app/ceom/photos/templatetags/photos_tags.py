@@ -102,8 +102,8 @@ def photoexists(file):
 
 @register.filter 
 def point2str(point):
-    lon = round(point.x,4)
-    lat = round(point.y,4)
+    lon = round(point.x,3)
+    lat = round(point.y,3)
     
     if lon < 0:
         s = str(lon * -1) + ' &deg;W, '
