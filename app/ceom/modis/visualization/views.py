@@ -96,6 +96,31 @@ def gmap1(request, lat, lon):
         'photoRedirect':True,
     })
 
+@login_required()
+def tropomi(request):
+    datasets = Dataset.objects.filter(is_global=False).order_by('name')
+    years = [y for y in range (2000, date.today().year + 1)]
+    return render(request, 'visualization/tropomi.html', context={
+        'datasets':datasets,
+        'years':years,
+    })
+
+@login_required()
+def tropomi1(request, lat, lon):
+    lon = float(lon)
+    lat = float(lat)
+    datasets = Dataset.objects.filter(is_global=False).order_by('name')
+    years = [y for y in range (2000,date.today().year +1)]
+
+    return render(request, 'visualization/tropomi.html', context={
+        'datasets':datasets,
+        'years':years,
+        'lonRedirect':lon,
+        'latRedirect':lat,
+        'photoRedirect':True,
+    })
+
+
 def manual(request):
     return render(request, 'visualization/manual.html')
 
