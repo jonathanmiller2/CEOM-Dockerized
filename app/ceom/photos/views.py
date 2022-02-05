@@ -618,6 +618,19 @@ def batchedit(request):
 
     return HttpResponseRedirect(next)
 
+def batchdelete(request):
+    ids = request.POST.getlist('ids')
+    photos = Photo.objects.filter(id__in=ids)
+
+    for p in photos:
+        if p.has_change_permission(request):
+            p.status = 0
+            p.save()
+
+    if 'next' in request.POST:
+        return redirect(request.POST['next'])
+    else:
+        return redirect("/photos/user/")
 
 def detailedit(request):
     if 'ids' in request.GET:
@@ -727,10 +740,16 @@ def edit(request, id):
 
 def delete(request, id):
     photo = Photo.objects.get(pk=id)
-    photo.status = 0
-    photo.save()
+
+    if photo.has_change_permission(request):
+        photo.status = 0
+        photo.save()
     
     if 'next' in request.GET:
+        # Fix for photo tiles in the map gallery. You can only redirect to the map, not to the map gallery
+        if "/photos/map_gallery" in request.GET["next"]:
+            return redirect('/photos/map/')    
+
         return redirect(request.GET['next'])
     else:
         return redirect("/photos/user/")
@@ -1110,13 +1129,23 @@ def classification(request):
     unclassified_category = Category.objects.get(name__iexact='Unclassified')
     users_voted_photos = CategoryVote.objects.filter(user=request.user).values_list('photo')
     user_vote_count = len(users_voted_photos)
-    photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=True) | Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
+    # photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=True) | Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
 
-    #If there are no photos that are geolocated, unclassified, and public
-    if photo_set.count() <= 0:
-        #Then just show a photo that is geolocated, classified, and public
-        photo_set = Photo.objects.filter(point__isnull=False).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
+    # #If there are no photos that are geolocated, unclassified, and public
+    # if photo_set.count() <= 0:
+    #     #Then just show a photo that is geolocated, classified, and public
+    #     photo_set = Photo.objects.filter(point__isnull=False).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
     
+    
+    #TEMPORARY FOR DAVID! 
+
+    photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=False) & ~Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
+
+    #If there are no photos that are geolocated, classified, and public
+    if photo_set.count() <= 0:
+        #Then just show a photo that is geolocated, unclassified, and public
+        photo_set = Photo.objects.filter(point__isnull=False).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
+
     #If there are still no photos
     if photo_set.count() <= 0:
         return render(request, 'photos/classification.html')

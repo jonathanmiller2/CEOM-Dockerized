@@ -207,10 +207,13 @@
                     <button type="submit" class='col-md-auto btn btn-primary menu-field m-1'
                         value="{% trans 'Download' %}">{% trans 'Download' %}</button>
                 </div>
+
+                <input type="hidden" name="next" value="/photos/user/">
             </div>
             <div id="multi-edit-buttons">
                 <button id="mass-edit-button" type="button" class="btn btn-info">Batch edit</button>
                 <button class='btn btn-light' type="submit" formmethod="GET" formaction="/photos/detailedit/">Detail edit</button>
+                <button class='btn btn-danger' type="submit" formaction="/photos/batchdelete/">Batch delete</button>
             </div>
             <div id="mass-edit-container" class='col-3'>
                 {{batch_edit_form}}
