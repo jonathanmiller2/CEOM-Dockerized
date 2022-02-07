@@ -8,7 +8,7 @@ from datetime import datetime
 from ceom.outreach.workshops.models import Workshop,WorkshopRegistration
 from django.db import IntegrityError
 from django.core.mail import EmailMultiAlternatives
-import json
+import json, csv
 
 
 def overview(request):
@@ -205,3 +205,31 @@ def photos(request, workshop_id):
         }, 
         
     )
+
+def registration_list(request, workshop_id):
+    if not request.user.is_staff:
+        return render(request, 'workshops/not_found.html', {})
+
+    try:
+        workshop = Workshop.objects.get(id = workshop_id)
+        registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('last_name')
+    except:
+        return render(request, 'workshops/not_found.html', {})
+
+
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="workshop_registrations.csv"'},
+    )
+
+    writer = csv.writer(response)
+    writer.writerow(['First Name', 'Last Name', 'Position', 'Institution', 'Address', 'Email', 'Phone', 'Area of Expertise', 'Created', 'Modified', 'Validated'])
+
+    output = []
+
+    for registration in registrations:
+        output.append([registration.first_name, registration.last_name, registration.position, registration.institution, registration.address, registration.email, registration.phone, registration.area_of_expertise, registration.created, registration.modified, registration.validated])
+    
+    writer.writerows(output)
+
+    return response

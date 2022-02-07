@@ -24,9 +24,9 @@
                         <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Agenda" %} </p>
                     </a>
                 {% else %}
-                    <a class="muted btn btn-light btn-block rounded-0 p-0"><i class="icon-calendar"></i> 
+                    <!-- <a class="muted btn btn-light btn-block rounded-0 p-0"><i class="icon-calendar"></i> 
                         <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Agenda not available" %} </p>
-                    </a>
+                    </a> -->
                {% endif %} 
             </li>
             <li {% if  '/workshops/presentations/' in request.path  %}class='active' {% endif %}> 
@@ -39,5 +39,12 @@
                     <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Photo Gallery" %} <span class="badge badge-success">{{ num_photos }}</span></p>
                 </a>
             </li>
+            {% if user.is_staff %}
+            <li>
+                <a class="btn btn-light btn-block rounded-0 p-0" style="text-align:left" href="/outreach/workshops/registration_list/{{workshop.id}}"><i class="icon-pencil"></i> 
+                    <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Get Registrations as CSV" %} </p>
+                </a>
+            </li>
+            {% endif %}
     </ul>    
 </nav>
