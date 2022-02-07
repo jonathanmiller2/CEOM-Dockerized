@@ -36,7 +36,7 @@ def export_as_csv_action(description="Export selected objects as CSV file",
         if header:
             writer.writerow(list(field_names))
         for obj in queryset:
-            writer.writerow([str(getattr(obj, field)).encode('utf-8') for field in field_names])
+            writer.writerow([str(getattr(obj, field)) for field in field_names])
         return response
     export_as_csv.short_description = description
     return export_as_csv
@@ -69,7 +69,7 @@ class WorkshopRegistrationAdmin(admin.ModelAdmin):
     list_display = ("last_name","first_name",'email','institution','workshop','validated','address','phone','extra_text_field1','extra_text_field2','extra_text_field3','extra_boolean_field1','extra_boolean_field2','extra_boolean_field3')
     list_filter = ['workshop','institution']
     #search_fields = ['workshop','last_name','first_name']
-    actions = [export_as_csv_action("Export selected sponsors to CSV", fields= list_display, header=True),]
+    actions = [export_as_csv_action("Export selected items to CSV", fields= list_display, header=True),]
     readonly_fields = ("created","modified",)
 admin.site.register(WorkshopRegistration, WorkshopRegistrationAdmin)
 
