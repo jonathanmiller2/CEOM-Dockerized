@@ -93,7 +93,7 @@ def workshop(request, workshop_id):
         workshop = Workshop.objects.get(id = workshop_id)
     except:
         return render(request, 'workshops/not_found.html')
-    validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('created')
+    validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('last_name')
     awaiting_validation_registrations =  WorkshopRegistration.objects.filter(workshop=workshop,validated=False)
     sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
     num_presentations = len(Presentation.objects.filter(workshop=workshop))
