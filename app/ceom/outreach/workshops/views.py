@@ -152,7 +152,6 @@ def workshop_registration(request, workshop_id):
                 address=request.POST['address'], 
                 area_of_expertise=request.POST['area_of_expertise'], 
                 email=request.POST['email'], 
-                verify_email=request.POST['verify_email'], 
                 phone=request.POST['phone'], 
             )
         except IntegrityError as error:
