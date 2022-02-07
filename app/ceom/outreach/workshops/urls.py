@@ -11,4 +11,6 @@ urlpatterns = [
     re_path(r'^register/(?P<workshop_id>\d+)', ceom.outreach.workshops.views.workshop_registration),
     re_path(r'^presentations/(?P<workshop_id>\d+)', ceom.outreach.workshops.views.presentations),
     re_path(r'^photos/(?P<workshop_id>\d+)', ceom.outreach.workshops.views.photos),
+
+    re_path(r'^registration_list/(?P<workshop_id>\d+)', ceom.outreach.workshops.views.registration_list),
 ]
