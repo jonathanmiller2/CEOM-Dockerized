@@ -167,7 +167,7 @@ def presentations(request, workshop_id):
     except:
         return render(request, 'workshops/not_found.html', {})
     sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
-    presentations = Presentation.objects.filter(workshop=workshop)
+    presentations = Presentation.objects.filter(workshop=workshop).order_by('-time_ini')
     num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
     return render(request, 'workshops/workshop_presentations.html', context={
          'available_years': available_years,
