@@ -168,7 +168,6 @@ INSTALLED_APPS = [
     'django_countries',
     'django_extensions',
 
-    'autotranslate',
     'chunked_upload',
     #'localflavor',
     'phonenumber_field',
