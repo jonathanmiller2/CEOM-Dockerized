@@ -48,12 +48,6 @@ TIMESTAMP_FORMAT = '%Y-%m-%d_%H-%M-%S'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en'
 #LANGUAGE_CODE = 'es-ES'
-LANGUAGES = ( 
-    ('en', format_lazy('{}{}{}', 'English (', _('English'), ')')),
-    ('zh-cn',format_lazy('{}{}{}', '中国简化 (',_('Chinese'),')')),
-    ('es', format_lazy('{}{}{}', 'Español (',_('Spanish'),')')),
-    ('fr', format_lazy('{}{}{}', 'Français(',_('French'),')')),
-)
 #('ne', format_lazy('{}{}{}', 'नेपाली (',_('Nepali'),')')),
 
 LOCALE_PATHS = (
