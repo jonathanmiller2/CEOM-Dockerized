@@ -7,7 +7,7 @@ from django.db.models import Count
 from datetime import datetime
 from ceom.outreach.workshops.models import Workshop,WorkshopRegistration
 from django.db import IntegrityError
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import send_mail
 import json, csv
 
 
@@ -157,6 +157,13 @@ def workshop_registration(request, workshop_id):
         except IntegrityError as error:
             data['error'] = 'duplicate-account'
             return render(request, 'workshops/registration.html', context=data)
+
+        send_mail(
+            'CEOM Website New Workshop Registration',
+            'The CEOM workshop "' + workshop.name + '" has received a new registration. The registration will need to be approved on the CEOM admin page. \n\nRegistrant name: ' + registration.first_name + " " + registration.last_name + "\n\n\nThis email is an automated email sent by the CEOM website. If you believe this email is an error, please contact ceomsupport@ou.edu.",
+            'noreply@ceom.ou.edu',
+            workshop.admin_emails.split(';')
+        )
 
     return render(request, 'workshops/registration.html', context=data)
 
