@@ -52,12 +52,6 @@
 		transition:all 0.2s;
 	}
 
-	.select-lan {
-		border: 1pt solid lightgrey;
-		border-radius: 3px;
-		margin-left: 1em;
-	}
-
 	.navbar {
 		background-color: #f3f3f3;
 		border-bottom: 1px solid #d7d7d7;
@@ -157,17 +151,7 @@
 			</a>
 		</li>
 	</ul>
-
-	<form class="form-inline" action="/i18n/setlang/" method="post">
-		{% csrf_token %} 
-		<input  name="next" type="hidden" value="." />
-		<select name="language" class="select-lan" onchange="this.form.submit()">
-			{% get_current_language as LANGUAGE_CODE %}
-			{% for lang in LANGUAGES %}
-				<option value="{{ lang.0 }}" {% if lang.0|lower == LANGUAGE_CODE|lower %}selected{% endif %}> {{ lang.1 }}</option>
-			{% endfor %}
-		</select>
-	</form>     
+   
 </nav>
 
 <nav id="mobile-navbar" class="flex-column card bg-light mb-4 animate__animated animate__fadeIn">
@@ -222,17 +206,6 @@
 				{% trans "Account" %}
 			</a>
 		</li>
-		<li class="my-3">
-			<form class="form" action="/i18n/setlang/" method="post">
-				{% csrf_token %} 
-				<input name="next" type="hidden" value="." />
-				<select name="language" class="select-lan" onchange="this.form.submit()">
-					{% get_current_language as LANGUAGE_CODE %}
-					{% for lang in LANGUAGES %}
-						<option value="{{ lang.0 }}" {% if lang.0|lower == LANGUAGE_CODE|lower %}selected{% endif %}> {{ lang.1 }}</option>
-					{% endfor %}
-				</select>
-			</form>    
-		</li>
+
 	</ul>
 </nav>
