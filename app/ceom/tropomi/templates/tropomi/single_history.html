@@ -1,0 +1,141 @@
+{% extends "visualization/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} {{title}} {% endblock %}
+{% block content %}
+<div>
+ <h2 style="color: #dc143c;">MODIS time series request history for single site</h2>
+ {% if message %}
+   <div class="alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Warning! </strong>{{message}}
+  </div>
+   {% endif %}
+  <a class="btn btn-success icon-2x" href="/visualization/timeseries/single/add/"><i class="icon-plus-sign "></i> Add request</a>
+  <div class='mt-3 d-flex justify-content-center'>
+    <div class="pagination">
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm">
+                {% if jobs.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1&amp;ppp={{ppp}}" area-label="Previous">
+                        <span aria-hidden="true"> &laquo;&laquo;</span>
+                        <span class="sr-only">PreviousX2</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ jobs.previous_page_number }}&amp;ppp={{ppp}}">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" area-label="Previous">
+                        <span aria-hidden="true"> &laquo;&laquo;</span>
+                        <span class="sr-only">PreviousX2</span>
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% for n in page_range %}
+                {% if jobs.number != n %}
+                <li class="page-item"><a class="page-link" href="?page={{n}}&amp;ppp={{ppp}}">
+                        <span aria-hidden="true">{{n}}</span>
+                        <span class="sr-only">{{n}}</span></a>
+                </li>
+                {% elif jobs.number == n %}
+                <li class="page-item active"><a class="page-link" href='#'>{{n}}
+                        <span class="sr-only">{{n}}</span></a>
+                </li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href='#'>{{n}}
+                        <!-- <span aria-hidden="true">{{n}}</span> -->
+                        <span class="sr-only">{{n}}</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% if jobs.has_next %}
+                <li class="page-item"><a class="page-link"
+                        href="?page={{ jobs.next_page_number }}&amp;ppp={{ppp}}">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link"
+                        href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                        <span class="sr-only">NextX2</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><a class="page-link" href="#">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+                <li class="page-item disabled"><a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                        <span class="sr-only">NextX2</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+  </div>
+    <hr>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>
+            Created
+          </th>
+          <th>
+            Updated
+          </th>
+          <th>
+            Product
+          </th>
+          <th>
+            Output file
+          </th>
+         <th>
+            State
+          </th>
+          <th>
+            Delete
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+ {% for row in jobs %}
+   <tr>
+      <td>{{row.created}}</td>
+      <td>{{row.modified}}</td>
+      <td>{{row.product}}</td>
+      <td> {% if row.result %} <a href="{{row.result.url}}"> result </a>{%endif%}</td>
+      <!-- <td> {% if row.sender %}{{row.sender}}{% endif %}</td> -->
+      <td>   
+      {% if row.completed %}
+         <span class="text-success">Complete</span>
+      {% endif %}
+      </td>
+      <td>
+        <a href="/visualization/timeseries/single/del={{row.id}}"><div class="btn btn-danger"><i class="bi bi-trash"></i>Delete</div></a>
+      </td>
+  </tr>
+ {% endfor %}
+    </tbody>
+ </table>
+ </div>
+   
+</div>
+
+{% endblock %}
