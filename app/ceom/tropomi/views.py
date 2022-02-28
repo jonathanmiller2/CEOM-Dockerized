@@ -13,7 +13,7 @@ def index(request):
 
 @login_required
 def single(request):
-    pass
+    return render(request, 'tropomi/single.html')
 
 @login_required
 def single_del(request, task_id):
@@ -33,7 +33,7 @@ def single_get_progress(request, task_id):
 
 @login_required
 def single_history(request):
-    pass
+    return render(request, 'tropomi/single_history.html')
 
 
 
@@ -41,7 +41,7 @@ def single_history(request):
 
 @login_required
 def multiple(request):
-    pass
+    return render(request, 'tropomi/multiple.html')
 
 @login_required
 def multiple_del(request, task_id):
@@ -61,4 +61,4 @@ def multiple_get_progress(request, task_id):
 
 @login_required
 def multiple_history(request):
-    pass
+    return render(request, 'tropomi/multiple_history.html')
