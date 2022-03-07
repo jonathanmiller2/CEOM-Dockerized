@@ -15,7 +15,7 @@ urlpatterns = [
     re_path(r'^timeseries/multiple/$', ceom.tropomi.views.multiple),
     re_path(r'^timeseries/multiple/del=(?P<task_id>.+)/$', ceom.tropomi.views.multiple_del),
     re_path(r'^timeseries/multiple/t=(?P<task_id>.+)$', ceom.tropomi.views.multiple_status),
-    re_path(r'^timeseries/multiple/start/$', ceom.tropomi.views.multiple_start),
+    re_path(r'^timeseries/multiple/start/', ceom.tropomi.views.multiple_start),
     re_path(r'^timeseries/multiple/progress/t=(?P<task_id>.+)/$', ceom.tropomi.views.multiple_get_progress),
     re_path(r'^timeseries/multiple/history/$', ceom.tropomi.views.multiple_history),
 ]

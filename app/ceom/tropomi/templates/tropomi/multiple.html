@@ -1,199 +1,41 @@
 {% extends "tropomi/base.html" %}
-
-{% load i18n %}
-{% block title %} {% trans "CEOM TROPOMI timeseries Multiple Site" %} {% endblock %}
-
+{% load crispy_forms_tags %}
+{% block title %} {{title}} {% endblock %}
 {% block content %}
-<div>
- <h2 style="color: #dc143c;">{% trans "TROPOMI time series request history for multiple sites" %}</h2>
- {% if message %}
-   <div class="alert alert-error">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>{% trans "Warning!" %} </strong>{{message}}
+<div class="span12 well">
+ <h2 style="color: #dc143c;">Retrieve time series MODIS data for multiple sites</h2>
+ <div class="alert alert-block">
+    <strong>Limitations </strong>
+    <ul>
+        <li> You can only have <strong>two jobs</strong> on the queue (waiting and/or processing).</li>
+        <li> The maximum number of <strong>100 sites</strong> per file due to performance concerns.</li>
+        <li> The maximum processing time is set to <strong>2 hours</strong> per task. Results may be saved up to that maximum execution time.</li>
+    </ul>
   </div>
-   {% endif %}
-    <button class="btn btn-success" id="addButton" onclick="location.href = '/visualization/multiple_add/';" {% if task_in_progress %}disabled{% endif %}><i class="icon-plus-sign "></i>{% trans "Add request" %}</button>
-    <h6 id="warningTxt" style="color: #dc143c; {% if not task_in_progress %} display:none; {% endif %}" class="text-left mt-2">Please wait for the current pending tasks to be completed.</h6>
-   <div class='mt-3 d-flex justify-content-center'>
-   <div class="pagination">
-    <nav aria-label="Page navigation">
-        <ul class="pagination pagination-sm">
-            {% if jobs.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page=1&amp;ppp={{ppp}}" area-label="Previous">
-                    <span aria-hidden="true"> &laquo;&laquo;</span>
-                    <span class="sr-only">PreviousX2</span>
-                </a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{ jobs.previous_page_number }}&amp;ppp={{ppp}}">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
-                </a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <a class="page-link" href="#" area-label="Previous">
-                    <span aria-hidden="true"> &laquo;&laquo;</span>
-                    <span class="sr-only">PreviousX2</span>
-                </a>
-            </li>
-            <li class="page-item disabled">
-                <a class="page-link" href="#">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
-                </a>
-            </li>
-            {% endif %}
-            {% for n in page_range %}
-            {% if jobs.number != n %}
-            <li class="page-item"><a class="page-link" href="?page={{n}}&amp;ppp={{ppp}}">
-                    <span aria-hidden="true">{{n}}</span>
-                    <span class="sr-only">{{n}}</span></a>
-            </li>
-            {% elif jobs.number == n %}
-            <li class="page-item active"><a class="page-link" href='#'>{{n}}
-                    <span class="sr-only">{{n}}</span></a>
-            </li>
-            {% else %}
-            <li class="page-item"><a class="page-link" href='#'>{{n}}
-                    <!-- <span aria-hidden="true">{{n}}</span> -->
-                    <span class="sr-only">{{n}}</span>
-                </a>
-            </li>
-            {% endif %}
-            {% endfor %}
-            {% if jobs.has_next %}
-            <li class="page-item"><a class="page-link"
-                    href="?page={{ jobs.next_page_number }}&amp;ppp={{ppp}}">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </li>
-            <li class="page-item"><a class="page-link"
-                    href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;&raquo;</span>
-                    <span class="sr-only">NextX2</span>
-                </a>
-            </li>
-            {% else %}
-            <li class="page-item disabled"><a class="page-link" href="#">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </li>
-            <li class="page-item disabled"><a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;&raquo;</span>
-                    <span class="sr-only">NextX2</span>
-                </a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-</div>
-</div>
-    <hr>
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>
-            {% trans "Timestamp" %}
-          </th>
-          <th>
-            {% trans "Product" %}
-          </th>
-          <!-- <th>
-            Years
-          </th> -->
-          <th>
-            {% trans "Input file" %}
-          </th>
-          <th>
-            {% trans "Output file" %}
-          </th>
-         <th>
-            {% trans "State" %}
-          </th>
-          <th>
-            {% trans "Delete" %}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
- {% for row in jobs %}
-   <tr>
-      <td>{{row.timestamp}}</td>
-      <td>{{row.product}}</td>
-      <!-- <td>{{row.years}}</td> -->
-      <td><a href="{{row.points.url}}"> input </a></td>
-      <td><div id="result_{{row.id}}">{% if row.result %}{% if row.completed or row.error %} <a href="{{row.result.url}}"> result </a>{%endif%}{%endif%}</div></td>
-      <td>   
-      <div id="statusContainer_{{row.id}}">
-      {% if row.completed %}
-        <span class="text-success">Complete</span>
-      {% elif row.working %}
+  
+   <FORM ACTION="." METHOD="post" ENCTYPE="multipart/form-data" class='form-horizontal'>
+      {% csrf_token %}
+            <p><span class="lead text-info">Step 1: </span> Prepare a text file with your site information and upload it to our server. Use Comma Separated Value file format with these values, using decimal degrees only:</p>
+            <p>Unique ID value, Latitude, Longitude</p>
+            <pre>
+            1, 20.2343, -100.26432
+            2, 30.212321, 27.1111
+            ...
+            </pre>
+            <p><span class="lead text-info">Step 2: </span> The file will be send to your usernae email address, if you wish to receive the results in other adress please enter it in the following box</p>
+            <p><span class="lead text-info">Step 3: </span> Please select a product and year(s) to process.</p>
+            <p>*Note that mod09a1 will also return a list of gap filled products derived from the surface reflectance data</p>
+            <p><span class="lead text-info">Step 4: </span> We will send you an email with te results once they have finished processing. Thank you for your patience! If you have any questions please contact the <a href="mailto:mamenarguez@ou.edu">web administrator </a></p>
+            <div class="well " style="background:white;">
+            {{ form|crispy }}
+            <INPUT TYPE="submit"  NAME="Submit" VALUE="Submit Form" class='btn btn-primary'>
+            </div>
+
       
-        <div class="text-left">
-          <i class="icon-cog  icon-2x icon-spin text-left"></i>
-          <span id="progressVerbose_{{row.id}}">{{row.progress}} </span> / {{row.total_sites}}
-        </div>
-        <div class="progress progress-striped active">
-          <div id="progressBar_{{row.id}}"class="progress-bar" style="width: {{row.calculate_progress_percentage}}%;"></div>
-        </div>
-        
-      {% elif row.error %}
-         <i class="icon-2x icon-exclamation-sign text-error"></i>
-      {% else %}
-         <i class="icon-2x icon-list-alt text-warning"></i>
-         <span id="progressVerbose_{{row.id}}">Queued</span>
-      {% endif %}
-      </div>
-   </td>
-   <td>  
-     <a href="/visualization/multiple/del={{row.id}}/"><div class="btn btn-danger"><i class="bi bi-trash"></i>Delete</div></a>
-   </td>
-</tr>
- {% endfor %}
-    </tbody>
- </table>
+   </FORM>
    
 </div>
-<script>
-  var updateInterfaceProgress = function(taskId,progress,total){
-    let chunk = '<div class="text-left"><i class="icon-cog  icon-2x icon-spin text-left"></i><span id="progressVerbose_{{row.id}}">' + progress + '</span> / '+ total + '</div><div class="progress progress-striped active"><div id="progressBar_{{row.id}}"class="progress-bar" style="width: ' + (parseInt(progress)/parseInt(total))*100 +'%;"></div></div>';
-    $("#statusContainer_" + taskId).html(chunk);
-  }
-  var updateInterfaceCompleted = function(taskId,result){
-    $("#statusContainer_"+taskId).html('<i class="icon-check  icon-2x text-success"></i>')
-    $("#statusContainer_"+taskId).html('<span id="complete" class="text-success">Complete</span>')
-    $("#result_"+taskId).html('<a href="/media/'+encodeURIComponent(result)+'"> result </a>')
-    $("#addButton").prop("disabled", false);
-    $("#warningTxt").css("display", "none");
-  }
-  var tasksInProgressList = [{% for t in jobs %}{% if not t.completed %}{{t.id}},{% endif %}{% endfor %}];
-  let request_task_progress = function(tasks_ids) {
-    
-    encoded_array = $.param({task_id_array: tasks_ids})
-    $.ajax({
-      url: '/visualization/get_multiple_task_progress/?' + encoded_array,
-      type: 'GET',
-      success: function (msg) {
-        msg.tasks.forEach(function(item, index) {
-          parsed_item = JSON.parse(item)
-          if(parsed_item.completed == "True") {
-            updateInterfaceCompleted(parsed_item.id, parsed_item.result)
-          }
-          else {
-            if(parsed_item.working == "True") {
-              updateInterfaceProgress(parsed_item.id, parsed_item.progress, parsed_item.total_sites)
-            }
-          }
-        });
-      }
-    })
-  }
-  setInterval(request_task_progress, 10000, tasksInProgressList) 
-</script>
+
+{% if d %} Debug:{{d}} {%endif%}
+
 {% endblock %}
-
-

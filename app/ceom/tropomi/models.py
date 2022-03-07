@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import validate_comma_separated_integer_list
+from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import User
 
 import json
@@ -45,9 +45,9 @@ class TROPOMISingleTimeSeriesJob(models.Model):
     pixelx = models.IntegerField(blank=True, null=True)
     pixely = models.IntegerField(blank=True, null=True)
     result = models.FileField(upload_to='tropomi/timeseries/single', blank=True,null=True,max_length=300)
-    years = models.CharField(validators=[validate_comma_separated_integer_list], max_length=150,verbose_name="Select years")
+    years = ArrayField(models.CharField(max_length=4))
     completed = models.BooleanField(default=False)
-    user = models.ForeignKey(User, null=False, blank=False, default=1096, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, default=1096, on_delete=models.CASCADE)
 
     created = models.DateTimeField('created', auto_now_add=True)
     modified = models.DateTimeField('modified', auto_now=True)
@@ -58,11 +58,11 @@ class TROPOMISingleTimeSeriesJob(models.Model):
 class TROPOMIMultipleTimeSeriesJob(models.Model):
     # task_id: unique id from celery updated upon task start
     task_id = models.CharField(null=True,blank=True,max_length=50)
-    points = models.FileField(upload_to='tropomi/timeseries/input',max_length=150,validators=[checkFormat], verbose_name="Upload csv file")
-    result = models.FileField(upload_to='tropomi/timeseries/multi', blank=True,null=True,max_length=300)
-    years = models.CharField(validators=[validate_comma_separated_integer_list], max_length=200, verbose_name="Select years")
+    points = models.FileField(upload_to='tropomi/timeseries/input', max_length=150, validators=[checkFormat])
+    result = models.FileField(upload_to='tropomi/timeseries/multi', blank=True, null=True, max_length=300)
+    years = ArrayField(models.CharField(max_length=4))
     completed = models.BooleanField(default=False)
-    user = models.ForeignKey(User, null=False, blank=False, default=1096, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, default=1096, on_delete=models.CASCADE)
     
     created = models.DateTimeField('created', auto_now_add=True)
     modified = models.DateTimeField('modified', auto_now=True)
@@ -71,4 +71,9 @@ class TROPOMIMultipleTimeSeriesJob(models.Model):
         return str(self.user)+' ['+str(self.created)+']'
 
 
+class TROPOMIYearFile(models.Model):
+    year = models.CharField(max_length=4)
+    location = models.CharField(max_length=200)
 
+    def __str__(self):
+        return "TROPOMI " + str(self.year)
