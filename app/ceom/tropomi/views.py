@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 import os
 
 from ceom.tropomi.models import *
 from ceom.tropomi.tasks import *
 
-SINGLE_TIMESERIES_LOCATION = os.path.join(settings.MEDIA_ROOT,'TROPOMI','timeseries','single')
-MULTIPLE_TIMESERIES_LOCATION = os.path.join(settings.MEDIA_ROOT,'TROPOMI','timeseries','multi')
+SINGLE_TIMESERIES_LOCATION = os.path.join('TROPOMI','timeseries','single')
+MULTIPLE_TIMESERIES_LOCATION = os.path.join('TROPOMI','timeseries','multi')
 
 
 def index(request):
@@ -31,6 +32,12 @@ def single_status(request, task_id):
     data = {}
     data['task'] = TROPOMISingleTimeSeriesJob.objects.get(task_id=task_id)
     data['year_string'] = ", ".join(data['task'].years)
+    
+    if data['task'].result:
+        if data['task'].result.name[0] == '/':
+            data['result_path'] = data['task'].result.name
+        else:
+            data['result_path'] = '/' + data['task'].result.name
 
     return render(request, 'tropomi/single_status.html', context=data)
 
@@ -41,19 +48,28 @@ def single_start(request):
         x = request.POST['x']
         y = request.POST['y']
 
-        #Start task
-        task = process_TROPOMI_single_site.delay(SINGLE_TIMESERIES_LOCATION, x, y, years)    
+        #Setup task
+        task = process_TROPOMI_single_site.s(settings.MEDIA_ROOT, SINGLE_TIMESERIES_LOCATION, x, y, years)    
+        task.freeze()
 
-        #Pass id from starting task to the create statement
+        #Pass id from task to the create statement
         TROPOMISingleTimeSeriesJob.objects.create(task_id=task.id, pixelx=x, pixely=y, years=years, user=request.user)
-        print(task.id)
+        
+        #Start task
+        task.delay()
         return redirect('/tropomi/timeseries/single/t=' + task.id + '/')
-
-    pass
 
 @login_required
 def single_get_progress(request, task_id):
-    pass
+    task = TROPOMISingleTimeSeriesJob.objects.get(task_id=task_id)
+
+    if task.result:
+        result_location = os.path.join(settings.MEDIA_URL, task.result.name)
+    else:
+        result_location = ""
+
+    return JsonResponse({'working':task.working, 'completed':task.completed, 'errored':task.errored, 'percent_complete':task.percent_complete, 'result':result_location})
+
 
 @login_required
 def single_history(request):

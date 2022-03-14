@@ -46,7 +46,10 @@ class TROPOMISingleTimeSeriesJob(models.Model):
     pixely = models.IntegerField(blank=True, null=True)
     result = models.FileField(upload_to='tropomi/timeseries/single', blank=True,null=True,max_length=300)
     years = ArrayField(models.CharField(max_length=4))
+    working = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
+    errored = models.BooleanField(default=False)
+    percent_complete = models.FloatField(blank=True, null=True)
     user = models.ForeignKey(User, default=1096, on_delete=models.CASCADE)
 
     created = models.DateTimeField('created', auto_now_add=True)
@@ -61,7 +64,11 @@ class TROPOMIMultipleTimeSeriesJob(models.Model):
     points = models.FileField(upload_to='tropomi/timeseries/input', max_length=150, validators=[checkFormat])
     result = models.FileField(upload_to='tropomi/timeseries/multi', blank=True, null=True, max_length=300)
     years = ArrayField(models.CharField(max_length=4))
+    working = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
+    errored = models.BooleanField(default=False)
+    completed_chunks = models.IntegerField(blank=True, null=True)
+    total_chunks = models.IntegerField(blank=True, null=True)
     user = models.ForeignKey(User, default=1096, on_delete=models.CASCADE)
     
     created = models.DateTimeField('created', auto_now_add=True)

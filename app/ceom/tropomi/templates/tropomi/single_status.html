@@ -5,148 +5,84 @@
 <div class="col-12">
   	<h2 style="color: #dc143c;">Single Site Timeseries Request</h2>
 
-      <div id="errorPanel" class="{% if task %}d-none{% endif %}">
-      <p class="text-danger"> Timeseries task not found or expired. If you just created the task, wait some time until that task gets into the queue or <a class="btn btn-primary" onclick="location.reload();">reload</a></p>
-      </div>
-
-      <div id="dataPanel"  class="well span10 offset1 {%if not found %}hide{% endif %}">
-        <dl class="dl-horizontal">
-          <dt>Pixel X:</dt><dd>{{ task.pixelx }}</dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt>Pixel Y:</dt><dd>{{ task.pixely }}</dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt>Dataset:</dt><dd>TROPOMI</dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt>Years:</dt><dd>{{ year_string }}</dd>
-        </dl>
-        <dl class="dl-horizontal">
-          <dt>Task_id</dt><dd>{{ task.task_id }}</dd>
-        </dl>
-        
-        <hr>
-        {% if task.completed %}
-        <div id="resultsDiv" class="text-center">
-          <a id="downloadButton" class="btn btn-primary" href="{{file}}"><i class="icon-download-alt"></i> Download</a>
-          <a class="btn btn-primary" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
-          <a href="/tropomi/timeseries/single/del={{task.task_id}}/" class="btn btn-danger"><i class="icon-trash"></i> Delete</a>
-        </div>
-        {% else %}
+    <dl class="dl-horizontal">
+        <dt>Pixel X:</dt><dd>{{ task.pixelx }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Pixel Y:</dt><dd>{{ task.pixely }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Dataset:</dt><dd>TROPOMI</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Years:</dt><dd>{{ year_string }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Task_id</dt><dd>{{ task.task_id }}</dd>
+    </dl>
+    
+    <hr>
+    {% if not task.completed %}
+    <div id="progress-panel">
         <p id='infoMessage' class="text-center text-info">Contacting server...</p>
-        <div id ='progressDiv' class="col-12 text-center">          
+        <div id='progressDiv' class="col-12 text-center">          
             <div id="progress_bars" class="progress">
                 <div id="completed-bar" class="progress-bar progress-bar-striped bg-success" style="width: 0%;"></div>
                 <div id="remaining-bar" class="progress-bar progress-bar-striped bg-warning" style="width: 0%;"></div>
                 <div id="error-bar" class="progress-bar progress-bar-striped bg-danger" style="width: 100%;"></div>
             </div>
         </div>
-        <div id="resultsDiv" class="hide text-center mt-2">
-          <a id="downloadButton" class="btn btn-primary" href="{{file}}"><i class="icon-download-alt"></i> Download</a>
-          <a class="btn btn-primary" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
-          <a href="/tropomi/timeseries/single/del={{task.task_id}}/" class="btn btn-danger"><i class="icon-trash"></i> Cancel</a>
-        </div>
-        {% endif %}
+    </div>
+    {% endif %}
+    <div id="resultsDiv" class="text-center mt-2">
+        <a id="downloadButton" class="btn btn-primary"><i class="icon-download-alt"></i> Download</a>
+        <a class="btn btn-primary" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
+        <a href="/tropomi/timeseries/single/del={{task.task_id}}/" class="btn btn-danger"><i class="icon-trash"></i> Cancel</a>
+    </div>
+    
         
-      </div>
 </div>
 
 <script type="text/javascript">
-    // Variables
-    var taskFound = {% if task %} true {% else %} false {% endif %};
-    var intervalID;
-    var MAX_RETRIES = 10;
-    var notFoundCounter=0;
-    var task_id = "{{task.task_id}}";
+    $('#resultsDiv').hide()
+    let interval;
 
-    // Functions
-    var showPanel = function(error) {
-        var visible= "#dataPanel";
-        var hidden = "#errorPanel";
-        if (error){
-        hidden = visible;
-        visible = "#errorPanel"
-        }
-        if ($(hidden).css("display")=="none"){
-        $(visible).removeClass('hide',500)
-        $(hidden).addClass('hide',500)
-        }
-    }
-    var updateProgressBar = function(completed,remaining,error, active,message) {
-        showPanel(false);
-        
-        $("#completed-bar").css("width",completed+"%");
-        $("#error-bar").css("width",error+"%");
-        $("#remaining-bar").css("width",remaining+"%");
-        var progress = error + completed;
-        progress = progress.toFixed(2);
-        $( "#infoMessage" ).text(message+" ("+progress+" %)");
-
-        if (active && $("#progress_bars").hasClass("active") ){
-        $("#progress_bars").removeClass("active")
-        }else if (!$("#progress_bars").hasClass("active")){
-        $("#progress_bars").addClass('active')
-        }
-    }
-    
-    var updateErrorCounter = function(counter){
-        $("#numRetries").text("Checking if task exists ("+counter+"/"+MAX_RETRIES+")...")
-    }
-
-    var showResults = function(fileUrl){
-        $("#downloadButton").attr("href",fileUrl)
-        $("#progressDiv").addClass('hide',500)
-        $("#errorPanel").addClass('hide',500)
-        $("#resultsDiv").removeClass('hide',500)
-    }
-
-    var checkState = function(data){
-        console.log(data);
-        if (data.success){
-        clearInterval(intervalID);
-        file_url = data['url']
-        $( "#infoMessage" ).text("Data ready to download")
-        $("#completed-bar").css("width","100%");
-        $("#remaining-bar").css("width","0%");
-        $("#error-bar").css("width","0%");
-        console.log(file_url)
-        showResults(file_url)
-        }else if (data.not_found){
-        if (notFoundCounter<MAX_RETRIES){
-            notFoundCounter+=1;
-            updateErrorCounter(notFoundCounter);
-        }else{
-            $( "#numRetries" ).text("Task not found, make sure that it is not expired or reload this page.")
-            clearInterval(intervalID);  
-        }
-        }else if (data.failure){
-        clearInterval(intervalID);
-        showPanel(true);
-        var message = "There was an error processing the task. Contact the administrator for more details." ;
-        $( "#infoMessage" ).text(message);
-        $( "#numRetries" ).text(message);
-        }else if (data.progress){
-        var remaining = 100.0*(data.total-data.completed-data.errors)/data.total;
-        var completed = 100.0*data.completed/data.total;
-        var error = 10.0*data.errors/data.total;
-        updateProgressBar(completed,remaining,error,false,"Working...");
-        }
-  }
-  
     var checkProgress = function(){
         $.ajax({
-            url: "/modis/visualization/timeseries/single/progress/t={{task.task_id}}/",
+            url: "/tropomi/timeseries/single/progress/t={{task.task_id}}/",
             success: function (result) {
-                checkState(result)
+                if(result['error']) {
+                    clearInterval(interval);
+                    $('#completed-bar').css('width', '0%');
+                    $('#remaining-bar').css('width', '0%');
+                    $('#error-bar').css('width', '100%');
+                    $('#infoMessage').html('An error has occured. Try re-submitting the request or ask support for more information.');
+                }
+                else if(result['completed']) {
+                    clearInterval(interval);
+                    console.log(result['result'])
+                    $('#downloadButton').attr('href', result['result'])
+                    $('#progress-panel').hide();
+                    $('#resultsDiv').show();
+                }
+                else if(result['working']) {
+                    $('#error-bar').css('width', '0%');
+                    $('#infoMessage').html('Your task is being processed...');
+                    
+                    let percent_complete = parseFloat(result['percent_complete']) * 100;
+                    let percent_remaining = 100 - percent_complete;
+
+                    $('#completed-bar').css('width', percent_complete + '%');
+                    $('#remaining-bar').css('width', percent_remaining + '%');
+                    
+                }
             }
         })
     }
 
-    // Main
     {% if task and not task.completed %}
-    var delay = 1000
-    intervalID = window.setInterval(checkProgress, delay);
+    var delay = 3000
+    interval = window.setInterval(checkProgress, delay);
     {% endif %}
 </script>
 
