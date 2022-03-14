@@ -1,0 +1,64 @@
+{% load i18n %}
+<li class='leftmenu-category nav-header'>
+    {%trans "MODIS data"%}
+</li>
+<li>
+    <a href="/modis/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Overview" %}</p>
+    </a>
+</li>
+<li class='leftmenu-category nav-header'>
+    {%trans "Inventory"%}
+</li>
+<li>
+    <a href="/modis/remote_sensing_datasets/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left"> {%trans "NASA data"%}</p>
+    </a>
+</li>
+<li>
+    <a href="/modis/remote_sensing_datasets/#modisdata" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "CEOM data"%}</p>
+    </a>
+</li>
+<li class='leftmenu-category nav-header'>
+    {%trans "Visualization"%}
+</li>
+<li>
+    <a href="/modis/composite" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "Composite Image"%}</p>
+    </a>
+</li>
+<li>
+    <a href="/modis/olmap/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "Vegetation Index Map"%}</p>
+    </a>
+</li>
+<li class='leftmenu-category nav-header'>
+    {%trans "Delivery"%}
+</li>
+<li>
+    <a href="/modis/gmap/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "Single Site Time-Series"%}</p>
+    </a>
+</li>
+<li>
+    <a href="/modis/multiple/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">{%trans "Multiple Site Time-Series"%}</p>
+    </a>
+</li>
+<li class='leftmenu-category nav-header'>
+    {%trans "Request history"%}
+</li>
+<li>
+    <a href="/modis/timeseries/single/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Single Site history" %}</p>
+    </a>
+</li>
+<li class='leftmenu-category nav-header'>
+    {%trans "Other"%}
+</li>
+<li>
+    <a href="/modis/geocatter/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "GeoCatter" %}</p>
+    </a>
+</li>

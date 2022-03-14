@@ -7,7 +7,7 @@ from django.conf import settings
 @app.task
 def update_datasets():
     #This import has to be done when this function gets called, as it requires that the Django apps be loaded, which isn't completed when the above imports run.
-    from ceom.modis.inventory.models import File, Dataset, Tile
+    from ceom.modis.models import File, Dataset, Tile
 
     with open('celerybeat.log', 'a') as f:
         f.write(f"Running update_datasets command at time: {datetime.datetime.now()}\n")
