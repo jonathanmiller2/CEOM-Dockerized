@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 import os
 
+from ceom.celery import app
 from ceom.tropomi.models import *
 from ceom.tropomi.tasks import *
 
@@ -25,7 +28,33 @@ def single(request):
 @login_required
 def single_del(request, task_id):
     # Make sure the owner is the one deleting the task! (or admin)
-    pass
+    if request.method != 'POST':
+        return HttpResponse()
+
+    redir = '/tropomi/timeseries/single/'
+    if request.POST['redirect']:
+        redir = request.POST['redirect']
+
+    try:
+        task = TROPOMISingleTimeSeriesJob.objects.get(task_id=task_id)
+    except TROPOMISingleTimeSeriesJob.DoesNotExist as e:
+        print(e)
+        print("Attempted TROPOMI single-site task delete but task not found")
+        return redirect(redir)
+
+    if request.user != task.user and not request.user.is_superuser:
+        return redirect(redir)
+    
+    if task.result and task.result.name:
+        os.remove(os.path.join(settings.MEDIA_ROOT, task.result.name))
+    
+    if task.working:
+        app.control.revoke(task.task_id, terminate=True)
+
+    task.delete()
+
+    return redirect(redir)
+
 
 @login_required
 def single_status(request, task_id):
@@ -73,7 +102,30 @@ def single_get_progress(request, task_id):
 
 @login_required
 def single_history(request):
-    return render(request, 'tropomi/single_history.html')
+    user_tasks = TROPOMISingleTimeSeriesJob.objects.filter(user=request.user).order_by('-created')
+    paginator = Paginator(user_tasks, 25) # Show 25 jobs per page
+
+    page = request.GET.get('page',1)
+    if page != "all":
+        try:
+            jobs = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            jobs = paginator.page(int(page))
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            jobs = paginator.page(paginator.num_pages)
+
+        page = int(page)
+        page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
+    else:
+        paginator = None
+        page_range = list(range(10))
+    return render(request, 'tropomi/single_history.html', context={
+        "jobs": jobs,
+        'paginator': paginator,
+        'page_range': page_range,
+        })
 
 
 

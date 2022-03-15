@@ -32,19 +32,33 @@
                 <div id="error-bar" class="progress-bar progress-bar-striped bg-danger" style="width: 100%;"></div>
             </div>
         </div>
+        <div class="row justify-content-center mt-2">
+            <form action="/tropomi/timeseries/single/del={{task.task_id}}/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="redirect" value="/tropomi/timeseries/single/">
+                <button type="submit" class="btn btn-danger"><i class="fas fa-ban"></i> Cancel</input>
+            </form>
+        </div> 
     </div>
     {% endif %}
-    <div id="resultsDiv" class="text-center mt-2">
-        <a id="downloadButton" class="btn btn-primary"><i class="icon-download-alt"></i> Download</a>
-        <a class="btn btn-primary" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
-        <a href="/tropomi/timeseries/single/del={{task.task_id}}/" class="btn btn-danger"><i class="icon-trash"></i> Cancel</a>
+    <div id="resultsDiv" class="text-center mt-2 row justify-content-center">
+        <a id="downloadButton" class="btn btn-primary mx-1"><i class="icon-download-alt"></i> Download</a>
+        <a class="btn btn-primary mx-1" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
+        <form action="/tropomi/timeseries/single/del={{task.task_id}}/" method="post" class="mx-1">
+            {% csrf_token %}
+            <input type="hidden" name="redirect" value="/tropomi/timeseries/single/">
+            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</input>
+        </form>
     </div>
     
         
 </div>
 
 <script type="text/javascript">
+    {% if not task.completed %}
     $('#resultsDiv').hide()
+    {% endif %}
+
     let interval;
 
     var checkProgress = function(){

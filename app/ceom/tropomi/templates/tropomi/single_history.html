@@ -3,8 +3,8 @@
 {% block title %} {{title}} {% endblock %}
 {% block content %}
 <div>
- <h2 style="color: #dc143c;">MODIS time series request history for single site</h2>
-  <div class='mt-3 d-flex justify-content-center'>
+    <h2 style="color: #dc143c;">MODIS time series request history for single site</h2>
+    <div class='mt-3 d-flex justify-content-center'>
     <div class="pagination">
         <nav aria-label="Page navigation">
             <ul class="pagination pagination-sm">
@@ -81,7 +81,7 @@
             </ul>
         </nav>
     </div>
-  </div>
+    </div>
     <hr>
   <div class="table-responsive">
     <table class="table table-bordered table-striped">
@@ -92,9 +92,6 @@
           </th>
           <th>
             Updated
-          </th>
-          <th>
-            Product
           </th>
           <th>
             Output file
@@ -112,7 +109,6 @@
    <tr>
       <td>{{row.created}}</td>
       <td>{{row.modified}}</td>
-      <td>{{row.product}}</td>
       <td> {% if row.result %} <a href="{{row.result.url}}"> result </a>{%endif%}</td>
       <!-- <td> {% if row.sender %}{{row.sender}}{% endif %}</td> -->
       <td>   
@@ -121,7 +117,11 @@
       {% endif %}
       </td>
       <td>
-        <a href="/visualization/timeseries/single/del={{row.id}}"><div class="btn btn-danger"><i class="bi bi-trash"></i>Delete</div></a>
+        <form action="/tropomi/timeseries/single/del={{row.task_id}}/" method="post" class="mx-1">
+            {% csrf_token %}
+            <input type="hidden" name="redirect" value="/tropomi/timeseries/single/history/">
+            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</input>
+        </form>
       </td>
   </tr>
  {% endfor %}
