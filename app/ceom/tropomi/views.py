@@ -76,24 +76,18 @@ def single_del(request, task_id):
 @login_required
 def single_status(request, task_id):
     data = {}
-    data['task'] = TROPOMISingleTimeSeriesJob.objects.get(task_id=task_id)
-    data['year_string'] = ", ".join(data['task'].years)
-    
-    if data['task'].result:
-        data['result_path'] = os.path.join(settings.MEDIA_URL, data['task'].result.name)
+    data['job'] = TROPOMISingleTimeSeriesJob.objects.get(task_id=task_id)
+    data['year_string'] = ", ".join(data['job'].years)
 
     return render(request, 'tropomi/single_status.html', context=data)
 
 @login_required
 def single_get_progress(request, task_id):
-    task = TROPOMISingleTimeSeriesJob.objects.get(task_id=task_id)
+    job = TROPOMISingleTimeSeriesJob.objects.get(task_id=task_id)
 
-    if task.result:
-        result_location = os.path.join(settings.MEDIA_URL, task.result.name)
-    else:
-        result_location = ""
+    res = job.result.url if job.result else ""
 
-    return JsonResponse({'working':task.working, 'completed':task.completed, 'errored':task.errored, 'percent_complete':task.percent_complete, 'result':result_location})
+    return JsonResponse({'working':job.working, 'completed':job.completed, 'errored':job.errored, 'percent_complete':job.percent_complete, 'result':res})
 
 
 @login_required
@@ -192,7 +186,7 @@ def multiple(request):
                 destination.write(chunk)
 
         #Setup task
-        task = process_TROPOMI_multiple_site.s(settings.MEDIA_ROOT, MULTIPLE_TIMESERIES_OUTPUT_LOCATION, rel_input_file_location, requested_years)    
+        task = process_TROPOMI_multiple_site.s(settings.MEDIA_ROOT, MULTIPLE_TIMESERIES_OUTPUT_LOCATION, rel_input_file_location, requested_years, request.user.id)    
         task.freeze()
 
         #Pass id from task to the create statement
@@ -226,6 +220,9 @@ def multiple_del(request, task_id):
     if request.user != task.user and not request.user.is_superuser:
         return redirect(redir)
     
+    if task.points and task.points.name:
+        os.remove(os.path.join(settings.MEDIA_ROOT, task.points.name))
+
     if task.result and task.result.name:
         os.remove(os.path.join(settings.MEDIA_ROOT, task.result.name))
     
@@ -239,22 +236,45 @@ def multiple_del(request, task_id):
 @login_required
 def multiple_status(request, task_id):
     data = {}
-    print(task_id)
-    data['task'] = TROPOMIMultipleTimeSeriesJob.objects.get(task_id=task_id)
-    data['year_string'] = ", ".join(data['task'].years)
+    data['job'] = TROPOMIMultipleTimeSeriesJob.objects.get(task_id=task_id)
+    data['year_string'] = ", ".join(data['job'].years)
     
-    if data['task'].points:
-        data['input_path'] = os.path.join(settings.MEDIA_URL, data['task'].points.name)
-
-    if data['task'].result:
-        data['result_path'] = os.path.join(settings.MEDIA_URL, data['task'].result.name)
+    data['input_path'] = data['job'].points.url if data['job'].points else ""
+    data['result_path'] = data['job'].result.url if data['job'].result else ""
 
     return render(request, 'tropomi/multiple_status.html', context=data)
 
 @login_required
 def multiple_get_progress(request, task_id):
-    pass
+    job = TROPOMIMultipleTimeSeriesJob.objects.get(task_id=task_id)
+
+    res = job.result.url if job.result else ""
+
+    return JsonResponse({'working':job.working, 'completed':job.completed, 'errored':job.errored, 'percent_complete':job.percent_complete, 'result':res})
 
 @login_required
 def multiple_history(request):
-    return render(request, 'tropomi/multiple_history.html')
+    user_tasks = TROPOMIMultipleTimeSeriesJob.objects.filter(user=request.user).order_by('-created')
+    paginator = Paginator(user_tasks, 25) # Show 25 jobs per page
+
+    page = request.GET.get('page',1)
+    if page != "all":
+        try:
+            jobs = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            jobs = paginator.page(int(page))
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            jobs = paginator.page(paginator.num_pages)
+
+        page = int(page)
+        page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
+    else:
+        paginator = None
+        page_range = list(range(10))
+    return render(request, 'tropomi/multiple_history.html', context={
+        "jobs": jobs,
+        'paginator': paginator,
+        'page_range': page_range,
+    })

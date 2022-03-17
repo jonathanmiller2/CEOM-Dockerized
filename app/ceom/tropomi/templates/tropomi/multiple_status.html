@@ -15,11 +15,11 @@
         <dt>Years:</dt><dd>{{ year_string }}</dd>
     </dl>
     <dl class="dl-horizontal">
-        <dt>Task_id</dt><dd>{{ task.task_id }}</dd>
+        <dt>Task_id</dt><dd>{{ job.task_id }}</dd>
     </dl>
     
     <hr>
-    {% if not task.completed %}
+    {% if not job.completed %}
     <div id="progress-panel">
         <p id='infoMessage' class="text-center text-info">Contacting server...</p>
         <div id='progressDiv' class="col-12 text-center">          
@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="row justify-content-center mt-2">
-            <form action="/tropomi/timeseries/multiple/del={{task.task_id}}/" method="post">
+            <form action="/tropomi/timeseries/multiple/del={{job.task_id}}/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="redirect" value="/tropomi/timeseries/multiple/">
                 <button type="submit" class="btn btn-danger"><i class="fas fa-ban"></i> Cancel</input>
@@ -41,7 +41,7 @@
     <div id="resultsDiv" class="text-center mt-2 row justify-content-center">
         <a id="downloadButton" class="btn btn-primary mx-1" href="{{result_path}}"><i class="icon-download-alt"></i> Download</a>
         <a class="btn btn-primary mx-1" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
-        <form action="/tropomi/timeseries/multiple/del={{task.task_id}}/" method="post" class="mx-1">
+        <form action="/tropomi/timeseries/multiple/del={{job.task_id}}/" method="post" class="mx-1">
             {% csrf_token %}
             <input type="hidden" name="redirect" value="/tropomi/timeseries/multiple/">
             <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</input>
@@ -52,7 +52,7 @@
 </div>
 
 <script type="text/javascript">
-    {% if not task.completed %}
+    {% if not job.completed %}
     $('#resultsDiv').hide()
     {% endif %}
 
@@ -60,7 +60,7 @@
 
     var checkProgress = function(){
         $.ajax({
-            url: "/tropomi/timeseries/multiple/progress/t={{task.task_id}}/",
+            url: "/tropomi/timeseries/multiple/progress/t={{job.task_id}}/",
             success: function (result) {
                 if(result['error']) {
                     clearInterval(interval);
@@ -91,7 +91,7 @@
         })
     }
 
-    {% if task and not task.completed %}
+    {% if job and not job.completed %}
     var delay = 3000
     interval = window.setInterval(checkProgress, delay);
     {% endif %}
