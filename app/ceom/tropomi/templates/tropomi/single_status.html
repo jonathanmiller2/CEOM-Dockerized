@@ -1,0 +1,103 @@
+{% extends "tropomi/base.html" %}
+
+{% block content %}
+
+<div class="col-12">
+  	<h2 style="color: #dc143c;">Single Site Timeseries Request</h2>
+
+    <dl class="dl-horizontal">
+        <dt>Pixel X:</dt><dd>{{ job.pixelx }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Pixel Y:</dt><dd>{{ job.pixely }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Dataset:</dt><dd>TROPOMI</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Years:</dt><dd>{{ year_string }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>Task_id</dt><dd>{{ job.task_id }}</dd>
+    </dl>
+    
+    <hr>
+    {% if not job.completed %}
+    <div id="progress-panel">
+        <p id='infoMessage' class="text-center text-info">Contacting server...</p>
+        <div id='progressDiv' class="col-12 text-center">          
+            <div id="progress_bars" class="progress">
+                <div id="completed-bar" class="progress-bar progress-bar-striped bg-success" style="width: 0%;"></div>
+                <div id="remaining-bar" class="progress-bar progress-bar-striped bg-warning" style="width: 0%;"></div>
+                <div id="error-bar" class="progress-bar progress-bar-striped bg-danger" style="width: 100%;"></div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <form action="/tropomi/timeseries/single/del={{job.task_id}}/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="redirect" value="/tropomi/timeseries/single/">
+                <button type="submit" class="btn btn-danger"><i class="fas fa-ban"></i> Cancel</input>
+            </form>
+        </div> 
+    </div>
+    {% endif %}
+    <div id="resultsDiv" class="text-center mt-2 row justify-content-center">
+        <a id="downloadButton" class="btn btn-primary mx-1" href="{% if job.result %}{{job.result.url}}{% endif %}"><i class="icon-download-alt"></i> Download</a>
+        <a class="btn btn-primary mx-1" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
+        <form action="/tropomi/timeseries/single/del={{job.task_id}}/" method="post" class="mx-1">
+            {% csrf_token %}
+            <input type="hidden" name="redirect" value="/tropomi/timeseries/single/">
+            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</input>
+        </form>
+    </div>
+    
+        
+</div>
+
+<script type="text/javascript">
+    {% if not job.completed %}
+    $('#resultsDiv').hide()
+    {% endif %}
+
+    let interval;
+
+    var checkProgress = function(){
+        $.ajax({
+            url: "/tropomi/timeseries/single/progress/t={{job.task_id}}/",
+            success: function (result) {
+                if(result['error']) {
+                    clearInterval(interval);
+                    $('#completed-bar').css('width', '0%');
+                    $('#remaining-bar').css('width', '0%');
+                    $('#error-bar').css('width', '100%');
+                    $('#infoMessage').html('An error has occured. Try re-submitting the request or ask support for more information.');
+                }
+                else if(result['completed']) {
+                    clearInterval(interval);
+                    console.log(result['result'])
+                    $('#downloadButton').attr('href', result['result'])
+                    $('#progress-panel').hide();
+                    $('#resultsDiv').show();
+                }
+                else if(result['working']) {
+                    $('#error-bar').css('width', '0%');
+                    $('#infoMessage').html('Your task is being processed...');
+                    
+                    let percent_complete = parseFloat(result['percent_complete']) * 100;
+                    let percent_remaining = 100 - percent_complete;
+
+                    $('#completed-bar').css('width', percent_complete + '%');
+                    $('#remaining-bar').css('width', percent_remaining + '%');
+                    
+                }
+            }
+        })
+    }
+
+    {% if job and not job.completed %}
+    var delay = 3000
+    interval = window.setInterval(checkProgress, delay);
+    {% endif %}
+</script>
+
+{% endblock %}

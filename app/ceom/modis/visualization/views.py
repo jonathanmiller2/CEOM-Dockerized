@@ -366,6 +366,7 @@ def multiple(request):
         "too_many_tasks":too_many_tasks,
         'page_range': page_range    
     })
+    
 @login_required
 def multiple_del(request,del_id):
     tsj = TimeSeriesJob.objects.filter(user=request.user,id=del_id)

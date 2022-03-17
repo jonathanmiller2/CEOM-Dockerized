@@ -1,0 +1,58 @@
+{% extends "tropomi/base.html" %}
+{% block content %}
+<h2 style="color: #dc143c;">Retrieve time series MODIS data for multiple sites</h2>
+<strong>Limitations</strong>
+<ul>
+    <li> You can only have <strong>two jobs</strong> on the queue (waiting and/or processing).</li>
+    <li> There is a maximum of <strong>100 sites</strong> per file due to performance concerns.</li>
+    <li> The maximum processing time is set to <strong>2 hours</strong> per task. Results may be saved up to that maximum execution time.</li>
+</ul>
+
+<form id="inputform" action="." method="post" enctype="multipart/form-data" class='form-horizontal'> {% csrf_token %}
+    <strong>Instructions</strong>
+    <ul>
+        <li><strong>Step 1: </strong>
+            <div class="mt-1 ml-5">
+                <p class="mb-2">Prepare a text file with your site information and upload it to our server. Use Comma Separated Value file format with these values, using decimal degrees only:</p>
+                <pre class="ml-5" style="white-space: pre-line;">
+                    Unique ID value, Latitude, Longitude
+                    1, 20.2343, -100.26432
+                    2, 30.212321, 27.1111
+                    ...
+                </pre>
+                <input type="file" id="inputfile" name="inputfile">
+            </div>
+        </li>
+        <li class="my-3"><strong>Step 2:</strong> 
+            <div class="mt-1 ml-5">
+                <p class="mb-2">Select the years you want to receive:</p>
+                <select id="years" name="years" class="form-control col-sm-3" multiple="multiple">
+                    {% for y in years %}
+                    <option value="{{y}}">{{y}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </li>
+        <li class="my-3"><strong>Step 3:</strong>
+            <div class="mt-1 ml-5">
+                <p id="error-message" style="color: red;">{{error}}</p>
+                <input type="submit" name="submit" value="Submit Form" class='btn btn-primary'>
+            </div>
+        </li>
+    </ul>
+</form>
+
+<script>
+    $("#inputform").submit(function(e) {
+        if($("#years").val().length == 0) {
+            $("#error-message").html("Please select the desired years for the dataset")
+            e.preventDefault();
+        }
+
+        if(!$("#inputfile").val()) {
+            $("#error-message").html("Please select an input file")
+            e.preventDefault();
+        }
+    });
+</script>
+{% endblock %}

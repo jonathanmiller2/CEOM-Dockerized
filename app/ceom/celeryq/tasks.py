@@ -164,7 +164,6 @@ def save_data(data,csv_folder,task_id,metadata):
 
 @app.task(bind=True)
 def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days):
-    print("toast 166")
     # Get the list days we need to retreive its value, each one of
     # them will be send as an independent task to get their value
     time_ini = time.time() # Initial time to extract execution time
@@ -239,26 +238,3 @@ def get_modis_year_data(params_dict):
 
 def terminate_task(task_id):
     app.control.revoke(task_id, terminate=True)
-
-# For testing purposes (worker)
-# if __name__ == "__main__":
-#     sys.path.append('/home/menarguez/celeryq/ceom-celery')
-#     lat =  40.492649
-#     lon = -98.321838
-#     dataset = 'mod09a1'
-#     dataset_npix = 1200
-#     col, row, xi, yi, tile = latlon2sin(float(lat), float(lon), dataset, dataset_npix)
-#     params = {
-#         'col' :  col,
-#         'row' : row,
-#         'tile' : tile,
-#         'dataset' : dataset,
-#         'year' : 2007,
-#         'dataset_freq_in_days': 8,
-#         'multi_day' : 8,
-#         'days' : [i for i in range (1,40,8)]
-#     }
-    
-    
-#     result = get_modis_year_data(params)
-#     print result

@@ -56,7 +56,7 @@ def tilemap(request, dataset_id, year):
     
 def tile(request, x, y):
 
-    #TODO: Why are there two files named the same thing?
+    #TODO: Why are there two functions named the same thing?
     def daystoranges( days,day_res):
         l = []
         if len(days) > 0:
@@ -159,32 +159,5 @@ def detail(request, product_id):
     except Product.DoesNotExist:
         raise Http404
     return render(request, 'inventory/remote_sensing_datasets.html', context={'prod': prod})
-
-
-from PIL import Image
-from django.conf import settings
-from io import BytesIO
-
-def toast_tile(request, z, x, y):
-    RESULT_SIZE = 256, 256
-    
-    #print(z, x, y)
-    with BytesIO() as output:
-        with Image.open(os.path.join(settings.MEDIA_ROOT, "toast-image.png")) as im:
-            width, height = im.size
-
-            h_tilesize = width / (2 ** z)
-            v_tilesize = height / (2 ** z)
-
-            left = h_tilesize * x
-            right = h_tilesize * (x + 1)
-            top = v_tilesize * y
-            bottom = v_tilesize * (y + 1)
-
-            im = im.crop((left, top, right, bottom))
-            if im.size[0] > RESULT_SIZE[0] or im.size[1] > RESULT_SIZE[1]:
-                im.thumbnail(RESULT_SIZE, Image.ANTIALIAS)
-            im.save(output, "png")
-        return HttpResponse(output.getvalue(), content_type="image/png")
     
     
