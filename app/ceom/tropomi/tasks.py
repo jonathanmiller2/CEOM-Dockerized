@@ -24,7 +24,9 @@ def process_TROPOMI_single_site(self, media_root, csv_folder, x, y, years):
         if not os.path.exists(os.path.join(media_root, csv_folder)):
             os.makedirs(os.path.join(media_root, csv_folder))
         
-        headers = ['date']
+        # Static headers appear as the first columns without being sorted, variable headers appear as later columns that are automatically sored
+        static_headers = []     # No static headers for single-site requests at the moment
+        variable_headers = []
         data = []
 
         for year_index in range(len(years)):
@@ -34,10 +36,12 @@ def process_TROPOMI_single_site(self, media_root, csv_folder, x, y, years):
 
             for i in range(len(subdatasets)):
                 subdataset_name = subdatasets[i][0].split(':')[2]
-                if subdataset_name not in headers:
-                    headers.append(subdataset_name)
+                if subdataset_name not in static_headers + variable_headers:
+                    variable_headers.append(subdataset_name)
+                
+            variable_headers.sort(key=lambda col: ('_std' in col, len(col)))
 
-            file_df = pd.DataFrame(columns=headers)
+            file_df = pd.DataFrame(columns=['date'] + static_headers + variable_headers)
             file_df.set_index('date', inplace=True)
             file_df.index = pd.to_datetime(file_df.index)
 
@@ -64,7 +68,7 @@ def process_TROPOMI_single_site(self, media_root, csv_folder, x, y, years):
                     if row_date not in file_df.index.array:
                         new_dates.append(row_date)
                 
-                new_dates_df = pd.DataFrame(fill_value, index=new_dates, columns=headers[1:])
+                new_dates_df = pd.DataFrame(fill_value, index=new_dates, columns=static_headers + variable_headers)
                 new_dates_df.index = pd.to_datetime(new_dates_df.index)
                 file_df = pd.concat([file_df, new_dates_df])
 
@@ -119,7 +123,9 @@ def process_TROPOMI_multiple_site(self, media_root, csv_folder, input_file, year
             os.makedirs(os.path.join(media_root, csv_folder))
         
         
-        headers = ['date', 'site']
+        # Static headers appear as the first columns without being sorted, variable headers appear as later columns that are automatically sored
+        static_headers = ['site']
+        variable_headers = []
         data = []
         locations = []
 
@@ -146,13 +152,15 @@ def process_TROPOMI_multiple_site(self, media_root, csv_folder, input_file, year
             # Populate header list if new file has any new headers
             for i in range(len(subdatasets)):
                 subdataset_name = subdatasets[i][0].split(':')[2]
-                if subdataset_name not in headers:
-                    headers.append(subdataset_name)
+                if subdataset_name not in static_headers + variable_headers:
+                    variable_headers.append(subdataset_name)
+            
+            variable_headers.sort(key=lambda col: ('_std' in col, len(col)))
 
             # Set up site dataframes for this year
             file_dfs = [] 
             for i in range(len(locations)):
-                file_dfs.append(pd.DataFrame(columns=headers))
+                file_dfs.append(pd.DataFrame(columns=['date'] + static_headers + variable_headers))
                 file_dfs[i].set_index('date', inplace=True)
                 file_dfs[i].index = pd.to_datetime(file_dfs[i].index)
 
@@ -186,7 +194,7 @@ def process_TROPOMI_multiple_site(self, media_root, csv_folder, input_file, year
                         new_dates.append(row_date)
                 
                 # Set up blank rows in our file dataframes for all the new dates found
-                new_dates_df = pd.DataFrame(fill_value, index=new_dates, columns=headers[1:])
+                new_dates_df = pd.DataFrame(fill_value, index=new_dates, columns=static_headers + variable_headers)
                 new_dates_df.index = pd.to_datetime(new_dates_df.index)
                 for i in range(len(file_dfs)):
                     file_dfs[i] = pd.concat([file_dfs[i], new_dates_df])
