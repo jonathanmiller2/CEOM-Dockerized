@@ -20,8 +20,8 @@ def process_TROPOMI_single_site(self, media_root, csv_folder, x, y, years):
         full_file = os.path.join(media_root, rel_file)
         nineteen_seventy = datetime.fromisoformat('1970-01-01')
 
-        if not os.path.exists(csv_folder):
-            os.makedirs(csv_folder)
+        if not os.path.exists(os.path.join(media_root, csv_folder)):
+            os.makedirs(os.path.join(media_root, csv_folder))
         
         headers = ['date']
         data = []
@@ -100,5 +100,5 @@ def process_TROPOMI_single_site(self, media_root, csv_folder, x, y, years):
 
 
 @app.task(bind=True)
-def process_TROPOMI_multiple_site(self, csv_folder, input_file, years):
+def process_TROPOMI_multiple_site(self, media_root, csv_folder, input_file, years):
     pass

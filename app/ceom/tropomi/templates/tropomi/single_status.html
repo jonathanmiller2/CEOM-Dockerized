@@ -42,7 +42,7 @@
     </div>
     {% endif %}
     <div id="resultsDiv" class="text-center mt-2 row justify-content-center">
-        <a id="downloadButton" class="btn btn-primary mx-1"><i class="icon-download-alt"></i> Download</a>
+        <a id="downloadButton" class="btn btn-primary mx-1" href="{{result_path}}"><i class="icon-download-alt"></i> Download</a>
         <a class="btn btn-primary mx-1" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
         <form action="/tropomi/timeseries/single/del={{task.task_id}}/" method="post" class="mx-1">
             {% csrf_token %}
