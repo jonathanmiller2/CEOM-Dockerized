@@ -16,7 +16,9 @@ def process_TROPOMI_single_site(self, media_root, csv_folder, x, y, years):
     job_obj.save()
 
     try:
-        filename = 'TROPOMI_x' + x + "_y" + y + "_" + "_".join(years) + ".csv"
+        lon = ((360 / 1440) * float(x) - 180) + 0.125
+        lat = (-(180 / 720) * float(y) + 90) - 0.125
+        filename = 'TROPOMI_lat_{:.3f}_lon_{:.3f}'.format(lat, lon) + "_" + "_".join(years) + ".csv"
         rel_file = os.path.join(csv_folder, filename)
         full_file = os.path.join(media_root, rel_file)
         nineteen_seventy = datetime.fromisoformat('1970-01-01')
@@ -24,9 +26,7 @@ def process_TROPOMI_single_site(self, media_root, csv_folder, x, y, years):
         if not os.path.exists(os.path.join(media_root, csv_folder)):
             os.makedirs(os.path.join(media_root, csv_folder))
         
-        # Static headers appear as the first columns without being sorted, variable headers appear as later columns that are automatically sored
-        static_headers = []     # No static headers for single-site requests at the moment
-        variable_headers = []
+        columns = []
         data = []
 
         for year_index in range(len(years)):
@@ -36,13 +36,13 @@ def process_TROPOMI_single_site(self, media_root, csv_folder, x, y, years):
 
             for i in range(len(subdatasets)):
                 subdataset_name = subdatasets[i][0].split(':')[2]
-                if subdataset_name not in static_headers + variable_headers:
-                    variable_headers.append(subdataset_name)
-                
-            variable_headers.sort(key=lambda col: ('_std' in col, len(col)))
+                if subdataset_name not in columns:
+                    columns.append(subdataset_name)
+            
+            columns = sort_columns(columns)
 
-            file_df = pd.DataFrame(columns=['date'] + static_headers + variable_headers)
-            file_df.set_index('date', inplace=True)
+            file_df = pd.DataFrame(columns=columns)
+            file_df.rename_axis('date', inplace=True)
             file_df.index = pd.to_datetime(file_df.index)
 
             for i in range(len(subdatasets)):
@@ -68,7 +68,7 @@ def process_TROPOMI_single_site(self, media_root, csv_folder, x, y, years):
                     if row_date not in file_df.index.array:
                         new_dates.append(row_date)
                 
-                new_dates_df = pd.DataFrame(fill_value, index=new_dates, columns=static_headers + variable_headers)
+                new_dates_df = pd.DataFrame(fill_value, index=new_dates, columns=columns)
                 new_dates_df.index = pd.to_datetime(new_dates_df.index)
                 file_df = pd.concat([file_df, new_dates_df])
 
@@ -122,10 +122,7 @@ def process_TROPOMI_multiple_site(self, media_root, csv_folder, input_file, year
         if not os.path.exists(os.path.join(media_root, csv_folder)):
             os.makedirs(os.path.join(media_root, csv_folder))
         
-        
-        # Static headers appear as the first columns without being sorted, variable headers appear as later columns that are automatically sored
-        static_headers = ['site']
-        variable_headers = []
+        columns = ['site']
         data = []
         locations = []
 
@@ -152,16 +149,16 @@ def process_TROPOMI_multiple_site(self, media_root, csv_folder, input_file, year
             # Populate header list if new file has any new headers
             for i in range(len(subdatasets)):
                 subdataset_name = subdatasets[i][0].split(':')[2]
-                if subdataset_name not in static_headers + variable_headers:
-                    variable_headers.append(subdataset_name)
+                if subdataset_name not in columns:
+                    columns.append(subdataset_name)
             
-            variable_headers.sort(key=lambda col: ('_std' in col, len(col)))
+            columns = sort_columns(columns)
 
             # Set up site dataframes for this year
             file_dfs = [] 
             for i in range(len(locations)):
-                file_dfs.append(pd.DataFrame(columns=['date'] + static_headers + variable_headers))
-                file_dfs[i].set_index('date', inplace=True)
+                file_dfs.append(pd.DataFrame(columns=columns))
+                file_dfs[i].rename_axis('date', inplace=True)
                 file_dfs[i].index = pd.to_datetime(file_dfs[i].index)
 
             # Fill in dataframes
@@ -194,7 +191,7 @@ def process_TROPOMI_multiple_site(self, media_root, csv_folder, input_file, year
                         new_dates.append(row_date)
                 
                 # Set up blank rows in our file dataframes for all the new dates found
-                new_dates_df = pd.DataFrame(fill_value, index=new_dates, columns=static_headers + variable_headers)
+                new_dates_df = pd.DataFrame(fill_value, index=new_dates, columns=columns)
                 new_dates_df.index = pd.to_datetime(new_dates_df.index)
                 for i in range(len(file_dfs)):
                     file_dfs[i] = pd.concat([file_dfs[i], new_dates_df])
@@ -241,3 +238,43 @@ def process_TROPOMI_multiple_site(self, media_root, csv_folder, input_file, year
         raise e
 
     return
+
+
+def sort_columns(column_list):
+    starting_columns = []
+
+    if 'site' in column_list:
+        starting_columns.append('site') 
+        column_list.remove('site') 
+
+    desired_order = ['Mean_TOA_RAD_743',
+                    'SIF_743',
+                    'SIF_Corr_743',
+                    'REF_665',
+                    'REF_781',
+                    'NDVI',
+                    'NIRv',
+                    'NIRv_Rad',
+                    'cloud_fraction_L2',
+                    'Mean_TOA_RAD_743_std',
+                    'SIF_743_std',
+                    'SIF_Corr_743_std',
+                    'SIF_ERROR_743',
+                    'SIF_ERROR_743_std',
+                    'REF_665_std',
+                    'REF_781_std',
+                    'NDVI_std',
+                    'NIRv_std',
+                    'NIRv_Rad_std',
+                    'cloud_fraction_L2_std',
+                    'n']
+
+    for item in desired_order:
+        if item not in column_list:
+            print("Sorting columns for TROPOMI task failed, item: " + item + " not found in column list.")
+            
+            # The hard-coded sort has failed. Returning alphabetical order.
+            return starting_columns + sorted(column_list)
+
+    # The hard-coded sort has succeeded. Returning hard-coded sort.
+    return starting_columns + desired_order
