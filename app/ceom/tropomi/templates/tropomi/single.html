@@ -160,6 +160,16 @@
             fillOpacity: 0,
             clickable: false,                 
         });
+
+        centerCircle = new google.maps.Circle({
+            strokeColor: "#FF3300",
+            strokeOpacity: 1,
+            strokeWeight: 2,
+            fillColor: "#FF3300",
+            fillOpacity: 1,
+            clickable: false,
+            radius: 100
+        })
      
         marker = new google.maps.Marker({
             position: startLocation,
@@ -273,6 +283,7 @@
         
         marker.setMap(map);
         polygon.setMap(map);
+        centerCircle.setMap(map);
         const geocoder = new google.maps.Geocoder();
         document.getElementById("addressGo").addEventListener("click", () => {
             geocodeAddress(geocoder);
@@ -308,9 +319,14 @@
             );        
     }
 
-    function updatePixelDisplay(lat, lng) {
-        let box = latlon2pixel(lat, lng);
+    function updatePixelDisplay(lat, lon) {
+        let box = latlon2pixel(lat, lon);
         polygon.setPath(box);
+
+        let grid = latlon2grid(lat, lon);
+        let corner = grid2latlon(grid.x, grid.y);
+        let center = {lat: corner.lat - 0.125, lng: corner.lon + 0.125}
+        centerCircle.setCenter(center);
     }
 
     let grid2latlon = function(x, y) {
@@ -416,8 +432,10 @@
             
             str += "<hr><div>"
             str += "<dl class='dl-horizontal'>"
-            str += "<div class='row'><dt>Latitude:</dt><dd class='pl-2'>" + lat+"</dd></div>";
-            str += "<div class='row'><dt>Longitude:</dt><dd class='pl-2'>" + lon+"</dd></div>";
+            str += "<div class='row'><dt>Top Left Corner Latitude:</dt><dd class='pl-2'>" + lat+"</dd></div>";
+            str += "<div class='row'><dt>Top Left Corner Longitude:</dt><dd class='pl-2'>" + lon+"</dd></div>";
+            str += "<div class='row'><dt>Center Latitude:</dt><dd class='pl-2'>" + (parseFloat(lat) - 0.125).toString() + "</dd></div>";
+            str += "<div class='row'><dt>Center Longitude:</dt><dd class='pl-2'>" + (parseFloat(lon) + 0.125).toString() +"</dd></div>";
             str += "<div class='row'><dt>Pixel X:</dt><dd class='pl-2'>" + pixel.x +"</dd></div>";
             str += "<div class='row'><dt>Pixel Y:</dt><dd class='pl-2'>" + pixel.y +"</dd></div>";
             str += "<div class='row'><dt>Product:</dt><dd class='pl-2'>TROPOMI</dd></div>";
