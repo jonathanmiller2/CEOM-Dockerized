@@ -428,14 +428,15 @@
             alert('Please pick a point');
         }else{
             let pixel = latlon2grid(lat, lon);
+            let topLeftCorner = grid2latlon(pixel.x, pixel.y);
             let str = "";
             
             str += "<hr><div>"
             str += "<dl class='dl-horizontal'>"
-            str += "<div class='row'><dt>Top Left Corner Latitude:</dt><dd class='pl-2'>" + lat+"</dd></div>";
-            str += "<div class='row'><dt>Top Left Corner Longitude:</dt><dd class='pl-2'>" + lon+"</dd></div>";
-            str += "<div class='row'><dt>Center Latitude:</dt><dd class='pl-2'>" + (parseFloat(lat) - 0.125).toString() + "</dd></div>";
-            str += "<div class='row'><dt>Center Longitude:</dt><dd class='pl-2'>" + (parseFloat(lon) + 0.125).toString() +"</dd></div>";
+            str += "<div class='row'><dt>Top Left Corner Latitude:</dt><dd class='pl-2'>" + topLeftCorner.lat +"</dd></div>";
+            str += "<div class='row'><dt>Top Left Corner Longitude:</dt><dd class='pl-2'>" + topLeftCorner.lon +"</dd></div>";
+            str += "<div class='row'><dt>Center Latitude:</dt><dd class='pl-2'>" + (parseFloat(topLeftCorner.lat) - 0.125).toString() + "</dd></div>";
+            str += "<div class='row'><dt>Center Longitude:</dt><dd class='pl-2'>" + (parseFloat(topLeftCorner.lon) + 0.125).toString() +"</dd></div>";
             str += "<div class='row'><dt>Pixel X:</dt><dd class='pl-2'>" + pixel.x +"</dd></div>";
             str += "<div class='row'><dt>Pixel Y:</dt><dd class='pl-2'>" + pixel.y +"</dd></div>";
             str += "<div class='row'><dt>Product:</dt><dd class='pl-2'>TROPOMI</dd></div>";

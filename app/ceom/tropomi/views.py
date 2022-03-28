@@ -79,6 +79,11 @@ def single_status(request, task_id):
     data['job'] = TROPOMISingleTimeSeriesJob.objects.get(task_id=task_id)
     data['year_string'] = ", ".join(data['job'].years)
 
+    data['lat'] = -(180 / 720) * data['job'].pixely + 90
+    data['lon'] = (360 / 1440) * data['job'].pixelx - 180
+    data['center_lat'] = data['lat'] - 0.125
+    data['center_lon'] = data['lon'] + 0.125
+
     return render(request, 'tropomi/single_status.html', context=data)
 
 @login_required
