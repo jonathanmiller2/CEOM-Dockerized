@@ -16,7 +16,6 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.core.validators import validate_email
 from django.forms import ValidationError
-from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
@@ -26,6 +25,8 @@ def index(request):
         return HttpResponseRedirect('/accounts/login/')
         
 def login(request):
+    alerts = []
+
     if request.method == 'POST':
         form = CustomLoginForm(request=request, data=request.POST)
         if form.is_valid():
@@ -34,16 +35,22 @@ def login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 auth_login(request, user)
-                messages.info(request, f"You are now logged in as {username}")
+                # TODO: This message is persisting for too long!
+                alerts.append(f"You are now logged in as {username}")
                 return redirect('/')
             else:
-                messages.error(request, "Invalid username or password.")
+                alerts.append("Invalid username or password.")
         else:
-            messages.error(request, "Invalid username or password.")
+            alerts.append("Invalid username or password.")
 
 
     form = CustomLoginForm()
-    return render(request, template_name="accounts/login.html", context={"form":form})
+    return render(request, template_name="accounts/login.html", context={"form":form, "alerts":alerts})
+
+# This cannot be named just "logout", as it interferes with a Django built-in function
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/')
 
 @csrf_exempt
 def mobile_logout(request):
