@@ -43,20 +43,6 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-class TileManager(models.Manager):
-    def with_count(self, product, year):
-        from django.db import connection
-        cursor = connection.cursor()
-        cursor.execute("SELECT t.name,t.ih,t.iv, count(*) "+
-                       "FROM inventory_tile as t, inventory_file as f "+
-                       "WHERE t.name = f.tile_id "+
-                       "AND f.year = "+year+" AND f.dataset_id = '"+product+"' group by 1,2,3")
-        result_list = []
-        for row in cursor.fetchall():
-            p = self.model(name=row[0],ih=row[1],iv=row[2])
-            p.count = int(row[3])
-            result_list.append(p)
-        return result_list
 
 class Tile(models.Model):
     name = models.CharField(max_length=6, primary_key=True)
@@ -71,8 +57,6 @@ class Tile(models.Model):
     lat_min = models.FloatField(null=True)
     lat_max = models.FloatField(null=True)
     continent = models.CharField(max_length=30,null=True)
-
-    objects = TileManager()    
 
     def toString(self):
         return self.name + ";ih=" + str(self.ih) + ";long_min=" \
@@ -147,7 +131,7 @@ class SingleTimeSeriesJob(models.Model):
     col = models.IntegerField(blank=True, null=True)
     tile = models.CharField(max_length=6,blank=True, null=True)
     
-    result = models.FileField(upload_to='visualization/timeseries/single', blank=True,null=True,max_length=300)
+    result = models.FileField(upload_to='modis/timeseries/single', blank=True,null=True,max_length=300)
     years = models.CharField(validators=[validate_comma_separated_integer_list], max_length=150,verbose_name="Select years")
     product = models.ForeignKey(Dataset, on_delete=models.CASCADE)
 
@@ -163,8 +147,8 @@ class SingleTimeSeriesJob(models.Model):
 
 class TimeSeriesJob(models.Model):
     sender = models.EmailField(max_length=150,verbose_name='Additional sender',null=True,blank=True)
-    points = models.FileField(upload_to='visualization/timeseries/input',max_length=150,validators=[checkFormat], verbose_name="Upload csv file")
-    result = models.FileField(upload_to='visualization/timeseries/multi', blank=True,null=True,max_length=300)
+    points = models.FileField(upload_to='modis/timeseries/input',max_length=150,validators=[checkFormat], verbose_name="Upload csv file")
+    result = models.FileField(upload_to='modis/timeseries/multi', blank=True,null=True,max_length=300)
     years = models.CharField(validators=[validate_comma_separated_integer_list], max_length=200,verbose_name="Select years")
     product = models.ForeignKey(Dataset, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
@@ -177,6 +161,9 @@ class TimeSeriesJob(models.Model):
     task_id = models.CharField(null=True,blank=True,max_length=50)
     total_sites = models.IntegerField(default=1)
     progress = models.IntegerField(default=0)
+
+    created = models.DateTimeField('created', auto_now_add=True)
+    modified = models.DateTimeField('modified', auto_now=True)
     
     def __str__(self):
         return self.sender

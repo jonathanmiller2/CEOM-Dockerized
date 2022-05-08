@@ -31,9 +31,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 # Celery tasks
-from ceom.celeryq.tasks import get_modis_raw_data
+from ceom.modis.taskprocessing.tasks import get_modis_raw_data
 #from ceom.celeryq.tasks import get_modis_raw_data, latlon2sin
-from ceom.celeryq.tasks_multi import multiple_site_modis,terminate_task
+from ceom.modis.taskprocessing.tasks_multi import multiple_site_modis,terminate_task
 
 
 from celery.result import AsyncResult
@@ -77,11 +77,15 @@ def tilemap(request, dataset_id, year):
     bad_list = []
 
     def splittiles(n):
-        for tile in Tile.objects.with_count(dataset_id,year):
-            if tile.count == n:
-                good_list.append(tile)
-            else:
-                bad_list.append(tile)
+        #TODO: THIS FUNCTIONALITY IS GOING TO BE BROKEN UNTIL THIS IS REWRITTEN
+        # with_count() WAS A HIGHLY, HIGHLY DANGEROUS METHOD THAT NEEDED TO BE REMOVED IMMEDIATELY
+
+        # for tile in Tile.objects.with_count(dataset_id,year):
+        #     if tile.count == n:
+        #         good_list.append(tile)
+        #     else:
+        #         bad_list.append(tile)
+        pass
     
     if year == '2000':
         splittiles(40)
@@ -102,7 +106,7 @@ def tilemap(request, dataset_id, year):
     
 def tile(request, x, y):
 
-    #TODO: Why are there two files named the same thing?
+    #TODO: Why are there two functions named the same thing?
     def daystoranges( days,day_res):
         l = []
         if len(days) > 0:
@@ -194,8 +198,6 @@ def tile(request, x, y):
         'total': len(files_query),
     })
     
-def tile_details(request, x, y):
-    return HttpRequest()
     
 def detail(request, product_id):
     try:
@@ -209,27 +211,6 @@ from PIL import Image
 from django.conf import settings
 from io import BytesIO
 
-def toast_tile(request, z, x, y):
-    RESULT_SIZE = 256, 256
-    
-    #print(z, x, y)
-    with BytesIO() as output:
-        with Image.open(os.path.join(settings.MEDIA_ROOT, "toast-image.png")) as im:
-            width, height = im.size
-
-            h_tilesize = width / (2 ** z)
-            v_tilesize = height / (2 ** z)
-
-            left = h_tilesize * x
-            right = h_tilesize * (x + 1)
-            top = v_tilesize * y
-            bottom = v_tilesize * (y + 1)
-
-            im = im.crop((left, top, right, bottom))
-            if im.size[0] > RESULT_SIZE[0] or im.size[1] > RESULT_SIZE[1]:
-                im.thumbnail(RESULT_SIZE, Image.ANTIALIAS)
-            im.save(output, "png")
-        return HttpResponse(output.getvalue(), content_type="image/png")
     
 def latlon2sin(lat,lon,modis='mod09a1',npix=2400.0):
 
@@ -256,58 +237,15 @@ def index(request):
     return render(request, 'modis/overview.html')
 
 @login_required()
-def gmap(request):
+def single(request):
     datasets = Dataset.objects.filter(is_global=False).order_by('name')
     years = [y for y in range (2000,date.today().year +1)]
-    return render(request, 'modis/gmap.html', context={
+    return render(request, 'modis/single.html', context={
         'datasets':datasets,
         'years':years,
     })
 
-@login_required()
-def gmap1(request, lat, lon):
-    lon = float(lon)
-    lat = float(lat)
-    datasets = Dataset.objects.filter(is_global=False).order_by('name')
-    years = [y for y in range (2000,date.today().year +1)]
-
-    return render(request, 'modis/gmap.html', context={
-        'datasets':datasets,
-        'years':years,
-        'lonRedirect':lon,
-        'latRedirect':lat,
-        'photoRedirect':True,
-    })
-
-@login_required()
-def tropomi(request):
-    datasets = Dataset.objects.filter(is_global=False).order_by('name')
-    years = [y for y in range (2000, date.today().year + 1)]
-    return render(request, 'modis/tropomi.html', context={
-        'datasets':datasets,
-        'years':years,
-    })
-
-@login_required()
-def tropomi1(request, lat, lon):
-    lon = float(lon)
-    lat = float(lat)
-    datasets = Dataset.objects.filter(is_global=False).order_by('name')
-    years = [y for y in range (2000,date.today().year +1)]
-
-    return render(request, 'modis/tropomi.html', context={
-        'datasets':datasets,
-        'years':years,
-        'lonRedirect':lon,
-        'latRedirect':lat,
-        'photoRedirect':True,
-    })
-
-
-def manual(request):
-    return render(request, 'modis/manual.html')
-
-def olmap(request):
+def vimap(request):
     products = RasterProduct.objects.all()
 
     options = {}
@@ -327,14 +265,6 @@ def olmap(request):
 
     return render(request, 'modis/olmap.html', context={
         "mapOptions": options,
-    })
-
-def gemap(request):
-    # ds = Datainfo.objects.all().order_by('label')
-    ds = None
-    return render(request, 'modis/gemap.html', context={
-        'content': "This is a map",
-        'datasets': ds,
     })
 
 def indices_kml(request):
@@ -374,37 +304,20 @@ def kml(request, name):
 
     return render(request, 'kml/main.kml', context= {'styles':styles, 'geometries':objects}, mimetype="application/vnd.google-earth.kml+xml")
 
-TIMESERIES_LOCATION = os.path.join('media','visualization','timeseries','single')
+TIMESERIES_LOCATION = os.path.join('MODIS','timeseries','single')
 
 @login_required()
 def timeseries_single_progress(request, task_id):
+    data = {'task_id': task_id}
 
-    t = loader.get_template('modis/single_site_timeseries.html')
     try:
-        task_db = SingleTimeSeriesJob.objects.get(task_id=task_id)
-        if task_db.user != request.user:
-            raise Exception('User does not own the task')
-
-        filepath = str(task_db.result)
-        if filepath and filepath[0] != '/':
-            filepath = '/' + filepath
-        
-        c = {"job_id":task_db.id,
-            "task_id":task_id,
-            "found":True,
-            "completed": task_db.completed,
-            "lat":task_db.lat,
-            "lon":task_db.lon,
-            "dataset":task_db.product,
-            'row':task_db.row,
-            'col':task_db.col,
-            'tile':task_db.tile,
-            'years':task_db.years,
-            'file': filepath}
+        data['found'] = True
+        data['job'] = SingleTimeSeriesJob.objects.get(task_id=task_id)
     except Exception as e:
-        c = {"task_id":task_id,"found":False}
+        print(e)
+        data['found'] = False
     
-    return render(request, 'modis/single_site_timeseries.html', context=c)
+    return render(request, 'modis/single_status.html', context=data)
 
 
 @login_required()
@@ -423,39 +336,11 @@ def launch_single_site_timeseries(request, lat, lon, dataset, years, product=Non
     dataset_npix = int(dataset_npix)
     ih,iv,xi,yi,folder = latlon2sin(lat,lon,dataset,dataset_npix)
     vi=False
-    task_id = get_modis_raw_data.delay(TIMESERIES_LOCATION,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)     
+    task_id = get_modis_raw_data.delay(settings.MEDIA_ROOT, TIMESERIES_LOCATION,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)     
 
     job = SingleTimeSeriesJob(lat=lat,lon=lon,user=request.user,years=years,product=dataset,task_id=task_id,col=xi,row=yi,tile=folder)
     job.save()
-    return redirect(to='/modis/visualization/timeseries/single/t=%s/'%task_id)
-
-# This page will host all single timeseries from a user
-@login_required()
-def timeseries_single_history(request):
-    user_tasks = SingleTimeSeriesJob.objects.filter(user=request.user).order_by('-created')
-    paginator = Paginator(user_tasks, 25) # Show 25 jobs per page
-
-    page = request.GET.get('page',1)
-    if page != "all":
-        try:
-            jobs = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            jobs = paginator.page(int(page))
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            jobs = paginator.page(paginator.num_pages)
-
-        page = int(page)
-        page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
-    else:
-        paginator = None
-        page_range = list(range(10))
-    return render(request, 'modis/single_timeseries_history.html', context={
-        "jobs": jobs,
-        'paginator': paginator,
-        'page_range': page_range,
-        })
+    return redirect(to='/modis/timeseries/single/t=%s/'%task_id)
 
 def read_from_csv(absolute_path):
     header=None
@@ -492,12 +377,9 @@ def get_task_progress(request,task_id):
                     }
                 return JsonResponse(data)
         else:
-            url = str(task_db.result)
-            if url and url[0] != '/':
-                url = '/' + url
             return JsonResponse({
                 'success':True, 
-                'url': url,
+                'url': task_db.result.url,
                 })
     except Exception as e:
         return JsonResponse({'failure':True,'message':'Unhandled exception: %s' % e})
@@ -514,39 +396,8 @@ def get_multiple_task_progress(request):
         return JsonResponse({'success':False,'message':'Unhandled exception: %s' % e})
     return HttpResponse()
 
-MULTIPLE_TIMESERIES_LOCATION = os.path.join(settings.MEDIA_ROOT,'visualization','timeseries','multi')
+MULTIPLE_TIMESERIES_LOCATION = os.path.join('MODIS','timeseries','multi')
 
-@login_required
-def multiple(request):
-    user_tasks = TimeSeriesJob.objects.filter(user=request.user).order_by('-timestamp')
-    too_many_tasks = False
-    if len(user_tasks)>=2:
-        too_many_tasks = True
-    paginator = Paginator(user_tasks, 25) # Show 25 jobs per page
-
-    page = request.GET.get('page',1)
-    if page != "all":
-        try:
-            jobs = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            jobs = paginator.page(int(page))
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            jobs = paginator.page(paginator.num_pages)
-        page = int(page)
-        page_range = sorted(list(set(range(page-4,page+4)).intersection(set(paginator.page_range))))
-    else:
-        paginator = None
-        page_range = list(range(10))
-    task_in_progress = any([job.working for job in jobs])
-    return render(request, 'modis/multiple.html', context={
-        "task_in_progress":task_in_progress,
-        'jobs':jobs, 
-        'paginator': paginator,
-        "too_many_tasks":too_many_tasks,
-        'page_range': page_range    
-    })
 @login_required
 def multiple_del(request,del_id):
     tsj = TimeSeriesJob.objects.filter(user=request.user,id=del_id)
@@ -557,7 +408,7 @@ def multiple_del(request,del_id):
         tsj.delete()
     else:
         message="Could not find selected job for user. Please make sure it is valid and it is not being processed (working)."
-    return redirect('/visualization/multiple/')
+    return redirect('/modis/timeseries/multiple_add/')
 
 @login_required
 def single_del(request,del_id):
@@ -569,34 +420,34 @@ def single_del(request,del_id):
         tsj.delete()
     else:
         message="Could not find selected job for user. Please make sure it is valid and it is not being processed (working)."
-    return redirect('/visualization/timeseries/single/')
+    return redirect('/modis/timeseries/single/')
 
 @login_required
-def multiple_add(request):
+def multiple(request):
     user_pending_jobs=TimeSeriesJob.objects.filter(user=request.user,completed=False,working=False,error=False)
     if len(user_pending_jobs)>=2:
-        return HttpResponseRedirect('/visualization/multiple/')
+        return HttpResponseRedirect('/modis/timeseries/multiple/')
     if request.method == 'POST':
         form = TimeSeriesJobForm(request.POST, request.FILES)
         if form.is_valid():
             job = form.save_data(request.user,'')
 
             csv_folder = MULTIPLE_TIMESERIES_LOCATION
-            media_timeseries = os.path.join('visualization','timeseries','multi')
             years = [int(y) for y in form.cleaned_data['years'].split(',')]
             points = job.points.file.name
             dataset = form.cleaned_data['product']
 
-            task_id = multiple_site_modis.delay(points,csv_folder,media_timeseries,dataset.name,years,dataset.xdim,dataset.day_res)
+            #TODO: this needs fixed
+            task_id = multiple_site_modis.delay(points,csv_folder, MULTIPLE_TIMESERIES_LOCATION, dataset.name,years,dataset.xdim,dataset.day_res)
             job.task_id = str(task_id)
             job.save()
             
-            return HttpResponseRedirect('/visualization/multiple/')
+            return HttpResponseRedirect('/modis/timeseries/multiple/')
     else:
         form = TimeSeriesJobForm()
         
     #It is the first visit or form had errors
-    return render(request, 'modis/multiple_add.html', context={"title":"Add Multiple Points time series request",'form':form})
+    return render(request, 'modis/multiple.html', context={"title":"Add Multiple Points time series request",'form':form})
 
 def composite(request, year = None, julian_day = None):
     prod='MOD09'

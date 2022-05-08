@@ -677,13 +677,13 @@ var showData = function(lon, lat, year, prod){
 
         var filename = prod+"_"+year+"_"+jQuery.trim(lat)+"_"+jQuery.trim(lon);
 
-        str += "<br /> Download raw data as an ASCII Table: <a href=\"/visualization/ascii_"+filename+".txt\">ascii_"+filename+".txt</a>";
-        str += "<br /> Download raw data as an CSV Table: <a href=\"/visualization/csv_"+filename+".csv\">csv_"+filename+".csv</a>";
+        str += "<br /> Download raw data as an ASCII Table: <a href=\"/ascii_"+filename+".txt\">ascii_"+filename+".txt</a>";
+        str += "<br /> Download raw data as an CSV Table: <a href=\"/csv_"+filename+".csv\">csv_"+filename+".csv</a>";
         if (prod == 'mod09a1' || prod == 'mod09q1'){
-            str += "<br /> Download products as CSV Table: <a href=\"/visualization/csv_products_"+filename+".csv\">csv_products_"+filename+".csv</a>";
+            str += "<br /> Download products as CSV Table: <a href=\"/csv_products_"+filename+".csv\">csv_products_"+filename+".csv</a>";
         }
-        str += "<br /> View data as a series of graphs: <a href=\"/visualization/graph-"+filename+"\">Graph Data</a>";
-        str += "<br /> View products in graphs <a href=\"/visualization/graphjs2-"+filename+"\">Graph Data</a>"
+        str += "<br /> View data as a series of graphs: <a href=\"/graph-"+filename+"\">Graph Data</a>";
+        str += "<br /> View products in graphs <a href=\"/graphjs2-"+filename+"\">Graph Data</a>"
         str += "<p>";
 
         // if($('#data-output').length <= 0){

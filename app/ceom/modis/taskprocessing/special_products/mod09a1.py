@@ -1,5 +1,5 @@
-from ceom.celeryq.modis import aux_functions
-from ceom.celeryq.modis import band_names
+from ceom.modis.taskprocessing import aux_functions
+from ceom.modis.taskprocessing import band_names
 
 def mod35_cloud(ii):
     cloud={'00':'clear',

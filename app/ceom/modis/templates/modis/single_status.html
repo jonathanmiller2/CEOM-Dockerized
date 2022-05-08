@@ -11,22 +11,22 @@
 
       <div id="dataPanel"  class="well span10 offset1 {%if not found %}hide{% endif %}">
         <dl class="dl-horizontal">
-          <dt>Latitude:</dt><dd>{{ lat }}</dd>
+          <dt>Latitude:</dt><dd>{{ job.lat }}</dd>
         </dl>
         <dl class="dl-horizontal">
-          <dt>Longitude:</dt><dd>{{ lon }}</dd>
+          <dt>Longitude:</dt><dd>{{ job.lon }}</dd>
         </dl>
         <dl class="dl-horizontal">
-          <dt>Dataset</dt><dd>{{dataset}}</dd>
+          <dt>Dataset</dt><dd>{{ job.product }}</dd>
         </dl>
         <dl class="dl-horizontal">
-          <dt>Tile:</dt><dd>{{ tile }}</dd>
+          <dt>Tile:</dt><dd>{{ job.tile }}</dd>
         </dl>
         <dl class="dl-horizontal">
-          <dt>Cell (row, column):</dt><dd>({{row}}, {{col}})</dd>
+          <dt>Cell (row, column):</dt><dd>({{job.row}}, {{job.col}})</dd>
         </dl>
         <dl class="dl-horizontal">
-          <dt>Years:</dt><dd>{{years}}</dd>
+          <dt>Years:</dt><dd>{{job.years}}</dd>
         </dl>
         <dl class="dl-horizontal">
           <dt>Scaling factor of the spectral bands</dt><dd>10,000</dd>
@@ -36,11 +36,11 @@
         </dl>
         
         <hr>
-        {% if completed %}
+        {% if job.completed %}
         <div id="resultsDiv" class="text-center">
-          <a id="downloadButton" class="btn btn-primary" href="{{file}}"><i class="icon-download-alt"></i> Download</a>
+          <a id="downloadButton" class="btn btn-primary" href="{% if job.result %}{{job.result.url}}{% endif %}"><i class="icon-download-alt"></i> Download</a>
           <a class="btn btn-primary" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
-          <a href="/modis/visualization/timeseries/single/del={{job_id}}/" class="btn btn-danger"><i class="icon-trash"></i> Delete</a>
+          <a href="/modis/timeseries/single/del={{job.id}}/" class="btn btn-danger"><i class="icon-trash"></i> Delete</a>
         </div>
         {% else %}
         <p id='infoMessage' class="text-center text-info">Contacting server...</p>
@@ -52,9 +52,9 @@
             </div>
         </div>
         <div id="resultsDiv" class="hide text-center mt-2">
-          <a id="downloadButton" class="btn btn-primary" href="{{file}}"><i class="icon-download-alt"></i> Download</a>
+          <a id="downloadButton" class="btn btn-primary" href="{% if job.result %}{{job.result.url}}{% endif %}"><i class="icon-download-alt"></i> Download</a>
           <a class="btn btn-primary" onclick="alert('Function not available yet.')"><i class="icon-bar-chart"></i> Chart it!</a>
-          <a href="/modis/visualization/timeseries/single/del={{job_id}}/" class="btn btn-danger"><i class="icon-trash"></i> Cancel</a>
+          <a href="/modis/timeseries/single/del={{job.id}}/" class="btn btn-danger"><i class="icon-trash"></i> Cancel</a>
         </div>
         {% endif %}
         
@@ -147,7 +147,7 @@
     
     var checkProgress = function(){
       $.ajax({
-        url: "/modis/visualization/timeseries/single/progress/t={{task_id}}/",
+        url: "/modis/timeseries/single/progress/t={{task_id}}/",
         success: function (result) {
           checkState(result)
         }

@@ -1,13 +1,14 @@
 from ceom.celery import app
 from django.db import IntegrityError
 import os, glob, datetime, random, time
+from datetime import datetime, timedelta
 
 from django.conf import settings
 
 @app.task
 def update_datasets():
     #This import has to be done when this function gets called, as it requires that the Django apps be loaded, which isn't completed when the above imports run.
-    from ceom.modis.models import File, Dataset, Tile
+    from ceom.modis.inventory.models import File, Dataset, Tile
 
     with open('celerybeat.log', 'a') as f:
         f.write(f"Running update_datasets command at time: {datetime.datetime.now()}\n")
@@ -122,3 +123,17 @@ def update_rasters():
                     new_layer = RasterLayer.objects.create(product=product, year=year, day=day, location=mosaic_location, max_zoom=settings.RASTER_MAP_MAX_ZOOM, store_reprojected=False)
 
                     time.sleep(60 * 5) #Give the raster time to process. This could be done better by using threading and waiting for the raster to be done processing, but a simple delay works for this script
+
+@app.task
+def clear_modis_csvs():
+    from ceom.modis.models import SingleTimeSeriesJob, TimeSeriesJob
+    from django.conf import settings
+    # TODO: Change this to be 7 days
+    week_ago = datetime.now() - timedelta(minutes=1)
+    outdated_jobs = SingleTimeSeriesJob.objects.filter(modified__lt=week_ago)
+    # current = datetime.datetime.now()
+    print("*==")
+    for outdated_job in outdated_jobs:
+        csv_abs_path = outdated_job.result.size
+        print(csv_abs_path) 
+        

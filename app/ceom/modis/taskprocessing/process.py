@@ -1,7 +1,8 @@
-from ceom.celeryq.modis.special_products import mod09a1
+from ceom.modis.taskprocessing.special_products import mod09a1
 from collections import  OrderedDict
 import datetime
 from osgeo import gdal
+from ceom.modis.taskprocessing import headers
 REAL_DATE_BAND_NAME = 'sur_refl_day_of_year'
 try:
     
@@ -156,7 +157,7 @@ def gap_fill_algorithm(data,relation_dict,is_bad_observation,gf_key):
             #print(("\t\t filling bad_obs which cannot be fixed with NA:\t"+"year:\t"+str(y)+"day:\t"+str(d)))
             data[y][d] = set_gf_no_gf(data[y][d],relation_dict,gf_key,"NA")
     return data
-from ceom.celeryq.modis import headers
+
 def gap_fill(data,dataset):
     dataset = dataset.upper()
     #print(('\033[93m'+"*********************i entered gap fill code***********************"+'\033[0m'))

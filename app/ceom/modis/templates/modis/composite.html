@@ -13,7 +13,7 @@
 	{% block content %}
 	<script type="text/javascript">
 		function image_error() {
-			var src = "/media/visualization/composite/not_available.png";
+			var src = "/media/composite/not_available.png";
 			$("#map").attr("src", src);
 		}
 		$(function () {
@@ -42,7 +42,7 @@
 			}
 			console.log(year.toString())
 			console.log(day.toString())
-			window.location.replace("/visualization/composite/" + year.toString() + "/" + day.toString() + "/");
+			window.location.replace("/composite/" + year.toString() + "/" + day.toString() + "/");
 		}
 
 		function julianSubmit() {
@@ -70,7 +70,7 @@
 				}
 			}
 
-			window.location.replace("/visualization/composite/" + year.toString() + "/" + day.toString() + "/");
+			window.location.replace("/composite/" + year.toString() + "/" + day.toString() + "/");
 
 
 		}
@@ -115,11 +115,11 @@
 	<div id="map" class="map" style="height: 675px;"></div>
 	<div class="row justify-content-around" style="margin: 60px 0px 10px 0px;">
 		<div>
-			<a href="/visualization/composite/{{previous8_year}}/{{previous8_day}}/" class="btn btn-primary mx-1" role="button">
+			<a href="/composite/{{previous8_year}}/{{previous8_day}}/" class="btn btn-primary mx-1" role="button">
 				<span class="fas fa-chevron-left"></span> 8
 			</a>
 
-			<a href="/visualization/composite/{{next8_year}}/{{next8_day}}/" class="btn btn-primary mx-1" role="button">
+			<a href="/composite/{{next8_year}}/{{next8_day}}/" class="btn btn-primary mx-1" role="button">
 				8 <span class="fas fa-chevron-right"></span>
 			</a>
 		</div>

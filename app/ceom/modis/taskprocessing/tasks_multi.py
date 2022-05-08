@@ -1,6 +1,4 @@
-
-from celery import task
-from celery import Celery
+from celery import shared_task
 import time
 import random
 import os, sys
@@ -8,19 +6,18 @@ import re, glob
 import math
 import datetime
 
-from .modis import products, process, band_names, headers
-from .modis.aux_functions import latlon2sin
-from .modis.process import get_pixel_value,get_band_names,gap_fill
-from .modis.headers import get_modis_header
+from ceom.modis.taskprocessing import products, process, band_names, headers
+from ceom.modis.taskprocessing.aux_functions import latlon2sin
+from ceom.modis.taskprocessing.process import get_pixel_value,get_band_names,gap_fill
+from ceom.modis.taskprocessing.headers import get_modis_header
+from ceom.modis.models import TimeSeriesJob
 from collections import OrderedDict
-app = Celery('tasks', backend='amqp', broker='amqp://')
-app.config_from_object('celeryconfig')
+from ceom.celery import app
 
-from celery import group
-
+from django.conf import settings
 try:
     from . import database
-except:
+except Exception as e:
     print("Database.py not found. disregard if it is a worker process")
 
 def get_location_metadata(lat,lon,dataset,dataset_npix,years):
@@ -36,9 +33,9 @@ def get_location_metadata(lat,lon,dataset,dataset_npix,years):
     }
     return metadata
 
-def monitor_tasks(tasks,fun,metadata):
+def monitor_single_site_tasks(tasks,metadata):
     MAX_ERRORS = 3
-    MAX_SECONDS= 1000 # seconds
+    MAX_SECONDS= 200 # seconds
     TIME_CHECK = 1 # seconds
     NUM_STEPS = int(MAX_SECONDS/TIME_CHECK)
 
@@ -62,8 +59,6 @@ def monitor_tasks(tasks,fun,metadata):
                 #         fatal_failures[year][day] = 1
                 #         fatal_failures_counter+=1
         progress = int((float(finished + error)/num_tasks)*100)
-        print(("Progress: %d Finished: %d Errors: %d Retry: %d Started %d Pending %d ") % (progress,finished, error, retry, started, pending))
-        fun.update_state(state='STARTED',  meta={'completed': finished,'error':error,'total':num_tasks,'metadata':metadata})
         if finished + error == num_tasks:
             break
         time.sleep(TIME_CHECK)
@@ -90,8 +85,8 @@ def get_data(tasks):
                 task.forget() #Remove partial info from backend because it is no longer necessary
     return data
 
-def process_data(data,dataset):
-	return gap_fill(data,dataset)
+# def process_data(data,dataset):
+#     return gap_fill(data,dataset)
 
 def send_tasks(function, params_dict):
     tasks =  {}
@@ -104,7 +99,7 @@ def send_tasks(function, params_dict):
 def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chunks=5):
     task_params = dict([(year,{}) for year in years])
     current_year = datetime.datetime.now().year
-    current_doy = datetime.datetime.now().timetuple().tm_yday
+    current_day = datetime.datetime.now().timetuple().tm_yday
     for year in years:
         days = [i+1 for i in range(0,366) if i % dataset_freq_in_days==0]
         if year not in list(range(2000,current_year+1)):
@@ -112,7 +107,7 @@ def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chun
         if year == 2000:
             days = [day for day in days if day > 56 ] # Modis has no days before this date
         elif year == current_year:
-            days = [day for day in days if day <= current_doy ] # Cannot get future dates
+            days = [day for day in days if day <= current_day ] # Cannot get future dates
         for day in days:
             chunk = ((day-1)/dataset_freq_in_days) % num_chunks
             if chunk not in task_params[year]:
@@ -121,10 +116,10 @@ def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chun
                     'row' :     metadata['row'],
                     'tile':     metadata['tile'],
                     'dataset':  metadata['dataset'],
-                    'year':     year,
+                    'year':     year, 
                     'dataset_freq_in_days': dataset_freq_in_days,
                     'multi_day': multi_day,
-                    'days': [day,]
+                    'days': [day], 
                 }
             else:
                 task_params[year][chunk]['days']+=[day]
@@ -143,17 +138,20 @@ def get_header(data,dataset):
                 return header
     raise Exception ('Error getting header')
 
-def save_data(data,csv_folder,task_id,metadata):
-    years = ",".join([str(year) for year in metadata['years']])
-    filename = metadata['dataset']+"_lat_"+str(str(metadata['lat']))+"_lon_"+str(str(metadata['lon']))+'_years_'+years+'.csv'
+def save_data_multi(data,site_id,dataset,csv_folder,filename,years,write_header=False):
+    years = ",".join([str(year) for year in years])
+    full_dir = os.path.join(csv_folder)
     full_path = os.path.join(csv_folder,filename)
-    f = open(full_path,'w')
-    header = get_header(data,metadata['dataset'])
-    f.write(','.join([h[1] for h in header])+'\n')
+    if not os.path.exists(full_dir):
+        os.makedirs(full_dir)
+    f = open(full_path,'a+')
+    header = get_header(data,dataset)
+    if write_header:
+        f.write('site ID,'+','.join([h[1] for h in header])+'\n')
     for year in data:
         for day in sorted([int(day) for day in data[year]]):
             if data[year][str(day)] and len(data[year][str(day)]) == len(header):
-                line=[]
+                line=[site_id]
                 for x in range(0,len(header)):
                     if data[year][str(day)][header[x][0]]:
                         line+=[str(data[year][str(day)][header[x][0]])]
@@ -161,42 +159,113 @@ def save_data(data,csv_folder,task_id,metadata):
             else:
                 current_date = datetime.date(int(year),1,1) + datetime.timedelta(int(day) - 1)
                 current_date = current_date.strftime("%m/%d/%Y")
-                current_line = [current_date] + ['NA' for x in range(1,len(header))]
+                current_line = [str(site_id),current_date] + ['NA' for x in range(1,len(header))]
                 f.write(','.join(current_line)+'\n')
     f.close()
     return filename
 
+def get_file_name(dataset,years):
+    years = [str(y) for y in years]
+    timestr = dataset+','.join(years)+'_'+time.strftime("%Y-%m-%d_%H:%M:%S")+'.csv'
+    return timestr
 
-@app.task(bind=True)
-def get_modis_raw_data(self,csv_folder,media_base_url,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days):
+def read_input_file(file_path):
+    f = open(file_path,'r')
+    line_cont = 0
+    input_sites = OrderedDict()
+    # Blank lines counter and boudn to prevent somebody addign 'infinite' blank lines file exploit
+    MAX_BLANK_LINES=100
+    MAX_SITE_ID_LENGTH = 16
+    blank_lines_cont = 0
+    # Start reading the file checking for errors first
+    for line in f:
+        line_cont+=1
+        line_data = line.replace('\n','').replace(' ','').split(',')
+        if len(line_data)==0 and blanl_lines_cont<MAX_BLANK_LINES:
+            # blank line, continue parsing
+            blank_lines_cont+=1
+            continue
+        if len(line_data[0])>MAX_SITE_ID_LENGTH:
+            raise Exception('Line %d has a site_id longer than the maximum allowed (%d)'% (line_cont,MAX_SITE_ID_LENGTH))
+        if line_data[0] in input_sites:
+             raise Exception('Line %d has a duplicated key the site ' % line_cont)
+        if len(line_data)!=3:
+            raise Exception('Line %d does not contain 3 columns. Correct Format is Unique ID value, Latitude, Longitude eg: 1, 20.2343, -100.26432 ' % line_cont)
+        try:
+            lat = float(line_data[1])
+            lon = float(line_data[2])
+        except:
+            raise Exception('Line %d latitude or longitude could not be parsed.' % line_cont)
+        input_sites[line_data[0]] = {'lat':lat,'lon':lon}
+    return input_sites
+         
+def updateDB(task_id,result,message,progress,total_sites,error=False,working=True):
+    job = TimeSeriesJob.objects.get(task_id=task_id)
+    job.result.name = result
+    job.message = message
+    job.progress = progress
+    job.total_sites = total_sites
+    job.completed = total_sites == progress
+    job.error = error
+    job.working = working
+    job.save()
+    # try:
+    #     db = database.pgDatabase()
+    #     completed = total_sites==progress
+    #     db.updateMultipleSiteTimeSeries(task_id,result,message,progress,total_sites,completed,error,working)
+    # except Exception as e:
+    #     print(('Error : %s' % e))
+    #     pass   
+@shared_task(time_limit=7200)
+def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,dataset_npix,dataset_freq_in_days):
     # Get the list days we need to retreive its value, each one of
     # them will be send as an independent task to get their value
-    time_ini = time.time() # Initial time to extract execution time
-    metadata = get_location_metadata(lat,lon,dataset,dataset_npix,years) # metadata of the selected site
-    # Set task initial state to started
-    get_modis_raw_data.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':0,'started':False,'metadata':metadata})
-    num_tasks = len(years) # Number of tasks to perform
-    multi_day = (int(dataset_freq_in_days)!=1)
-    # Send all tasks to queue and store their queing id in a double dictionary (year-->day-->task_id) object
-    params_lists = {}
-    # Create parameter list for all years
-    chunks = 12
-    tasks_params = split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,chunks)
-    tasks = send_tasks(get_modis_year_data.delay,tasks_params)
-    monitor_tasks(tasks,self,metadata)
-    data  = get_data(tasks)
-    data = process_data(data,dataset)
-    filename = save_data(data,csv_folder,get_modis_raw_data.request.id,metadata)
+
+    task_id = multiple_site_modis.request.id
+    file_result = ''
+    message = ''
     try:
-        db = database.pgDatabase()
-        db.updateCompletedSingleTimeSeriestask(get_modis_raw_data.request.id,os.path.join(media_base_url,filename),)
+        try:
+            input_sites = read_input_file(input_file)
+        except Exception as e :
+            # Set error to the task in the db (Wrong input file)
+            #print(("Exception reading input file: ", str(e.message)))
+            updateDB(task_id,file_result,str(e.message),0,total_sites,True,False)
+            return None;
+        time_ini = time.time() # Initial time to extract execution time
+        total_sites = len(input_sites)
+        multiple_site_modis.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':0,'started':False})
+        updateDB(task_id,file_result,message,0,total_sites,False,True)
+        filename = get_file_name(dataset,years)
+        site_cont=0
+        for site_id,site_data in list(input_sites.items()):
+            multiple_site_modis.update_state(state='STARTED', meta={'completed': site_cont,'error':0,'total':total_sites,'started':True})
+            updateDB(task_id,file_result,message,site_cont,total_sites,False,True)
+            site_cont+=1
+            lat = site_data['lat']
+            lon = site_data['lon']
+            metadata = get_location_metadata(lat,lon,dataset,dataset_npix,years) # metadata of the selected site
+            # Set task initial state to started
+            num_tasks = len(years) # Number of tasks to perform
+            multi_day = (int(dataset_freq_in_days)!=1)
+            # Send all tasks to queue and store their queing id in a double dictionary (year-->day-->task_id) object
+            params_lists = {}
+            # Create parameter list for all years
+            chunks = 12
+            tasks_params = split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,chunks)
+            tasks = send_tasks(get_modis_year_data.delay,tasks_params)
+            monitor_single_site_tasks(tasks,metadata)
+            data  = get_data(tasks)
+            data = gap_fill(data,dataset)
+            file_url = save_data_multi(data,site_id,dataset,csv_folder,filename,years,site_cont==1)
+            file_result = os.path.join(media_base_url,file_url)
+        updateDB(task_id,file_result,message,site_cont,total_sites,False,False)
+        time_exec = time.time()-time_ini
+        return {'filename':file_url,'exec_time':time_exec}
     except Exception as e:
-        print('Error : %s' % e.message)
-        pass
-    return {'filename':filename,'metadata':metadata,}
+        updateDB(task_id,file_result,str(e),0,0,True,False)
 
 # ------------------------------------- PROCESSING SCRIPT PART ----------------------------
-MODIS_FOLDER_PATH = "/data/ifs/modis/datasets/"
 
 import multiprocessing as mp
 def make_serializable_dict(mydict):
@@ -210,16 +279,17 @@ def extract_day_data(col,row,dataset,year,day,tile):
         multi_day = False
         r = re.compile(".*A(?P<year>\d{4})(?P<day>\d{3}).*.hdf$")
         items = (dataset, year, tile, year, day)
-        search = MODIS_FOLDER_PATH+"%s/%d/%s/*%d%03d*.hdf" % items
+        search = os.path.join(settings.MODIS_DATASETS_PATH, "%s/%d/%s/*%d%03d*.hdf" % items)
         flist = glob.glob(search)
         data = {}
+
         if len(flist) > 0 and r.match(flist[0]) is not None:
             fn = flist[0]
             pixel_values = None
             try:
                 pixel_values = get_pixel_value(fn,col,row)
             except Exception as e:
-                print("Error retrieving pixel values for file: %s %s " % (fn,e.message))
+                print(("Error retrieving pixel values for file: %s %s " % (fn,e.message)))
 
             data = process.get_dates(pixel_values,year,day,multi_day)
             if products.dataset_is_available(dataset):
@@ -229,62 +299,19 @@ def extract_day_data(col,row,dataset,year,day,tile):
             data = [(k,v) for k,v in list(data.items()) ]
         else:
             data = None
-            print("i entered else part because i have no files or files returned were 0")
         return data
     except Exception as e:
-        print("Exception at year %d day %d: %s" % (year,day,e.message))
+        print(("Exception at year %d day %d: %s" % (year,day,e.message)))
         return None
 
-@app.task(time_limit=50)
+
+def terminate_task(task_id):
+    app.control.revoke(task_id, terminate=True)
+
+@shared_task(time_limit=50)
 def get_modis_year_data( params_dict):
     p = params_dict
     results = {p['year']:{}}
     for day in p['days']:
         results[p['year']][day] = extract_day_data(p['col'],p['row'],p['dataset'],p['year'],day,p['tile'])
     return results
-
-# For testing purposes (control)
-
-if __name__ == "__main__":
-    # lat =  43.587495
-    # lon = -102.828119
-    # dataset= 'mod09a1'
-    # dataset_freq_in_days=8
-    # years = range(2000,2015)
-    # dataset_npix = 1200
-    lat =  0.820435
-    lon = 109.688242
-    dataset= 'mod09a1'
-    dataset_freq_in_days=8
-    years = list(range(2009,2012))
-    dataset_npix = 1200
-    csv_folder = '/webapps/ceom_admin/celeryq/tests'
-    # pixel_val = get_modis_raw_data.delay(csv_folder,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days)
-    pixel_val = get_modis_raw_data(csv_folder,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days)
-
-
-def terminate_task(task_id):
-    app.control.revoke(task_id, terminate=True)
-
-# For testing purposes (worker)
-# if __name__ == "__main__":
-#     sys.path.append('/home/menarguez/celeryq/ceom-celery')
-#     lat =  40.492649
-#     lon = -98.321838
-#     dataset = 'mod09a1'
-#     dataset_npix = 1200
-#     col, row, xi, yi, tile = latlon2sin(float(lat), float(lon), dataset, dataset_npix)
-#     params = {
-#         'col' :  col,
-#         'row' : row,
-#         'tile' : tile,
-#         'dataset' : dataset,
-#         'year' : 2007,
-#         'dataset_freq_in_days': 8,
-#         'multi_day' : 8,
-#         'days' : [i for i in range (1,40,8)]
-#     }
-    
-    
-#     result = get_modis_year_data(params)
-#     print result

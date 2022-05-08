@@ -7,15 +7,16 @@ import re, glob
 import math
 import datetime
 
-from ceom.celeryq.modis import products, process, band_names, headers
-from ceom.celeryq.modis.aux_functions import latlon2sin
-from ceom.celeryq.modis.process import get_pixel_value,get_band_names,gap_fill
-from ceom.celeryq.modis.headers import get_modis_header
+
+from ceom.modis.taskprocessing import products, process, band_names, headers
+from ceom.modis.taskprocessing.aux_functions import latlon2sin
+from ceom.modis.taskprocessing.process import get_pixel_value,get_band_names,gap_fill
+from ceom.modis.models import SingleTimeSeriesJob
+from ceom.modis.taskprocessing.headers import get_modis_header
 from collections import OrderedDict
 
 from celery import group
 from django.conf import settings
-from ceom.celeryq import database
 from ceom.celery import app
 
 def get_location_metadata(lat,lon,dataset,dataset_npix,years):
@@ -135,11 +136,8 @@ def get_header(data,dataset):
                 return header
     raise Exception ('Error getting header')
 
-def save_data(data,csv_folder,task_id,metadata):
-    years = ",".join([str(year) for year in metadata['years']])
-    filename = metadata['dataset']+"_lat_"+str(str(metadata['lat']))+"_lon_"+str(str(metadata['lon']))+'_years_'+years+'.csv'
-    full_dir = os.path.join(settings.BASE_DIR, csv_folder)
-    full_path = os.path.join(settings.BASE_DIR,csv_folder,filename)
+def save_data(data,full_path,task_id,metadata):
+    full_dir = os.path.dirname(full_path)
     if not os.path.exists(full_dir):
         os.makedirs(full_dir)
     f = open(full_path,'w')
@@ -159,12 +157,11 @@ def save_data(data,csv_folder,task_id,metadata):
                 current_line = [current_date] + ['NA' for x in range(1,len(header))]
                 f.write(','.join(current_line)+'\n')
     f.close()
-    return filename
+    return
 
 
 @app.task(bind=True)
-def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,dataset_freq_in_days):
-    print("toast 166")
+def get_modis_raw_data(self, media_root, csv_folder, lat,lon,dataset,years,dataset_npix,dataset_freq_in_days):
     # Get the list days we need to retreive its value, each one of
     # them will be send as an independent task to get their value
     time_ini = time.time() # Initial time to extract execution time
@@ -180,15 +177,21 @@ def get_modis_raw_data(self,csv_folder,lat,lon,dataset,years,dataset_npix,datase
     tasks_params = split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,chunks)
     tasks = send_tasks(get_modis_year_data.delay,tasks_params)
     monitor_tasks(tasks,self,metadata)
-    data  = get_data(tasks)
+    data = get_data(tasks)
     data = gap_fill(data,dataset)
-    filename = save_data(data,csv_folder,get_modis_raw_data.request.id,metadata)
-    try:
-        db = database.pgDatabase()
-        db.updateCompletedSingleTimeSeriestask(get_modis_raw_data.request.id,os.path.join(csv_folder,filename),)
-    except Exception as e:
-        print(e)
-        pass
+
+    years = ",".join([str(year) for year in metadata['years']])
+    filename = metadata['dataset']+"_lat_"+str(str(metadata['lat']))+"_lon_"+str(str(metadata['lon']))+'_years_'+years+'.csv'
+    rel_path = os.path.join(csv_folder, filename)
+    full_path = os.path.join(media_root, rel_path)
+
+    save_data(data, full_path, get_modis_raw_data.request.id, metadata)
+
+    job = SingleTimeSeriesJob.objects.get(task_id=get_modis_raw_data.request.id)
+    job.completed = True
+    job.result.name = rel_path
+    job.save()
+
     return {'filename':filename,'metadata':metadata,}
 
 # ------------------------------------- PROCESSING SCRIPT PART ----------------------------

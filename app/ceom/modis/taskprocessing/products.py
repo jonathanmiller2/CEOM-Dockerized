@@ -1,5 +1,5 @@
-from ceom.celeryq.modis.special_products import mod09a1
-from ceom.celeryq.modis import band_names
+from ceom.modis.taskprocessing.special_products import mod09a1
+from ceom.modis.taskprocessing import band_names
 def dataset_is_available(dataset):
 
     accepted_list = [
