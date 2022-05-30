@@ -15,10 +15,10 @@
     </div>
     <p class="ml-3">Don't have an account? <a href="/accounts/register/" target="blank"><strong>register here!</strong></a></p>
 
-    {% for message in messages %}
+    {% for alert in alerts %}
         <div class="alert alert-danger">
             <a class="close" href="#" data-dismiss="alert">×</a>
-                {{ message }}
+                {{ alert }}
         </div>
     {% endfor %}
 

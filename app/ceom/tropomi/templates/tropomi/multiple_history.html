@@ -1,0 +1,138 @@
+{% extends "tropomi/base.html" %}
+{% block content %}
+<h2 style="color: #dc143c;">TROPOMI time series request history for multiple sites</h2>
+<div class='mt-3 d-flex justify-content-center'>
+    <div class="pagination">
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm">
+                {% if jobs.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1&amp;ppp={{ppp}}" area-label="Previous">
+                        <span aria-hidden="true"> &laquo;&laquo;</span>
+                        <span class="sr-only">PreviousX2</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ jobs.previous_page_number }}&amp;ppp={{ppp}}">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" area-label="Previous">
+                        <span aria-hidden="true"> &laquo;&laquo;</span>
+                        <span class="sr-only">PreviousX2</span>
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% for n in page_range %}
+                {% if jobs.number != n %}
+                <li class="page-item"><a class="page-link" href="?page={{n}}&amp;ppp={{ppp}}">
+                        <span aria-hidden="true">{{n}}</span>
+                        <span class="sr-only">{{n}}</span></a>
+                </li>
+                {% elif jobs.number == n %}
+                <li class="page-item active"><a class="page-link" href='#'>{{n}}
+                        <span class="sr-only">{{n}}</span></a>
+                </li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href='#'>{{n}}
+                        <!-- <span aria-hidden="true">{{n}}</span> -->
+                        <span class="sr-only">{{n}}</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% if jobs.has_next %}
+                <li class="page-item"><a class="page-link"
+                        href="?page={{ jobs.next_page_number }}&amp;ppp={{ppp}}">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link"
+                        href="?page={{ paginator.num_pages }}&amp;ppp={{ppp}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                        <span class="sr-only">NextX2</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><a class="page-link" href="#">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+                <li class="page-item disabled"><a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                        <span class="sr-only">NextX2</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div> 
+<hr />
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Created
+                </th>
+                <th>
+                    Updated
+                </th>
+                <th>
+                    Input file
+                </th>
+                <th>
+                    Output file
+                </th>
+                <th>
+                    State
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in jobs %}
+        <tr>
+            <td>{{row.created}}</td>
+            <td>{{row.modified}}</td>
+            <td> {% if row.points %} <a href="{{row.points.url}}"> Input </a>{% endif %} </td>
+            <td> {% if row.result %} <a href="{{row.result.url}}"> Result </a>{% endif %}</td>
+            <td>   
+            {% if row.completed %}
+                <span class="text-success">Complete</span>
+            {% endif %}
+            {% if row.working %}
+                <span class="text-secondary">Working</span>
+            {% endif %}
+            {% if row.error %}
+                <span class="text-danger">Error</span>
+            {% endif %}
+            </td>
+            <td>
+                <form action="/tropomi/timeseries/multiple/del={{row.task_id}}/" method="post" class="mx-1">
+                    {% csrf_token %}
+                    <input type="hidden" name="redirect" value="/tropomi/timeseries/multiple/history/">
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</input>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+   
+{% endblock %}

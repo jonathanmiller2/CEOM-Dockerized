@@ -246,4 +246,3 @@ def get_modis_year_data(params_dict):
 
 def terminate_task(task_id):
     app.control.revoke(task_id, terminate=True)
-

@@ -7,8 +7,8 @@ from django.db.models import Count
 from datetime import datetime
 from ceom.outreach.workshops.models import Workshop,WorkshopRegistration
 from django.db import IntegrityError
-from django.core.mail import EmailMultiAlternatives
-import json
+from django.core.mail import send_mail
+import json, csv
 
 
 def overview(request):
@@ -93,7 +93,7 @@ def workshop(request, workshop_id):
         workshop = Workshop.objects.get(id = workshop_id)
     except:
         return render(request, 'workshops/not_found.html')
-    validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('created')
+    validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('last_name')
     awaiting_validation_registrations =  WorkshopRegistration.objects.filter(workshop=workshop,validated=False)
     sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
     num_presentations = len(Presentation.objects.filter(workshop=workshop))
@@ -152,12 +152,18 @@ def workshop_registration(request, workshop_id):
                 address=request.POST['address'], 
                 area_of_expertise=request.POST['area_of_expertise'], 
                 email=request.POST['email'], 
-                verify_email=request.POST['verify_email'], 
                 phone=request.POST['phone'], 
             )
         except IntegrityError as error:
             data['error'] = 'duplicate-account'
             return render(request, 'workshops/registration.html', context=data)
+
+        send_mail(
+            'CEOM Website New Workshop Registration',
+            'The CEOM workshop "' + workshop.name + '" has received a new registration. The registration will need to be approved on the CEOM admin page. \n\nRegistrant name: ' + registration.first_name + " " + registration.last_name + "\n\n\nThis email is an automated email sent by the CEOM website. If you believe this email is an error, please contact ceomsupport@ou.edu.",
+            'noreply@ceom.ou.edu',
+            workshop.admin_emails.split(';')
+        )
 
     return render(request, 'workshops/registration.html', context=data)
 
@@ -168,7 +174,7 @@ def presentations(request, workshop_id):
     except:
         return render(request, 'workshops/not_found.html', {})
     sponsors = SponsorInWorkshop.objects.filter(workshop=workshop)
-    presentations = Presentation.objects.filter(workshop=workshop)
+    presentations = Presentation.objects.filter(workshop=workshop).order_by('-time_ini')
     num_photos = len(WorkshopPhoto.objects.filter(workshop=workshop))
     return render(request, 'workshops/workshop_presentations.html', context={
          'available_years': available_years,
@@ -206,3 +212,31 @@ def photos(request, workshop_id):
         }, 
         
     )
+
+def registration_list(request, workshop_id):
+    if not request.user.is_staff:
+        return render(request, 'workshops/not_found.html', {})
+
+    try:
+        workshop = Workshop.objects.get(id = workshop_id)
+        registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('last_name')
+    except:
+        return render(request, 'workshops/not_found.html', {})
+
+
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="workshop_registrations.csv"'},
+    )
+
+    writer = csv.writer(response)
+    writer.writerow(['First Name', 'Last Name', 'Position', 'Institution', 'Address', 'Email', 'Phone', 'Area of Expertise', 'Created', 'Modified', 'Validated'])
+
+    output = []
+
+    for registration in registrations:
+        output.append([registration.first_name, registration.last_name, registration.position, registration.institution, registration.address, registration.email, registration.phone, registration.area_of_expertise, registration.created, registration.modified, registration.validated])
+    
+    writer.writerows(output)
+
+    return response

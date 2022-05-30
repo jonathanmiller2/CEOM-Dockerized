@@ -3,7 +3,7 @@ from django.core import serializers
 import json
 
 from django.template import RequestContext, loader
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as auth_login
@@ -14,8 +14,8 @@ from django.utils.html import escape
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.core.validators import validate_email
 from django.forms import ValidationError
-from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
@@ -25,6 +25,8 @@ def index(request):
         return HttpResponseRedirect('/accounts/login/')
         
 def login(request):
+    alerts = []
+
     if request.method == 'POST':
         form = CustomLoginForm(request=request, data=request.POST)
         if form.is_valid():
@@ -33,20 +35,27 @@ def login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 auth_login(request, user)
-                messages.info(request, f"You are now logged in as {username}")
+                # TODO: This message is persisting for too long!
+                alerts.append(f"You are now logged in as {username}")
                 return redirect('/')
             else:
-                messages.error(request, "Invalid username or password.")
+                alerts.append("Invalid username or password.")
         else:
-            messages.error(request, "Invalid username or password.")
+            alerts.append("Invalid username or password.")
 
 
     form = CustomLoginForm()
-    return render(request, template_name="accounts/login.html", context={"form":form})
+    return render(request, template_name="accounts/login.html", context={"form":form, "alerts":alerts})
 
-def logout(request):
+# This cannot be named just "logout", as it interferes with a Django built-in function
+def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+@csrf_exempt
+def mobile_logout(request):
+    logout(request)
+    return JsonResponse({}, status=200)
 
 @csrf_exempt
 def mobile_login(request):
@@ -57,7 +66,7 @@ def mobile_login(request):
             auth_login(request, user)
             return HttpResponse("login-success", status=200)
         else: 
-            return HttpResponse("login-failed", status=404)
+            return HttpResponse("login-failed", status=401)
 
     except Exception as e:
         return HttpResponse('ERROR: ' + str(e), status=500)
@@ -86,6 +95,34 @@ def register(request):
         'user_form' : user_form, 
         'profile_form': profile_form
     })
+
+@csrf_exempt
+def mobile_register(request):
+    username = request.POST['username']
+    email = request.POST['email']
+    password = request.POST['password']
+
+    if request.method != 'POST':
+        return JsonResponse({'status':'bad-request'}, status=501)
+    
+    if User.objects.filter(username=username).exists():
+        return JsonResponse({'status':'username-taken'}, status=400)
+
+    if User.objects.filter(email=email).exists():
+        return JsonResponse({'status':'email-taken'}, status=400)
+
+    try:
+        validate_email(email)
+    except ValidationError as e:
+        return JsonResponse({'status':'email-invalid'}, status=400)
+    
+    user = User.objects.create_user(username, email, password)
+    authenticated_user = authenticate(username=username, password=password)
+
+    if authenticated_user is not None:
+        return JsonResponse({'status':'success'}, status=200)
+
+    return JsonResponse({'status':'unknown'}, status=500)
 
 
 def profile_authed(request):

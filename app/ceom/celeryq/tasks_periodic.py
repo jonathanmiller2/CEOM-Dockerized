@@ -79,6 +79,8 @@ def update_datasets():
 
             f.write(self.style.SUCCESS(f'Ingesting successful: {dir}\n'))
 
+
+
 @app.task(soft_time_limit=7*24*60*60, time_limit=7*24*60*60)
 def update_rasters():
     #TODO: Add entries to database for all products, layers, dates, and let celery process them

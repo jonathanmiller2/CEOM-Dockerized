@@ -12,10 +12,12 @@ info_users = {
 urlpatterns = [
     re_path(r'^$', ceom.accounts.views.index),
 
-    re_path(r'^login/$', ceom.accounts.views.login, name="login"),
-    re_path(r'^logout/$', auth_views.LogoutView.as_view(), {'template_name': 'accounts/logout.html'},name='logout'),
+    re_path(r'^login/$', ceom.accounts.views.login),
+    re_path(r'^logout/$', ceom.accounts.views.logout_view),
 
-    re_path(r'^mobile_login/$', ceom.accounts.views.mobile_login,name='mobile_login'),    
+    re_path(r'^mobile_login/$', ceom.accounts.views.mobile_login),    
+    re_path(r'^mobile_logout/$', ceom.accounts.views.mobile_logout),
+    re_path(r'^mobile_register/$', ceom.accounts.views.mobile_register),
 
     re_path(r'^register/$', ceom.accounts.views.register,name='register'),
 

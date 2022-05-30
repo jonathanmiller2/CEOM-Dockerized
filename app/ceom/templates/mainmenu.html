@@ -21,6 +21,11 @@
 		font-weight:bold;
 		transition:all 0.2s;
 	}
+	#menu-tropomi > a:hover {
+		color: #006994;
+		font-weight:bold;
+		transition:all 0.2s;
+	}
 	#menu-geohealth > a:hover {
 		color: #FF6666;
 		font-weight:bold;
@@ -51,6 +56,7 @@
 		font-weight:bold;
 		transition:all 0.2s;
 	}
+	
 
 	.navbar {
 		background-color: #f3f3f3;
@@ -126,6 +132,12 @@
 				{% trans "MODIS" %}
 			</a>
 		</li>
+		<li id="menu-tropomi" class="nav-item{% if '/tropomi/' in request.path %} active{% endif %}">
+			<a class="nav-link main-menu-link" href="/tropomi/">
+				<span class="fas fa-globe-americas"></span> 
+				{% trans "TROPOMI" %}
+			</a>
+		</li>
 		<li id="menu-geohealth" class="nav-item{% if '/geohealth/' in request.path %} active{% endif %}">
 			<a class="nav-link main-menu-link" href="/geohealth/">
 				<span class="fas fa-heartbeat"></span>
@@ -180,6 +192,12 @@
 			<a class="nav-link main-menu-link" href="/modis/visualization/">
 				<span class="fas fa-globe-americas"></span> 
 				{% trans "MODIS" %}
+			</a>
+		</li>
+		<li id="menu-tropomi" class="nav-item{% if '/tropomi/' in request.path %} active{% endif %}">
+			<a class="nav-link main-menu-link" href="/modis/visualization/">
+				<span class="fas fa-globe-americas"></span> 
+				{% trans "TROPOMI" %}
 			</a>
 		</li>
 		<li id="menu-geohealth" class="nav-item{% if '/geohealth/' in request.path %} active{% endif %}">

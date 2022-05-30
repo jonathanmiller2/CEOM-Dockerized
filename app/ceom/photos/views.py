@@ -30,6 +30,7 @@ from ceom.photos.models import Photo, Category, CategoryVote
 from ceom.photos.forms import SearchForm, PhotoForm, BatchEditForm
 
 import datetime
+import dateutil.parser as date_parser
 import pickle
 import itertools
 import shutil
@@ -1029,7 +1030,7 @@ def mobile_upload(request):
         try:
 
             time_string = request.POST['date_taken']
-            taken_time = datetime.datetime.strptime(time_string, "%Y-%m-%d %H:%M:%S.%f")
+            taken_time = date_parser.parse(time_string)
 
             lat = float(request.POST['lat'])
             lon = float(request.POST['lon'])

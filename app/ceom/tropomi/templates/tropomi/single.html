@@ -1,0 +1,460 @@
+{% extends "tropomi/base.html" %}
+{% load i18n %}
+{% block title %} {% trans "CEOM TROPOMI timeseries Single Site" %} {% endblock %}
+
+{% block head_extra %}
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=init"></script>
+{% endblock %}
+
+
+{% block content %}
+<div>
+    <h3 style="color:#999900;"><strong>Instructions</strong></h3>
+
+    <p>Here you can retrieve time series TROPOMI data for a single study site, in other words, the time series TROPOMI data from one TROPOMI pixel that contains your study site. The data you get are in ASCII text file and Microsoft Excel *.csv file. </p>
+    <ol>
+        <li>
+            <p><strong>Define the location </strong> of your study site</p>
+            <ul>
+                <li>
+                    <p>Enter an address (e.g., street address, or city, or state)</p>
+                </li>
+                <li>
+                    <p>Enter latitude and longitude of your study using Degree, Minute and Second Units</p>
+                </li>
+                <li>
+                    <p>Enter latitude and longitude of your study using Decimal degree Unit</p>
+                </li>
+            </ul>
+            <p><b>(OR)</b></p>
+            <p><strong>Zoom-in the Google map</strong> and then <strong>click on a point</strong> of interest to adjust the location if required.<br \>
+                    <small>Note: The rectangle in Google Map is the boundary of one TROPOMI pixel, and the red dot is the location of your study site within the TROPOMI pixel.</small>
+            </p>
+        </li>
+        <li>
+            <p><strong>Select product and year(s)</strong><br \>
+                <small>You may choose one TROPOMI product over one year or several years.</small> </p>
+        </li>
+        <li>
+            <p><strong> Submit</strong> your request. <small> Note: Upon submitting make sure you have done all previous steps or an error message will appear </small></p>
+        </li>
+    </ol>
+
+</div>
+<h2 style="color: #dc143c;">Retrieve time series TROPOMI data for a single study site</h2>
+
+<legend><strong>1a. Select an address or a Point on the Map</strong> </legend>
+
+<div id="div_address">
+    <div class="row">
+        <label class="col-sm-2 my-1">Enter the address:</label>
+        <input class="form-control col-sm-3 mx-2 my-1" id="Taddress" type="text" name="address">
+        <button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1" id="addressGo" style="border-width: 1.6px;">{% trans "Go" %}</button>
+    </div>
+</div>
+<p><b>(OR)</b></p>
+<div>
+    <legend class="pt-2"><strong>1b. Enter the latitude & longitude information</strong> </legend>
+    <div class="row">
+        <label class="col-sm-2"></label>
+        <label class="col-sm-2 mx-2" style="text-align:center">Degrees</label>
+        <label class="col-sm-2 mx-2" style="text-align:center">Minutes</label>
+        <label class="col-sm-2 mx-2" style="text-align:center">Seconds</label>
+    </div>
+    <div class="row">
+        <label class="col-sm-2 my-1 pt-1" style="text-align:center">Latitude:</label> <!-- DMS Lat -->
+        <input id="LAT_DEG" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Degrees">
+        <input id="LAT_MIN" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Minutes">
+        <input id="LAT_SEC" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="any" placeholder="Seconds">
+    </div>
+
+    <div class="row">
+        <label class="col-sm-2 my-1 pt-1" style="text-align:center">Longitude:</label> <!-- DMS Lon -->
+        <input id="LON_DEG" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Degrees">
+        <input id="LON_MIN" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="1" placeholder="Minutes">
+        <input id="LON_SEC" class="DMSField form-control col-sm-2 mx-2 my-1" type="number" step="any" placeholder="Seconds">
+        <button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1" onclick="enterCoordsDMS();" style="border-width: 1.6px;">{% trans "Go" %}</button>
+    </div>
+    <label class="pt-2 my-1">or enter <strong>Decimal degrees</strong> below:</label> <!-- decimal degrees -->
+    <div class="row">
+        <label class="col-sm-2 my-1 pt-1" style="text-align:center">Latitude:</label>
+        <input id="LAT_DEC" class="DECField form-control col-sm-2 mx-2 my-1 offset1" type="number" step="any" placeholder="Latitude">
+        <label class="col-sm-2 my-1 mx-2 pt-1" style="text-align:center">Longitude:</label>
+        <input id="LON_DEC" class="DECField form-control col-sm-2 mx-2 my-1 offset1" type="number" step="any" placeholder="Longitude">
+        <button class="btn btn-light btn-outline-secondary col-sm-1 mx-2 my-1" id="RedirectControl" onclick="enterCoordsLatLon();" name="RedirectControl" style="border-width: 1.6px;">Go</button>
+    </div>
+</div>
+
+<div class="pt-2">
+    <p><b>(OR)</b></p>
+</div>
+<legend class="text-left"><strong>1c. Zoom-in the map and then click on a point of interest </strong></legend>
+
+<div id="map" class="mr-auto" style="width: 90%; height: 450px"></div>
+
+<div class="row">
+    <div class="col-sm-3">
+        <input type="checkbox" id="auto_zoom" name="auto_zoom" checked /> Zoom to TROPOMI Pixel</div>
+    <div class="col-sm-5">
+        <small>
+            <label style="color:red;">Red pixel : 25km</label>
+        </small>
+    </div>
+</div>
+<legend class="text-left"><strong>2. Select year(s) </strong></legend>
+<div>
+    <div class="row">
+        <div class="col-lg">
+            <label class="col-sm-1">Year</label>
+            <select id="yearsPane" class="form-control col-sm-3" multiple="multiple">
+                {% for y in years %}
+                <option value="{{y}}">{{y}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <legend class="text-left mt-2"><strong>3. Submit your request</strong></legend>
+
+    <div>
+        <button class="btn btn-primary" onclick="showResults();">Submit</button>
+    </div>
+</div>
+<div id="data-output"></div>
+
+<script>
+    function toDMS(decimalVal) {
+        var degree = Math.trunc(decimalVal);
+        var minute = Math.trunc((decimalVal - degree) * 60);
+        var second = Math.trunc(((decimalVal - degree) * 60 - minute ) * 60);
+
+        return [degree, minute, second];
+    }
+    
+    let startLocation = {
+        lat: 0,
+        lng: 0
+    };
+
+    var radians = function(x){
+        return x * Math.PI / 180.0; 
+    };
+
+    var degrees = function(x){
+        return x * 180.0 / Math.PI;
+    };
+    let map, marker;
+    let polygon;
+
+    function init() {
+        map =  new google.maps.Map(document.getElementById('map'), { 
+            zoom: 2,
+            center: startLocation,
+            gestureHandling: 'cooperative',
+            mapTypeId: 'satellite',
+        });
+        
+        polygon = new google.maps.Polygon({ 
+            strokeColor: "#FF3300",                 
+            strokeOpacity: 0.9,
+            strokeWeight: 2,                                 
+            fillOpacity: 0,
+            clickable: false,                 
+        });
+
+        centerCircle = new google.maps.Circle({
+            strokeColor: "#FF3300",
+            strokeOpacity: 1,
+            strokeWeight: 2,
+            fillColor: "#FF3300",
+            fillOpacity: 1,
+            clickable: false,
+            radius: 100
+        })
+     
+        marker = new google.maps.Marker({
+            position: startLocation,
+            map: map,
+            draggable: true,
+        });
+
+        google.maps.event.addListener(marker, 'dragend', async function (evt) {
+            let lat = evt.latLng.lat().toFixed(3);
+            let lon = evt.latLng.lng().toFixed(3);
+
+            let dms_lat = toDMS(lat);
+            let dms_lon = toDMS(lon);
+
+            $('#LAT_DEG').val(dms_lat[0])
+            $('#LAT_MIN').val(dms_lat[1])
+            $('#LAT_SEC').val(dms_lat[2])
+
+            $('#LON_DEG').val(dms_lon[0])
+            $('#LON_MIN').val(dms_lon[1])
+            $('#LON_SEC').val(dms_lon[2])
+
+            $('#LAT_DEC').val(lat)
+            $('#LON_DEC').val(lon)
+            marker.setPosition({lat: evt.latLng.lat(), lng: evt.latLng.lng()});
+            if($("#auto_zoom").is(":checked")) {
+                let mzs = new google.maps.MaxZoomService();
+                let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+                map.setZoom(Math.min(zoomobj.zoom, 10));
+                map.setCenter(marker.getPosition())
+            }
+            updatePixelDisplay(lat, lon);
+        });
+
+        google.maps.event.addListener(map, 'click', async function (evt) {
+            let lat = evt.latLng.lat().toFixed(3);
+            let lon = evt.latLng.lng().toFixed(3);
+
+            let dms_lat = toDMS(lat);
+            let dms_lon = toDMS(lon);
+
+            $('#LAT_DEG').val(dms_lat[0])
+            $('#LAT_MIN').val(dms_lat[1])
+            $('#LAT_SEC').val(dms_lat[2])
+
+            $('#LON_DEG').val(dms_lon[0])
+            $('#LON_MIN').val(dms_lon[1])
+            $('#LON_SEC').val(dms_lon[2])
+
+            $('#LAT_DEC').val(lat)
+            $('#LON_DEC').val(lon)
+            marker.setPosition({lat: evt.latLng.lat(), lng: evt.latLng.lng()});
+            if($("#auto_zoom").is(":checked")) {
+                let mzs = new google.maps.MaxZoomService();
+                let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+                map.setZoom(Math.min(zoomobj.zoom, 10));
+                map.setCenter(marker.getPosition())
+            }
+            updatePixelDisplay(lat, lon);
+        });
+
+        $(".DMSField").change(async function() {
+            //... get new DMS coords (just reading from the fields, not using (this.value)...
+            let lat_deg = parseFloat($('#LAT_DEG').val() || 0);
+            let lat_min = parseFloat($('#LAT_MIN').val() || 0);
+            let lat_sec = parseFloat($('#LAT_SEC').val() || 0);
+            let lon_deg = parseFloat($('#LON_DEG').val() || 0);
+            let lon_min = parseFloat($('#LON_MIN').val() || 0);
+            let lon_sec = parseFloat($('#LON_SEC').val() || 0);
+
+            //... update Decimal degrees fields... // Remember to use JQuery $().value to update the Decimal Degrees field.
+            let lat_dec = lat_deg + parseFloat(parseFloat(lat_min + (lat_sec / 60)) / 60);
+            let lon_dec = lon_deg + parseFloat(parseFloat(lon_min + (lon_sec / 60)) / 60);
+            $('#LAT_DEC').val(lat_dec.toFixed(3));
+            $('#LON_DEC').val(lon_dec.toFixed(3));
+
+            //...update map...
+            marker.setPosition({lat: lat_dec, lng: lon_dec});
+            if($("#auto_zoom").is(":checked")) {
+                let mzs = new google.maps.MaxZoomService();
+                let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+                map.setZoom(Math.min(zoomobj.zoom, 10));
+                map.setCenter(marker.getPosition());
+            }
+            updatePixelDisplay(lat_dec, lon_dec);
+        });       
+
+        $(".DECField").change(async function() {
+            let lat_dec = parseFloat($('#LAT_DEC').val() || 0);
+            let lon_dec = parseFloat($('#LON_DEC').val() || 0);
+
+            let dms_lat = toDMS(lat_dec);
+            let dms_lon = toDMS(lon_dec);
+
+            $('#LAT_DEG').val(dms_lat[0]);
+            $('#LAT_MIN').val(dms_lat[1]);
+            $('#LAT_SEC').val(dms_lat[2]);
+            $('#LON_DEG').val(dms_lon[0]);
+            $('#LON_MIN').val(dms_lon[1]);
+            $('#LON_SEC').val(dms_lon[2]);
+
+            marker.setPosition({lat: lat_dec, lng: lon_dec});
+            if($("#auto_zoom").is(":checked")) {
+                let mzs = new google.maps.MaxZoomService();
+                let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+                map.setZoom(Math.min(zoomobj.zoom, 10));
+                map.setCenter(marker.getPosition());
+            }
+            updatePixelDisplay(lat_dec, lon_dec); 
+        });
+        
+        marker.setMap(map);
+        polygon.setMap(map);
+        centerCircle.setMap(map);
+        const geocoder = new google.maps.Geocoder();
+        document.getElementById("addressGo").addEventListener("click", () => {
+            geocodeAddress(geocoder);
+        });
+    }
+
+    function geocodeAddress(geocoder) {
+        const address = document.getElementById("Taddress").value;
+        geocoder.geocode({ address: address })
+            .then(({ results }) => {
+                marker.setPosition(results[0].geometry.location);
+                let lat = results[0].geometry.location.lat().toFixed(3);
+                let lon = results[0].geometry.location.lng().toFixed(3);
+              
+                let dms_lat = toDMS(parseFloat(lat));
+                let dms_lon = toDMS(parseFloat(lon));
+                
+                $('#LAT_DEG').val(dms_lat[0]);
+                $('#LAT_MIN').val(dms_lat[1]);
+                $('#LAT_SEC').val(dms_lat[2]);
+
+                $('#LON_DEG').val(dms_lon[0]);
+                $('#LON_MIN').val(dms_lon[1]);
+                $('#LON_SEC').val(dms_lon[2]);
+
+                $('#LAT_DEC').val(lat);
+                $('#LON_DEC').val(lon);
+                updatePixelDisplay(lat, lon);
+                map.setCenter(marker.getPosition());
+            })
+            .catch((e) =>
+            alert("Geocode was not successful for the following reason: " + e)
+            );        
+    }
+
+    function updatePixelDisplay(lat, lon) {
+        let box = latlon2pixel(lat, lon);
+        polygon.setPath(box);
+
+        let grid = latlon2grid(lat, lon);
+        let corner = grid2latlon(grid.x, grid.y);
+        let center = {lat: corner.lat - 0.125, lng: corner.lon + 0.125}
+        centerCircle.setCenter(center);
+    }
+
+    let grid2latlon = function(x, y) {
+        let lon = (360 / 1440) * parseFloat(x) - 180;
+        let lat = -(180 / 720) * parseFloat(y) + 90;
+        
+        return {lat:lat, lon:lon};
+    };
+    
+    let latlon2grid = function(lat, lon) {
+        let x = Math.floor(((parseFloat(lon) + 180) * 1440) / 360);
+        let y = Math.floor(((-parseFloat(lat) + 90) * 720) / 180);
+        
+        return {x: x, y: y};
+    };
+    
+    let latlon2pixel = function(lat, lon){
+        let grid = latlon2grid(parseFloat(lat), parseFloat(lon));
+        let x = grid.x, y = grid.y;
+        let bbox = [];
+        let p;
+       
+        p = grid2latlon(x + 0, y + 0);
+        bbox.push({lat: p.lat, lng: p.lon});
+        p = grid2latlon(x + 0, y + 1);
+        bbox.push({lat: p.lat, lng: p.lon});
+        p = grid2latlon(x + 1, y + 1);
+        bbox.push({lat: p.lat, lng: p.lon});
+        p = grid2latlon(x + 1, y + 0);
+        bbox.push({lat: p.lat, lng: p.lon});
+        return bbox;
+    };
+
+    async function enterCoordsDMS() {
+        let lat_deg = parseFloat($('#LAT_DEG').val() || 0);
+        let lat_min = parseFloat($('#LAT_MIN').val() || 0);
+        let lat_sec = parseFloat($('#LAT_SEC').val() || 0);
+        let lon_deg = parseFloat($('#LON_DEG').val() || 0);
+        let lon_min = parseFloat($('#LON_MIN').val() || 0);
+        let lon_sec = parseFloat($('#LON_SEC').val() || 0);
+
+        let lat_dec = lat_deg + parseFloat(parseFloat(lat_min + (lat_sec / 60)) / 60);
+        let lon_dec = lon_deg + parseFloat(parseFloat(lon_min + (lon_sec / 60)) / 60);
+        $('#LAT_DEC').val(lat_dec.toFixed(3))
+        $('#LON_DEC').val(lon_dec.toFixed(3))
+      
+        marker.setPosition({lat: lat_dec, lng: lon_dec});
+        updatePixelDisplay(lat_dec, lon_dec);
+        
+        let mzs = new google.maps.MaxZoomService();
+        let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+        map.setZoom(Math.min(zoomobj.zoom, 10));
+        map.setCenter(marker.getPosition());
+    }
+    async function enterCoordsLatLon() {
+        let lat_dec = parseFloat($('#LAT_DEC').val() || 0);
+        let lon_dec = parseFloat($('#LON_DEC').val() || 0);
+
+        let dms_lat = toDMS(lat_dec);
+        let dms_lon = toDMS(lon_dec);
+
+        $('#LAT_DEG').val(dms_lat[0])
+        $('#LAT_MIN').val(dms_lat[1])
+        $('#LAT_SEC').val(dms_lat[2])
+        $('#LON_DEG').val(dms_lon[0])
+        $('#LON_MIN').val(dms_lon[1])
+        $('#LON_SEC').val(dms_lon[2])
+
+        marker.setPosition({lat: lat_dec, lng: lon_dec});
+        updatePixelDisplay(lat_dec, lon_dec);
+        
+        let mzs = new google.maps.MaxZoomService();
+        let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+        map.setZoom(Math.min(zoomobj.zoom, 10));
+        map.setCenter(marker.getPosition())
+    }
+
+    var showResults = function(){
+        var selectedYears = $('#yearsPane').val();
+        var lat = parseFloat(marker.position.lat()).toFixed(3);
+        var lon = parseFloat(marker.position.lng()).toFixed(3);
+       
+        if(lat.length == 0 || lon.length == 0){
+            alert('Please follow steps 1 and 2 to pick a point');
+            return ;
+        }
+        else if (selectedYears?.length == 0){
+            alert('Please select the desired years for the dataset');
+            return ;
+        }
+
+        //All data is correct, generating links
+        showData(lon, lat, selectedYears);
+    }
+
+    var showData = function(lon, lat, yearsArray){
+        
+        if(lat.length == 0 || lon.length == 0){
+            alert('Please pick a point');
+        }else{
+            let pixel = latlon2grid(lat, lon);
+            let topLeftCorner = grid2latlon(pixel.x, pixel.y);
+            let str = "";
+            
+            str += "<hr><div>"
+            str += "<dl class='dl-horizontal'>"
+            str += "<div class='row'><dt>Top Left Corner Latitude:</dt><dd class='pl-2'>" + topLeftCorner.lat +"</dd></div>";
+            str += "<div class='row'><dt>Top Left Corner Longitude:</dt><dd class='pl-2'>" + topLeftCorner.lon +"</dd></div>";
+            str += "<div class='row'><dt>Center Latitude:</dt><dd class='pl-2'>" + (parseFloat(topLeftCorner.lat) - 0.125).toString() + "</dd></div>";
+            str += "<div class='row'><dt>Center Longitude:</dt><dd class='pl-2'>" + (parseFloat(topLeftCorner.lon) + 0.125).toString() +"</dd></div>";
+            str += "<div class='row'><dt>Pixel X:</dt><dd class='pl-2'>" + pixel.x +"</dd></div>";
+            str += "<div class='row'><dt>Pixel Y:</dt><dd class='pl-2'>" + pixel.y +"</dd></div>";
+            str += "<div class='row'><dt>Product:</dt><dd class='pl-2'>TROPOMI</dd></div>";
+            str += "<div class='row'><dt>Years:</dt><dd class='pl-2'>" + yearsArray + "</dd></div>";
+            
+            str += '<form action="." method="post">{% csrf_token %}"';
+            str += "<input type='hidden' name='x' value='" + pixel.x +"'>";
+            str += "<input type='hidden' name='y' value='" + pixel.y +"'>";
+            
+            yearsArray.forEach(year => {
+                str += "<input type='hidden' name='years[]' value=" + year + " />";
+            });
+
+            str += "<button class='btn btn-primary' type='submit'>Start Task</button>";
+            str += "</form>";
+            $('#data-output').append(str);
+        }
+    };
+
+</script>
+{% endblock %}
