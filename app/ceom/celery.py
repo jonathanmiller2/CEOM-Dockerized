@@ -25,7 +25,7 @@ def setup_periodic_tasks(sender, **kwargs):
 
         sender.add_periodic_task(crontab(minute=1, hour=7, day_of_week='sunday'), update_rasters.s(), name='Raster update')
 
-        sender.add_periodic_task(crontab(minute=0), clear_modis_csvs.s(), name='Clear csvs')
+        sender.add_periodic_task(crontab(minute=1, hour=7, day_of_week='monday'), clear_modis_csvs.s(), name='Clear csvs')
     except Exception as e:
-        print("ER?", e)
+        print("Error in /ceom/celery.py. This error will not print normally without this try/except. :", e)
     

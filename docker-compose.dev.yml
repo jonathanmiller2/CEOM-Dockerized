@@ -8,8 +8,8 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
 
-    command: bash -c "pip install django-raster/ &&               
-                      python manage.py makemigrations && 
+    command: bash -c "pip install django-raster/ &&         
+                      python manage.py makemigrations &&
                       python manage.py migrate --noinput -v 1 && 
                       python manage.py check &&
                       python manage.py collectstatic --noinput &&
@@ -26,7 +26,7 @@ services:
 
                       #     This can be used to keep the web container open when it errors. Useful for poking around inside the container when it's broken. 
                       #     To be placed as last command in command list.
-                      #touch removeme && tail -F removeme"
+                      #touch removeme && tail -F removeme &&
 
                       #     Alternate webserver that can be used instead of gunicorn.
                       #     Replaces gunicorn line in command list.

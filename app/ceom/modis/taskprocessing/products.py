@@ -1,9 +1,10 @@
-from ceom.modis.taskprocessing.special_products import mod09a1
+from ceom.modis.taskprocessing.special_products import mod09a1, myd11a2
 from ceom.modis.taskprocessing import band_names
 def dataset_is_available(dataset):
 
     accepted_list = [
             'MOD09A1',
+            'MYD11A2'
         ]
     if dataset.upper() in accepted_list:
         return True
@@ -52,6 +53,10 @@ def get_vegetation_indexes(dataset,data):
             data[bn['green']])
         special_indexes = mod09a1.get_special_products(data)
         data = dict(list(data.items())+list(veg_indexes.items())+list(special_indexes.items()))
+        return data
+    elif dataset=='MYD11A2':
+        special_indexes = myd11a2.get_special_products(data)
+        data = dict(list(data.items())+list(special_indexes.items()))
         return data
     return {}
       

@@ -1,5 +1,5 @@
 from django import forms
-from ceom.modis.models import TimeSeriesJob
+from ceom.modis.models import MODISMultipleTimeSeriesJob
 from django.forms.widgets import RadioSelect, CheckboxSelectMultiple, Select
 import datetime
 import os
@@ -63,10 +63,10 @@ class TimeSeriesJobForm(forms.ModelForm):
         years =self.cleaned_data["years"]
         product =self.cleaned_data["product"]
 
-        newjob = TimeSeriesJob(sender=sender,points=points,years=years,user=user,product=product,task_id=task_id)
+        newjob = MODISMultipleTimeSeriesJob(sender=sender,points=points,years=years,user=user,product=product,task_id=task_id)
         newjob.save()
         return newjob
     class Meta:
-        model = TimeSeriesJob
+        model = MODISMultipleTimeSeriesJob
         fields = ['points','sender',  'product','years']
         #widgets = {            'years': forms.SelectMultiple(choices=YEARS),        }

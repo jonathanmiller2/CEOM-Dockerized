@@ -10,15 +10,11 @@ from ceom.modis.taskprocessing import products, process, band_names, headers
 from ceom.modis.taskprocessing.aux_functions import latlon2sin
 from ceom.modis.taskprocessing.process import get_pixel_value,get_band_names,gap_fill
 from ceom.modis.taskprocessing.headers import get_modis_header
-from ceom.modis.models import TimeSeriesJob
+from ceom.modis.models import MODISMultipleTimeSeriesJob
 from collections import OrderedDict
 from ceom.celery import app
 
 from django.conf import settings
-try:
-    from . import database
-except Exception as e:
-    print("Database.py not found. disregard if it is a worker process")
 
 def get_location_metadata(lat,lon,dataset,dataset_npix,years):
     ih, iv, xi, yi, folder = latlon2sin(float(lat), float(lon), dataset, dataset_npix)
@@ -126,7 +122,7 @@ def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chun
     return task_params
 
 def get_header(data,dataset):
-    if dataset.upper()=='MOD09A1':
+    if dataset.upper()=='MOD09A1' or dataset.upper()=='MYD11A2':
         return get_modis_header(dataset,True)
     for year in data:
         for day in sorted(data[year]):
@@ -138,10 +134,9 @@ def get_header(data,dataset):
                 return header
     raise Exception ('Error getting header')
 
-def save_data_multi(data,site_id,dataset,csv_folder,filename,years,write_header=False):
+def save_data_multi(data,site_id,dataset,full_path, years,write_header=False):
     years = ",".join([str(year) for year in years])
-    full_dir = os.path.join(csv_folder)
-    full_path = os.path.join(csv_folder,filename)
+    full_dir = os.path.dirname(full_path)
     if not os.path.exists(full_dir):
         os.makedirs(full_dir)
     f = open(full_path,'a+')
@@ -162,12 +157,7 @@ def save_data_multi(data,site_id,dataset,csv_folder,filename,years,write_header=
                 current_line = [str(site_id),current_date] + ['NA' for x in range(1,len(header))]
                 f.write(','.join(current_line)+'\n')
     f.close()
-    return filename
-
-def get_file_name(dataset,years):
-    years = [str(y) for y in years]
-    timestr = dataset+','.join(years)+'_'+time.strftime("%Y-%m-%d_%H:%M:%S")+'.csv'
-    return timestr
+    return
 
 def read_input_file(file_path):
     f = open(file_path,'r')
@@ -181,7 +171,7 @@ def read_input_file(file_path):
     for line in f:
         line_cont+=1
         line_data = line.replace('\n','').replace(' ','').split(',')
-        if len(line_data)==0 and blanl_lines_cont<MAX_BLANK_LINES:
+        if len(line_data)==0 and blank_lines_cont<MAX_BLANK_LINES:
             # blank line, continue parsing
             blank_lines_cont+=1
             continue
@@ -200,7 +190,7 @@ def read_input_file(file_path):
     return input_sites
          
 def updateDB(task_id,result,message,progress,total_sites,error=False,working=True):
-    job = TimeSeriesJob.objects.get(task_id=task_id)
+    job = MODISMultipleTimeSeriesJob.objects.get(task_id=task_id)
     job.result.name = result
     job.message = message
     job.progress = progress
@@ -209,15 +199,9 @@ def updateDB(task_id,result,message,progress,total_sites,error=False,working=Tru
     job.error = error
     job.working = working
     job.save()
-    # try:
-    #     db = database.pgDatabase()
-    #     completed = total_sites==progress
-    #     db.updateMultipleSiteTimeSeries(task_id,result,message,progress,total_sites,completed,error,working)
-    # except Exception as e:
-    #     print(('Error : %s' % e))
-    #     pass   
+
 @shared_task(time_limit=7200)
-def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,dataset_npix,dataset_freq_in_days):
+def multiple_site_modis(input_file, media_root, csv_folder, dataset, years, dataset_npix, dataset_freq_in_days):
     # Get the list days we need to retreive its value, each one of
     # them will be send as an independent task to get their value
 
@@ -231,12 +215,12 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
             # Set error to the task in the db (Wrong input file)
             #print(("Exception reading input file: ", str(e.message)))
             updateDB(task_id,file_result,str(e.message),0,total_sites,True,False)
-            return None;
+            return None
         time_ini = time.time() # Initial time to extract execution time
         total_sites = len(input_sites)
         multiple_site_modis.update_state(state='STARTED', meta={'completed': 0,'error':0,'total':0,'started':False})
         updateDB(task_id,file_result,message,0,total_sites,False,True)
-        filename = get_file_name(dataset,years)
+        filename = dataset+'_'+'_'.join([str(y) for y in years])+'_'+time.strftime("%Y-%m-%d_%H:%M:%S")+'.csv'
         site_cont=0
         for site_id,site_data in list(input_sites.items()):
             multiple_site_modis.update_state(state='STARTED', meta={'completed': site_cont,'error':0,'total':total_sites,'started':True})
@@ -257,13 +241,17 @@ def multiple_site_modis(input_file,csv_folder,media_base_url,dataset,years,datas
             monitor_single_site_tasks(tasks,metadata)
             data  = get_data(tasks)
             data = gap_fill(data,dataset)
-            file_url = save_data_multi(data,site_id,dataset,csv_folder,filename,years,site_cont==1)
-            file_result = os.path.join(media_base_url,file_url)
-        updateDB(task_id,file_result,message,site_cont,total_sites,False,False)
+
+            rel_path = os.path.join(csv_folder, filename)
+            full_path = os.path.join(media_root, rel_path)
+            save_data_multi(data, site_id, dataset, full_path, years, site_cont==1)
+
+        updateDB(task_id, rel_path, message, site_cont, total_sites, False, False)
         time_exec = time.time()-time_ini
-        return {'filename':file_url,'exec_time':time_exec}
+        return {'filename':full_path,'exec_time':time_exec}
     except Exception as e:
-        updateDB(task_id,file_result,str(e),0,0,True,False)
+        print(e)
+        updateDB(task_id,rel_path,str(e),0,0,True,False)
 
 # ------------------------------------- PROCESSING SCRIPT PART ----------------------------
 

@@ -21,14 +21,15 @@ urlpatterns = [
     re_path(r'^kml/(?P<name>.*)\.kmz$', ceom.modis.views.kml),
 
     re_path(r'^timeseries/single/$', ceom.modis.views.single),
-    re_path(r'^timeseries/single/del=(?P<del_id>[0-9]+)/$', ceom.modis.views.single_del),
-    re_path(r'^timeseries/single/t=(?P<task_id>.+)/$', ceom.modis.views.timeseries_single_progress),
+    re_path(r'^timeseries/single/del=(?P<del_id>.+)/$', ceom.modis.views.single_del),
+    re_path(r'^timeseries/single/t=(?P<task_id>.+)/$', ceom.modis.views.single_progress),
     re_path(r'^timeseries/single/start/'+modis_re+'/', ceom.modis.views.launch_single_site_timeseries),
-    re_path(r'^timeseries/single/progress/t=(?P<task_id>.+)/$', ceom.modis.views.get_task_progress),
+    re_path(r'^timeseries/single/progress/t=(?P<task_id>.+)/$', ceom.modis.views.get_single_task_progress),
 
     re_path(r'^timeseries/multiple/$', ceom.modis.views.multiple),
-    re_path(r'^timeseries/multiple/del=(?P<del_id>[0-9]+)/$', ceom.modis.views.multiple_del),
-    re_path(r'^timeseries/get_multiple_task_progress/$', ceom.modis.views.get_multiple_task_progress),
+    re_path(r'^timeseries/multiple/del=(?P<del_id>.+)/$', ceom.modis.views.multiple_del),
+    re_path(r'^timeseries/multiple/t=(?P<task_id>.+)/$', ceom.modis.views.multiple_progress),
+    re_path(r'^timeseries/multiple/progress/t=(?P<task_id>.+)/$$', ceom.modis.views.get_multiple_task_progress),
     
     re_path(r'^composite/(?P<year>\d{4})/(?P<julian_day>\d*)/$', ceom.modis.views.composite),
     re_path(r'^composite/', ceom.modis.views.composite),

@@ -17,14 +17,14 @@ class TileAdmin(admin.ModelAdmin):
 admin.site.register(Tile, TileAdmin)
 admin.site.register(File)
 
-class TimeSeriesJobAdmin(admin.ModelAdmin):
+class MODISMultipleTimeSeriesJobAdmin(admin.ModelAdmin):
     list_display = ('user','sender', 'product', 'timestamp', 'completed','working','error','progress','total_sites','message')
 
-admin.site.register(TimeSeriesJob, TimeSeriesJobAdmin)
+admin.site.register(MODISMultipleTimeSeriesJob, MODISMultipleTimeSeriesJobAdmin)
 
-class SingleTimeSeriesJobAdmin(admin.ModelAdmin):
+class MODISSingleTimeSeriesJobAdmin(admin.ModelAdmin):
     list_display = ('created','user','product','modified', 'completed',)
-admin.site.register(SingleTimeSeriesJob, SingleTimeSeriesJobAdmin)
+admin.site.register(MODISSingleTimeSeriesJob, MODISSingleTimeSeriesJobAdmin)
 
 class GeocatterPointAdmin(admin.ModelAdmin):
     list_display = ('id', 'lat', 'lon', 'category')

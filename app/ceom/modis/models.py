@@ -121,7 +121,7 @@ def checkFormat(document):
 
 #   This model holds all single site timeseries so that they can be accessed from the user panel later
 
-class SingleTimeSeriesJob(models.Model):
+class MODISSingleTimeSeriesJob(models.Model):
 
     # task_id: unique id from celery updated upon task start
     task_id = models.CharField(null=True,blank=True,max_length=50)
@@ -145,7 +145,7 @@ class SingleTimeSeriesJob(models.Model):
     def __str__(self):
         return str(self.user)+' ['+str(self.created)+']'
 
-class TimeSeriesJob(models.Model):
+class MODISMultipleTimeSeriesJob(models.Model):
     sender = models.EmailField(max_length=150,verbose_name='Additional sender',null=True,blank=True)
     points = models.FileField(upload_to='modis/timeseries/input',max_length=150,validators=[checkFormat], verbose_name="Upload csv file")
     result = models.FileField(upload_to='modis/timeseries/multi', blank=True,null=True,max_length=300)

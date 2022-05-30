@@ -9,17 +9,19 @@ try:
     from osgeo.gdalconst import GA_ReadOnly
 except:
     pass
-def get_dates(data,year,day,multi_day=True): 
+def get_dates(data,year,day,multi_day=True):
     new_dict = OrderedDict()
     date = datetime.date(int(year),1,1) + datetime.timedelta(int(day) - 1)
     new_dict['date'] = date.strftime("%m/%d/%Y")
+
     if multi_day:
         new_dict['real_date']  = (datetime.date(int(year),1,1)+datetime.timedelta(int(data[REAL_DATE_BAND_NAME])-1)).strftime("%m/%d/%Y")
     else:
         new_dict['real_date'] = new_dict['date']
-    for k,e in list(data.items()):
+    
+    for k, v in list(data.items()):
         if k not in ('date',REAL_DATE_BAND_NAME):
-            new_dict[k] = e
+            new_dict[k] = v
     return new_dict
 
 def get_band_names(filename):

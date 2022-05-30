@@ -11,7 +11,7 @@ import datetime
 from ceom.modis.taskprocessing import products, process, band_names, headers
 from ceom.modis.taskprocessing.aux_functions import latlon2sin
 from ceom.modis.taskprocessing.process import get_pixel_value,get_band_names,gap_fill
-from ceom.modis.models import SingleTimeSeriesJob
+from ceom.modis.models import MODISSingleTimeSeriesJob
 from ceom.modis.taskprocessing.headers import get_modis_header
 from collections import OrderedDict
 
@@ -84,6 +84,7 @@ def get_data(tasks):
                         bands_dict [day] = None
                 data[year].update(bands_dict) #Merge the partial year dict into the global year dict
                 task.forget() #Remove partial info from backend because it is no longer necessary
+
     return data
  
 def send_tasks(function, params_dict):
@@ -124,7 +125,7 @@ def split_tasks_in_chunks(years,metadata,dataset_freq_in_days,multi_day,num_chun
     return task_params
 
 def get_header(data,dataset):
-    if dataset.upper()=='MOD09A1':
+    if dataset.upper()=='MOD09A1' or dataset.upper()=='MYD11A2':
         return get_modis_header(dataset,True)
     for year in data:
         for day in sorted(data[year]):
@@ -187,7 +188,7 @@ def get_modis_raw_data(self, media_root, csv_folder, lat,lon,dataset,years,datas
 
     save_data(data, full_path, get_modis_raw_data.request.id, metadata)
 
-    job = SingleTimeSeriesJob.objects.get(task_id=get_modis_raw_data.request.id)
+    job = MODISSingleTimeSeriesJob.objects.get(task_id=get_modis_raw_data.request.id)
     job.completed = True
     job.result.name = rel_path
     job.save()
@@ -218,11 +219,14 @@ def extract_day_data(col,row,dataset,year,day,tile):
                 pixel_values = get_pixel_value(fn,col,row)
             except Exception as e:
                 print(("Error retrieving pixel values for file: %s %s " % (fn,e)))
-
-            data = process.get_dates(pixel_values,year,day,multi_day)
+            
+            if dataset.upper() == "MYD11A2":
+                data = process.get_dates(pixel_values,year,day,False)
+            else:
+                data = process.get_dates(pixel_values,year,day,multi_day)
             if products.dataset_is_available(dataset):
-               vegetation_indexes = products.get_vegetation_indexes(dataset,pixel_values)
-               data = dict(list(data.items())+list(vegetation_indexes.items()))
+                vegetation_indexes = products.get_vegetation_indexes(dataset,pixel_values)
+                data = dict(list(data.items())+list(vegetation_indexes.items()))
             data = make_serializable_dict(data)
             data = [(k,v) for k,v in list(data.items()) ]
         else:
@@ -243,25 +247,3 @@ def get_modis_year_data(params_dict):
 def terminate_task(task_id):
     app.control.revoke(task_id, terminate=True)
 
-# For testing purposes (worker)
-# if __name__ == "__main__":
-#     sys.path.append('/home/menarguez/celeryq/ceom-celery')
-#     lat =  40.492649
-#     lon = -98.321838
-#     dataset = 'mod09a1'
-#     dataset_npix = 1200
-#     col, row, xi, yi, tile = latlon2sin(float(lat), float(lon), dataset, dataset_npix)
-#     params = {
-#         'col' :  col,
-#         'row' : row,
-#         'tile' : tile,
-#         'dataset' : dataset,
-#         'year' : 2007,
-#         'dataset_freq_in_days': 8,
-#         'multi_day' : 8,
-#         'days' : [i for i in range (1,40,8)]
-#     }
-    
-    
-#     result = get_modis_year_data(params)
-#     print result

@@ -9,7 +9,7 @@ from django.core.files.base import ContentFile
 from django.db.models import Q
 from ceom.modis.models import Dataset
 from ceom.photos.models import Category, Photo
-from ceom.modis.models import TimeSeriesJob,  SingleTimeSeriesJob, GeocatterPoint
+from ceom.modis.models import MODISMultipleTimeSeriesJob,  MODISSingleTimeSeriesJob, GeocatterPoint
 from ceom.modis.forms import TimeSeriesJobForm
 from datetime import datetime, date, timedelta
 
@@ -304,15 +304,15 @@ def kml(request, name):
 
     return render(request, 'kml/main.kml', context= {'styles':styles, 'geometries':objects}, mimetype="application/vnd.google-earth.kml+xml")
 
-TIMESERIES_LOCATION = os.path.join('MODIS','timeseries','single')
+TIMESERIES_LOCATION = os.path.join('modis','timeseries','single')
 
 @login_required()
-def timeseries_single_progress(request, task_id):
+def single_progress(request, task_id):
     data = {'task_id': task_id}
 
     try:
         data['found'] = True
-        data['job'] = SingleTimeSeriesJob.objects.get(task_id=task_id)
+        data['job'] = MODISSingleTimeSeriesJob.objects.get(task_id=task_id)
     except Exception as e:
         print(e)
         data['found'] = False
@@ -338,7 +338,7 @@ def launch_single_site_timeseries(request, lat, lon, dataset, years, product=Non
     vi=False
     task_id = get_modis_raw_data.delay(settings.MEDIA_ROOT, TIMESERIES_LOCATION,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)     
 
-    job = SingleTimeSeriesJob(lat=lat,lon=lon,user=request.user,years=years,product=dataset,task_id=task_id,col=xi,row=yi,tile=folder)
+    job = MODISSingleTimeSeriesJob(lat=lat,lon=lon,user=request.user,years=years,product=dataset,task_id=task_id,col=xi,row=yi,tile=folder)
     job.save()
     return redirect(to='/modis/timeseries/single/t=%s/'%task_id)
 
@@ -357,9 +357,9 @@ def read_from_csv(absolute_path):
                 data.append(raw_dict)
     return data
 
-def get_task_progress(request,task_id):
+def get_single_task_progress(request,task_id):
     try:
-        task_db = SingleTimeSeriesJob.objects.get(task_id=task_id)
+        task_db = MODISSingleTimeSeriesJob.objects.get(task_id=task_id)
         if not task_db.completed:
             task = AsyncResult(str(task_id))
             if task.result is None:
@@ -384,23 +384,18 @@ def get_task_progress(request,task_id):
     except Exception as e:
         return JsonResponse({'failure':True,'message':'Unhandled exception: %s' % e})
 
-def get_multiple_task_progress(request):
-    tasks_ids = request.GET.getlist('task_id_array[]')
-    try:
-        if not tasks_ids:
-            raise Exception('Task List is empty')
-        tasks = TimeSeriesJob.objects.filter(Q(user=request.user)&Q(reduce(lambda x, y: x | y, [Q(id=task_id) for task_id in tasks_ids])))
-        tasks_dict = [(t.toJSON()) for t in tasks]
-        return JsonResponse({'tasks':tasks_dict,'success':True})
-    except Exception as e:
-        return JsonResponse({'success':False,'message':'Unhandled exception: %s' % e})
-    return HttpResponse()
+def get_multiple_task_progress(request, task_id):
+    job = MODISMultipleTimeSeriesJob.objects.get(task_id=task_id)
+    
+    res = job.result.url if job.result else ""
 
-MULTIPLE_TIMESERIES_LOCATION = os.path.join('MODIS','timeseries','multi')
+    return JsonResponse({'working':job.working, 'completed':job.completed, 'errored':job.error, 'total_sites':job.total_sites, 'progress':job.progress, 'result':res})
+
+MULTIPLE_TIMESERIES_LOCATION = os.path.join('modis','timeseries','multi')
 
 @login_required
 def multiple_del(request,del_id):
-    tsj = TimeSeriesJob.objects.filter(user=request.user,id=del_id)
+    tsj = MODISMultipleTimeSeriesJob.objects.filter(task_id=del_id)
     message=None
     if len(tsj)==1:
         # Cancel celery task
@@ -408,11 +403,11 @@ def multiple_del(request,del_id):
         tsj.delete()
     else:
         message="Could not find selected job for user. Please make sure it is valid and it is not being processed (working)."
-    return redirect('/modis/timeseries/multiple_add/')
+    return redirect('/modis/timeseries/multiple/')
 
 @login_required
 def single_del(request,del_id):
-    tsj = SingleTimeSeriesJob.objects.filter(user=request.user,id=del_id)
+    tsj = MODISSingleTimeSeriesJob.objects.filter(user=request.user,id=del_id)
     message=None
     if len(tsj)==1:
         # Cancel celery task
@@ -424,7 +419,7 @@ def single_del(request,del_id):
 
 @login_required
 def multiple(request):
-    user_pending_jobs=TimeSeriesJob.objects.filter(user=request.user,completed=False,working=False,error=False)
+    user_pending_jobs=MODISMultipleTimeSeriesJob.objects.filter(user=request.user,completed=False,working=False,error=False)
     if len(user_pending_jobs)>=2:
         return HttpResponseRedirect('/modis/timeseries/multiple/')
     if request.method == 'POST':
@@ -432,22 +427,30 @@ def multiple(request):
         if form.is_valid():
             job = form.save_data(request.user,'')
 
-            csv_folder = MULTIPLE_TIMESERIES_LOCATION
             years = [int(y) for y in form.cleaned_data['years'].split(',')]
             points = job.points.file.name
             dataset = form.cleaned_data['product']
 
-            #TODO: this needs fixed
-            task_id = multiple_site_modis.delay(points,csv_folder, MULTIPLE_TIMESERIES_LOCATION, dataset.name,years,dataset.xdim,dataset.day_res)
+            task_id = multiple_site_modis.delay(points, settings.MEDIA_ROOT, MULTIPLE_TIMESERIES_LOCATION, dataset.name,years,dataset.xdim,dataset.day_res)
             job.task_id = str(task_id)
             job.save()
             
-            return HttpResponseRedirect('/modis/timeseries/multiple/')
+            return redirect('/modis/timeseries/multiple/t=' + str(task_id) + '/')
     else:
         form = TimeSeriesJobForm()
         
     #It is the first visit or form had errors
     return render(request, 'modis/multiple.html', context={"title":"Add Multiple Points time series request",'form':form})
+
+@login_required
+def multiple_progress(request, task_id):
+    data = {}
+    data['job'] = MODISMultipleTimeSeriesJob.objects.get(task_id=task_id)
+    
+    data['input_path'] = data['job'].points.url if data['job'].points else ""
+    data['result_path'] = data['job'].result.url if data['job'].result else ""
+
+    return render(request, 'modis/multiple_status.html', context=data)
 
 def composite(request, year = None, julian_day = None):
     prod='MOD09'

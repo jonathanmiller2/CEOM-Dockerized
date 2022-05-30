@@ -61,6 +61,33 @@ MOD09A1_GF_RELATION= [
     ('ndwi1200', 'gf_ndwi1200')
 ]
 
+MYD11A2_HEADER = [
+    ("date", "Date"),
+    ("real_date", "Real Date"),
+    ('LST_Day_1km', 'LST_Day_1km'),
+    ('QC_Day', 'QC_Day'),
+    ('Day_view_time', 'Day_view_time'),
+    ('Day_view_angl', 'Day_view_angl'),
+    ('LST_Night_1km', 'LST_Night_1km'),
+    ('QC_Night', 'QC_Night'),
+    ('Night_view_time', 'Night_view_time'),
+    ('Night_view_angl', 'Night_view_angl'),
+    ('Emis_31', 'Emis_31'),
+    ('Emis_32', 'Emis_32'),
+    ('Clear_sky_days', 'Clear_sky_days'),
+    ('Clear_sky_nights', 'Clear_sky_nights'),
+    ('QC_day_b', 'QC_day_b'),
+    ('Q_day_qa', 'Q_day_qa'),
+    ('Q_day_dq', 'Q_day_dq'),
+    ('Q_day_emis_error_flag', 'Q_day_emis_error_flag'),
+    ('Q_day_lst_error_flag', 'Q_day_lst_error_flag'),
+    ('QC_night_b', 'QC_night_b'),
+    ('Q_night_qa', 'Q_night_qa'),
+    ('Q_night_dq', 'Q_night_dq'),
+    ('Q_night_emis_error_flag', 'Q_night_emis_error_flag'),
+    ('Q_night_lst_error_flag', 'Q_night_lst_error_flag'),
+]
+
 def get_modis_header(dataset, products=False):
     dataset = dataset.upper()
     if dataset=="MOD09A1":
@@ -68,10 +95,14 @@ def get_modis_header(dataset, products=False):
             return MOD09A1_HEADER
         else:
             return MOD09A1_HEADER + MOD09A1_PRODUCTS_HEADER
+    elif dataset=="MYD11A2":
+        return MYD11A2_HEADER
     return []
 
 def get_gap_fill_relation_dict(dataset):
     dataset = dataset.upper()
     if dataset=="MOD09A1":
         return MOD09A1_GF_RELATION
+    elif dataset=="MYD11A2":
+        return []
     return []
