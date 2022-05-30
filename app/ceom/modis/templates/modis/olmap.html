@@ -1,0 +1,273 @@
+{% extends "modis/base.html" %}
+
+{% block title %} Data Visualization {% endblock %}
+
+{% block head_extra %}
+ <!-- <script src="/media/js/modis.js" type="text/javascript"></script> -->
+ <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=init"></script>
+
+<style type="text/css">
+    .map  {position: relative; width: 658px; height: 400px; top: 25px; left: 0px; border: solid #999999 1px;}
+    .legend {position: absolute; top: 0px; left: 670px; text-align: left; z-index: 999999;}
+    .info  {position: relative; width: 658px; height: 50px; bottom: 5px; padding: 5px; background-color: #EEE; border: solid 1px #999999; text-align: left; display:inline-block;}
+    #control {  position: absolute; top: 480px; left: 10px; z-index: 999999; }
+    .btn-outline-secondary:hover{color: white !important}
+    .btn-outline-secondary {color: black; max-height: 40px}
+    .pos { max-width: 80px; float:right; background-color: #ffffff00; border-color: #ffffff00; font-size: 0.8em}
+    .pos-bar{position: relative; width: 658px; height: 10px; bottom: 25px; padding: 5px; right: 35px;}
+    .evi{ float:right; right: 2%}
+</style>
+{% endblock %}
+
+{% block content %}
+<h3>Multi-pane MODIS Browser</h3>
+<nav>
+    <h4>Controls</h4>
+    <div class="row ml-1 my-3">
+        <button id="add_map" type="button"  onclick="addMap()" class="btn btn-sm btn-primary mr-1">
+            <span>Add Map</span>
+        </button>
+    </div>
+    <div class="row ml-1">
+        Click within any map window in order to synchronize map windows views to the same center position.
+        <br>
+        To change map view independently drag the map or use select tool.
+        <br>
+        To zoom all maps to the same altitude click the 'Synch Zoom' button.
+    </div>
+</nav>
+<div id="map-container">
+    <div class="row ml-1">
+        <div class="container">
+            <div id="map-1" class="map"> 
+                <div id="legend1" class="legend"></div>
+            </div>
+            <div class="pos-bar">
+                <input class="pos" id="LAT1">
+                <input class="pos" id="LON1">
+            </div>
+            <div id="info" class="info">
+                <div class="form-row">
+                    <div class="form-group col-2">
+                        <select id="products-1" class="form-control" name="products">
+                        </select>
+                    </div>
+                    <div class="form-group col-2">
+                        <select id="years-1" class="form-control" name="years">
+                        </select>
+                    </div>
+                    <div class="form-group col-2">
+                        <select id="days-1" class="form-control" name="days">
+                        </select>
+                    </div>
+                    <input type="hidden" class="form-control" name="map_num" value="1" />
+                    <input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="updateMap(1);"/>
+                    <input type="button" class="btn btn-light btn-outline-secondary button" value="Synch Zoom" onclick="synch_zoom(1)";/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row ml-1">
+        <div class="container">
+            <div id="map-2" class="map">
+                <div id="legend2" class="legend"></div>
+            </div>
+            <div class="pos-bar">
+                <input class="pos" id="LAT2">
+                <input class="pos" id="LON2">
+            </div>
+            <div id="info" class="info">
+                <div class="form-row">
+                    <div class="form-group col-2">
+                        <select id="products-2" class="form-control" name="products">
+                        </select>
+                    </div>
+                    <div class="form-group col-2">
+                        <select id="years-2" class="form-control" name="years">
+                        </select>
+                    </div>
+                    <div class="form-group col-2">
+                        <select id="days-2" class="form-control" name="days">
+                        </select>
+                    </div>
+                    <input type="hidden" class="form-control" name="map_num" value="2" />
+                    <input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="updateMap(2);"/>
+                    <input type="button" class="btn btn-light btn-outline-secondary button" value="Synch Zoom" onclick='synch_zoom(2)';/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<script>
+    var startLocation = {
+        lat: 0,
+        lng: 0
+    };
+    var myOptions = {
+        zoom: 2,
+        center: startLocation,
+        gestureHandling: 'cooperative',
+        mapTypeId: 'terrain',
+    }
+    let mapArray = [];
+    let idCounter = 1;
+
+    let options = JSON.parse("{{ mapOptions|escapejs }}");
+    
+    
+    function init() {
+        let map1 = new google.maps.Map(document.getElementById('map-1'), myOptions);
+        let map2 = new google.maps.Map(document.getElementById('map-2'), myOptions);
+
+        map1.addListener("mouseover", (e) => update_coord_display(e, 1));
+        map1.addListener("mousemove", (e) => update_coord_display(e, 1));
+        mapArray.push([idCounter, map1]);
+        idCounter++;
+
+        map2.addListener("mouseover", (e) => update_coord_display(e, 2));
+        map2.addListener("mousemove", (e) => update_coord_display(e, 2));
+        mapArray.push([idCounter, map2]);
+        idCounter++;
+
+        updateMap(1);
+        updateMap(2);
+    }
+
+    //Still part of the initialization, but doesn't require google to be loaded, and does require external variables that don't exist when init() runs, so this part doesn't need to be in init()
+    updateProductList(1);
+    updateProductList(2);
+    updateYearList(1);
+    updateYearList(2);
+    updateDayList(1);
+    updateDayList(2);
+    $("#products-1").change(function() {updateYearList(1);});
+    $("#products-2").change(function() {updateYearList(2);});
+    $("#years-1").change(function() {updateDayList(1); updateMap(1);});
+    $("#years-2").change(function() {updateDayList(2); updateMap(2);});
+    $("#days-1").change(function() {updateMap(1);});
+    $("#days-2").change(function() {updateMap(2);});
+
+    function update_coord_display(event, count) {
+        let lat = event.latLng.lat().toFixed(5);
+        let lon = event.latLng.lng().toFixed(5);
+
+        $('#LAT' + count).val(lat)
+        $('#LON' + count).val(lon)
+    }
+
+    function synch_zoom(id) {
+        //get the zoom/center from the map with the id that was passed to the function
+        let center;
+        let zoom;
+
+        for(let i = 0; i < mapArray.length; i++) {
+            if(mapArray[i][0] == id) {
+                center = mapArray[i][1].getCenter();
+                zoom = mapArray[i][1].getZoom();
+            }
+        }
+
+        //for each (id,map) pair in the big map array:
+            //if the id isn't the same as the id that was passed to the function:
+            //sync the zoom/center of the map to the one we stored above
+        for(let i = 0; i < mapArray.length; i++) {
+            if(mapArray[i][0] != id) {
+                mapArray[i][1].setCenter(center);
+                mapArray[i][1].setZoom(zoom);
+            }
+        }
+    }
+  
+    function addMap() {
+        let count = idCounter; //We have to make a local copy of this variable, so that the local variable doesn't change later in the listeners when the global map count changes
+
+        let div = '<div class="row ml-1"><div class="container"><div id="map-' + count + '" class="map"></div><div class="pos-bar"><input class="pos" id="LAT' + count + '"><input class="pos" id="LON' + count + '"></div><div id="info" class="info"><div class="form-row"><div class="form-group col-2"><select id="products-'+ count +'" class="form-control" name="products"></select></div><div class="form-group col-2"><select id="years-' + count + '" class="form-control" name="years"></select></div><div class="form-group col-2"><select id="days-' + count + '" class="form-control" name="days"></select></div><input type="hidden" class="form-control" name="map_num" value="' + count + '" /><input type="button" class="btn btn-light btn-outline-secondary button mr-2" value="Update Modis Map" onclick="updateMap(' + count +');"/><input type="button" class="btn btn-light btn-outline-secondary button" value="Synch Zoom" onclick="synch_zoom(' + count +')";/></div></div></div></div>'
+        let chunk = $('#map-container').append(div);
+       
+        let map = new google.maps.Map($("#map-" + count)[0], myOptions); 
+        
+        map.addListener("mouseover", (e) => update_coord_display(e, count));
+        map.addListener("mousemove", (e) => update_coord_display(e, count));
+       
+        mapArray.push([count, map]);
+        
+        updateProductList(count);
+        updateYearList(count);
+        updateDayList(count);
+        updateMap(count);
+        $("#products-" + count).change(function() {updateYearList(count);});
+        $("#years-" + count).change(function() {updateDayList(count); updateMap(count);});
+        $("#days-" + count).change(function() {updateMap(count);});
+
+        ++idCounter;
+    }
+
+
+    function updateMap(id) {
+        let map;
+
+        for(let i = 0; i < mapArray.length; i++) {
+            if(mapArray[i][0] == id) {
+                map = mapArray[i][1];
+            }
+        }
+
+        let selectedProduct = $("#products-" + id).val();
+        let selectedYear = $("#years-" + id).val();
+        let selectedDay = $("#days-" + id).val();
+
+        if(!selectedProduct || !selectedYear || !selectedDay)
+        {
+            return
+        }
+
+        let mapTypeIdentifier = "mt" + selectedProduct + selectedYear + selectedDay + id;
+
+        map.mapTypes.set(mapTypeIdentifier, new google.maps.ImageMapType({
+            getTileUrl: function(coord, zoom) {            
+                if(coord.y > (2 ** zoom) - 1 || coord.y < 0)
+                {
+                    return ""
+                }
+
+                url = "/raster/tiles/" + selectedProduct + "/" + selectedYear + "/" + selectedDay  + "/" + zoom + "/" + coord.x + "/" + coord.y + ".png"
+                return (url)
+            },
+            maxZoom: 6,
+        }));
+        map.setMapTypeId(mapTypeIdentifier);
+    }
+
+    function updateProductList(id) {
+        let productList = Object.keys(options)
+        productList.forEach(element => {
+            $("#products-" + id).append($("<option></option>").attr("value", element).text(element));
+        });
+    }
+
+    function updateYearList(id) {
+        let selectedProduct = $("#products-" + id).val()
+        let yearList = Object.keys(options[selectedProduct])
+
+        $("#years-" + id).empty()
+        yearList.forEach(element => {
+            $("#years-" + id).append($("<option></option>").attr("value", element).text(element));
+        });
+    }
+
+    function updateDayList(id) {
+        console.log("udl" + id);
+
+        let selectedProduct = $("#products-" + id).val()
+        let selectedYear = $("#years-" + id).val()
+        let dayList = options[selectedProduct][selectedYear]
+
+        $("#days-" + id).empty()
+        dayList.forEach(element => {
+            $("#days-" + id).append($("<option></option>").attr("value", element).text(element));
+        });
+    }
+</script>
+{% endblock %}
