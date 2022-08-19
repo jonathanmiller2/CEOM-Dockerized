@@ -238,12 +238,18 @@ def index(request):
 
 @login_required()
 def single(request):
-    datasets = Dataset.objects.filter(is_global=False).order_by('name')
-    years = [y for y in range (2000,date.today().year +1)]
-    return render(request, 'modis/single.html', context={
-        'datasets':datasets,
-        'years':years,
-    })
+    data = {}
+    data['datasets'] = Dataset.objects.filter(is_global=False).order_by('name')
+    data['years'] = [y for y in range (2000,date.today().year + 1)]
+    
+    if request.method == 'GET' and 'lat' in request.GET and 'lon' in request.GET:
+        data['starting_lat'] = request.GET['lat']
+        data['starting_lon'] = request.GET['lon']
+    else:
+        data['starting_lat'] = 0
+        data['starting_lon'] = 0
+
+    return render(request, 'modis/single.html', context=data)
 
 def vimap(request):
     products = RasterProduct.objects.all()
