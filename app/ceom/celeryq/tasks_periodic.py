@@ -1,6 +1,7 @@
 from ceom.celery import app
 from django.db import IntegrityError
 import os, glob, datetime, random, time
+from datetime import datetime, timedelta
 
 from django.conf import settings
 
@@ -123,4 +124,30 @@ def update_rasters():
                     f.write(f"New layer for product {product.name},  year: {year},  day: {day}")
                     new_layer = RasterLayer.objects.create(product=product, year=year, day=day, location=mosaic_location, max_zoom=settings.RASTER_MAP_MAX_ZOOM, store_reprojected=False)
 
-                    time.sleep(60 * 5) #Give the raster time to process. This could be done better by using threading and waiting for the raster to be done processing, but a simple delay works for this script
+                time.sleep(60 * 5) #Give the raster time to process. This could be done better by using threading and waiting for the raster to be done processing, but a simple delay works for this script
+
+@app.task
+def clear_modis_csvs():
+    from ceom.modis.models import MODISSingleTimeSeriesJob, MODISMultipleTimeSeriesJob
+    from django.conf import settings
+
+    week_ago = datetime.now() - timedelta(days=7)
+    outdated_jobs = MODISMultipleTimeSeriesJob.objects.filter(modified__lt=week_ago)
+    for outdated_job in outdated_jobs:
+        res_path = os.path.join(settings.MEDIA_ROOT, outdated_job.result.path)
+        if os.path.exists(res_path):
+            os.remove(res_path)
+
+        inp_path = os.path.join(settings.MEDIA_ROOT, outdated_job.points.path)
+        if os.path.exists(inp_path):
+            os.remove(inp_path)
+
+        outdated_job.delete()
+    
+    outdated_jobs = MODISSingleTimeSeriesJob.objects.filter(modified__lt=week_ago)
+    for outdated_job in outdated_jobs:
+        res_path = os.path.join(settings.MEDIA_ROOT, outdated_job.result.path)
+        if os.path.exists(res_path):
+            os.remove(res_path)
+
+        outdated_job.delete()

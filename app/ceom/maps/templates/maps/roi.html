@@ -545,7 +545,7 @@ var showData = function(lon, lat, year, prod) {
         str += "<dt>Product:</dt><dd>" + prod + "</dd>";
         str += "<dt>Years:</dt><dd>" + year + "</dd>";
 
-        str += "<dt>Start task</dt><dd><a class=\"btn btn-primary\" href=\"/visualization/timeseries/single/start/" + filename + "/\">Click Here </a></dd>";
+        str += "<dt>Start task</dt><dd><a class=\"btn btn-primary\" href=\"/timeseries/single/start/" + filename + "/\">Click Here </a></dd>";
         str += "</dl></div>";
         $('#data-output').append(str);
         $('#data-output a').click(function() {

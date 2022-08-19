@@ -1,0 +1,103 @@
+{% extends "modis/base.html" %}
+
+{% block content %}
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=initMap" type="text/javascript"></script>
+
+<h2 class="legend title">GeoCatter</h2>
+
+
+
+<form id="cat-form" action="." method='post' class="form-inline mb-3"> {% csrf_token %}
+    <div class="form-group">
+        <input id='lat-field' name='lat' hidden/>
+        <input id='lon-field' name='lon' hidden/>
+        <select class="form-control" name='category'>
+            <option></option>
+            {% for category in category_list %}
+            <option>{{category.name}}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="mx-5 btn btn-primary">Submit</button>
+        <button type="button" class="mx-5 btn btn-warning" onclick="newPoint()">Try a Different Point</button>
+    </div>
+</form>
+
+<div class="row" style="height:750px">
+    <div class="col-4" id="map"></div>
+    <div class="col" id="pano"></div>
+</div>
+
+<script>
+    let map;
+    let panorama;
+
+    async function initMap() {
+
+        console.log("inittdd");
+        let point = await findPoint()
+
+        mzs = new google.maps.MaxZoomService()
+		let zoomobj = await mzs.getMaxZoomAtLatLng({lat: point[0], lng:point[1]});
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: zoomobj.zoom - 3,
+            center: {lat: point[0], lng:point[1]},
+            gestureHandling: 'cooperative',
+            mapTypeId: 'hybrid',
+        });
+
+        panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"),{
+            position: {lat: point[0], lng:point[1]},
+        });
+        
+        map.setStreetView(panorama);
+    }
+
+    async function findPoint() {
+        let SVService = new google.maps.StreetViewService();
+        let checkaround = 5000000;
+        let SVlat, SVlng;
+
+        while(true) {
+            let randLocation = {
+                lat: Math.random() * 140 - 70,
+                lng: Math.random() * 360 - 180
+            };
+            
+            let SV;
+
+            try {
+                SV = await SVService.getPanorama({location: randLocation, radius:checkaround});
+                SVlat = SV.data.location.latLng.lat()
+                SVlng = SV.data.location.latLng.lng()
+                break;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+
+        return [SVlat, SVlng];
+    }
+
+    async function newPoint(){
+        let point = await findPoint()
+        map.setCenter({lat: point[0], lng:point[1]});
+        panorama.setPosition({lat: point[0], lng:point[1]});
+    }
+
+
+
+    $('#cat-form').submit(function(eventObj) {
+        let point = panorama.getLocation().latLng
+        $('#lat-field').attr("value", point.lat());
+        $('#lon-field').attr("value", point.lng());
+
+        $.post('.', $(this).serialize());
+        eventObj.preventDefault();
+
+        newPoint();
+    });
+</script>
+
+{% endblock %}
