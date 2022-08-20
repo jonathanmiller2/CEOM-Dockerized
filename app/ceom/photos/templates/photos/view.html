@@ -45,7 +45,7 @@
         {% if photo.user == request.user or request.user.is_superuser %}
         <a class='btn btn-primary' href="/photos/edit/{{photo.id}}">{% trans "Edit" %}</a>
         <a class='btn btn-danger btn-small' onclick="return confirm('{% trans 'Are you sure, you want to delete?' %}');" href="/photos/delete/{{photo.id}}/?next={{request.META.HTTP_REFERER|urlencode}}">{% trans "Delete" %}</a>
-        <a class='btn btn-small' href="/modis/gmap/{{photo.lat}}_{{photo.lon}}" onclick='timeSeries({{photo.lon}},{{photo.lat}}); return true'>
+        <a class='btn btn-small' href="/modis/timeseries/single/?lat={{photo.lat}}&lon={{photo.lon}}">
                         <abbr title="{% trans 'View MODIS data for this photo. Click on this button and scroll down to the bottom of the page and to select appropriate dataset and year' %}">MODIS</abbr>
                     </a>
 
