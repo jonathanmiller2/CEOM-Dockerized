@@ -243,11 +243,9 @@ def single(request):
     data['years'] = [y for y in range (2000,date.today().year + 1)]
     
     if request.method == 'GET' and 'lat' in request.GET and 'lon' in request.GET:
-        data['starting_lat'] = request.GET['lat']
-        data['starting_lon'] = request.GET['lon']
-    else:
-        data['starting_lat'] = 0
-        data['starting_lon'] = 0
+        data['photoRedirect'] = True
+        data['latRedirect'] = request.GET['lat']
+        data['lonRedirect'] = request.GET['lon']
 
     return render(request, 'modis/single.html', context=data)
 

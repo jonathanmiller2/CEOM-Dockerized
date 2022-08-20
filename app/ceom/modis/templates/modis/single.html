@@ -160,8 +160,8 @@
     }
     
     let startLocation = {
-        lat: {{starting_lat}},
-        lng: {{starting_lon}}
+        lat: 0,
+        lng: 0,
     };
 
     var radians = function(x){
@@ -323,25 +323,25 @@
         });
 
         {% if photoRedirect %}
-        let latRe = {{latRedirect}}
-        let lonRe = {{lonRedirect}}
-        $('#LAT_DEC').val(latRe.toFixed(3));
-        $('#LON_DEC').val(lonRe.toFixed(3));
-        let dms_lat_re = toDMS(latRe);
-        let dms_lon_re = toDMS(lonRe);
+            let latRe = {{latRedirect}}
+            let lonRe = {{lonRedirect}}
+            $('#LAT_DEC').val(latRe.toFixed(3));
+            $('#LON_DEC').val(lonRe.toFixed(3));
+            let dms_lat_re = toDMS(latRe);
+            let dms_lon_re = toDMS(lonRe);
 
-        $('#LAT_DEG').val(dms_lat_re[0]);
-        $('#LAT_MIN').val(dms_lat_re[1]);
-        $('#LAT_SEC').val(dms_lat_re[2]);
+            $('#LAT_DEG').val(dms_lat_re[0]);
+            $('#LAT_MIN').val(dms_lat_re[1]);
+            $('#LAT_SEC').val(dms_lat_re[2]);
 
-        $('#LON_DEG').val(dms_lon_re[0]);
-        $('#LON_MIN').val(dms_lon_re[1]);
-        $('#LON_SEC').val(dms_lon_re[2]);
+            $('#LON_DEG').val(dms_lon_re[0]);
+            $('#LON_MIN').val(dms_lon_re[1]);
+            $('#LON_SEC').val(dms_lon_re[2]);
 
-        marker.setPosition({lat: latRe, lng: lonRe});
-        map.setZoom(15);
-        map.setCenter(marker.getPosition());
-        updatePixelDisplay(latRe, lonRe);
+            marker.setPosition({lat: latRe, lng: lonRe});
+            map.setZoom(15);
+            map.setCenter(marker.getPosition());
+            updatePixelDisplay(latRe, lonRe);
         {% endif %}
     }
 
