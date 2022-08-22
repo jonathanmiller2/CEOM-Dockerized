@@ -174,6 +174,7 @@ def photo_path(instance, filename):
     return path
 
 
+
 class Photo(models.Model):
     #id = models.IntegerField(unique=True)
     file = models.ImageField(
@@ -198,6 +199,17 @@ class Photo(models.Model):
     dir_card = models.CharField(max_length=4, choices=DIR_CARD_CHOICES, db_column='dir', null=True, blank=True)
     dir_deg = models.FloatField(null=True, blank=True)
     status = models.IntegerField(choices=STATUS_CHOICES, null=True, blank=True, default=1)
+
+    def save(self, *args, **kwargs):
+        # Save as normal
+        super().save(*args, **kwargs)
+
+        # Also update the vote table with the new information
+            
+        # If whoever is saving this photo provided a category, insert/update the owner vote 
+        # WARN: I'm basing the "unclassified" case on the *name* of the unclassified category. This might break in the future. Fixing this is on my TODO list.
+        if self.category and self.category is not None and self.category.name.lower() != "unclassified":
+            CategoryVote.objects.update_or_create(photo=self, user=self.user, defaults={'category': self.category})
 
 
     def __str__(self):
