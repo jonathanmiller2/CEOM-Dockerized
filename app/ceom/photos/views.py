@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Sum, Case, When
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Count
@@ -1119,34 +1119,47 @@ def classification(request):
         return HttpResponseRedirect("/accounts/login/")
 
     if request.method == 'POST':
+        # Check if someone is trying to vote "unclassified"
+        unclassified_category = Category.objects.get(name__iexact='Unclassified')
+        if not request.POST['categoryid'] or int(unclassified_category.id) == int(request.POST['categoryid']):
+            return HttpResponseRedirect("/photos/classification/")
+
         cat = Category.objects.get(id=request.POST['categoryid'])
         photo = Photo.objects.get(id=request.POST['photoid'])
-        CategoryVote.objects.create(user=request.user, category=cat, photo=photo)
+
+        # Create new vote
+        CategoryVote.objects.update_or_create(photo=photo, user=request.user, defaults={'category': cat})
+
+        # Re-evalute photo to see if classification has changed
+        scores = CategoryVote.objects.filter(photo=request.POST['photoid']).values('category').annotate(
+                                        score=Sum(
+                                            Case(
+                                                When(user=photo.user, then=2),
+                                                default=1
+                                            )
+                                        )
+                                    ).order_by('-score')
+        winning_category_id = scores[0]['category']
+
+        # Update photo's stored category
+        photo.category = Category.objects.get(id=winning_category_id)
+        photo.save()
+
         return HttpResponseRedirect("/photos/classification/")
 
 
     data = {}
-    
+
     unclassified_category = Category.objects.get(name__iexact='Unclassified')
     users_voted_photos = CategoryVote.objects.filter(user=request.user).values_list('photo')
     user_vote_count = len(users_voted_photos)
-    # photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=True) | Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
+    photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=True) | Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
 
-    # #If there are no photos that are geolocated, unclassified, and public
-    # if photo_set.count() <= 0:
-    #     #Then just show a photo that is geolocated, classified, and public
-    #     photo_set = Photo.objects.filter(point__isnull=False).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
-    
-    
-    #TEMPORARY FOR DAVID! 
-
-    photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=False) & ~Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
-
-    #If there are no photos that are geolocated, classified, and public
+    #If there are no photos that are geolocated, unclassified, and public
     if photo_set.count() <= 0:
-        #Then just show a photo that is geolocated, unclassified, and public
+        #Then just show a photo that is geolocated, classified, and public
         photo_set = Photo.objects.filter(point__isnull=False).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')
-
+    
     #If there are still no photos
     if photo_set.count() <= 0:
         return render(request, 'photos/classification.html')
