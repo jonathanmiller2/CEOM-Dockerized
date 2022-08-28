@@ -1,15 +1,16 @@
-{% load i18n %}
-<ul>
-    <li class='nav-header'><strong>Area's and point's of interest</strong></li>
-    <ul>
-        <li><a href="/maps/poi/">{% trans "POIs" %}</a></li>
-        <li><a href="/maps/roi/">{% trans "ROIs" %}</a></li>
-        <li><a href="/maps/view_pois/">{% trans "View/Download POIs" %}</a></li>
-        <li><a href="/maps/view_rois/">{% trans "View/Download ROIs" %}</a></li>
-    </ul>
-    <li class='nav-header'><strong>Map evaluation</strong></li>
-    <ul>
-        <li><a href="/maps/map_gallery/">{% trans "Map gallery" %}</a></li>
-        <li><a href="/maps/add_map_gallery/">{% trans "Upload your map" %}</a></li>
-    </ul>
-</ul>
+<li class='leftmenu-category nav-header'>
+    Maps
+</li>
+<li>
+    <a href="/maps/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">Overview</p>
+    </a>
+</li>
+<li class='leftmenu-category nav-header'>
+    Data Generation
+</li>
+<li>
+    <a href="/maps/geocatter/" class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">GeoCatter</p>
+    </a>
+</li>

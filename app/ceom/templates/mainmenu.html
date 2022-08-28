@@ -16,13 +16,18 @@
 		font-weight:bold;
 		transition:all 0.2s;
 	}
-	#menu-vis > a:hover {
+	#menu-modis > a:hover {
 		color: #008AE6;
 		font-weight:bold;
 		transition:all 0.2s;
 	}
 	#menu-tropomi > a:hover {
 		color: #006994;
+		font-weight:bold;
+		transition:all 0.2s;
+	}
+	#menu-maps > a:hover {
+		color: #3700ff;
 		font-weight:bold;
 		transition:all 0.2s;
 	}
@@ -126,7 +131,7 @@
 			</a>
 		</li>
 		<!--<li id="menu-inventory" {% if '/inventory/' in request.path %}class='active'{% endif %}><a href="/inventory/"><span class="icon-list-ul navbar-icon"></span> {% trans "Datasets" %} </a></li>-->
-		<li id="menu-vis" class="nav-item{% if '/modis/' in request.path %} active{% endif %}">
+		<li id="menu-modis" class="nav-item{% if '/modis/' in request.path %} active{% endif %}">
 			<a class="nav-link main-menu-link" href="/modis/">
 				<span class="fas fa-globe-americas"></span> 
 				{% trans "MODIS" %}
@@ -136,6 +141,12 @@
 			<a class="nav-link main-menu-link" href="/tropomi/">
 				<span class="fas fa-globe-americas"></span> 
 				{% trans "TROPOMI" %}
+			</a>
+		</li>
+		<li id="menu-maps" class="nav-item{% if '/maps/' in request.path %} active{% endif %}">
+			<a class="nav-link main-menu-link" href="/maps/">
+				<span class="fas fa-globe-americas"></span> 
+				{% trans "Maps" %}
 			</a>
 		</li>
 		<li id="menu-geohealth" class="nav-item{% if '/geohealth/' in request.path %} active{% endif %}">
@@ -188,7 +199,7 @@
 			</a>
 		</li>
 		<!--<li id="menu-inventory" {% if '/inventory/' in request.path %}class='active'{% endif %}><a href="/inventory/"><span class="icon-list-ul navbar-icon"></span> {% trans "Datasets" %} </a></li>-->
-		<li id="menu-vis" class="nav-item{% if '/modis/' in request.path %} active{% endif %}">
+		<li id="menu-modis" class="nav-item{% if '/modis/' in request.path %} active{% endif %}">
 			<a class="nav-link main-menu-link" href="/modis/visualization/">
 				<span class="fas fa-globe-americas"></span> 
 				{% trans "MODIS" %}
@@ -198,6 +209,12 @@
 			<a class="nav-link main-menu-link" href="/modis/visualization/">
 				<span class="fas fa-globe-americas"></span> 
 				{% trans "TROPOMI" %}
+			</a>
+		</li>
+		<li id="menu-maps" class="nav-item{% if '/maps/' in request.path %} active{% endif %}">
+			<a class="nav-link main-menu-link" href="/maps/">
+				<span class="fas fa-globe-americas"></span> 
+				{% trans "Maps" %}
 			</a>
 		</li>
 		<li id="menu-geohealth" class="nav-item{% if '/geohealth/' in request.path %} active{% endif %}">
