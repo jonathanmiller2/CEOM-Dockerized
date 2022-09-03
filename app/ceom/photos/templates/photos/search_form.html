@@ -133,7 +133,7 @@
 <form id='search' class="mx-3 mt-3" action="." method="post" name="searchform" onkeypress="return runScript(event)">{% csrf_token %}
     <fieldset>
         {{ search.non_field_errors }}
-        <legend class="text-center mb-0">{% trans "Search By:" %}</legend>
+        <legend class="text-center mb-0">{% trans "Search Photos By:" %}</legend>
         <hr />
 
         <label data-toggle="collapse" data-target="#LandCover">
@@ -267,7 +267,7 @@
             </div>
         </div>
         <br>
-        <legend class="text-center mb-0">{% trans "Sort By:" %}</legend>
+        <legend class="text-center mb-0">{% trans "Sort Photos By:" %}</legend>
         <hr />
         <select class="form-control form-control-sm" name="sort">
             <option value="uploaddate">Photo upload date</option>

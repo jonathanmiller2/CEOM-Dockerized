@@ -31,11 +31,16 @@
             <p class="leftmenu-text mx-4 m-0 text-left">Upload</p>
         </a>
     </li>
+    <a href='/photos/classification/' class="btn btn-light btn-block rounded-0 p-0">
+        <p class="leftmenu-text mx-4 m-0 text-left">Photo Classification</p>
+    </a>
+    </li>
     <li> 
         <a href='/accounts/logout/' class="btn btn-light btn-block rounded-0 p-0">
             <p class="leftmenu-text mx-4 m-0 text-left">Log out</p>
         </a>
     </li>
+    <li> 
 {% else %}
     <li> 
         <a href='/accounts/login/?next={{request.path}}' class="btn btn-light btn-block rounded-0 p-0">
@@ -56,16 +61,3 @@
     </a>
 </li>
 {% endif %}
-<li class='leftmenu-category nav-header'>
-    Maps
-</li>
-<li> 
-    <a href='/photos/map_validation/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="leftmenu-text mx-4 m-0 text-left">Map Validation</p>
-    </a>
-</li>
-<li> 
-    <a href='/photos/classification/' class="btn btn-light btn-block rounded-0 p-0">
-        <p class="leftmenu-text mx-4 m-0 text-left">Photo Classification</p>
-    </a>
-</li>

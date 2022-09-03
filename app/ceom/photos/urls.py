@@ -26,8 +26,6 @@ urlpatterns = [
     re_path(r'^delete/(?P<id>\d+)/?$', ceom.photos.views.delete, name="photo-del"),
     re_path(r'^exif/(?P<id>\d+)/?$', ceom.photos.views.exif),
 
-    re_path(r'^map_validation/$', ceom.photos.views.map_validation),
-    re_path(r'^validation_data/$', ceom.photos.views.validation_data),
     re_path(r'^classification/$', ceom.photos.views.classification),
 
     #Data feeds
