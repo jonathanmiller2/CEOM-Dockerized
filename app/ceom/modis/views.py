@@ -9,7 +9,7 @@ from django.core.files.base import ContentFile
 from django.db.models import Q
 from ceom.modis.models import Dataset
 from ceom.photos.models import Category, Photo
-from ceom.modis.models import MODISMultipleTimeSeriesJob,  MODISSingleTimeSeriesJob, GeocatterPoint
+from ceom.modis.models import MODISMultipleTimeSeriesJob,  MODISSingleTimeSeriesJob
 from ceom.modis.forms import TimeSeriesJobForm
 from datetime import datetime, date, timedelta
 
@@ -491,16 +491,3 @@ def composite(request, year = None, julian_day = None):
         )
 
 
-def geocatter(request):
-    data = {}
-    data['category_list'] = Category.objects.all()
-
-    if request.method == 'POST' and 'category' in request.POST:
-        GeocatterPoint.objects.create(
-            lat = request.POST['lat'],
-            lon = request.POST['lon'],
-            category = Category.objects.get(name=request.POST['category'])
-        )
-        return HttpResponse()
-    return render(request, 'modis/geocatter.html', context=data)
-    

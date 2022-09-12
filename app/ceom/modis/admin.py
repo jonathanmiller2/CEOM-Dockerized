@@ -25,7 +25,3 @@ admin.site.register(MODISMultipleTimeSeriesJob, MODISMultipleTimeSeriesJobAdmin)
 class MODISSingleTimeSeriesJobAdmin(admin.ModelAdmin):
     list_display = ('created','user','product','modified', 'completed',)
 admin.site.register(MODISSingleTimeSeriesJob, MODISSingleTimeSeriesJobAdmin)
-
-class GeocatterPointAdmin(admin.ModelAdmin):
-    list_display = ('id', 'lat', 'lon', 'category')
-admin.site.register(GeocatterPoint, GeocatterPointAdmin)

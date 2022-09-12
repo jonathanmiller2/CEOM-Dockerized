@@ -9,7 +9,6 @@ modis_re =  r'(?P<dataset>[mM]\w{6})(?:-(?P<product>\w{3,4}))?_(?P<years>(\d{4})
 urlpatterns = [
     re_path(r'^$',  ceom.modis.views.index),
     re_path(r'^vimap/$', ceom.modis.views.vimap),
-    re_path(r'^geocatter/$', ceom.modis.views.geocatter),
     
     re_path(r'^(?P<dataset_id>[mM]\w{5,6})/(?P<year>\d{4})/$', ceom.modis.views.tilemap),
     re_path(r'^tile-h(?P<x>\d+)v(?P<y>\d+)$', ceom.modis.views.tile),

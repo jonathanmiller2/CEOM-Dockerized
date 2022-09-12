@@ -1,0 +1,413 @@
+{% extends "maps/base.html" %}
+
+{% block content %}
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=initMap" type="text/javascript"></script>
+
+<h2 class="legend title">GeoCatter</h2>
+
+
+
+<!--  -->
+
+<div style="height:775px">
+    <div class="row h-100">
+        <div class="col-lg-8">
+            <div id="map" class="h-50"></div>
+            <div id="pano" class="h-50"></div>
+        </div>
+        <div class="col-lg-4">
+            <form id="cat-form" action="." method="post"> {% csrf_token %}
+                <h4>Categorize Pixels</h4>
+                <hr />
+                <input id='date-field' name='date' hidden/>
+                <input id='s-npix-field' name='s-npix' hidden/>
+                <input id='s-tileh-field' name='s-tileh' hidden/>
+                <input id='s-tilev-field' name='s-tilev' hidden/>
+                <input id='s-pixelx-field' name='s-pixelx' hidden/>
+                <input id='s-pixely-field' name='s-pixely' hidden/>
+                <input id='m-npix-field' name='m-npix' hidden/>
+                <input id='m-tileh-field' name='m-tileh' hidden/>
+                <input id='m-tilev-field' name='m-tilev' hidden/>
+                <input id='m-pixelx-field' name='m-pixelx' hidden/>
+                <input id='m-pixely-field' name='m-pixely' hidden/>
+                <input id='l-npix-field' name='l-npix' hidden/>
+                <input id='l-tileh-field' name='l-tileh' hidden/>
+                <input id='l-tilev-field' name='l-tilev' hidden/>
+                <input id='l-pixelx-field' name='l-pixelx' hidden/>
+                <input id='l-pixely-field' name='l-pixely' hidden/>
+                <h5 style="color: red;">Red Pixel (250m)</h5>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="s-multicat-check" name="s-multicat">
+                    <label class="form-check-label" for="s-multicat-check">
+                        Is there more than one landcover in this pixel?
+                    </label>
+                </div>
+                <div id="s-cat1" class="form-group">
+                    <label for="s-cat1-select">Primary Landcover</label>
+                    <select id="s-cat1-select" class="form-control" name="s-cat1-select">
+                        <option></option>
+                        {% for category in category_list %}
+                        <option>{{category.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="invalid-feedback">
+                        Please classify primary landcover
+                    </div>
+                </div>
+                <div id="s-cat2" class="form-group" style="display: none;">
+                    <label for="s-cat2-select">Secondary Landcover</label>
+                    <select id="s-cat2-select" class="form-control" name="s-cat2-select">
+                        <option></option>
+                        {% for category in category_list %}
+                        <option>{{category.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="invalid-feedback">
+                        Please classify secondary landcover
+                    </div>
+                </div>
+                <hr />
+                <h5 style="color: blue;">Blue Pixel (500m)</h5>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="m-multicat-check" name="m-multicat">
+                    <label class="form-check-label" for="m-multicat-check">
+                        Is there more than one landcover in this pixel?
+                    </label>
+                </div>
+                <div id="m-cat1" class="form-group">
+                    <label for="m-cat1-select">Primary Landcover</label>
+                    <select id="m-cat1-select" class="form-control" name="m-cat1-select">
+                        <option></option>
+                        {% for category in category_list %}
+                        <option>{{category.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="invalid-feedback">
+                        Please classify primary landcover
+                    </div>
+                </div>
+                <div id="m-cat2" class="form-group" style="display: none;">
+                    <label for="m-cat2-select">Secondary Landcover</label>
+                    <select id="m-cat2-select" class="form-control" name="m-cat2-select">
+                        <option></option>
+                        {% for category in category_list %}
+                        <option>{{category.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="invalid-feedback">
+                        Please classify secondary landcover
+                    </div>
+                </div>
+                <hr />
+                <h5 style="color: green;">Green Pixel (1000m)</h5>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" id="l-multicat-check" name="l-multicat">
+                    <label class="form-check-label" for="l-multicat-check">
+                        Is there more than one landcover in this pixel?
+                    </label>
+                </div>
+                <div id="l-cat1" class="form-group">
+                    <label for="l-cat1-select">Primary Landcover</label>
+                    <select id="l-cat1-select" class="form-control" name="l-cat1-select">
+                        <option></option>
+                        {% for category in category_list %}
+                        <option>{{category.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="invalid-feedback">
+                        Please classify primary landcover
+                    </div>
+                </div>
+                <div id="l-cat2" class="form-group" style="display: none;">
+                    <label for="l-cat2-select">Secondary Landcover</label>
+                    <select id="l-cat2-select" class="form-control" name="l-cat2-select">
+                        <option></option>
+                        {% for category in category_list %}
+                        <option>{{category.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="invalid-feedback">
+                        Please classify secondary landcover
+                    </div>
+                </div>
+                <hr />
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-warning" onclick="newPoint()">Try a Different Point</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $("#s-multicat-check").change((x) => {
+        if(x.target.checked) {
+            $("#s-cat2").show()
+        }
+        else {
+            $("#s-cat2").hide()
+        }
+    });
+
+    $("#m-multicat-check").change((x) => {
+        if(x.target.checked) {
+            $("#m-cat2").show()
+        }
+        else {
+            $("#m-cat2").hide()
+        }
+    });
+
+    $("#l-multicat-check").change((x) => {
+        if(x.target.checked) {
+            $("#l-cat2").show()
+        }
+        else {
+            $("#l-cat2").hide()
+        }
+    });
+
+
+    //===========================================================================================================
+    // UI processing above
+    // ===========================================================================================================
+    // Map processing below
+    // ===========================================================================================================
+
+    let map;
+    let panorama;   // The container for the street view
+    let SV;         // The street views themselves
+    let svlat, svlng;
+
+    const sNpix = 4800;
+    const mNpix = 2400;
+    const lNpix = 1200;
+
+    async function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            gestureHandling: 'cooperative',
+            mapTypeId: 'hybrid',
+        });
+
+        spoly = new google.maps.Polygon({ 
+            strokeColor: "#FF3300",
+            strokeOpacity: 0.9,
+            strokeWeight: 2,
+            fillOpacity: 0,
+            clickable: false,
+            zIndex: 3,
+        });
+        mpoly = new google.maps.Polygon({ 
+            strokeColor: "Blue",                 
+            strokeOpacity: 0.9,
+            strokeWeight: 2,
+            fillOpacity: 0,
+            clickable: false,
+            zIndex: 2,
+        });
+        lpoly = new google.maps.Polygon({ 
+            strokeColor: "#75FF30",                 
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillOpacity: 0,
+            clickable: false,
+            zIndex: 1,  
+        });
+
+        spoly.setMap(map);
+        mpoly.setMap(map);
+        lpoly.setMap(map);
+
+        panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"));
+        map.setStreetView(panorama);
+
+        newPoint();
+    }
+
+    async function findPoint() {
+        let SVService = new google.maps.StreetViewService();
+        let checkaround = 5000000;
+
+        while(true) {
+            let randLocation = {
+                lat: Math.random() * 140 - 70,
+                lng: Math.random() * 360 - 180
+            };
+
+            try {
+                SV = await SVService.getPanorama({location: randLocation, radius:checkaround});
+                svlat = SV.data.location.latLng.lat()
+                svlng = SV.data.location.latLng.lng()
+                break;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+
+        return;
+    }
+
+    let radians = function(x){
+        return x * Math.PI / 180.0; 
+    };
+
+    let degrees = function(x){
+        return x * 180.0 / Math.PI;
+    };
+
+    let latlon2sin = function(lat, lon, npix) {
+        let cons =(36.0 * npix)/(2.0 * Math.PI);
+        let yg = 9.0 * npix - radians(cons * lat);
+        let xg = radians(cons*lon*Math.cos(radians(lat))) + 18.0 * npix;
+
+        let ih = Math.floor(xg/npix);
+        let iv = Math.floor(yg/npix);
+
+        let x = xg-ih*npix;
+        let y = yg-iv*npix;
+
+        let xi = Math.floor(x);
+        let yi = Math.floor(y);
+
+        return {h: ih, v: iv, x: xi, y: yi};
+    };
+
+    let sin2latlon = function(ih, iv, xi, yi, npix) {
+        let cons =(36.0 * npix)/(2.0 * Math.PI);
+        let yg = iv * npix + yi;
+        let xg = ih * npix + xi;
+
+        let lat = degrees((9.0 * npix) - yg) / cons; 
+        let lon = degrees(xg - 18.0 * npix) / (cons * Math.cos(radians(lat)));
+        
+        return {lat:lat, lon:lon};
+    };
+
+    let latlon2pixel = function(lat, lon, npix){
+        let sin = latlon2sin(lat, lon, npix);
+        let ih = sin.h, iv = sin.v, xi = sin.x, yi = sin.y;
+        let bbox = [];
+        let p;
+       
+        p = sin2latlon(ih, iv, xi + 0, yi + 0, npix);
+        bbox.push({lat: p.lat, lng: p.lon});
+        p = sin2latlon(ih, iv, xi + 0, yi + 1, npix);
+        bbox.push({lat: p.lat, lng: p.lon});
+        p = sin2latlon(ih, iv, xi + 1, yi + 1, npix);
+        bbox.push({lat: p.lat, lng: p.lon});
+        p = sin2latlon(ih, iv, xi + 1, yi + 0, npix);
+        bbox.push({lat: p.lat, lng: p.lon});
+        return bbox;
+    };
+
+    async function newPoint(){
+        await findPoint();
+
+        $("#cat-form").trigger("reset");
+        $("#s-cat2").hide()
+        $("#m-cat2").hide()
+        $("#l-cat2").hide()
+
+        mzs = new google.maps.MaxZoomService();
+		let zoomobj = await mzs.getMaxZoomAtLatLng({lat: svlat, lng: svlng});
+
+        map.setCenter({lat: svlat, lng: svlng});
+        map.setZoom(Math.min(zoomobj.zoom - 3, 15));
+        panorama.setPosition({lat: svlat, lng: svlng});
+
+
+        let sbox = latlon2pixel(svlat, svlng, sNpix);
+        let mbox = latlon2pixel(svlat, svlng, mNpix);
+        let lbox = latlon2pixel(svlat, svlng, lNpix);
+        spoly.setPath(sbox);
+        mpoly.setPath(mbox);
+        lpoly.setPath(lbox);
+    }
+
+
+
+    $('#cat-form').submit(function(eventObj) {
+        eventObj.preventDefault();
+
+        let isvalid = true;
+        if($("#s-cat1-select").val() == "" || $("#s-cat1-select").val() == "Unclassified") {
+            $("#s-cat1-select").addClass('is-invalid');
+            isvalid = false;
+        }
+        else {
+            $("#s-cat1-select").removeClass('is-invalid');
+        }
+
+        if($("#s-multicat-check").is(":checked") && ($("#s-cat2-select").val() == "" || $("#s-cat2-select").val() == "Unclassified")) {
+            $("#s-cat2-select").addClass('is-invalid');
+            isvalid = false;
+        }
+        else {
+            $("#s-cat2-select").removeClass('is-invalid');
+        }
+
+        if($("#m-cat1-select").val() == "" || $("#m-cat1-select").val() == "Unclassified") {
+            $("#m-cat1-select").addClass('is-invalid');
+            isvalid = false;
+        }
+        else {
+            $("#m-cat1-select").removeClass('is-invalid');
+        }
+
+        if($("#m-multicat-check").is(":checked") && ($("#m-cat2-select").val() == "" || $("#m-cat2-select").val() == "Unclassified")) {
+            $("#m-cat2-select").addClass('is-invalid');
+            isvalid = false;
+        }
+        else {
+            $("#m-cat2-select").removeClass('is-invalid');
+        }
+        
+        if($("#l-cat1-select").val() == "" || $("#l-cat1-select").val() == "Unclassified") {
+            $("#l-cat1-select").addClass('is-invalid');
+            isvalid = false;
+        }
+        else {
+            $("#l-cat1-select").removeClass('is-invalid');
+        }
+
+        if($("#l-multicat-check").is(":checked") && ($("#l-cat2-select").val() == "" || $("#l-cat2-select").val() == "Unclassified")) {
+            $("#l-cat2-select").addClass('is-invalid');
+            isvalid = false;
+        }
+        else {
+            $("#l-cat2-select").removeClass('is-invalid');
+        }
+
+        if(!isvalid) {
+            return;
+        }
+
+        let sSin = latlon2sin(svlat, svlng, sNpix);
+        let mSin = latlon2sin(svlat, svlng, mNpix);
+        let lSin = latlon2sin(svlat, svlng, lNpix);
+
+        $('#date-field').attr("value", SV.data.imageDate + "-01");
+        $('#s-npix-field').attr("value", sNpix);
+        $('#m-npix-field').attr("value", mNpix);
+        $('#l-npix-field').attr("value", lNpix);
+        $('#s-tileh-field').attr("value", sSin.h);
+        $('#m-tileh-field').attr("value", mSin.h);
+        $('#l-tileh-field').attr("value", lSin.h);
+        $('#s-tilev-field').attr("value", sSin.v);
+        $('#m-tilev-field').attr("value", mSin.v);
+        $('#l-tilev-field').attr("value", lSin.v);
+        $('#s-pixelx-field').attr("value", sSin.x);
+        $('#m-pixelx-field').attr("value", mSin.x);
+        $('#l-pixelx-field').attr("value", lSin.x);
+        $('#s-pixely-field').attr("value", sSin.y);
+        $('#m-pixely-field').attr("value", mSin.y);
+        $('#l-pixely-field').attr("value", lSin.y);
+
+        $.post('.', $(this).serialize());
+
+        newPoint();
+    });
+</script>
+
+{% endblock %}
