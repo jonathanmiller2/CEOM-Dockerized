@@ -11,7 +11,7 @@ def update_datasets():
     from ceom.modis.models import File, Dataset, Tile
 
     with open('celerybeat.log', 'a') as f:
-        f.write(f"Running update_datasets command at time: {datetime.datetime.now()}\n")
+        f.write(f"Running update_datasets command at time: {datetime.now()}\n")
 
         datasets = Dataset.objects.all()
         

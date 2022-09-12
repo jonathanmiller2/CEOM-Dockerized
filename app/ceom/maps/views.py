@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+
 from ceom.photos.models import Category
 from ceom.maps.models import GeocatterPoint
 
@@ -7,17 +10,57 @@ def index(request):
     return render(request, 'maps/index.html')
 
 
+@login_required
 def geocatter(request):
     data = {}
     data['category_list'] = Category.objects.all()
 
-    if request.method == 'POST' and 'category' in request.POST:
+    if request.method == 'POST':
+        print(request.POST)
+
+        # Small pixel
         GeocatterPoint.objects.create(
-            lat = request.POST['lat'],
-            lon = request.POST['lon'],
+            user = request.user,
             date_taken = request.POST['date'],
-            category = Category.objects.get(name=request.POST['category'])
+            grid_npix = request.POST['s-npix'],
+            tile_h = request.POST['s-tileh'],
+            tile_v = request.POST['s-tilev'],
+            pixel_x = request.POST['s-pixelx'],
+            pixel_y = request.POST['s-pixely'],
+            is_multi_cat = 's-multicat' in request.POST,
+            primary_category = Category.objects.get(name=request.POST['s-cat1-select']),
+            secondary_category = Category.objects.get(name=request.POST['s-cat2-select']) if 's-multicat' in request.POST else None,
         )
+
+        # Medium pixel
+        GeocatterPoint.objects.create(
+            user = request.user,
+            date_taken = request.POST['date'],
+            grid_npix = request.POST['m-npix'],
+            tile_h = request.POST['m-tileh'],
+            tile_v = request.POST['m-tilev'],
+            pixel_x = request.POST['m-pixelx'],
+            pixel_y = request.POST['m-pixely'],
+            is_multi_cat = 'm-multicat' in request.POST,
+            primary_category = Category.objects.get(name=request.POST['m-cat1-select']),
+            secondary_category = Category.objects.get(name=request.POST['m-cat2-select']) if 'm-multicat' in request.POST else None,
+        )
+
+        # Large pixel
+        GeocatterPoint.objects.create(
+            user = request.user,
+            date_taken = request.POST['date'],
+            grid_npix = request.POST['l-npix'],
+            tile_h = request.POST['l-tileh'],
+            tile_v = request.POST['l-tilev'],
+            pixel_x = request.POST['l-pixelx'],
+            pixel_y = request.POST['l-pixely'],
+            is_multi_cat = 'l-multicat' in request.POST,
+            primary_category = Category.objects.get(name=request.POST['l-cat1-select']),
+            secondary_category = Category.objects.get(name=request.POST['l-cat2-select']) if 'l-multicat' in request.POST else None,
+        )
+        
+
         return HttpResponse()
     return render(request, 'maps/geocatter.html', context=data)
 
