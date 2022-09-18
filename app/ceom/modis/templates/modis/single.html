@@ -211,8 +211,8 @@
         });
 
         google.maps.event.addListener(marker, 'dragend', async function (evt) {
-            let lat = evt.latLng.lat().toFixed(3);
-            let lon = evt.latLng.lng().toFixed(3);
+            let lat = evt.latLng.lat().toFixed(4);
+            let lon = evt.latLng.lng().toFixed(4);
 
             let dms_lat = toDMS(lat);
             let dms_lon = toDMS(lon);
@@ -238,8 +238,8 @@
         });
 
         google.maps.event.addListener(map, 'click', async function (evt) {
-            let lat = evt.latLng.lat().toFixed(3);
-            let lon = evt.latLng.lng().toFixed(3);
+            let lat = evt.latLng.lat().toFixed(4);
+            let lon = evt.latLng.lng().toFixed(4);
 
             let dms_lat = toDMS(lat);
             let dms_lon = toDMS(lon);
@@ -276,8 +276,8 @@
             //... update Decimal degrees fields... // Remember to use JQuery $().value to update the Decimal Degrees field.
             let lat_dec = lat_deg + parseFloat(parseFloat(lat_min + (lat_sec / 60)) / 60);
             let lon_dec = lon_deg + parseFloat(parseFloat(lon_min + (lon_sec / 60)) / 60);
-            $('#LAT_DEC').val(lat_dec.toFixed(3))
-            $('#LON_DEC').val(lon_dec.toFixed(3))
+            $('#LAT_DEC').val(lat_dec.toFixed(4))
+            $('#LON_DEC').val(lon_dec.toFixed(4))
             //...update map...
             marker.setPosition({lat: lat_dec, lng: lon_dec});
             if($("#auto_zoom").is(":checked")) {
@@ -325,8 +325,8 @@
         {% if photoRedirect %}
             let latRe = {{latRedirect}}
             let lonRe = {{lonRedirect}}
-            $('#LAT_DEC').val(latRe.toFixed(3));
-            $('#LON_DEC').val(lonRe.toFixed(3));
+            $('#LAT_DEC').val(latRe.toFixed(4));
+            $('#LON_DEC').val(lonRe.toFixed(4));
             let dms_lat_re = toDMS(latRe);
             let dms_lon_re = toDMS(lonRe);
 
@@ -351,8 +351,8 @@
             .geocode({ address: address })
             .then(({ results }) => {
                 marker.setPosition(results[0].geometry.location);
-                let lat = results[0].geometry.location.lat().toFixed(3);
-                let lon = results[0].geometry.location.lng().toFixed(3);
+                let lat = results[0].geometry.location.lat().toFixed(4);
+                let lon = results[0].geometry.location.lng().toFixed(4);
               
                 let dms_lat = toDMS(parseFloat(lat));
                 let dms_lon = toDMS(parseFloat(lon));
@@ -440,8 +440,8 @@
 
         let lat_dec = lat_deg + parseFloat(parseFloat(lat_min + (lat_sec / 60)) / 60);
         let lon_dec = lon_deg + parseFloat(parseFloat(lon_min + (lon_sec / 60)) / 60);
-        $('#LAT_DEC').val(lat_dec.toFixed(3))
-        $('#LON_DEC').val(lon_dec.toFixed(3))
+        $('#LAT_DEC').val(lat_dec.toFixed(4))
+        $('#LON_DEC').val(lon_dec.toFixed(4))
       
         marker.setPosition({lat: lat_dec, lng: lon_dec});
         updatePixelDisplay(lat_dec, lon_dec);
@@ -477,8 +477,8 @@
     var showResults = function(){
         var selectedYears = $('#yearsPane').val();
         var selectedDataset = $('#datasetPane').val();
-        var lat = parseFloat(marker.position.lat()).toFixed(3);
-        var lon = parseFloat(marker.position.lng()).toFixed(3);
+        var lat = parseFloat(marker.position.lat()).toFixed(4);
+        var lon = parseFloat(marker.position.lng()).toFixed(4);
        
         if(lat.length == 0 || lon.length == 0){
             alert('Please follow steps 1 and 2 to pick a point');

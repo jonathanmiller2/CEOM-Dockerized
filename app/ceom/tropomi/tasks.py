@@ -79,6 +79,7 @@ def process_TROPOMI_single_site(self, media_root, csv_folder, x, y, years):
             data.append(file_df)
             
         final_df = pd.concat(data)
+        final_df.rename_axis('Date', inplace=True)
 
         with open(full_file, 'w+') as csvfile:
             final_df.to_csv(csvfile)
