@@ -205,6 +205,15 @@ def multiple_site_modis(input_file, media_root, csv_folder, dataset, years, data
     # Get the list days we need to retreive its value, each one of
     # them will be send as an independent task to get their value
 
+    # Solve a race condition
+    # TODO: this is so bad. SO. BAD.
+    # UpdateDB works off of the DB task, and does so by requesting the task ID
+    # However the task ID is saved to the DB by what is starting this job
+    # So, one thread requests the task_id while another is in the middle of saving it = race condition
+    # The real solution is either to rewrite this entire process to be like TROPOMI, where only the task is driving the DB, or to start passing direct references to the DB object to the task
+    # Right now I have time for neither. So.. this..
+    time.sleep(5)
+
     task_id = multiple_site_modis.request.id
     file_result = ''
     message = ''
