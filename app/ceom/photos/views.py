@@ -18,11 +18,11 @@ from django.core.files.uploadedfile import UploadedFile
 from django.core.files.base import ContentFile
 from django.core.files import File
 from django.shortcuts import redirect
-from django.contrib.auth.models import User
 
 
 from django.views.decorators.csrf import csrf_exempt
 from django.template.defaultfilters import wordwrap
+from ceom.photos.models import PhotoUser
 
 
 from ceom.photos.templatetags.photos_tags import thumbnail, point2str
@@ -72,6 +72,12 @@ def ranges(i):
 
 def home(request):
     return render(request, 'photos/overview.html')
+
+def leaderboard(request):
+    data = {}
+    data['photo_leaderboard'] = User.objects.annotate(user_points=Count('categoryvote')).order_by("-user_points")[:10]
+
+    return render(request, 'photos/leaderboard.html', context=data)
 
 
 def search_for_photos(request):

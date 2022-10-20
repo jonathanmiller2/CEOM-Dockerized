@@ -6,6 +6,7 @@ urlpatterns = [
     re_path(r'^browse/$', ceom.photos.views.browse),
     re_path(r'^map/$', ceom.photos.views.map),
     re_path(r'^FieldPhoto/?$', ceom.photos.views.FieldPhoto),
+    re_path(r'^leaderboard/$', ceom.photos.views.leaderboard),
    
     re_path(r'^user/?$', ceom.photos.views.user_photos),
 

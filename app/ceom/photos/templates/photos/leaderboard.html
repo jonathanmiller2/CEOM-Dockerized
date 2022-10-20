@@ -1,0 +1,35 @@
+{% extends "photos/base.html" %}
+{% load i18n %}
+{% block content %}
+
+<h2 style="color: #0860be;" >Photos Leaderboard</h2>
+
+<br>
+
+<h5 class="text-center"> Welcome to the <strong> CEOM Photos Leaderboard</strong>! </h5>
+
+<p class="text-center"> Ranks are calulated based on which user classifies the most photos. </p>
+
+<table class="table table-bordered" style="width: 75%; border:1px solid black;margin-left:auto;margin-right:auto;">
+    <thead class = "table-dark">
+      <tr style="text-align: center">
+        <th scope="col">Ranking</th>
+        <th scope="col">Username</th>
+        <th scope="col">Points</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for users in photo_leaderboard %}
+      {% with index=forloop.counter %}
+        <tr>
+          <th scope="row"> {{ index }} </th>
+          <td> {{ users.username }}</td>
+          <td> {{ users.user_points }}</td>
+        </tr>
+      {% endwith %}
+      {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
