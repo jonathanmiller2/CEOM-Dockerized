@@ -1,0 +1,30 @@
+{% extends "maps/base.html" %}
+{% block content %}
+<h2 class="legend title">Maps Leaderboard</h2>
+
+<h5 class="text-center"> Welcome to the <strong> CEOM Maps Leaderboard</strong>! </h5>
+
+<p class="text-center"> Ranks are calulated based on which user classifies the most GeoCatter Points. </p>
+
+<table class="table table-bordered" style="width: 75%; border:1px solid black;margin-left:auto;margin-right:auto;">
+    <thead class="thead-dark">
+      <tr style="text-align: center">
+        <th scope="col">Position</th>
+        <th scope="col">Username</th>
+        <th scope="col">Points</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in ranked_list %}
+      {% with index=forloop.counter %} 
+        <tr style="text-align: center">
+          <th scope="row">{{ index }}</th>
+          <td> {{ user.username }}</td>
+          <td> {{ user.points }}</td>
+        </tr>
+      {% endwith %}
+      {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

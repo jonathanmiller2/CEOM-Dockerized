@@ -6,8 +6,10 @@ from django.contrib.gis.geos import Polygon
 import csv
 
 from ceom.photos.models import Photo, Category
-from ceom.photos.models import Category
 from ceom.maps.models import GeocatterPoint
+from django.contrib.auth.models import User
+from django.db.models import Count
+
 
 
 def index(request):
@@ -64,7 +66,6 @@ def geocatter(request):
             secondary_category = Category.objects.get(name=request.POST['l-cat2-select']) if 'l-multicat' in request.POST else None,
         )
         
-
         return HttpResponse()
     return render(request, 'maps/geocatter.html', context=data)
 
@@ -87,3 +88,8 @@ def map_validation_data(request):
         writer.writerow([photo.point.y, photo.point.x, photo.category.id, photo.category.name, photo.takendate])
 
     return response
+
+def leaderboard(request):
+    data = {}
+    data['ranked_list'] = User.objects.annotate(points=Count('geocatterpoint')).order_by("-points")[:10].values()
+    return render(request, 'maps/leaderboard.html',context=data)
