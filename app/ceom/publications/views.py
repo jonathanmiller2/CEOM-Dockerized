@@ -6,7 +6,7 @@ from ceom.publications.models import Publication, Category
 
 
 def index(request):
-    pubs = Publication.objects.all().order_by('date')
+    pubs = Publication.objects.all().order_by('-date')
     #pubs.reverse()
 
     if 'type' in request.GET:
@@ -22,6 +22,8 @@ def index(request):
         year_list = years.get(year, [])
         year_list.append(pub)
         years[year] = year_list
+
+    print(years)
 
     return render(request, 'publications/section_list.html', context={'section_list': years})
 
