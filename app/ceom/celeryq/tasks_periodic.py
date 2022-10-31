@@ -134,20 +134,29 @@ def clear_modis_csvs():
     week_ago = datetime.now() - timedelta(days=7)
     outdated_jobs = MODISMultipleTimeSeriesJob.objects.filter(modified__lt=week_ago)
     for outdated_job in outdated_jobs:
-        res_path = os.path.join(settings.MEDIA_ROOT, outdated_job.result.path)
-        if os.path.exists(res_path):
-            os.remove(res_path)
+        try:
+            res_path = os.path.join(settings.MEDIA_ROOT, outdated_job.result.path)
+            if os.path.exists(res_path):
+                os.remove(res_path)
 
-        inp_path = os.path.join(settings.MEDIA_ROOT, outdated_job.points.path)
-        if os.path.exists(inp_path):
-            os.remove(inp_path)
+            inp_path = os.path.join(settings.MEDIA_ROOT, outdated_job.points.path)
+            if os.path.exists(inp_path):
+                os.remove(inp_path)
+
+        except ValueError:
+            # Job never finished and has no file associated
+            pass
 
         outdated_job.delete()
     
     outdated_jobs = MODISSingleTimeSeriesJob.objects.filter(modified__lt=week_ago)
     for outdated_job in outdated_jobs:
-        res_path = os.path.join(settings.MEDIA_ROOT, outdated_job.result.path)
-        if os.path.exists(res_path):
-            os.remove(res_path)
+        try:
+            res_path = os.path.join(settings.MEDIA_ROOT, outdated_job.result.path)
+            if os.path.exists(res_path):
+                os.remove(res_path)
+        except ValueError:
+            # Job never finished and has no file associated
+            pass
 
         outdated_job.delete()
