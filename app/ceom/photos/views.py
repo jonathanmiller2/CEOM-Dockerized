@@ -74,10 +74,15 @@ def home(request):
     return render(request, 'photos/overview.html')
 
 def leaderboard(request):
-    data = {}
-    data['photo_leaderboard'] = User.objects.annotate(user_points=Count('categoryvote')).order_by("-user_points")[:10]
+    points = User.objects.annotate(user_points=Count('categoryvote')).order_by("-user_points")
 
-    return render(request, 'photos/leaderboard.html', context=data)
+    #Paginator 
+    page_num = request.GET.get('page')
+    paginator = Paginator(points, 5)
+    page = paginator.get_page(page_num)
+
+    return render(request, 'photos/leaderboard.html', {'page': page})    
+#    return render(request, 'photos/leaderboard.html', context=data)
 
 
 def search_for_photos(request):
