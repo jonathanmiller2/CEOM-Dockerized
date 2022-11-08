@@ -9,6 +9,7 @@ from ceom.photos.models import Photo, Category
 from ceom.maps.models import GeocatterPoint
 from django.contrib.auth.models import User
 from django.db.models import Count
+from django.core.paginator import Paginator
 
 
 
@@ -90,6 +91,8 @@ def map_validation_data(request):
     return response
 
 def leaderboard(request):
-    data = {}
-    data['ranked_list'] = User.objects.annotate(points=Count('geocatterpoint')).order_by("-points")[:10].values()
-    return render(request, 'maps/leaderboard.html',context=data)
+    ranks = User.objects.annotate(points=Count('geocatterpoint')).order_by("-points")
+    paginator = Paginator(ranks, 25) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'maps/leaderboard.html', {'page_obj': page_obj})
