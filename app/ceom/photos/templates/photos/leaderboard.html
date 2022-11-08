@@ -62,14 +62,16 @@
             </li>
             {% endif %}
             {% for n in page.paginator.page_range %}
-            {% if page.number == n %}
-            <li class="page-item active">
-                <a class="current page-link">{{ n }}</a>
-            </li>
-            {% else %}
-            <li class="page-item">
-                <a style="color: black" class="page-link" href="?page={{ n }}">{{ n }}</a>
-            </li>
+            {% if n <= page.number|add:2 and n >= page.number|add:-2 %}
+                {% if page.number == n %}
+                    <li class="page-item active">
+                        <a class="current page-link">{{ n }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a style="color: black" class="page-link" href="?page={{ n }}">{{ n }}</a>
+                    </li>
+            {% endif %}
             {% endif %}
             {% endfor %}
             {% if page.has_next %}

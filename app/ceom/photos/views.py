@@ -78,7 +78,7 @@ def leaderboard(request):
 
     #Paginator 
     page_num = request.GET.get('page')
-    paginator = Paginator(points, 5)
+    paginator = Paginator(points, 100)
     page = paginator.get_page(page_num)
 
     return render(request, 'photos/leaderboard.html', {'page': page})    
