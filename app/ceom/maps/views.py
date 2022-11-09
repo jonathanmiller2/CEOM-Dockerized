@@ -91,8 +91,9 @@ def map_validation_data(request):
     return response
 
 def leaderboard(request):
+    data = {}
     ranks = User.objects.annotate(points=Count('geocatterpoint')).order_by("-points")
     paginator = Paginator(ranks, 25) 
     page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'maps/leaderboard.html', {'page_obj': page_obj})
+    data['page_obj'] = paginator.get_page(page_number)
+    return render(request, 'maps/leaderboard.html', context=data)

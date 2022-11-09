@@ -3,8 +3,6 @@
 
 <h2 class="legend title">Pixels Leaderboard</h2>
 
-<h5 class="text-center"> Welcome to the <strong> CEOM Pixels Categorize Leaderboard</strong>! </h5>
-
 <p class="text-center"> Ranks are calulated based on which user classifies the most GeoCatter Pixels. </p>
 
 <table class="table table-bordered" style="width: 75%; border:1px solid black;margin-left:auto;margin-right:auto;">
@@ -52,13 +50,13 @@
           </li>
         {% endif %}
         {% for i in page_obj.paginator.page_range %}
-        {% if i <= page_obj.number|add:3 and i >= page_obj.number|add:-3 %}
-          {% if page_obj.number == i %}
-            <li class="page-item active"><a class="current page-link">{{ i }}</a></li>
-          {% else %}
-            <li class="page-item"><a style="color: black" class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-        {% endif %}
-        {% endif %}
+          {% if i <= page_obj.number|add:3 and i >= page_obj.number|add:-3 %}
+            {% if page_obj.number == i %}
+              <li class="page-item active"><a class="current page-link">{{ i }}</a></li>
+            {% else %}
+              <li class="page-item"><a style="color: black" class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+          {% endif %}
         {% endfor %}
         {% if page_obj.has_next %}
           <li class="page-item">
