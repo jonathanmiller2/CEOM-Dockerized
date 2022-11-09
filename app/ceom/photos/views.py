@@ -22,12 +22,13 @@ from django.shortcuts import redirect
 
 from django.views.decorators.csrf import csrf_exempt
 from django.template.defaultfilters import wordwrap
-from ceom.photos.models import PhotoUser
 
 
 from ceom.photos.templatetags.photos_tags import thumbnail, point2str
 from ceom.photos.models import Photo, Category, CategoryVote
 from ceom.photos.forms import SearchForm, PhotoForm, BatchEditForm
+from ceom.photos.models import PhotoUser
+
 
 import datetime
 import dateutil.parser as date_parser
@@ -79,10 +80,10 @@ def leaderboard(request):
     #Paginator 
     page_num = request.GET.get('page')
     paginator = Paginator(points, 100)
-    page = paginator.get_page(page_num)
+    data = {}
+    data['page'] = paginator.get_page(page_num)
 
-    return render(request, 'photos/leaderboard.html', {'page': page})    
-#    return render(request, 'photos/leaderboard.html', context=data)
+    return render(request, 'photos/leaderboard.html', context=data)
 
 
 def search_for_photos(request):

@@ -33,7 +33,6 @@ urlpatterns = [
     re_path(r'^water/', include('ceom.water.urls')),
     re_path(r'^poi/', include('ceom.poi.urls')),
     re_path(r'^tropomi/',include('ceom.tropomi.urls')),
-    #re_path(r'^leaderboard/', include('ceom.leaderboard.urls')),
 
     url(r'^raster/', include('raster.urls')),
 ]
