@@ -16,7 +16,6 @@ RUN apt-get install binutils libproj-dev libgdal-dev=3.2.2+dfsg-2+deb11u2 gdal-b
 #Install dependencies
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-
 RUN pip install --no-cache-dir GDAL==3.2.2 
 
 #Run entrypoint.sh
