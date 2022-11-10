@@ -18,7 +18,6 @@ from django.core.files.uploadedfile import UploadedFile
 from django.core.files.base import ContentFile
 from django.core.files import File
 from django.shortcuts import redirect
-from django.contrib.auth.models import User
 
 
 from django.views.decorators.csrf import csrf_exempt
@@ -26,8 +25,9 @@ from django.template.defaultfilters import wordwrap
 
 
 from ceom.photos.templatetags.photos_tags import thumbnail, point2str
-from ceom.photos.models import Photo, Category, CategoryVote
+from ceom.photos.models import Photo, Category, CategoryVote, PhotoUser
 from ceom.photos.forms import SearchForm, PhotoForm, BatchEditForm
+
 
 import datetime
 import dateutil.parser as date_parser
@@ -72,6 +72,17 @@ def ranges(i):
 
 def home(request):
     return render(request, 'photos/overview.html')
+
+def leaderboard(request):
+    points = User.objects.annotate(user_points=Count('categoryvote')).order_by("-user_points")
+
+    #Paginator 
+    page_num = request.GET.get('page')
+    paginator = Paginator(points, 100)
+    data = {}
+    data['page'] = paginator.get_page(page_num)
+
+    return render(request, 'photos/leaderboard.html', context=data)
 
 
 def search_for_photos(request):
