@@ -25,9 +25,8 @@ from django.template.defaultfilters import wordwrap
 
 
 from ceom.photos.templatetags.photos_tags import thumbnail, point2str
-from ceom.photos.models import Photo, Category, CategoryVote
+from ceom.photos.models import Photo, Category, CategoryVote, PhotoUser
 from ceom.photos.forms import SearchForm, PhotoForm, BatchEditForm
-from ceom.photos.models import PhotoUser
 
 
 import datetime
