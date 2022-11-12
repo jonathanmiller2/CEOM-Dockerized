@@ -12,9 +12,9 @@
 	<div class="hr"></div>&nbsp;
  {% if section_list %}
 <div id='list'>
-    {% for name, pub_list in section_list.items reversed %}
+    {% for name, pub_list in section_list.items %}
         <div id='{{name}}'><h3>{{ name }}</h3></div>
-        <ol>
+        <ol reversed>
         {% for p in pub_list %}
             <li style="margin-bottom: 1em">
              {{ p.authorship }},
