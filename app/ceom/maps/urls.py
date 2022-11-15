@@ -8,4 +8,5 @@ urlpatterns = [
     re_path(r'^geocatter/$', ceom.maps.views.geocatter),
     re_path(r'^validation/$', ceom.maps.views.map_validation),
     re_path(r'^validation_data/$', ceom.maps.views.map_validation_data),
+    re_path(r'^leaderboard/$', ceom.maps.views.leaderboard),
 ]

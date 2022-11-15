@@ -1,0 +1,90 @@
+{% extends "photos/base.html" %}
+{% load i18n %}
+{% block content %}
+
+<h2 style="color: #0860be;" >Photos Leaderboard</h2>
+
+<br>
+
+<p class="text-center"> Ranks are calulated based on which user classifies the most photos.</p>
+
+<table class="table table-bordered" style="width: 75%; border:1px solid black;margin-left:auto;margin-right:auto;">
+    <thead class = "table-dark">
+      <tr style="text-align: center">
+        <th scope="col">Ranking</th>
+        <th scope="col">Username</th>
+        <th scope="col">Points</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for users in page %}
+        {% with index=forloop.counter0 %}
+            <tr style="text-align: center">
+                {% ifequal users.username|stringformat:"s" request.user.username %}
+                    <th class="table-active" scope="row"> {{ page.start_index|add:index }} </th>
+                    <td id="position" class="table-active"> {{ users.username }}</td>
+                    <td class="table-active"> {{ users.user_points }}</td>
+                {% else %}
+                    <th scope="row"> {{ page.start_index|add:index }} </th>
+                    <td> {{ users.username }}</td>
+                    <td> {{ users.user_points }}</td>
+                {% endifequal %}
+            </tr>
+        {% endwith %}
+      {% endfor %}
+    </tbody>
+</table>
+
+
+<div class="mt-3 d-flex justify-content-center"> 
+    <div class="pagination">
+        <ul class="pagination pagination-sm">
+            {% if page.has_previous %}
+                <li class="page-item">
+                    <a style="color: black" class="page-link" href="?page=1"> &laquo;&laquo;</a>
+                </li>
+                <li class="page-item">
+                    <a style="color: black" class="page-link" href="?page={{ page.previous_page_number }}"> &laquo;</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link"> &laquo;&laquo;</a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link">&laquo;</a>
+                </li>
+            {% endif %}
+            {% for n in page.paginator.page_range %}
+                {% if n <= page.number|add:2 and n >= page.number|add:-2 %}
+                    {% if page.number == n %}
+                        <li class="page-item active">
+                            <a class="current page-link">{{ n }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a style="color: black" class="page-link" href="?page={{ n }}">{{ n }}</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% if page.has_next %}
+                <li class="page-item">
+                    <a style="color: black" class="page-link" href="?page={{ page.next_page_number }}">&raquo;</a>
+                </li>
+                <li class="page-item">
+                    <a style="color: black" class="page-link" href="?page={{ page.paginator.num_pages }}">&raquo;&raquo;</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">&raquo;</a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link">&raquo;&raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
