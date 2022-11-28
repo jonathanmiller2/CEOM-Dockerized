@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db.models import Q
 from celery.result import AsyncResult
+from raster.models import RasterProduct, RasterLayer
 
 from ceom.modis.models import Product, Dataset, Tile, MODISMultipleTimeSeriesJob,  MODISSingleTimeSeriesJob
 from ceom.photos.models import Category, Photo
@@ -16,19 +17,16 @@ from ceom.modis.forms import TimeSeriesJobForm
 import os, re, glob, sys, csv, json, uuid, subprocess, numpy, math
 from datetime import datetime, date, timedelta
 from functools import reduce
-from raster.models import RasterProduct, RasterLayer
+
 from PIL import Image
 from io import BytesIO
 
 
-ERROR_NOT_EXIST_MESSAGE = 'Could not retrieve task. It may not exist or may have expired.'
-FAILURE_MESSAGE = 'We are sorry, but an error occured while processing the task. Please contact the administrator.'
-PENDING_MESSAGE = 'Waiting in queue... (If it takes too long please contact the administrator)'
-PROCESSING_MESSAGE = 'Processing...'
+def index(request):
+    return render(request, 'modis/overview.html')
+
 
 def remote_sensing_datasets(request):
-    # existing = File.objects.values('dataset').distinct()
-    # dataset_list = Dataset.objects.filter(file__dataset_id__isnull=False).order_by("name")
     dataset_list = Dataset.objects.all().order_by("name")
     product_list = Product.objects.all().order_by("name")
     return render(request, 'modis/remote_sensing_datasets.html', context={
@@ -36,40 +34,31 @@ def remote_sensing_datasets(request):
         'product_list' : product_list,
     })
 
+
 def tilemap(request, dataset_id, year):
     dataset = Dataset.objects.get(name__iexact=dataset_id)
-    # Need to replace existing and dataset_list query. It is too slow... use subqueries and group by!!!  
-    existing = File.objects.distinct().values('dataset')
-    #existing = [mcd43a4,mod09a1,mod09ga,mod09q1,mod11a1,mod11a2,mod11c3,mod12q1,mod13a1,mod13a2,mod13c2,mod13q1,mod14a2,mod15a2,mod17a2,myd11a2,myd11c3,myd14a2]
-    dataset_list = Dataset.objects.filter(name__in=existing)
-    # dataset_list contains all the information of the product in the existing list above
-    year_list = File.objects.filter(dataset=dataset).distinct().order_by('year').values('year')
-    #year_list = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016]
+
+    if dataset.location[-1] != '/':
+        loc = dataset.location + '/'
+    else:
+        loc = dataset.location
+    
+    year_dirs = list(glob.glob(loc + '[0-9][0-9][0-9][0-9]/'))
+    year_list = sorted([int(y[-5:-1]) for y in year_dirs])
 
     good_list = []
     bad_list = []
 
-    def splittiles(n):
-        #TODO: THIS FUNCTIONALITY IS GOING TO BE BROKEN UNTIL THIS IS REWRITTEN
-        # with_count() WAS A HIGHLY, HIGHLY DANGEROUS METHOD THAT NEEDED TO BE REMOVED IMMEDIATELY
+    for tile_dir in glob.glob(loc + str(year) + '/h[0-9][0-9]v[0-9][0-9]/'):
+        h = int(tile_dir[-6:-4])
+        v = int(tile_dir[-3:-1])
+        if len(glob.glob(tile_dir + '*.hdf')) == 46:
+            good_list.append({'h': h, 'v':v})
+        else:
+            bad_list.append({'h': h, 'v':v})
 
-        # for tile in Tile.objects.with_count(dataset_id,year):
-        #     if tile.count == n:
-        #         good_list.append(tile)
-        #     else:
-        #         bad_list.append(tile)
-        pass
-    
-    if year == '2000':
-        splittiles(40)
-    elif year == '2001':
-        splittiles(45)
-    else:
-        splittiles(46)
-
-    return render(request, 'modis/map.html', context={
-        'dataset' : dataset_id,
-        'dataset_list' : dataset_list,
+    return render(request, 'modis/tiledatamap.html', context={
+        'dataset' : dataset,
         'good_list' : good_list,
         'bad_list' : bad_list,
         'year' : year,
@@ -77,112 +66,77 @@ def tilemap(request, dataset_id, year):
         'year_list' : year_list,
     })
     
-def tile(request, x, y):
+def tile(request, dataset_id, x, y):
+    data = {}
+    data['tile_name'] = "h%02dv%02d" % (int(x),int(y))
+    data['file_total'] = 0
+    data['file_data'] = []
 
-    #TODO: Why are there two functions named the same thing?
-    def daystoranges( days,day_res):
-        l = []
-        if len(days) > 0:
-            rang = []
-            rang.append(days[0])
-            prev = days[0]
+    dataset = Dataset.objects.get(name__iexact=dataset_id)
 
-            for i in range(1, len(days)):
-                if days[i]-day_res != prev:
-                    l.append(rang)
-                    rang = []
-                rang.append(days[i])
-                prev = days[i]
-            l.append(rang)
-        for i in range(0,len(l)):
-            l[i] = [l[i][0], l[i][-1]]
-        return l
+    if dataset.location[-1] != '/':
+        loc = dataset.location + '/'
+    else:
+        loc = dataset.location
 
-    def daysToRanges( days,day_res):
-        ranges = []
-        for r in daystoranges(days,day_res):
-            if r[0] != r[1]:
-                ranges.append('-'.join(map(str, r)))
+    year_dirs = list(glob.glob(loc + '[0-9][0-9][0-9][0-9]/'))
+    year_list = sorted([int(y[-5:-1]) for y in year_dirs])
+    
+    for y in year_list:
+        files_in_year = glob.glob(loc + str(y) + '/' + data['tile_name'] + '/*.hdf')
+        days_present = sorted([int(fname.split('/')[-1][13:16]) for fname in files_in_year])
+
+        data['file_total'] += len(days_present)
+        
+        good_ranges = []
+        bad_ranges = []
+
+        # Iterate through year, looking for missing ranges of files. 
+        currently_good = 1 in days_present
+        range_start = 1
+        for d in range(9, 365, dataset.day_res):
+            if d not in days_present and currently_good:
+                # Downward edge. End of present range / start of missing range.
+
+                if range_start == d - dataset.day_res:
+                    good_ranges.append(str(range_start))
+                else:
+                    good_ranges.append(str(range_start) + '-' + str(d - dataset.day_res))
+                range_start = d
+                currently_good = False
+
+            elif d in days_present and not currently_good:
+                # Upward edge. Start of present range / end of missing range.
+
+                if range_start == d - dataset.day_res:
+                    bad_ranges.append(str(range_start))
+                else:
+                    bad_ranges.append(str(range_start) + '-' + str(d - dataset.day_res))
+                range_start = d
+                currently_good = True
+
+        # Handle final range
+        if currently_good:
+            if range_start == 365:
+                good_ranges.append(str(365))
             else:
-                ranges.append(str(r[0]))
-
-        return ', '.join(ranges)
-
-    #This function takes sorted array of day numbers with 8 days
-    # interval and returns the days that are missing
-    def missingdays( days,day_res):
-        l = []
-        i = 0
-        length = len(days)
-        for d in range(1, 365, day_res):
-            if (i>=length or d != days[i]):
-                l.append(d)
+                good_ranges.append(str(range_start) + '-365')
+        else:
+            if range_start == 365:
+                bad_ranges.append(str(365))
             else:
-                i=i+1
+                bad_ranges.append(str(range_start) + '-365')
 
-        return l
+        data['file_data'].append((y, {
+            'present': ','.join(good_ranges),
+            'absent': ','.join(bad_ranges),
+            'total': len(days_present)
+        }))
 
-    def parsePresentMissing( days,day_res):
-        s = daysToRanges(days,day_res)
-        m = daysToRanges(missingdays(days,day_res),day_res)
-        return s, m
-
-    def getproducts(names,dataset_day_res_dict):
-        dic = {}
-        result = []
-        for name in sorted(names):
-            f = name.split('.')
-            # MOD09A1.A2000185.h12v01.005.2006292063546.hdf
-            if(f[5]=='hdf'):
-                product = f[0]
-                year = f[1][1:5]
-                tile = f[2]
-                day = f[1][-3:]
-                dic.setdefault(product,{}).setdefault(year, {}).setdefault(tile,[]).append(int(day))
-
-        # Could be improved by removing the expensive sorting by using lists ( O(log n))
-        for p in sorted(dic.keys()):
-            years = dic[p]
-            year_list = []
-            for y in sorted(years.keys()):
-                tiles = years[y]
-                tile_list = []
-                for t in sorted(tiles.keys()):
-                    days = tiles[t]
-                    days.sort()
-                    dataset_day_res_dict[p]
-                    present, missing = parsePresentMissing(days,dataset_day_res_dict[p])
-                    tile_list.append((t, {'ranges': present, 'missing': missing, 'total': len(days)}))
-                year_list.append((y, tile_list))
-            result.append((p, year_list))
-        return result
-
-
-    tileq = "h%02dv%02d" % (int(x),int(y))
-    files_query = File.objects.filter(tile=tileq).values('name').order_by('name')
-    dataset_day_res_query = Dataset.objects.all().values('name','day_res')
-    dataset_day_res_dict = {d['name']:d['day_res'] for d in dataset_day_res_query}
-    files = [ row['name'] for row in files_query]
-    files = getproducts(files,dataset_day_res_dict)
-    return render(request, 'modis/tile.html', context={
-        'tile': tileq,
-        'files': files,
-        'total': len(files_query),
-    })
-    
-    
-def detail(request, product_id):
-    try:
-        prod = Product.objects.get(pk=product_id)
-    except Product.DoesNotExist:
-        raise Http404
-    return render(request, 'modis/remote_sensing_datasets.html', context={'prod': prod})
-
-
-
+    return render(request, 'modis/tile.html', context=data)
 
     
-def latlon2sin(lat,lon,modis='mod09a1',npix=2400.0):
+def latlon2sin(lat, lon, npix=2400.0):
 
     const =(36.*npix)/(2.*math.pi)
     folder = ''
@@ -200,24 +154,7 @@ def latlon2sin(lat,lon,modis='mod09a1',npix=2400.0):
     folder = 'h%02dv%02d' % (ih,iv) 
     return ih,iv,xi,yi,folder
 
-def down(request):
-    return HttpResponse("Temporarily offline")
 
-def index(request):
-    return render(request, 'modis/overview.html')
-
-@login_required()
-def single(request):
-    data = {}
-    data['datasets'] = Dataset.objects.filter(is_global=False).order_by('name')
-    data['years'] = [y for y in range (2000,date.today().year + 1)]
-    
-    if request.method == 'GET' and 'lat' in request.GET and 'lon' in request.GET:
-        data['photoRedirect'] = True
-        data['latRedirect'] = request.GET['lat']
-        data['lonRedirect'] = request.GET['lon']
-
-    return render(request, 'modis/single.html', context=data)
 
 def vimap(request):
     products = RasterProduct.objects.all()
@@ -237,48 +174,12 @@ def vimap(request):
 
     options = json.dumps(options)
 
-    return render(request, 'modis/olmap.html', context={
+    return render(request, 'modis/vimap.html', context={
         "mapOptions": options,
     })
 
-def indices_kml(request):
-    timespans = []
-    for y in range(2002,2003):
-        for d in range(1,96,8):
-            time = date(y,1,1) + timedelta(d-1)
-            timespans.append({'layers':"TOP%2CBOT%2Cocean_mask",
-                             'params':"year=%d&day=%d&prod=evi"%(y,d),
-                             'begin':time,
-                             'end':time+timedelta(d+6) })
-
-    #test = points[0].kml
-    return render(request, 'kml/wrap_wms_time.kml', context={'timespans' : timespans, 'host':request.META['HTTP_HOST']}, content_type = "application/vnd.google-earth.kml+xml")
 
 
-def evi_kml(request):
-    timespans = []
-    for y in range(2002,2003):
-        for d in range(1,96,8):
-            time = date(y,1,1) + timedelta(d-1)
-            timespans.append({'layers':"TOP%2CBOT%2Cocean_mask",
-                             'params':"year=%d&day=%d&prod=evi"%(y,d),
-                             'begin':time,
-                             'end':time+timedelta(d+6) })
-
-    #test = points[0].kml
-    return render(request, 'kml/wrap_wms_time.kml', context={'timespans' : timespans, 'host':request.META['HTTP_HOST']}, content_type="application/vnd.google-earth.kml+xml")
-
-
-def kml(request, name):
-    try:
-        styles = targetModel().styles()
-    except AttributeError:
-
-        styles = [{'name':'default', 'color':'8800ff00', 'icon':'http://maps.google.com/mapfiles/kml/shapes/info.png'}]
-
-    return render(request, 'kml/main.kml', context= {'styles':styles, 'geometries':objects}, mimetype="application/vnd.google-earth.kml+xml")
-
-TIMESERIES_LOCATION = os.path.join('modis','timeseries','single')
 
 @login_required()
 def single_progress(request, task_id):
