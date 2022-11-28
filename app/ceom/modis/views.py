@@ -1,51 +1,24 @@
-from ceom.modis.models import File, Product, Dataset, Tile
 from django.template import Context, loader, RequestContext
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
-import numpy
-import sys, os
-
-from django.core.files.base import ContentFile
-from django.db.models import Q
-from ceom.modis.models import Dataset
-from ceom.photos.models import Category, Photo
-from ceom.modis.models import MODISMultipleTimeSeriesJob,  MODISSingleTimeSeriesJob
-from ceom.modis.forms import TimeSeriesJobForm
-from datetime import datetime, date, timedelta
-
-from functools import reduce
-from raster.models import RasterProduct, RasterLayer
-
-#TODO: Are these imports necessary?
-#from django.template.context_processors import csrf
-
-import numpy, math
-import  os, re, glob, sys
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-# Need to change to include new celery script
-# import process
-
-import csv, json
-from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
-# Celery tasks
-from ceom.modis.taskprocessing.tasks import get_modis_raw_data
-#from ceom.celeryq.tasks import get_modis_raw_data, latlon2sin
-from ceom.modis.taskprocessing.tasks_multi import multiple_site_modis,terminate_task
-
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
+from django.core.files.base import ContentFile
+from django.db.models import Q
 from celery.result import AsyncResult
 
-from django.conf import settings
+from ceom.modis.models import Product, Dataset, Tile, MODISMultipleTimeSeriesJob,  MODISSingleTimeSeriesJob
+from ceom.photos.models import Category, Photo
+from ceom.modis.forms import TimeSeriesJobForm
 
-#Charting lib
-# from chartit import DataPool, Chart
-import csv
-import uuid
-import subprocess
-
+import os, re, glob, sys, csv, json, uuid, subprocess, numpy, math
+from datetime import datetime, date, timedelta
+from functools import reduce
+from raster.models import RasterProduct, RasterLayer
+from PIL import Image
+from io import BytesIO
 
 
 ERROR_NOT_EXIST_MESSAGE = 'Could not retrieve task. It may not exist or may have expired.'
@@ -185,7 +158,6 @@ def tile(request, x, y):
         return result
 
 
-    import datetime
     tileq = "h%02dv%02d" % (int(x),int(y))
     files_query = File.objects.filter(tile=tileq).values('name').order_by('name')
     dataset_day_res_query = Dataset.objects.all().values('name','day_res')
@@ -207,9 +179,7 @@ def detail(request, product_id):
     return render(request, 'modis/remote_sensing_datasets.html', context={'prod': prod})
 
 
-from PIL import Image
-from django.conf import settings
-from io import BytesIO
+
 
     
 def latlon2sin(lat,lon,modis='mod09a1',npix=2400.0):

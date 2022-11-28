@@ -1,19 +1,12 @@
-#This class describes the inventory data model in Django
-# model syntax
-
-from django.db import models
-import datetime
 from django import forms
+from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_comma_separated_integer_list
-
-from ceom.photos.models import Category, Photo
 from django.contrib.auth.models import User
 
-import time
-import csv
+from ceom.photos.models import Category, Photo
 
-import json
+import time, csv, json, datetime
 
 class Dataset(models.Model):
     name = models.CharField(max_length=7, primary_key=True)
@@ -31,7 +24,6 @@ class Dataset(models.Model):
     location = models.CharField(max_length=100, null=True, blank=True)
     day_res = models.IntegerField(default=8)
     is_global = models.BooleanField(default=False)
-    # timeseries_enabled = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -58,45 +50,20 @@ class Tile(models.Model):
     lat_max = models.FloatField(null=True)
     continent = models.CharField(max_length=30,null=True)
 
-    def toString(self):
-        return self.name + ";ih=" + str(self.ih) + ";long_min=" \
-               + str(self.lon_min) +";" + self.continent + ";"
-
-    def __str__(self):
-        return self.name
-        
-class File(models.Model):
-    tile = models.ForeignKey(Tile, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50, primary_key=True)
-    year = models.IntegerField(null=True)
-    day = models.IntegerField(null=True)
-    timestamp = models.BigIntegerField()
-    dataset = models.ForeignKey(Dataset, null=True, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, through='Process')
-    absolute_path = models.CharField(max_length = 300, null=False, default='N/A')
     def __str__(self):
         return self.name
 
-class Process(models.Model):
-    file = models.ForeignKey(File, on_delete=models.DO_NOTHING)
-    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
-    timestamp = models.DateTimeField('date processed', null=True, blank=True)
-
-
-def get_series_path(instance, filename):
-    return time.strftime('timeseries/input')+filename
-
-def get_seriesresult_path(instance, filename):
-    return time.strftime('timeseries/%a%d%b%Y_%H-%M-%S_result_')+filename
 
 MAX_BLANK_ROWS=100
 MAX_SITES_PER_FILE=100
 def checkFormat(document):
+    # TODO: Rewrite this trash
+
     try:
         dialect = csv.Sniffer().sniff(document.read(1024).decode('utf-8'))
         document.seek(0, 0)
     except csv.Error:
-        raise ValidationError('fNot a valid CSV file')
+        raise ValidationError('Not a valid CSV file')
     reader = csv.reader(document.read().decode('utf-8').splitlines(), dialect)
     i=1
     blank_rows=0
@@ -118,8 +85,6 @@ def checkFormat(document):
             raise forms.ValidationError("Format error at line "+ str(i)+": latitude and longitude must be in number format eg: 12.1234. ["+str(row)+"]")
         i+=1
     return True
-
-#   This model holds all single site timeseries so that they can be accessed from the user panel later
 
 class MODISSingleTimeSeriesJob(models.Model):
 

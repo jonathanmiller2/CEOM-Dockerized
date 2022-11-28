@@ -11,12 +11,6 @@ class ProductAdmin(admin.ModelAdmin):
 
 admin.site.register(Product, ProductAdmin)
 
-class TileAdmin(admin.ModelAdmin):
-    list_display = ('name','continent', 'lon_min', 'lon_max', 'lat_min', 'lat_max')
-
-admin.site.register(Tile, TileAdmin)
-admin.site.register(File)
-
 class MODISMultipleTimeSeriesJobAdmin(admin.ModelAdmin):
     list_display = ('user','sender', 'product', 'timestamp', 'completed','working','error','progress','total_sites','message')
 
