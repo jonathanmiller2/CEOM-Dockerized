@@ -49,7 +49,7 @@ def tilemap(request, dataset_id, year):
     good_list = []
     bad_list = []
 
-    for tile_dir in glob.glob(loc + str(year) + '/h[0-9][0-9]v[0-9][0-9]/'):
+    for tile_dir in glob.glob(glob.escape(loc) + str(year) + '/h[0-9][0-9]v[0-9][0-9]/'):
         h = int(tile_dir[-6:-4])
         v = int(tile_dir[-3:-1])
         if len(glob.glob(tile_dir + '*.hdf')) == 46:
@@ -80,12 +80,14 @@ def tile(request, dataset_id, x, y):
     else:
         loc = data['dataset'].location
 
-    year_dirs = list(glob.glob(loc + '[0-9][0-9][0-9][0-9]/'))
+    year_dirs = list(glob.glob(glob.escape(loc) + '[0-9][0-9][0-9][0-9]/'))
     year_list = sorted([int(y[-5:-1]) for y in year_dirs])
     
     for y in year_list:
-        files_in_year = glob.glob(loc + str(y) + '/' + data['tile_name'] + '/*.hdf')
-        days_present = sorted([int(fname.split('/')[-1][13:16]) for fname in files_in_year])
+        files_in_year = glob.glob(glob.escape(loc) + str(y) + '/' + data['tile_name'] + '/*.hdf')
+        days_present = sorted([int(fname.split('/')[-1].split('.')[1][5:8]) for fname in files_in_year])
+        print(files_in_year)
+        print(days_present)
 
         data['file_total'] += len(days_present)
         
