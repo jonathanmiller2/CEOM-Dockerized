@@ -72,12 +72,13 @@ def tile(request, dataset_id, x, y):
     data['file_total'] = 0
     data['file_data'] = []
 
-    dataset = Dataset.objects.get(name__iexact=dataset_id)
+    data['dataset'] = Dataset.objects.get(name__iexact=dataset_id)
+    day_res = data['dataset'].day_res
 
-    if dataset.location[-1] != '/':
-        loc = dataset.location + '/'
+    if data['dataset'].location[-1] != '/':
+        loc = data['dataset'].location + '/'
     else:
-        loc = dataset.location
+        loc = data['dataset'].location
 
     year_dirs = list(glob.glob(loc + '[0-9][0-9][0-9][0-9]/'))
     year_list = sorted([int(y[-5:-1]) for y in year_dirs])
@@ -94,24 +95,24 @@ def tile(request, dataset_id, x, y):
         # Iterate through year, looking for missing ranges of files. 
         currently_good = 1 in days_present
         range_start = 1
-        for d in range(9, 365, dataset.day_res):
+        for d in range(9, 365, day_res):
             if d not in days_present and currently_good:
                 # Downward edge. End of present range / start of missing range.
 
-                if range_start == d - dataset.day_res:
+                if range_start == d - day_res:
                     good_ranges.append(str(range_start))
                 else:
-                    good_ranges.append(str(range_start) + '-' + str(d - dataset.day_res))
+                    good_ranges.append(str(range_start) + '-' + str(d - day_res))
                 range_start = d
                 currently_good = False
 
             elif d in days_present and not currently_good:
                 # Upward edge. Start of present range / end of missing range.
 
-                if range_start == d - dataset.day_res:
+                if range_start == d - day_res:
                     bad_ranges.append(str(range_start))
                 else:
-                    bad_ranges.append(str(range_start) + '-' + str(d - dataset.day_res))
+                    bad_ranges.append(str(range_start) + '-' + str(d - day_res))
                 range_start = d
                 currently_good = True
 
