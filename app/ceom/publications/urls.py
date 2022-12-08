@@ -1,6 +1,6 @@
 #TODO: Are these imports necessary?
 from django.conf.urls import *
-from ceom.publications.models import Publication
+from ceom.aboutus.models import Publication
 
 from django.urls import re_path
 import ceom.publications.views

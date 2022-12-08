@@ -1,5 +1,5 @@
-from ceom.publications.models import Category
-from ceom.publications.models import Publication
+from ceom.aboutus.models import Category
+from ceom.aboutus.models import Publication
 from django.contrib import admin
 
 
@@ -13,4 +13,3 @@ class CatAdmin(admin.ModelAdmin):
 	list_display = ('name',)
 	
 admin.site.register(Publication, PubAdmin)
-admin.site.register(Category, CatAdmin)
