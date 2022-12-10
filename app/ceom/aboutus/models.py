@@ -132,9 +132,7 @@ class Publication(models.Model):
 
     def __str__(self):
         return self.title
-
-
-
+        
 # Gross and Net Primary Production -- Vegetation Photosynthesis Model (VPM)
 # Agro-Ecosystem, Agriculture and Irrigation
 # Forest Ecosystem and Forestry

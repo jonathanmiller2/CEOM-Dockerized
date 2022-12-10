@@ -13,3 +13,4 @@ class CatAdmin(admin.ModelAdmin):
 	list_display = ('name',)
 	
 admin.site.register(Publication, PubAdmin)
+admin.site.register(Category, CatAdmin)
