@@ -2,7 +2,7 @@
 from django.template import Context, RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from ceom.aboutus.models import Post, Person, GalleryPhoto
+from ceom.aboutus.models import Post, Person, GalleryPhoto, Publication
 from itertools import chain
 from operator import attrgetter
 from datetime import date
@@ -17,6 +17,35 @@ def people(request):
     data['people'] = Person.objects.all().order_by('category__order', 'order', 'last_name')
     
     return render(request, 'aboutus/people.html', context=data)
+
+def index(request):
+    pubs = Publication.objects.all().order_by('-date')
+    #pubs.reverse()
+
+    if 'type' in request.GET:
+        pubs = pubs.filter(pubtype=str(request.GET['type']))
+
+    years = dict()
+    for pub in pubs:
+        if pub.year:
+            year = pub.year
+        else:
+            year = pub.date.year
+
+        year_list = years.get(year, [])
+        year_list.append(pub)
+        years[year] = year_list
+
+    print(years)
+
+    return render(request, 'publications/section_list.html', context={'section_list': years})
+
+def detail(request):
+    '''
+    This can be a future view to display a single publication with content
+    '''
+
+    return HttpRequest()
 
 def group_photos(request, selYear = None):
     available_years=GalleryPhoto.objects.all().values_list('year', flat=True).order_by('-year')
