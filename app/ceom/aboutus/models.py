@@ -132,13 +132,3 @@ class Publication(models.Model):
 
     def __str__(self):
         return self.title
-        
-# Gross and Net Primary Production -- Vegetation Photosynthesis Model (VPM)
-# Agro-Ecosystem, Agriculture and Irrigation
-# Forest Ecosystem and Forestry
-# Land Cover and Land Use Change
-# Biochemical and Biophysical Parameters -- Chlorophyll, Nitrogen and Leaf Area Index
-# Land Surface Phenology
-# Snow Cover
-# Water fluxes and hydrology
-# Infectious Disease Ecology, Epidemiology, and Global Health

@@ -40,13 +40,6 @@ def index(request):
 
     return render(request, 'publications/section_list.html', context={'section_list': years})
 
-def detail(request):
-    '''
-    This can be a future view to display a single publication with content
-    '''
-
-    return HttpRequest()
-
 def group_photos(request, selYear = None):
     available_years=GalleryPhoto.objects.all().values_list('year', flat=True).order_by('-year')
     photos= None

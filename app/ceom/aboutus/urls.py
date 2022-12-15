@@ -20,7 +20,6 @@ urlpatterns = [
     re_path(r'facilities/$', TemplateView.as_view(template_name="aboutus/facilities/overview.html")),
 	re_path(r'calendar', TemplateView.as_view(template_name="aboutus/calendar.html")),
     re_path(r'publications/', TemplateView.as_view(template_name="aboutus/section_list.html")),
-    re_path(r'publications/publications/(?P<object_id>\d+)/$', ceom.aboutus.views.detail),
 	re_path(r'^group_photos/(?P<selYear>\d{4})', ceom.aboutus.views.group_photos),
 	re_path(r'^group_photos', ceom.aboutus.views.group_photos),
     re_path(r'$', ceom.aboutus.views.news),
