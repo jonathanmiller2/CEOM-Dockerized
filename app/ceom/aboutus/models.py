@@ -102,9 +102,15 @@ PUBLICATION_CHOICES = (
     ('pres', 'Presentations'),
 )
 
+class PublicationCategory(models.Model):
+    name = models.CharField(max_length=125)
+
+    def __str__(self):
+        return self.name
+
 class Publication(models.Model):
     pubtype = models.CharField(max_length=4, choices=PUBLICATION_CHOICES, null=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(PublicationCategory, on_delete=models.CASCADE)
     authorship = models.TextField(null=True, blank=True)
     title = models.CharField(max_length=250, null=True, blank=True)
 
