@@ -168,7 +168,6 @@ INSTALLED_APPS = [
 
     'ceom.accounts',
     'ceom.photos',
-    'ceom.publications',
     'ceom.modis',
     'ceom.geohealth',
     'ceom.pages',
