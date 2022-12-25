@@ -105,7 +105,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('sender', models.EmailField(blank=True, max_length=150, null=True, verbose_name='Additional sender')),
-                ('points', models.FileField(max_length=150, upload_to='modis/timeseries/input', validators=[ceom.modis.models.checkFormat], verbose_name='Upload csv file')),
+                ('points', models.FileField(max_length=150, upload_to='modis/timeseries/input', verbose_name='Upload csv file')),
                 ('result', models.FileField(blank=True, max_length=300, null=True, upload_to='modis/timeseries/multi')),
                 ('years', models.CharField(max_length=200, validators=[django.core.validators.RegexValidator(re.compile('^\\d+(?:,\\d+)*\\Z'), code='invalid', message='Enter only digits separated by commas.')], verbose_name='Select years')),
                 ('completed', models.BooleanField(default=False)),

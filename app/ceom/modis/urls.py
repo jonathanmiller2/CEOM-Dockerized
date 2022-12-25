@@ -1,6 +1,3 @@
-from django.conf.urls import *
-from django.views.generic import TemplateView
-
 from django.urls import re_path, path
 import ceom.modis.views
 
@@ -14,16 +11,17 @@ urlpatterns = [
     re_path(r'^(?P<dataset_id>[mM]\w{5,6})/tile-h(?P<x>\d+)v(?P<y>\d+)/$', ceom.modis.views.tile),
 	re_path(r'^remote_sensing_datasets/', ceom.modis.views.remote_sensing_datasets),
 	
-    #re_path(r'^timeseries/single/$', ceom.modis.views.single),
-    #re_path(r'^timeseries/single/del=(?P<del_id>.+)/$', ceom.modis.views.single_del),
-    #re_path(r'^timeseries/single/t=(?P<task_id>.+)/$', ceom.modis.views.single_progress),
-    #re_path(r'^timeseries/single/start/'+modis_re+'/', ceom.modis.views.launch_single_site_timeseries),
-    #re_path(r'^timeseries/single/progress/t=(?P<task_id>.+)/$', ceom.modis.views.get_single_task_progress),
-
-    #re_path(r'^timeseries/multiple/$', ceom.modis.views.multiple),
-    #re_path(r'^timeseries/multiple/del=(?P<del_id>.+)/$', ceom.modis.views.multiple_del),
-    #re_path(r'^timeseries/multiple/t=(?P<task_id>.+)/$', ceom.modis.views.multiple_progress),
-    #re_path(r'^timeseries/multiple/progress/t=(?P<task_id>.+)/$', ceom.modis.views.get_multiple_task_progress),
+    re_path(r'^timeseries/single/$', ceom.modis.views.single),
+    re_path(r'^timeseries/single/del=(?P<task_id>.+)/$', ceom.modis.views.single_del),
+    re_path(r'^timeseries/single/t=(?P<task_id>.+)/$', ceom.modis.views.single_status),
+    re_path(r'^timeseries/single/progress/t=(?P<task_id>.+)/$', ceom.modis.views.single_get_progress),
+    re_path(r'^timeseries/single/history/$', ceom.modis.views.single_history),
+    
+    re_path(r'^timeseries/multiple/$', ceom.modis.views.multiple),
+    re_path(r'^timeseries/multiple/del=(?P<task_id>.+)/$', ceom.modis.views.multiple_del),
+    re_path(r'^timeseries/multiple/t=(?P<task_id>.+)/$', ceom.modis.views.multiple_status),
+    re_path(r'^timeseries/multiple/progress/t=(?P<task_id>.+)/$', ceom.modis.views.multiple_get_progress),
+    re_path(r'^timeseries/multiple/history/$', ceom.modis.views.multiple_history),
     
     re_path(r'^composite/(?P<year>\d{4})/(?P<julian_day>\d*)/$', ceom.modis.views.composite),
     re_path(r'^composite/', ceom.modis.views.composite),
