@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.http import JsonResponse
 from raster.models import RasterProduct, RasterLayer
 
 import os, glob, csv, json, math, re
 from datetime import datetime, date, timedelta
 
 from ceom.celery import app
-from ceom.tropomi.models import *
-from ceom.tropomi.tasks import *
+from ceom.modis.models import *
+from ceom.modis.tasks import *
 
 
 SINGLE_TIMESERIES_LOCATION = os.path.join('MODIS','timeseries','single')
@@ -231,9 +232,6 @@ def composite(request, year = None, julian_day = None):
 @login_required
 def single(request):
     if request.method == 'POST':
-
-        print(request.POST)
-
         ds = Dataset.objects.get(name__iexact=request.POST['dataset'])
 
         years = request.POST.getlist('years[]')
@@ -243,11 +241,11 @@ def single(request):
         h, v, x, y = latlon2sin(lat, lon, int(ds.xdim / ds.grid_size)) # TODO: If xdim != ydim, I have no idea how to handle that.
 
         #Setup task
-        task = process_MODIS_single_site.s(settings.MEDIA_ROOT, SINGLE_TIMESERIES_LOCATION, h, v, x, y, years)    
+        task = process_MODIS_single_site.s(settings.MEDIA_ROOT, SINGLE_TIMESERIES_LOCATION, ds.name, ds.location, h, v, x, y, years)    
         task.freeze()
 
         #Pass id from task to the create statement
-        MODISSingleTimeSeriesJob.objects.create(task_id=task.id, h=h, v=v, x=x, y=y, years=requested_years, user=request.user)
+        MODISSingleTimeSeriesJob.objects.create(task_id=task.id, dataset=ds, h=h, v=v, x=x, y=y, years=years, user=request.user)
         
         #Start task
         task.delay()
@@ -268,18 +266,53 @@ def single(request):
 
 @login_required
 def single_del(request, task_id):
-    return None
+    if request.method != 'POST':
+        return HttpResponse()
+
+    redir = '/modis/timeseries/single/'
+    if request.POST['redirect']:
+        redir = request.POST['redirect']
+
+    try:
+        task = MODISSingleTimeSeriesJob.objects.get(task_id=task_id)
+    except MODISSingleTimeSeriesJob.DoesNotExist as e:
+        print(e)
+        print("Attempted MODIS single-site task delete but task not found")
+        return redirect(redir)
+
+    if request.user != task.user and not request.user.is_superuser:
+        return redirect(redir)
+    
+    if task.result and task.result.name:
+        os.remove(os.path.join(settings.MEDIA_ROOT, task.result.name))
+    
+    if task.working:
+        app.control.revoke(task.task_id, terminate=True)
+
+    task.delete()
+
+    return redirect(redir)
 
 
 @login_required
 def single_status(request, task_id):
-    return None
+    data = {}
+    data['job'] = MODISSingleTimeSeriesJob.objects.get(task_id=task_id)
+    data['year_string'] = ", ".join(data['job'].years)
+
+    data['tile'] = 'h' + str(data['job'].h).zfill(2) + 'v' + str(data['job'].v).zfill(2)
+    data['pixel'] = '(' + str(data['job'].x) + ', ' + str(data['job'].y) + ")"
+
+    return render(request, 'modis/single_status.html', context=data)
 
 
 @login_required()
 def single_get_progress(request, task_id):
-    return None
+    job = MODISSingleTimeSeriesJob.objects.get(task_id=task_id)
 
+    res = job.result.url if job.result else ""
+
+    return JsonResponse({'working':job.working, 'completed':job.completed, 'errored':job.errored, 'percent_complete':job.percent_complete, 'result':res})
 
 @login_required()
 def single_history(request):
