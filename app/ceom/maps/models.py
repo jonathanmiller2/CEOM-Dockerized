@@ -1,6 +1,7 @@
 from django.db import models
 from ceom.photos.models import Category
 from django.contrib.auth.models import User
+from django.contrib.gis.db import models
 
 
 class GeocatterPoint(models.Model):
@@ -13,6 +14,7 @@ class GeocatterPoint(models.Model):
     tile_v = models.IntegerField(null=False)
     pixel_x = models.IntegerField(null=False)
     pixel_y = models.IntegerField(null=False)
+    center = models.PointField(null=False, srid=4326)
     is_multi_cat = models.BooleanField(null=False)
     primary_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="primary_category")
     secondary_category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="secondary_category", null=True)

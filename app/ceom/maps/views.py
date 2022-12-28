@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.geos import Polygon
-
+from django.contrib.gis.geos import Point
 import csv
 
 from ceom.photos.models import Photo, Category
@@ -34,6 +34,7 @@ def geocatter(request):
             tile_v = request.POST['s-tilev'],
             pixel_x = request.POST['s-pixelx'],
             pixel_y = request.POST['s-pixely'],
+            center = Point(float(request.POST['s-centerx']), float(request.POST['s-centery'])),
             is_multi_cat = 's-multicat' in request.POST,
             primary_category = Category.objects.get(name=request.POST['s-cat1-select']),
             secondary_category = Category.objects.get(name=request.POST['s-cat2-select']) if 's-multicat' in request.POST else None,
@@ -48,6 +49,7 @@ def geocatter(request):
             tile_v = request.POST['m-tilev'],
             pixel_x = request.POST['m-pixelx'],
             pixel_y = request.POST['m-pixely'],
+            center = Point(float(request.POST['m-centerx']), float(request.POST['m-centery'])),
             is_multi_cat = 'm-multicat' in request.POST,
             primary_category = Category.objects.get(name=request.POST['m-cat1-select']),
             secondary_category = Category.objects.get(name=request.POST['m-cat2-select']) if 'm-multicat' in request.POST else None,
@@ -62,6 +64,7 @@ def geocatter(request):
             tile_v = request.POST['l-tilev'],
             pixel_x = request.POST['l-pixelx'],
             pixel_y = request.POST['l-pixely'],
+            center = Point(float(request.POST['l-centerx']), float(request.POST['l-centery'])),
             is_multi_cat = 'l-multicat' in request.POST,
             primary_category = Category.objects.get(name=request.POST['l-cat1-select']),
             secondary_category = Category.objects.get(name=request.POST['l-cat2-select']) if 'l-multicat' in request.POST else None,
@@ -97,3 +100,22 @@ def leaderboard(request):
     page_number = request.GET.get('page')
     data['page_obj'] = paginator.get_page(page_number)
     return render(request, 'maps/leaderboard.html', context=data)
+
+def pixels_validation(request):
+    return render(request, 'maps/pixels_validation.html')
+
+def pixels_validation_csv(request):
+    poly = Polygon.from_bbox((request.GET['xmin'], request.GET['ymin'], request.GET['xmax'], request.GET['ymax']))
+    
+    geocatterPoints = GeocatterPoint.objects.filter(center__within=poly)
+
+    response = HttpResponse(content_type='text/csv')
+    writer = csv.writer(response)
+
+    #Header
+    writer.writerow(['Tile h', 'Tile v', 'Grid npix', 'Pixel x', 'Pixel y', 'Multiple Categories', 'Primary Category', 'Secondary Category', 'Date categorized'])
+
+    for p in geocatterPoints:
+        writer.writerow([p.tile_h, p.tile_v, p.grid_npix, p.pixel_x, p.pixel_y, p.is_multi_cat, p.primary_category, p.secondary_category, p.date_categorized])
+
+    return response
