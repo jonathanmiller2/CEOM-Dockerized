@@ -1,4 +1,3 @@
-from django.db import models
 from ceom.photos.models import Category
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models

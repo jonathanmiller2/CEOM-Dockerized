@@ -1,11 +1,6 @@
 {% extends "maps/base.html" %}
 
 {% load i18n %}
-{% block sidebar_extra %}
-<nav class="card bg-light ml-5 mt-3 shadow-sm">
-    {% include "photos/search_form.html" %}
-</nav>
-{% endblock %}
 
 {% block content %}
 <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=initMap" type="text/javascript"></script>
@@ -87,14 +82,15 @@
 <script>
     let map;
     let polygon;
+    var size = 5;
     let lat = 0;
     let lon = 0;
     let centerLocation = {
         lat: lat,
         lng: lon
     };
-    var size = 5;
-	function initMap() 
+   
+    function initMap() 
 	{
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 3,
@@ -135,7 +131,8 @@
     $(document).on('input', function(e) {
         centerLocation = marker.getPosition();
         size = $('input[name=boxSize]:checked').val();
-        initMap(); 
+        updatePolygon(lat, lon);
+        polygon.setMap(map);
     });
    
     function updatePolygon(lat, lon){

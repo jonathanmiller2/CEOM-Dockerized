@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib.gis.geos import Polygon
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Polygon, Point
+
 import csv
 
 from ceom.photos.models import Photo, Category
@@ -113,9 +113,9 @@ def pixels_validation_csv(request):
     writer = csv.writer(response)
 
     #Header
-    writer.writerow(['Tile h', 'Tile v', 'Grid npix', 'Pixel x', 'Pixel y', 'Multiple Categories', 'Primary Category', 'Secondary Category', 'Date categorized'])
+    writer.writerow(['Grid_size', 'Grid_npix', 'Tile_H', 'Tile_V', 'Pixel_X', 'Pixel_Y', 'Date_Categorized', 'Multiple_Categories', 'Primary_Category', 'Secondary_Category'])
 
     for p in geocatterPoints:
-        writer.writerow([p.tile_h, p.tile_v, p.grid_npix, p.pixel_x, p.pixel_y, p.is_multi_cat, p.primary_category, p.secondary_category, p.date_categorized])
+        writer.writerow([1200/p.grid_npix, p.grid_npix, p.tile_h, p.tile_v, p.pixel_x, p.pixel_y, p.date_categorized, p.is_multi_cat, p.primary_category, p.secondary_category])
 
     return response
