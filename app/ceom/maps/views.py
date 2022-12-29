@@ -73,10 +73,10 @@ def geocatter(request):
         return HttpResponse()
     return render(request, 'maps/geocatter.html', context=data)
 
-def map_validation(request):
-    return render(request, 'maps/map_validation.html')
+def point_validation(request):
+    return render(request, 'maps/point_validation.html')
 
-def map_validation_data(request):
+def point_validation_csv(request):
     box = Polygon.from_bbox((request.GET['l'], request.GET['d'], request.GET['r'], request.GET['u']))
     
     unclassified_category = Category.objects.get(name__iexact="Unclassified")
@@ -101,10 +101,10 @@ def leaderboard(request):
     data['page_obj'] = paginator.get_page(page_number)
     return render(request, 'maps/leaderboard.html', context=data)
 
-def pixels_validation(request):
-    return render(request, 'maps/pixels_validation.html')
+def pixel_validation(request):
+    return render(request, 'maps/pixel_validation.html')
 
-def pixels_validation_csv(request):
+def pixel_validation_csv(request):
     poly = Polygon.from_bbox((request.GET['xmin'], request.GET['ymin'], request.GET['xmax'], request.GET['ymax']))
     
     geocatterPoints = GeocatterPoint.objects.filter(center__within=poly)

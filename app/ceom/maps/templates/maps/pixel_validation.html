@@ -75,7 +75,7 @@
         </p> 
         <p><strong style="font-size:large">3. Check your request and click Download</strong></p>
         <div>
-            <button class="btn btn-success mb-2" onclick="pixels_validation_csv()"><i class="icon-plus-sign "></i>Download CSV</button>
+            <button class="btn btn-success mb-2" onclick="pixel_validation_csv()"><i class="icon-plus-sign "></i>Download CSV</button>
         </div>
     </div>
 </nav>
@@ -143,10 +143,10 @@
         polygon.setPath(box);
     };
 
-    function pixels_validation_csv() {
+    function pixel_validation_csv() {
         let p0 = polygon.getPath().getAt(0);
         let p2 = polygon.getPath().getAt(2);
-        window.location='/maps/pixels_validation_csv/?xmin=' + p2.lng() + '&ymin=' + p2.lat() + '&xmax=' + p0.lng() + '&ymax=' + p0.lat();
+        window.location='/maps/pixel_validation_csv/?xmin=' + p2.lng() + '&ymin=' + p2.lat() + '&xmax=' + p0.lng() + '&ymax=' + p0.lat();
     };
 
 </script>
