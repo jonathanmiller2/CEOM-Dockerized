@@ -91,7 +91,7 @@
     };
    
     function initMap() 
-	{
+    {
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 3,
           center: centerLocation,
@@ -129,7 +129,6 @@
     };
 
     $(document).on('input', function(e) {
-        centerLocation = marker.getPosition();
         size = $('input[name=boxSize]:checked').val();
         updatePolygon(lat, lon);
         polygon.setMap(map);
