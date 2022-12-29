@@ -25,16 +25,22 @@
                 <input id='s-tilev-field' name='s-tilev' hidden/>
                 <input id='s-pixelx-field' name='s-pixelx' hidden/>
                 <input id='s-pixely-field' name='s-pixely' hidden/>
+                <input id='s-centerx-field' name='s-centerx' hidden/>
+                <input id='s-centery-field' name='s-centery' hidden/>
                 <input id='m-npix-field' name='m-npix' hidden/>
                 <input id='m-tileh-field' name='m-tileh' hidden/>
                 <input id='m-tilev-field' name='m-tilev' hidden/>
                 <input id='m-pixelx-field' name='m-pixelx' hidden/>
                 <input id='m-pixely-field' name='m-pixely' hidden/>
+                <input id='m-centerx-field' name='m-centerx' hidden/>
+                <input id='m-centery-field' name='m-centery' hidden/>
                 <input id='l-npix-field' name='l-npix' hidden/>
                 <input id='l-tileh-field' name='l-tileh' hidden/>
                 <input id='l-tilev-field' name='l-tilev' hidden/>
                 <input id='l-pixelx-field' name='l-pixelx' hidden/>
                 <input id='l-pixely-field' name='l-pixely' hidden/>
+                <input id='l-centerx-field' name='l-centerx' hidden/>
+                <input id='l-centery-field' name='l-centery' hidden/>
                 <h5 style="color: red;">Red Pixel (250m)</h5>
                 <div class="form-check mb-2">
                     <input class="form-check-input" type="checkbox" id="s-multicat-check" name="s-multicat">
@@ -301,6 +307,14 @@
         return bbox;
     };
 
+    let central_point = function(sin, npix){
+        let p1 = sin2latlon(sin.h, sin.v, sin.x + 0, sin.y + 0, npix);
+        let p3 = sin2latlon(sin.h, sin.v, sin.x + 1, sin.y + 1, npix);
+        let center_lat = (p1.lat + p3.lat)/2;
+        let center_lon = (p1.lon + p3.lon)/2;
+        return {x: center_lon, y: center_lat};
+    };
+
     async function newPoint(){
         await findPoint();
 
@@ -386,6 +400,9 @@
         let sSin = latlon2sin(svlat, svlng, sNpix);
         let mSin = latlon2sin(svlat, svlng, mNpix);
         let lSin = latlon2sin(svlat, svlng, lNpix);
+        let sCenter = central_point(sSin, sNpix);
+        let mCenter = central_point(mSin, mNpix);
+        let lCenter = central_point(lSin, lNpix);  
 
         $('#date-field').attr("value", SV.data.imageDate + "-01");
         $('#s-npix-field').attr("value", sNpix);
@@ -403,6 +420,12 @@
         $('#s-pixely-field').attr("value", sSin.y);
         $('#m-pixely-field').attr("value", mSin.y);
         $('#l-pixely-field').attr("value", lSin.y);
+        $('#s-centerx-field').attr("value", sCenter.x);
+        $('#s-centery-field').attr("value", sCenter.y);
+        $('#m-centerx-field').attr("value", mCenter.x);
+        $('#m-centery-field').attr("value", mCenter.y);
+        $('#l-centerx-field').attr("value", lCenter.x);
+        $('#l-centery-field').attr("value", lCenter.y); 
 
         $.post('.', $(this).serialize());
 

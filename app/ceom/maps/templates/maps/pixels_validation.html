@@ -1,0 +1,153 @@
+{% extends "maps/base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo98LuzUr-aVpxRZPFHkBl2m4ogHeROGQ&callback=initMap" type="text/javascript"></script>
+<style>
+    .menu-field {
+        font-size: small;
+        height: 22px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .control-group {
+        display: inline-flex;
+    }
+
+    .font {
+        font-size: 9pt;
+        color: #555;
+    }
+
+    .title {
+        color: #0f4ba4;
+    }
+
+    .batch {
+        width: initial;
+        font-size: small;
+    }
+    #map {
+           height: 768px;
+    }
+    @media screen and (min-width:575px) and (max-width: 1250px) {
+
+        .title {
+            font-size: min(max(3.9vw, 10px), 30px);
+        }
+        .content {
+            padding-left: 5%;
+        }
+    }
+
+    @media screen and (max-width:575px) {
+
+        .title {
+            font-size: min(max(3.8vw, 23px), 30px);
+        }
+        .content {
+            padding-left: 5%;
+        }
+    }    
+</style>
+<nav>
+    <h2 class="legend title">Pixels Validation</h2>
+    <p style="font-size:large">Here you can retrieve geographical data of pixels in the selected area. The file of data you get is in *.csv file</p>
+    <div class="my-2">
+        <p><strong style="font-size:large"> 1. Select size of region. </strong></p>
+        <ul style="list-style: none;">
+            <li>
+                <p><input type="radio" name="boxSize" value="5" checked> 5 degrees</p>
+            </li>
+            <li>
+                <p><input type="radio" name="boxSize" value="10"> 10 degrees</p>
+            </li>
+        </ul>
+        <p><strong style="font-size:large">2. Zoom-in the map and then click on a point of interest </strong></p>
+        <p>
+            <div id="map"></div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <input type="checkbox" id="auto_zoom" name="auto_zoom" checked /> Zoom to selected region</div>
+            </div>
+        </p> 
+        <p><strong style="font-size:large">3. Check your request and click Download</strong></p>
+        <div>
+            <button class="btn btn-success mb-2" onclick="pixels_validation_csv()"><i class="icon-plus-sign "></i>Download CSV</button>
+        </div>
+    </div>
+</nav>
+<script>
+    let map;
+    let polygon;
+    var size = 5;
+    let lat = 0;
+    let lon = 0;
+    let centerLocation = {
+        lat: lat,
+        lng: lon
+    };
+   
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 3,
+          center: centerLocation,
+          gestureHandling: 'cooperative',
+          mapTypeId: 'satellite',
+        });
+    
+        marker = new google.maps.Marker({
+            position: {lat: -2, lng: -2},
+            map: map,
+        });
+        
+        polygon = new google.maps.Polygon({ 
+            strokeColor: "#000000",                 
+            strokeOpacity: 0.9,
+            strokeWeight: 2,                                 
+            fillOpacity: 0,
+            clickable: false,                 
+        });
+        updatePolygon(lat, lon);
+        google.maps.event.addListener(map, 'click', async function (evt) {
+            lat = evt.latLng.lat();
+            lon = evt.latLng.lng();
+            marker.setPosition({lat: lat, lng: lon});
+            if($("#auto_zoom").is(":checked")) {
+                let mzs = new google.maps.MaxZoomService();
+                let zoomobj = await mzs.getMaxZoomAtLatLng(marker.getPosition());
+                map.setZoom(Math.min(zoomobj.zoom, 5));
+                map.setCenter(marker.getPosition());     
+            }
+            updatePolygon(lat, lon);
+        });    
+        marker.setMap(map);
+        polygon.setMap(map);
+    };
+
+    $(document).on('input', function(e) {
+        size = $('input[name=boxSize]:checked').val();
+        updatePolygon(lat, lon);
+        polygon.setMap(map);
+    });
+   
+    function updatePolygon(lat, lon){
+        let box = [
+            { lat: Math.ceil(lat/size)*size, lng: Math.ceil(lon/size)*size },
+            { lat: Math.ceil(lat/size)*size - size, lng: Math.ceil(lon/size)*size },
+            { lat: Math.ceil(lat/size)*size - size, lng: Math.ceil(lon/size)*size - size },
+            { lat: Math.ceil(lat/size)*size, lng: Math.ceil(lon/size)*size - size },
+            ];
+        polygon.setPath(box);
+    };
+
+    function pixels_validation_csv() {
+        let p0 = polygon.getPath().getAt(0);
+        let p2 = polygon.getPath().getAt(2);
+        window.location='/maps/pixels_validation_csv/?xmin=' + p2.lng() + '&ymin=' + p2.lat() + '&xmax=' + p0.lng() + '&ymax=' + p0.lat();
+    };
+
+</script>
+{% endblock %}
