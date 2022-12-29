@@ -116,6 +116,6 @@ def pixels_validation_csv(request):
     writer.writerow(['Grid_size', 'Grid_npix', 'Tile_H', 'Tile_V', 'Pixel_X', 'Pixel_Y', 'Date_Categorized', 'Multiple_Categories', 'Primary_Category', 'Secondary_Category'])
 
     for p in geocatterPoints:
-        writer.writerow([1200/p.grid_npix, p.grid_npix, p.tile_h, p.tile_v, p.pixel_x, p.pixel_y, p.date_categorized, p.is_multi_cat, p.primary_category, p.secondary_category])
+        writer.writerow([int((1200/p.grid_npix)*1000), p.grid_npix, p.tile_h, p.tile_v, p.pixel_x, p.pixel_y, p.date_categorized, p.is_multi_cat, p.primary_category, p.secondary_category])
 
     return response

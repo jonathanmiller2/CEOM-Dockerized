@@ -90,8 +90,7 @@
         lng: lon
     };
    
-    function initMap() 
-    {
+    function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 3,
           center: centerLocation,
@@ -100,7 +99,7 @@
         });
     
         marker = new google.maps.Marker({
-            position: centerLocation,
+            position: {lat: -2, lng: -2},
             map: map,
         });
         
