@@ -4,7 +4,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from raster.models import RasterProduct, RasterLayer
 
-import os, glob, csv, json, math, re
+import os, glob, csv, json, math, re, uuid
 from datetime import datetime, date, timedelta
 
 from ceom.celery import app
@@ -240,16 +240,13 @@ def single(request):
 
         h, v, x, y = latlon2sin(lat, lon, int(ds.xdim / ds.grid_size)) # TODO: If xdim != ydim, I have no idea how to handle that.
 
-        #Setup task
-        task = process_MODIS_single_site.s(settings.MEDIA_ROOT, SINGLE_TIMESERIES_LOCATION, ds.name, ds.location, h, v, x, y, years)    
-        task.freeze()
-
-        #Pass id from task to the create statement
-        MODISSingleTimeSeriesJob.objects.create(task_id=task.id, dataset=ds, h=h, v=v, x=x, y=y, years=years, user=request.user)
+        task_id = str(uuid.uuid4())
         
-        #Start task
-        task.delay()
-        return redirect('/modis/timeseries/single/t=' + task.id + '/')
+        MODISSingleTimeSeriesJob.objects.create(task_id=task_id, dataset=ds, h=h, v=v, x=x, y=y, years=years, user=request.user)
+
+        process_MODIS_single_site(task_id, settings.MEDIA_ROOT, SINGLE_TIMESERIES_LOCATION, ds.name, ds.location, h, v, x, y, years)   
+        
+        return redirect('/modis/timeseries/single/t=' + task_id + '/')
 
     options = {}
     datasets = Dataset.objects.filter(is_global=False).order_by('name')
