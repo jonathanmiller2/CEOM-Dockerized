@@ -21,7 +21,7 @@ def people(request):
 def publications(request):
     pubs = Publication.objects.all().order_by('-date')
 
-    if 'type' in request.GET:
+    if request.GET:
         pubs = pubs.filter(pubtype=str(request.GET['type']))
 
     years = dict()
