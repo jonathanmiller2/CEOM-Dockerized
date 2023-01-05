@@ -19,7 +19,6 @@ def people(request):
     return render(request, 'aboutus/people.html', context=data)
 
 def publications(request):
-    print("Hi:)")
     pubs = Publication.objects.all().order_by('-date')
 
     if 'type' in request.GET:
@@ -35,9 +34,6 @@ def publications(request):
         year_list = years.get(year, [])
         year_list.append(pub)
         years[year] = year_list
-
-    print(years)
-    print(pubs)
         
     return render(request, 'aboutus/section_list.html', context={'section_list': years})
 
