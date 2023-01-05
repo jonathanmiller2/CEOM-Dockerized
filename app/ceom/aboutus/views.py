@@ -18,28 +18,6 @@ def people(request):
     
     return render(request, 'aboutus/people.html', context=data)
 
-#def index(request):
-#    pubs = Publication.objects.all().order_by('-date')
-    #pubs.reverse()
-
-#    if 'type' in request.GET:
-#        pubs = pubs.filter(pubtype=str(request.GET['type']))
-
-#    years = dict()
-#    for pub in pubs:
-#        if pub.year:
-#            year = pub.year
-#        else:
-#            year = pub.date.year
-
-#        year_list = years.get(year, [])
-#        year_list.append(pub)
-#        years[year] = year_list
-
-#    print(years)
-
-#    return render(request, 'publications/section_list.html', context={'section_list': years})
-
 def publications(request):
     print("Hi:)")
     pubs = Publication.objects.all().order_by('-date')
@@ -62,7 +40,6 @@ def publications(request):
     print(pubs)
         
     return render(request, 'aboutus/section_list.html', context={'section_list': years})
-
 
 def group_photos(request, selYear = None):
     available_years=GalleryPhoto.objects.all().values_list('year', flat=True).order_by('-year')
