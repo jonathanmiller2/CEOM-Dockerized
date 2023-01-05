@@ -28,13 +28,19 @@ class PersonAdmin(admin.ModelAdmin):
 	search_fields = ['title']
 	date_hierarchy = 'date'
 
+admin.site.register(Person, PersonAdmin)
+
 class CategoryAdmin(admin.ModelAdmin):
 	list_display = ('name','order')
+
+admin.site.register(Category, CategoryAdmin)
 
 class GalleryPhotoAdmin(admin.ModelAdmin):
 	list_filter = ['year']
 	search_fields = ['title']
 	list_display = ('year','order','title','description','picture')
+
+admin.site.register(GalleryPhoto, GalleryPhotoAdmin)
 
 class PubAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'authorship', 'pubtype', 'category')
@@ -42,13 +48,11 @@ class PubAdmin(admin.ModelAdmin):
     search_fields = ['title']
     date_hierarchy = 'date'
 
+admin.site.register(Publication, PubAdmin)
+
 class CatAdmin(admin.ModelAdmin):
     list_display = ('name',)
     
-admin.site.register(Publication, PubAdmin)
 admin.site.register(PublicationCategory, CatAdmin)
 	
-admin.site.register(GalleryPhoto, GalleryPhotoAdmin)
-admin.site.register(Person, PersonAdmin)
-admin.site.register(Category, CategoryAdmin)
 
