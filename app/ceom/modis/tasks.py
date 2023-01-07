@@ -6,6 +6,8 @@ import pandas as pd
 
 from ceom.celery import app
 from ceom.modis.models import *
+from ceom.modis.aux_processing.MOD09A1 import process_MOD09A1
+from ceom.modis.aux_processing.MYD11A2 import process_MYD11A2
 
 # This funcion isn't a celery task, but rather is an intermediary between the view and the celery tasks.
 def process_MODIS_single_site(task_id, media_root, csv_folder, dataset_name, dataset_loc, h, v, x, y, years):
@@ -44,6 +46,7 @@ def process_MODIS_single_site(task_id, media_root, csv_folder, dataset_name, dat
         else:
             chain(MODIS_fetch_day.chunks(subtask_params, MAXIMUM_SUBTASK_COUNT).group(), finish_MODIS_single_site.s(task_id, dataset_name, full_file, rel_file)).delay()
         
+
 
     except Exception as e:
         job_obj.working = False
@@ -131,6 +134,9 @@ def finish_MODIS_single_site(self, records, task_id, dataset_name, full_file, re
 
         final_df = pd.DataFrame.from_records(records, index='date')
         final_df = final_df[sort_columns(dataset_name, list(final_df.columns))]
+
+        if dataset_name.upper() == "MOD09A1":
+            final_df = process_MOD09A1(final_df)
 
         with open(full_file, 'w+') as csvfile:
             final_df.to_csv(csvfile)

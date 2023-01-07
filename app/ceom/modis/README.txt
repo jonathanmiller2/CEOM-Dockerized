@@ -1,8 +1,6 @@
 This README relates to tasks.py, and how the MODIS single-site and multi-site timeseries requests are handled.
 Written by Jonathan Miller, 12/31/2022
 
-Where to begin...
-
 The initial idea was relatively simple. The view starts a celery task and redirects to a status page, the
 celery task slowly writes out a CSV, you get the CSV from the status page.
 
