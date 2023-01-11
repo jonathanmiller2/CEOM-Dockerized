@@ -112,9 +112,6 @@
             <select id="datasets" class="form-control col-sm-6" size="4">
             </select>
         </div>
-        <div id="Modis_long">
-
-        </div>
         <div class="col-lg">
             <label class="col-sm-1">Year</label>
             <select id="years" class="form-control col-sm-6" multiple="multiple">
@@ -487,6 +484,8 @@
         if(lat.length == 0 || lon.length == 0){
             alert('Please pick a point');
         }else{
+            sin = latlon2sin(lat, lon, options[dataset]['npix'])
+
             let str = "";
             str += "<hr><div>"
             str += "<dl class='dl-horizontal'>"
@@ -494,6 +493,8 @@
             str += "<div class='row'><dt>Longitude:</dt><dd class='pl-2'>" + lon + "</dd></div>";
             str += "<div class='row'><dt>Dataset:</dt><dd class='pl-2'>" + dataset + "</dd></div>";
             str += "<div class='row'><dt>Years:</dt><dd class='pl-2'>" + yearsArray + "</dd></div>";
+            str += "<div class='row'><dt>Tile:</dt><dd class='pl-2'> h" + sin['h'] + 'v' + sin['v'] + "</dd></div>";
+            str += "<div class='row'><dt>Pixel:</dt><dd class='pl-2'> (" + sin['x'] + ', ' + sin['y'] + ") </dd></div>";
             
             str += '<form action="." method="post">{% csrf_token %}';
             str += "<input type='hidden' name='lat' value='" + lat +"'>";
@@ -541,7 +542,7 @@
             return
         }
 
-        let yearList = options[selectedProduct]
+        let yearList = options[selectedProduct]['years']
 
         $("#years").empty()
         yearList.forEach(element => {

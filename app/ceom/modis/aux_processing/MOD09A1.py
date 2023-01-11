@@ -1,16 +1,32 @@
 
 def process_MOD09A1(input_df):
-    QC_COLUMNS = ['MODLAND QA', 'band 1 data quality', 'band 2 data quality', 'band 3 data quality', 
-                    'band 4 data quality', 'band 5 data quality', 'band 6 data quality', 'band 7 data quality', 
-                    'atmospheric correction performed', 'adjacency correction performed']
+    QC_COLUMNS = ['MODLAND QA', 'Band 1 Data Quality', 'Band 2 Data Quality', 'Band 3 Data Quality', 
+                    'Band 4 Data Quality', 'Band 5 Data Quality', 'Band 6 Data Quality', 'Band 7 Data Quality', 
+                    'Atmospheric Correction Performed', 'Adjacency Correction Performed']
     input_df[QC_COLUMNS] = input_df.apply(process_qc, axis=1, result_type='expand')
     input_df = input_df.drop('sur_refl_qc_500m', axis=1)
 
-    STATE_COLUMNS = ['cloud state', 'cloud shadow', 'land/water flag', 'aerosol quantity', 'cirrus detected', 
-                        'internal cloud algorithm flag', 'internal fire algorithm flag', 'MOD35 snow/ice flag', 
-                        'Pixel is adjacent to cloud', 'salt pan', 'internal snow mask']
+    STATE_COLUMNS = ['Cloud State', 'Cloud Shadow', 'Land/Water Flag', 'Aerosol Quantity', 'Cirrus Detected', 
+                        'Internal Cloud Algorithm Flag', 'Internal Fire Algorithm Flag', 'MOD35 Snow/Ice Flag', 
+                        'Pixel is Adjacent to Cloud', 'Salt Pan', 'Internal Snow Mask']
     input_df[STATE_COLUMNS] = input_df.apply(process_state, axis=1, result_type='expand')
     input_df = input_df.drop('sur_refl_state_500m', axis=1)
+
+    COLUMN_RENAMES = {
+        'sur_refl_b01':'Band 1 - Red (620-670 nm)',
+        'sur_refl_b02':'Band 2 - NIR1 (841-876 nm)',
+        'sur_refl_b03':'Band 3 - Blue (459-479 nm)',
+        'sur_refl_b04':'Band 4 - Green (545-565 nm)',
+        'sur_refl_b05':'Band 5 - NIR2 (1230-1250 nm)',
+        'sur_refl_b06':'Band 6 - SWIR1 (1628-1652 nm)',
+        'sur_refl_b07':'Band 7 - SWIR2 (2105-2155 nm)',
+        'sur_refl_szen':'Solar Zenith Angle',
+        'sur_refl_vzen':'View Zenith Angle',
+        'sur_refl_raz':'Relative Azimuth Angle',
+        'sur_refl_day_of_year':'Day of Year',
+    }
+
+    input_df.columns = [COLUMN_RENAMES.get(x, x) for x in input_df.columns]
 
     return input_df
 

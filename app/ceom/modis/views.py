@@ -238,7 +238,7 @@ def single(request):
         lon = float(request.POST['lon'])
         lat = float(request.POST['lat'])
 
-        h, v, x, y = latlon2sin(lat, lon, int(ds.xdim / ds.grid_size)) # TODO: If xdim != ydim, I have no idea how to handle that.
+        h, v, x, y = latlon2sin(lat, lon, ds.xdim) # TODO: If xdim != ydim, I have no idea how to handle that.
 
         task_id = str(uuid.uuid4())
         
@@ -254,7 +254,10 @@ def single(request):
     for ds in datasets:
         years = glob.glob(os.path.join(ds.location, '[0-9][0-9][0-9][0-9]/'))
         years = sorted([int(y[-5:-1]) for y in years])
-        options[str(ds.name)] = years
+        options[str(ds.name)] = {
+            'npix': 1200 / (ds.grid_size / 1000),
+            'years': years
+        }
 
     return render(request, 'modis/single.html', context={
         "options": json.dumps(options)
@@ -330,22 +333,145 @@ def single_history(request):
 
 @login_required
 def multiple(request):
-    return None
+    if request.method == 'POST':
+        data = {}
+
+        ds = Dataset.objects.get(name__iexact=request.POST['datasets'])
+
+        requested_years = request.POST.getlist('years')
+
+        if 'inputfile' not in request.FILES:
+            data['error'] = "Please select an input file"
+            return render(request, 'modis/multiple.html', context=data)
+
+        if len(requested_years) == 0:
+            data['error'] = "Please select the desired years for the dataset"
+            return render(request, 'modis/multiple.html', context=data)
+
+        input_file = request.FILES['inputfile']
+
+        #Verify file
+        MAX_BLANK_ROWS=100
+        MAX_SITES_PER_FILE=100
+        try:
+            dialect = csv.Sniffer().sniff(input_file.read(1024).decode('utf-8'))
+            input_file.seek(0, 0)
+        except csv.Error:
+            data['error'] = 'Not a valid CSV file'
+            return render(request, 'modis/multiple.html', context=data)
+
+        reader = csv.reader(input_file.read().decode('utf-8').splitlines(), dialect, delimiter=',')
+        i=1
+        blank_rows=0
+        for y_index, row in enumerate(reader):
+            if i > MAX_SITES_PER_FILE:
+                data['error'] = "The limit of sites per request is "+ str(MAX_SITES_PER_FILE)+". Please split the file in smaller chunks."
+                return render(request, 'modis/multiple.html', context=data)
+            if not ''.join(str(x) for x in row):
+                blank_rows+=1
+                if blank_rows>= MAX_BLANK_ROWS:
+                    data['error'] = 'Too many blank rows in file. Please delete them'
+                    return render(request, 'modis/multiple.html', context=data)
+                continue
+            if len(row) != 3:
+                data['error'] = "Format error at line " + str(i) + ": More/less than three columns detected. " + str(row)
+                return render(request, 'modis/multiple.html', context=data)
+            try:
+                a = float(row[1])
+                a = float(row[2])
+            except Exception:
+                data['error'] = "Format error at line " + str(i) + ": latitude and longitude must be in number format eg: 12.1234. " + str(row)
+                return render(request, 'modis/multiple.html', context=data)
+            i+=1
+        #File verified
+
+        full_input_dir = os.path.join(settings.MEDIA_ROOT, MULTIPLE_TIMESERIES_INPUT_LOCATION)
+        if not os.path.exists(full_input_dir):
+            os.makedirs(full_input_dir)
+
+        filename = 'MODIS_Input_uid' + str(request.user.id) + "_" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + ".csv"
+        rel_input_file_location = os.path.join(MULTIPLE_TIMESERIES_INPUT_LOCATION, filename)
+
+        with open(os.path.join(settings.MEDIA_ROOT, rel_input_file_location), 'wb+') as destination:
+            for chunk in input_file.chunks():
+                destination.write(chunk)
+
+
+        task_id = str(uuid.uuid4())
+        
+        obj = MODISMultipleTimeSeriesJob.objects.create(task_id=task_id, dataset=ds, years=requested_years, user=request.user)
+        obj.points.name = rel_input_file_location
+        obj.save()
+
+        process_MODIS_multiple_site(task_id, settings.MEDIA_ROOT, MULTIPLE_TIMESERIES_OUTPUT_LOCATION, ds.name, ds.location, ds.xdim, rel_input_file_location, requested_years)   
+        
+        return redirect('/modis/timeseries/multiple/t=' + task_id + '/')
+
+    options = {}
+    datasets = Dataset.objects.filter(is_global=False).order_by('name')
+
+    for ds in datasets:
+        years = glob.glob(os.path.join(ds.location, '[0-9][0-9][0-9][0-9]/'))
+        years = sorted([int(y[-5:-1]) for y in years])
+        options[str(ds.name)] = {
+            'npix': 1200 / (ds.grid_size / 1000),
+            'years': years
+        }
+
+    return render(request, 'modis/multiple.html', context={
+        "options": json.dumps(options)
+    })
 
 
 @login_required
 def multiple_del(request, task_id):
-    return None
+    if request.method != 'POST':
+        return HttpResponse()
+
+    redir = '/modis/timeseries/multiple/'
+    if request.POST['redirect']:
+        redir = request.POST['redirect']
+
+    try:
+        task = MODISMultipleTimeSeriesJob.objects.get(task_id=task_id)
+    except MODISMultipleTimeSeriesJob.DoesNotExist as e:
+        print(e)
+        print("Attempted MODIS multiple-site task delete but task not found")
+        return redirect(redir)
+
+    if request.user != task.user and not request.user.is_superuser:
+        return redirect(redir)
+    
+    if task.result and task.result.name:
+        os.remove(os.path.join(settings.MEDIA_ROOT, task.result.name))
+    
+    if task.working:
+        app.control.revoke(task.task_id, terminate=True)
+
+    task.delete()
+
+    return redirect(redir)
 
 
 @login_required
 def multiple_status(request, task_id):
-    return None
+    data = {}
+    data['job'] = MODISMultipleTimeSeriesJob.objects.get(task_id=task_id)
+    data['year_string'] = ", ".join(data['job'].years)
+    
+    data['input_path'] = data['job'].points.url if data['job'].points else ""
+    data['result_path'] = data['job'].result.url if data['job'].result else ""
+    
+    return render(request, 'modis/multiple_status.html', context=data)
 
 
 @login_required
 def multiple_get_progress(request, task_id):
-    return None
+    job = MODISMultipleTimeSeriesJob.objects.get(task_id=task_id)
+
+    res = job.result.url if job.result else ""
+
+    return JsonResponse({'working':job.working, 'completed':job.completed, 'errored':job.errored, 'percent_complete':job.percent_complete, 'result':res})
 
 
 def multiple_history(request):

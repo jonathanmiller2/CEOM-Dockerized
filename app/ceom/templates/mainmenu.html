@@ -187,7 +187,7 @@
 			</a>
 		</li>
 		<li id="menu-about" class="nav-item{% if '/aboutus/' in request.path %} active{% endif %}">
-			<a class="nav-link main-menu-link" href="/aboutus/news">
+			<a class="nav-link main-menu-link" href="/aboutus/news/">
 				<span class="fas fa-info-circle"></span> 
 				{% trans "About Us" %} 
 			</a>
@@ -200,13 +200,13 @@
 		</li>
 		<!--<li id="menu-inventory" {% if '/inventory/' in request.path %}class='active'{% endif %}><a href="/inventory/"><span class="icon-list-ul navbar-icon"></span> {% trans "Datasets" %} </a></li>-->
 		<li id="menu-modis" class="nav-item{% if '/modis/' in request.path %} active{% endif %}">
-			<a class="nav-link main-menu-link" href="/modis/visualization/">
+			<a class="nav-link main-menu-link" href="/modis/">
 				<span class="fas fa-globe-americas"></span> 
 				{% trans "MODIS" %}
 			</a>
 		</li>
 		<li id="menu-tropomi" class="nav-item{% if '/tropomi/' in request.path %} active{% endif %}">
-			<a class="nav-link main-menu-link" href="/modis/visualization/">
+			<a class="nav-link main-menu-link" href="/tropomi/">
 				<span class="fas fa-globe-americas"></span> 
 				{% trans "TROPOMI" %}
 			</a>
