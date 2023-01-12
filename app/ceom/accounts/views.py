@@ -26,7 +26,11 @@ def index(request):
         
 def login(request):
     alerts = []
+    next = '/'
 
+    if request.GET:  
+        next = request.GET['next']
+        
     if request.method == 'POST':
         form = CustomLoginForm(request=request, data=request.POST)
         if form.is_valid():
@@ -37,7 +41,7 @@ def login(request):
                 auth_login(request, user)
                 # TODO: This message is persisting for too long!
                 alerts.append(f"You are now logged in as {username}")
-                return redirect('/')
+                return HttpResponseRedirect(next)
             else:
                 alerts.append("Invalid username or password.")
         else:

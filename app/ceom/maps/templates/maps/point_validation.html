@@ -58,7 +58,7 @@
     }    
 </style>
 <nav>
-    <h2 class="legend title">Map Validation</h2>
+    <h2 class="legend title">Points Validation</h2>
     
     <div class="my-2">
         <strong style="font-size:large">Select a region by adjusting the rectangle tool on the map. </strong>
@@ -66,7 +66,7 @@
         <strong style="font-size:large">Click the "Download CSV" button below to retrieve geographical data of photos in the selected area. </strong>
     </div>
     <div>
-        <button class="btn btn-success mb-2" onclick="validation_csv()"><i class="icon-plus-sign "></i>Download CSV</button>
+        <button class="btn btn-success mb-2" onclick="point_validation_csv()"><i class="icon-plus-sign "></i>Download CSV</button>
     </div>
     <div id="map"></div>
 </nav>
@@ -102,11 +102,11 @@
         rectangle.setMap(map);
       
     }
-    function validation_csv() {
+    function point_validation_csv() {
         box_coordinates = rectangle.getBounds();
         let ne = box_coordinates.getNorthEast();
         let se = box_coordinates.getSouthWest();
-        window.location='/maps/validation_data/?u=' + ne.lat() + '&r=' + se.lng() + '&d=' + se.lat() + '&l=' + ne.lng();
+        window.location='/maps/point_validation_csv/?u=' + ne.lat() + '&r=' + se.lng() + '&d=' + se.lat() + '&l=' + ne.lng();
     }
 </script>
 {% endblock %}
