@@ -1,39 +1,90 @@
 {% extends "modis/base.html" %}
-{% load crispy_forms_tags %}
-{% block title %} {{title}} {% endblock %}
 {% block content %}
-<div class="span12 well">
- <h2 style="color: #dc143c;">Retrieve time series MODIS data for multiple sites</h2>
- <div class="alert alert-block">
-    <strong>Limitations </strong>
+<h2 style="color: #dc143c;">Retrieve time series MODIS data for multiple sites</h2>
+<strong>Limitations</strong>
+<ul>
+    <li> You can only have <strong>two jobs</strong> on the queue (waiting and/or processing).</li>
+    <li> There is a maximum of <strong>100 sites</strong> per file due to performance concerns.</li>
+    <li> The maximum processing time is set to <strong>2 hours</strong> per task. Results may be saved up to that maximum execution time.</li>
+</ul>
+
+<form id="inputform" action="." method="post" enctype="multipart/form-data" class='form-horizontal'> {% csrf_token %}
+    <strong>Instructions</strong>
     <ul>
-        <li> You can only have <strong>two jobs</strong> on the queue (waiting and/or processing).</li>
-        <li> The maximum number of <strong>100 sites</strong> per file due to performance concerns.</li>
-        <li> The maximum processing time is set to <strong>2 hours</strong> per task. Results may be saved up to that maximum execution time.</li>
-    </ul>
-  </div>
-  
-   <FORM ACTION="." METHOD="post" ENCTYPE="multipart/form-data" class='form-horizontal'>
-      {% csrf_token %}
-            <p><span class="lead text-info">Step 1: </span> Prepare a text file with your site information and upload it to our server. Use Comma Separated Value file format with these values, using decimal degrees only:</p>
-            <p>Unique ID value, Latitude, Longitude</p>
-            <pre>
-            1, 20.2343, -100.26432
-            2, 30.212321, 27.1111
-            ...
-            </pre>
-            <p><span class="lead text-info">Step 2: </span> The file will be send to your usernae email address, if you wish to receive the results in other adress please enter it in the following box</p>
-            <p><span class="lead text-info">Step 3: </span> Please select a product and year(s) to process.</p>
-            <p>*Note that mod09a1 will also return a list of gap filled products derived from the surface reflectance data</p>
-            <p><span class="lead text-info">Step 4: </span> We will send you an email with te results once they have finished processing. Thank you for your patience! If you have any questions please contact the <a href="mailto:ceomsupport@ou.edu">web administrator </a></p>
-            <div class="well " style="background:white;">
-            {{ form|crispy }}
-            <INPUT TYPE="submit"  NAME="Submit" VALUE="Submit Form" class='btn btn-primary'>
+        <li><strong>Step 1: </strong>
+            <div class="mt-1 ml-5">
+                <p class="mb-2">Prepare a text file with your site information and upload it to our server. Use Comma Separated Value file format with these values, using decimal degrees only:</p>
+                <pre class="ml-5" style="white-space: pre-line;">
+                    Unique ID value, Latitude, Longitude
+                    1, 20.2343, -100.26432
+                    2, 30.212321, 27.1111
+                    ...
+                </pre>
+                <input type="file" id="inputfile" name="inputfile">
             </div>
+        </li>
+        <li class="my-3"><strong>Step 2:</strong> 
+            <div class="row mt-1 ml-5">
+                <div class="col-lg">
+                    <label class="col-sm-1">Dataset</label>
+                    <select id="datasets" name="datasets" class="form-control col-sm-6" size="4">
+                    </select>
+                </div>
+                <div class="col-lg">
+                    <label class="col-sm-1">Year</label>
+                    <select id="years" name="years" class="form-control col-sm-6" multiple="multiple">
+                    </select>
+                </div>
+            </div>
+        </li>
+        <li class="my-3"><strong>Step 3:</strong>
+            <div class="mt-1 ml-5">
+                <p id="error-message" style="color: red;">{{error}}</p>
+                <input type="submit" name="submit" value="Submit Form" class='btn btn-primary'>
+            </div>
+        </li>
+    </ul>
+</form>
 
-      
-   </FORM>
-   
-</div>
+<script>
+   let options = JSON.parse("{{ options | escapejs }}");
 
+    updateDatasetList()
+    updateYearList()
+    $("#datasets").click(function() {updateYearList();});
+
+    $("#inputform").submit(function(e) {
+        if($("#years").val().length == 0) {
+            $("#error-message").html("Please select the desired years for the dataset")
+            e.preventDefault();
+        }
+
+        if(!$("#inputfile").val()) {
+            $("#error-message").html("Please select an input file")
+            e.preventDefault();
+        }
+    });
+    
+    function updateDatasetList() {
+        let productList = Object.keys(options)
+        productList.forEach(element => {
+            $("#datasets").append($("<option></option>").attr("value", element).text(element));
+        });
+    }
+
+    function updateYearList() {
+        let selectedProduct = $("#datasets").val()
+
+        if(!selectedProduct) {
+            return
+        }
+
+        let yearList = options[selectedProduct]['years']
+
+        $("#years").empty()
+        yearList.forEach(element => {
+            $("#years").append($("<option></option>").attr("value", element).text(element));
+        });
+    }
+</script>
 {% endblock %}

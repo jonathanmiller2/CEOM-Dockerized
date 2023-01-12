@@ -3,16 +3,16 @@
 {% block content %}
 
 <div class="col-12">
-  	<h2 style="color: #dc143c;">Multiple Site Time Series Request</h2>
+  	<h2 style="color: #dc143c;">Multiple Site Timeseries Request</h2>
 
     <dl class="dl-horizontal">
         <dt>Input File:</dt><dd><a href="{{input_path}}">Input</a></dd>
     </dl>
     <dl class="dl-horizontal">
-        <dt>Dataset:</dt><dd>{{ job.product.name }}</dd>
+        <dt>Dataset:</dt><dd>{{ job.dataset }}</dd>
     </dl>
     <dl class="dl-horizontal">
-        <dt>Years:</dt><dd>{{ job.years }}</dd>
+        <dt>Years:</dt><dd>{{ year_string }}</dd>
     </dl>
     <dl class="dl-horizontal">
         <dt>Task_id</dt><dd>{{ job.task_id }}</dd>
@@ -80,7 +80,7 @@
                     $('#error-bar').css('width', '0%');
                     $('#infoMessage').html('Your task is being processed...');
                     
-                    let percent_complete = (parseFloat(result['progress']) / parseFloat(result['total_sites'])) * 100;
+                    let percent_complete = parseFloat(result['percent_complete']) * 100;
                     let percent_remaining = 100 - percent_complete;
 
                     $('#completed-bar').css('width', percent_complete + '%');
@@ -92,7 +92,7 @@
     }
 
     {% if job and not job.completed %}
-    var delay = 5000
+    var delay = 3000
     interval = window.setInterval(checkProgress, delay);
     {% endif %}
 </script>

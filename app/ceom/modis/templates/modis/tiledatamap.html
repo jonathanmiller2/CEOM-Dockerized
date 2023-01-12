@@ -16,8 +16,8 @@
     var width = 13;
     var height = 13;
     var margin = 3;
-    var goodlist = [{% for tile in good_list %}[{{ tile.ih }},{{ tile.iv }}]{% if not forloop.last %},{% endif %}{% endfor %}];
-    var badlist = [{% for tile in bad_list %}[{{ tile.ih }},{{ tile.iv }}]{% if not forloop.last %},{% endif %}{% endfor %}];
+    var goodlist = [{% for tile in good_list %}[{{ tile.h }},{{ tile.v }}]{% if not forloop.last %},{% endif %}{% endfor %}];
+    var badlist = [{% for tile in bad_list %}[{{ tile.h }},{{ tile.v }}]{% if not forloop.last %},{% endif %}{% endfor %}];
     function drawHV(c, h, v){
         c.drawRect(xo+(square_size)*h,yo+(square_size)*v,width,height);
     }
@@ -30,7 +30,7 @@
     
     function loadPage(h,v){
         //alert("This will be a popup for tile: h"+h+"v"+v);
-        window.open("/inventory/tile-h"+h+"v"+v,
+        window.open("/modis/{{dataset}}/tile-h"+h+"v"+v+'/',
                     "Tile Inventory", "menubar=no,width=400, height=600, toolbar=no,scrollbars=yes");
     }
 
@@ -47,9 +47,6 @@
         $("#mapinfo #lat_max").text("{% trans 'Lat max' %}: "+t[5].toString());
     }
     
-    function clearInfo(){
-
-    }
 
     function hoverTile(c, h, v){
         showInfo(h,v);
@@ -61,7 +58,6 @@
     
     function unhoverTile(c){
         c.clear();
-        clearInfo();
     }
 
     function goodTileDraw(c){
@@ -103,22 +99,17 @@
 {% block content %}
 <div class='row-fluid' style='height: 800px;'>
     <h3>{% trans "Dataset" %}</h3>
-
     <ul class="nav nav-pills">
-    {% for ds in dataset_list %}
-        {% ifequal dataset ds.name %}
-            <li class="nav-item"><a href="/inventory/{{ds.name}}/{{2000}}">{{ds.name|upper}}</a> {{ ds.long_name}}
-            {% if year_list %}
-                <ul class="nav nav-pills">
-                {% for y in year_list %}
-                    <li class="nav-item {% if year_int == y.year %}active{% endif %}">
-                        <a class="nav-link {% if year_int == y.year %}active{% endif %}" href="/inventory/{{ds.name}}/{{y.year}}/">{{ y.year }}</a>
-                    </li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-        {% endifequal %}
-    {% endfor %}
+        <li class="nav-item"><a href="/modis/inventory/{{dataset.name}}/{{2000}}/">{{dataset.name|upper}}</a> {{dataset.long_name}}
+        {% if year_list %}
+            <ul class="nav nav-pills">
+            {% for y in year_list %}
+                <li class="nav-item {% if year_int == y %}active{% endif %}">
+                    <a class="nav-link {% if year_int == y %}active{% endif %}" href="/modis/inventory/{{dataset.name}}/{{y}}/">{{y}}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
     </ul>
 
     <h3 align="center">{% trans "MODIS Global Datasets " %} <font size="-1">{% trans "(via Sinusoidal Grid )" %}</font> </h3>
@@ -158,7 +149,6 @@
     
         <ul>
             <li>{% trans "Tiles are 10 degrees by 10 degrees at the equator." %} </li>
-
             <li>{% trans "The tile coordinate system starts at (0,0) (horizontal tile number,vertical tile number) in the upper left corner and proceeds right (horizontal) and downward (vertical). The tile in the bottom right corner is (35,17)." %} </li>
         </ul>
     </div>

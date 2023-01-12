@@ -17,7 +17,6 @@ urlpatterns = [
     re_path(r'^modis/',include('ceom.modis.urls')),
     re_path(r'^visualization/',include('ceom.modis.urls')),
     re_path(r'^modis/data/',include('ceom.modis.urls')),
-    re_path(r'^inventory/',include('ceom.modis.urls')),
     re_path(r'^data/',include('ceom.modis.urls')),
     re_path(r'^geohealth/', include('ceom.geohealth.urls')),
     re_path(r'^photos/', include('ceom.photos.urls')),

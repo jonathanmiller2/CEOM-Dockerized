@@ -74,8 +74,8 @@ highlighted {
 						<th scope="col" colspan=2>{% trans "Datasets from MODIS" %}</th>
 					</tr>
 				{% for ds in dataset_list %}
-					<tr onclick="DoNav('/inventory/{{ds.name}}/{{2000}}/')">
-						<td><a href="/inventory/{{ds.name}}/{{2000}}/">{{ds.name|upper}}</a></td>
+					<tr onclick="DoNav('/modis/inventory/{{ds.name}}/{{2000}}/')">
+						<td><a href="/modis/inventory/{{ds.name}}/{{2000}}/">{{ds.name|upper}}</a></td>
 						<td>{{ ds.long_name}}</td>
 					</tr>
 				{% endfor %}

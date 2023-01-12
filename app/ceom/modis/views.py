@@ -1,102 +1,57 @@
-from ceom.modis.models import File, Product, Dataset, Tile
-from django.template import Context, loader, RequestContext
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
-import numpy
-import sys, os
-
-from django.core.files.base import ContentFile
-from django.db.models import Q
-from ceom.modis.models import Dataset
-from ceom.photos.models import Category, Photo
-from ceom.modis.models import MODISMultipleTimeSeriesJob,  MODISSingleTimeSeriesJob
-from ceom.modis.forms import TimeSeriesJobForm
-from datetime import datetime, date, timedelta
-
-from functools import reduce
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.http import JsonResponse
 from raster.models import RasterProduct, RasterLayer
 
-#TODO: Are these imports necessary?
-#from django.template.context_processors import csrf
+import os, glob, csv, json, math, re, uuid
+from datetime import datetime, date, timedelta
 
-import numpy, math
-import  os, re, glob, sys
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-# Need to change to include new celery script
-# import process
-
-import csv, json
-from django.http import JsonResponse
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-
-# Celery tasks
-from ceom.modis.taskprocessing.tasks import get_modis_raw_data
-#from ceom.celeryq.tasks import get_modis_raw_data, latlon2sin
-from ceom.modis.taskprocessing.tasks_multi import multiple_site_modis,terminate_task
+from ceom.celery import app
+from ceom.modis.models import *
+from ceom.modis.tasks import *
 
 
-from celery.result import AsyncResult
-
-from django.conf import settings
-
-#Charting lib
-# from chartit import DataPool, Chart
-import csv
-import uuid
-import subprocess
+SINGLE_TIMESERIES_LOCATION = os.path.join('MODIS','timeseries','single')
+MULTIPLE_TIMESERIES_INPUT_LOCATION = os.path.join('MODIS','timeseries','multi','input')
+MULTIPLE_TIMESERIES_OUTPUT_LOCATION = os.path.join('MODIS','timeseries','multi','output')
 
 
+def index(request):
+    return render(request, 'modis/overview.html')
 
-ERROR_NOT_EXIST_MESSAGE = 'Could not retrieve task. It may not exist or may have expired.'
-FAILURE_MESSAGE = 'We are sorry, but an error occured while processing the task. Please contact the administrator.'
-PENDING_MESSAGE = 'Waiting in queue... (If it takes too long please contact the administrator)'
-PROCESSING_MESSAGE = 'Processing...'
 
 def remote_sensing_datasets(request):
-    # existing = File.objects.values('dataset').distinct()
-    # dataset_list = Dataset.objects.filter(file__dataset_id__isnull=False).order_by("name")
-    dataset_list = Dataset.objects.all().order_by("name")
-    product_list = Product.objects.all().order_by("name")
     return render(request, 'modis/remote_sensing_datasets.html', context={
-        'dataset_list' : dataset_list,
-        'product_list' : product_list,
+        'dataset_list' : Dataset.objects.all().order_by("name"),
+        'product_list' : Product.objects.all().order_by("name"),
     })
+
 
 def tilemap(request, dataset_id, year):
     dataset = Dataset.objects.get(name__iexact=dataset_id)
-    # Need to replace existing and dataset_list query. It is too slow... use subqueries and group by!!!  
-    existing = File.objects.distinct().values('dataset')
-    #existing = [mcd43a4,mod09a1,mod09ga,mod09q1,mod11a1,mod11a2,mod11c3,mod12q1,mod13a1,mod13a2,mod13c2,mod13q1,mod14a2,mod15a2,mod17a2,myd11a2,myd11c3,myd14a2]
-    dataset_list = Dataset.objects.filter(name__in=existing)
-    # dataset_list contains all the information of the product in the existing list above
-    year_list = File.objects.filter(dataset=dataset).distinct().order_by('year').values('year')
-    #year_list = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016]
+
+    if dataset.location[-1] != '/':
+        loc = dataset.location + '/'
+    else:
+        loc = dataset.location
+    
+    year_dirs = list(glob.glob(loc + '[0-9][0-9][0-9][0-9]/'))
+    year_list = sorted([int(y[-5:-1]) for y in year_dirs])
 
     good_list = []
     bad_list = []
 
-    def splittiles(n):
-        #TODO: THIS FUNCTIONALITY IS GOING TO BE BROKEN UNTIL THIS IS REWRITTEN
-        # with_count() WAS A HIGHLY, HIGHLY DANGEROUS METHOD THAT NEEDED TO BE REMOVED IMMEDIATELY
+    for tile_dir in glob.glob(glob.escape(loc) + str(year) + '/h[0-9][0-9]v[0-9][0-9]/'):
+        h = int(tile_dir[-6:-4])
+        v = int(tile_dir[-3:-1])
+        if len(glob.glob(tile_dir + '*.hdf')) == 46:
+            good_list.append({'h': h, 'v':v})
+        else:
+            bad_list.append({'h': h, 'v':v})
 
-        # for tile in Tile.objects.with_count(dataset_id,year):
-        #     if tile.count == n:
-        #         good_list.append(tile)
-        #     else:
-        #         bad_list.append(tile)
-        pass
-    
-    if year == '2000':
-        splittiles(40)
-    elif year == '2001':
-        splittiles(45)
-    else:
-        splittiles(46)
-
-    return render(request, 'modis/map.html', context={
-        'dataset' : dataset_id,
-        'dataset_list' : dataset_list,
+    return render(request, 'modis/tiledatamap.html', context={
+        'dataset' : dataset,
         'good_list' : good_list,
         'bad_list' : bad_list,
         'year' : year,
@@ -104,118 +59,83 @@ def tilemap(request, dataset_id, year):
         'year_list' : year_list,
     })
     
-def tile(request, x, y):
 
-    #TODO: Why are there two functions named the same thing?
-    def daystoranges( days,day_res):
-        l = []
-        if len(days) > 0:
-            rang = []
-            rang.append(days[0])
-            prev = days[0]
+def tile(request, dataset_id, x, y):
+    data = {}
+    data['tile_name'] = "h%02dv%02d" % (int(x),int(y))
+    data['file_total'] = 0
+    data['file_data'] = []
 
-            for i in range(1, len(days)):
-                if days[i]-day_res != prev:
-                    l.append(rang)
-                    rang = []
-                rang.append(days[i])
-                prev = days[i]
-            l.append(rang)
-        for i in range(0,len(l)):
-            l[i] = [l[i][0], l[i][-1]]
-        return l
+    data['dataset'] = Dataset.objects.get(name__iexact=dataset_id)
+    day_res = data['dataset'].day_res
 
-    def daysToRanges( days,day_res):
-        ranges = []
-        for r in daystoranges(days,day_res):
-            if r[0] != r[1]:
-                ranges.append('-'.join(map(str, r)))
+    if data['dataset'].location[-1] != '/':
+        loc = data['dataset'].location + '/'
+    else:
+        loc = data['dataset'].location
+
+    year_dirs = list(glob.glob(glob.escape(loc) + '[0-9][0-9][0-9][0-9]/'))
+    year_list = sorted([int(y[-5:-1]) for y in year_dirs])
+    
+    for y in year_list:
+        files_in_year = glob.glob(glob.escape(loc) + str(y) + '/' + data['tile_name'] + '/*.hdf')
+        days_present = sorted([int(fname.split('/')[-1].split('.')[1][5:8]) for fname in files_in_year])
+        print(files_in_year)
+        print(days_present)
+
+        data['file_total'] += len(days_present)
+        
+        good_ranges = []
+        bad_ranges = []
+
+        # Iterate through year, looking for missing ranges of files. 
+        currently_good = 1 in days_present
+        range_start = 1
+        for d in range(range_start + day_res, 365, day_res):
+            if d not in days_present and currently_good:
+                # Downward edge. End of present range / start of missing range.
+
+                if range_start == d - day_res:
+                    good_ranges.append(str(range_start))
+                else:
+                    good_ranges.append(str(range_start) + '-' + str(d - day_res))
+                range_start = d
+                currently_good = False
+
+            elif d in days_present and not currently_good:
+                # Upward edge. Start of present range / end of missing range.
+
+                if range_start == d - day_res:
+                    bad_ranges.append(str(range_start))
+                else:
+                    bad_ranges.append(str(range_start) + '-' + str(d - day_res))
+                range_start = d
+                currently_good = True
+
+        # Handle final range
+        if currently_good:
+            if range_start == 365:
+                good_ranges.append(str(365))
             else:
-                ranges.append(str(r[0]))
-
-        return ', '.join(ranges)
-
-    #This function takes sorted array of day numbers with 8 days
-    # interval and returns the days that are missing
-    def missingdays( days,day_res):
-        l = []
-        i = 0
-        length = len(days)
-        for d in range(1, 365, day_res):
-            if (i>=length or d != days[i]):
-                l.append(d)
+                good_ranges.append(str(range_start) + '-365')
+        else:
+            if range_start == 365:
+                bad_ranges.append(str(365))
             else:
-                i=i+1
+                bad_ranges.append(str(range_start) + '-365')
 
-        return l
+        data['file_data'].append((y, {
+            'present': ','.join(good_ranges),
+            'absent': ','.join(bad_ranges),
+            'total': len(days_present)
+        }))
 
-    def parsePresentMissing( days,day_res):
-        s = daysToRanges(days,day_res)
-        m = daysToRanges(missingdays(days,day_res),day_res)
-        return s, m
-
-    def getproducts(names,dataset_day_res_dict):
-        dic = {}
-        result = []
-        for name in sorted(names):
-            f = name.split('.')
-            # MOD09A1.A2000185.h12v01.005.2006292063546.hdf
-            if(f[5]=='hdf'):
-                product = f[0]
-                year = f[1][1:5]
-                tile = f[2]
-                day = f[1][-3:]
-                dic.setdefault(product,{}).setdefault(year, {}).setdefault(tile,[]).append(int(day))
-
-        # Could be improved by removing the expensive sorting by using lists ( O(log n))
-        for p in sorted(dic.keys()):
-            years = dic[p]
-            year_list = []
-            for y in sorted(years.keys()):
-                tiles = years[y]
-                tile_list = []
-                for t in sorted(tiles.keys()):
-                    days = tiles[t]
-                    days.sort()
-                    dataset_day_res_dict[p]
-                    present, missing = parsePresentMissing(days,dataset_day_res_dict[p])
-                    tile_list.append((t, {'ranges': present, 'missing': missing, 'total': len(days)}))
-                year_list.append((y, tile_list))
-            result.append((p, year_list))
-        return result
-
-
-    import datetime
-    tileq = "h%02dv%02d" % (int(x),int(y))
-    files_query = File.objects.filter(tile=tileq).values('name').order_by('name')
-    dataset_day_res_query = Dataset.objects.all().values('name','day_res')
-    dataset_day_res_dict = {d['name']:d['day_res'] for d in dataset_day_res_query}
-    files = [ row['name'] for row in files_query]
-    files = getproducts(files,dataset_day_res_dict)
-    return render(request, 'modis/tile.html', context={
-        'tile': tileq,
-        'files': files,
-        'total': len(files_query),
-    })
-    
-    
-def detail(request, product_id):
-    try:
-        prod = Product.objects.get(pk=product_id)
-    except Product.DoesNotExist:
-        raise Http404
-    return render(request, 'modis/remote_sensing_datasets.html', context={'prod': prod})
-
-
-from PIL import Image
-from django.conf import settings
-from io import BytesIO
+    return render(request, 'modis/tile.html', context=data)
 
     
-def latlon2sin(lat,lon,modis='mod09a1',npix=2400.0):
+def latlon2sin(lat, lon, npix=2400.0):
 
     const =(36.*npix)/(2.*math.pi)
-    folder = ''
     yg = 9.*npix - math.radians(const*lat)
     xg = math.radians(const*lon*math.cos(math.radians(lat))) + 18.*npix
 
@@ -227,27 +147,8 @@ def latlon2sin(lat,lon,modis='mod09a1',npix=2400.0):
  
     xi = int(x)
     yi = int(y)
-    folder = 'h%02dv%02d' % (ih,iv) 
-    return ih,iv,xi,yi,folder
+    return ih,iv,xi,yi
 
-def down(request):
-    return HttpResponse("Temporarily offline")
-
-def index(request):
-    return render(request, 'modis/overview.html')
-
-@login_required()
-def single(request):
-    data = {}
-    data['datasets'] = Dataset.objects.filter(is_global=False).order_by('name')
-    data['years'] = [y for y in range (2000,date.today().year + 1)]
-    
-    if request.method == 'GET' and 'lat' in request.GET and 'lon' in request.GET:
-        data['photoRedirect'] = True
-        data['latRedirect'] = request.GET['lat']
-        data['lonRedirect'] = request.GET['lon']
-
-    return render(request, 'modis/single.html', context=data)
 
 def vimap(request):
     products = RasterProduct.objects.all()
@@ -267,194 +168,10 @@ def vimap(request):
 
     options = json.dumps(options)
 
-    return render(request, 'modis/olmap.html', context={
+    return render(request, 'modis/vimap.html', context={
         "mapOptions": options,
     })
 
-def indices_kml(request):
-    timespans = []
-    for y in range(2002,2003):
-        for d in range(1,96,8):
-            time = date(y,1,1) + timedelta(d-1)
-            timespans.append({'layers':"TOP%2CBOT%2Cocean_mask",
-                             'params':"year=%d&day=%d&prod=evi"%(y,d),
-                             'begin':time,
-                             'end':time+timedelta(d+6) })
-
-    #test = points[0].kml
-    return render(request, 'kml/wrap_wms_time.kml', context={'timespans' : timespans, 'host':request.META['HTTP_HOST']}, content_type = "application/vnd.google-earth.kml+xml")
-
-
-def evi_kml(request):
-    timespans = []
-    for y in range(2002,2003):
-        for d in range(1,96,8):
-            time = date(y,1,1) + timedelta(d-1)
-            timespans.append({'layers':"TOP%2CBOT%2Cocean_mask",
-                             'params':"year=%d&day=%d&prod=evi"%(y,d),
-                             'begin':time,
-                             'end':time+timedelta(d+6) })
-
-    #test = points[0].kml
-    return render(request, 'kml/wrap_wms_time.kml', context={'timespans' : timespans, 'host':request.META['HTTP_HOST']}, content_type="application/vnd.google-earth.kml+xml")
-
-
-def kml(request, name):
-    try:
-        styles = targetModel().styles()
-    except AttributeError:
-
-        styles = [{'name':'default', 'color':'8800ff00', 'icon':'http://maps.google.com/mapfiles/kml/shapes/info.png'}]
-
-    return render(request, 'kml/main.kml', context= {'styles':styles, 'geometries':objects}, mimetype="application/vnd.google-earth.kml+xml")
-
-TIMESERIES_LOCATION = os.path.join('modis','timeseries','single')
-
-@login_required()
-def single_progress(request, task_id):
-    data = {'task_id': task_id}
-
-    try:
-        data['found'] = True
-        data['job'] = MODISSingleTimeSeriesJob.objects.get(task_id=task_id)
-    except Exception as e:
-        print(e)
-        data['found'] = False
-    
-    return render(request, 'modis/single_status.html', context=data)
-
-
-@login_required()
-def launch_single_site_timeseries(request, lat, lon, dataset, years, product=None):
-
-    years_formated = [int(year) for year in years.split(',')]
-    dataset_freq_in_days = 8
-    # try:
-    dataset = Dataset.objects.get(name__iexact=dataset)
-    dataset_npix = dataset.xdim #2400 for mod09a1
-    dataset_freq_in_days = dataset.day_res # 8 for mod09a1
-    # except Exception as e:
-    #     return HttpResponse("An error occurred. If you did not modify the URL please contact the web administrator")
-    lon=float(lon)
-    lat = float(lat)
-    dataset_npix = int(dataset_npix)
-    ih,iv,xi,yi,folder = latlon2sin(lat,lon,dataset,dataset_npix)
-    vi=False
-    task_id = get_modis_raw_data.delay(settings.MEDIA_ROOT, TIMESERIES_LOCATION,lat,lon,dataset.name,years_formated,dataset_npix,dataset_freq_in_days)     
-
-    job = MODISSingleTimeSeriesJob(lat=lat,lon=lon,user=request.user,years=years,product=dataset,task_id=task_id,col=xi,row=yi,tile=folder)
-    job.save()
-    return redirect(to='/modis/timeseries/single/t=%s/'%task_id)
-
-def read_from_csv(absolute_path):
-    header=None
-    data = []
-    with open(absolute_path, 'rb') as f:
-        reader = csv.reader(f)
-        for row in reader:
-            if header is None:
-                header = row
-            else:
-                raw_dict = {}
-                for col in range(0,len(header)):
-                    raw_dict[header[col]] = row[col]
-                data.append(raw_dict)
-    return data
-
-def get_single_task_progress(request,task_id):
-    try:
-        task_db = MODISSingleTimeSeriesJob.objects.get(task_id=task_id)
-        if not task_db.completed:
-            task = AsyncResult(str(task_id))
-            if task.result is None:
-                return JsonResponse({'not_found':True,'message':ERROR_NOT_EXIST_MESSAGE})
-            if task.status=="FAILURE":
-                return JsonResponse({'failure':True,'message':FAILURE_MESSAGE})
-            elif task.status=="STARTED":
-                # Task is still running
-                data = {
-                    'progress':True,
-                    'completed':task.result['completed'],
-                    'errors': task.result['error'],
-                    'total':task.result['total'],
-                    'message': PROCESSING_MESSAGE,
-                    }
-                return JsonResponse(data)
-        else:
-            return JsonResponse({
-                'success':True, 
-                'url': task_db.result.url,
-                })
-    except Exception as e:
-        return JsonResponse({'failure':True,'message':'Unhandled exception: %s' % e})
-
-def get_multiple_task_progress(request, task_id):
-    job = MODISMultipleTimeSeriesJob.objects.get(task_id=task_id)
-    
-    res = job.result.url if job.result else ""
-
-    return JsonResponse({'working':job.working, 'completed':job.completed, 'errored':job.error, 'total_sites':job.total_sites, 'progress':job.progress, 'result':res})
-
-MULTIPLE_TIMESERIES_LOCATION = os.path.join('modis','timeseries','multi')
-
-@login_required
-def multiple_del(request,del_id):
-    tsj = MODISMultipleTimeSeriesJob.objects.filter(task_id=del_id)
-    message=None
-    if len(tsj)==1:
-        # Cancel celery task
-        terminate_task(tsj[0].task_id)
-        tsj.delete()
-    else:
-        message="Could not find selected job for user. Please make sure it is valid and it is not being processed (working)."
-    return redirect('/modis/timeseries/multiple/')
-
-@login_required
-def single_del(request,del_id):
-    tsj = MODISSingleTimeSeriesJob.objects.filter(user=request.user,id=del_id)
-    message=None
-    if len(tsj)==1:
-        # Cancel celery task
-        terminate_task(tsj[0].task_id)
-        tsj.delete()
-    else:
-        message="Could not find selected job for user. Please make sure it is valid and it is not being processed (working)."
-    return redirect('/modis/timeseries/single/')
-
-@login_required
-def multiple(request):
-    user_pending_jobs=MODISMultipleTimeSeriesJob.objects.filter(user=request.user,completed=False,working=False,error=False)
-    if len(user_pending_jobs)>=2:
-        return HttpResponseRedirect('/modis/timeseries/multiple/')
-    if request.method == 'POST':
-        form = TimeSeriesJobForm(request.POST, request.FILES)
-        if form.is_valid():
-            job = form.save_data(request.user,'')
-
-            years = [int(y) for y in form.cleaned_data['years'].split(',')]
-            points = job.points.file.name
-            dataset = form.cleaned_data['product']
-
-            task_id = multiple_site_modis.delay(points, settings.MEDIA_ROOT, MULTIPLE_TIMESERIES_LOCATION, dataset.name,years,dataset.xdim,dataset.day_res)
-            job.task_id = str(task_id)
-            job.save()
-            
-            return redirect('/modis/timeseries/multiple/t=' + str(task_id) + '/')
-    else:
-        form = TimeSeriesJobForm()
-        
-    #It is the first visit or form had errors
-    return render(request, 'modis/multiple.html', context={"title":"Add Multiple Points time series request",'form':form})
-
-@login_required
-def multiple_progress(request, task_id):
-    data = {}
-    data['job'] = MODISMultipleTimeSeriesJob.objects.get(task_id=task_id)
-    
-    data['input_path'] = data['job'].points.url if data['job'].points else ""
-    data['result_path'] = data['job'].result.url if data['job'].result else ""
-
-    return render(request, 'modis/multiple_status.html', context=data)
 
 def composite(request, year = None, julian_day = None):
     prod='MOD09'
@@ -489,5 +206,286 @@ def composite(request, year = None, julian_day = None):
             'sat_name': sat_name,
             }
         )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required
+def single(request):
+    if request.method == 'POST':
+        ds = Dataset.objects.get(name__iexact=request.POST['dataset'])
+
+        years = request.POST.getlist('years[]')
+        lon = float(request.POST['lon'])
+        lat = float(request.POST['lat'])
+
+        h, v, x, y = latlon2sin(lat, lon, ds.xdim) # TODO: If xdim != ydim, I have no idea how to handle that.
+
+        task_id = str(uuid.uuid4())
+        
+        MODISSingleTimeSeriesJob.objects.create(task_id=task_id, dataset=ds, h=h, v=v, x=x, y=y, years=years, user=request.user)
+
+        process_MODIS_single_site(task_id, settings.MEDIA_ROOT, SINGLE_TIMESERIES_LOCATION, ds.name, ds.location, h, v, x, y, years)   
+        
+        return redirect('/modis/timeseries/single/t=' + task_id + '/')
+
+    options = {}
+    datasets = Dataset.objects.filter(is_global=False).order_by('name')
+
+    for ds in datasets:
+        years = glob.glob(os.path.join(ds.location, '[0-9][0-9][0-9][0-9]/'))
+        years = sorted([int(y[-5:-1]) for y in years])
+        options[str(ds.name)] = {
+            'npix': 1200 / (ds.grid_size / 1000),
+            'years': years
+        }
+
+    return render(request, 'modis/single.html', context={
+        "options": json.dumps(options)
+    })
+
+
+@login_required
+def single_del(request, task_id):
+    if request.method != 'POST':
+        return HttpResponse()
+
+    redir = '/modis/timeseries/single/'
+    if request.POST['redirect']:
+        redir = request.POST['redirect']
+
+    try:
+        task = MODISSingleTimeSeriesJob.objects.get(task_id=task_id)
+    except MODISSingleTimeSeriesJob.DoesNotExist as e:
+        print(e)
+        print("Attempted MODIS single-site task delete but task not found")
+        return redirect(redir)
+
+    if request.user != task.user and not request.user.is_superuser:
+        return redirect(redir)
+    
+    if task.result and task.result.name:
+        os.remove(os.path.join(settings.MEDIA_ROOT, task.result.name))
+    
+    if task.working:
+        app.control.revoke(task.task_id, terminate=True)
+
+    task.delete()
+
+    return redirect(redir)
+
+
+@login_required
+def single_status(request, task_id):
+    data = {}
+    data['job'] = MODISSingleTimeSeriesJob.objects.get(task_id=task_id)
+    data['year_string'] = ", ".join(data['job'].years)
+
+    data['tile'] = 'h' + str(data['job'].h).zfill(2) + 'v' + str(data['job'].v).zfill(2)
+    data['pixel'] = '(' + str(data['job'].x) + ', ' + str(data['job'].y) + ")"
+
+    return render(request, 'modis/single_status.html', context=data)
+
+
+@login_required()
+def single_get_progress(request, task_id):
+    job = MODISSingleTimeSeriesJob.objects.get(task_id=task_id)
+
+    res = job.result.url if job.result else ""
+
+    return JsonResponse({'working':job.working, 'completed':job.completed, 'errored':job.errored, 'percent_complete':job.percent_complete, 'result':res})
+
+@login_required()
+def single_history(request):
+    return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required
+def multiple(request):
+    if request.method == 'POST':
+        data = {}
+
+        ds = Dataset.objects.get(name__iexact=request.POST['datasets'])
+
+        requested_years = request.POST.getlist('years')
+
+        if 'inputfile' not in request.FILES:
+            data['error'] = "Please select an input file"
+            return render(request, 'modis/multiple.html', context=data)
+
+        if len(requested_years) == 0:
+            data['error'] = "Please select the desired years for the dataset"
+            return render(request, 'modis/multiple.html', context=data)
+
+        input_file = request.FILES['inputfile']
+
+        #Verify file
+        MAX_BLANK_ROWS=100
+        MAX_SITES_PER_FILE=100
+        try:
+            dialect = csv.Sniffer().sniff(input_file.read(1024).decode('utf-8'))
+            input_file.seek(0, 0)
+        except csv.Error:
+            data['error'] = 'Not a valid CSV file'
+            return render(request, 'modis/multiple.html', context=data)
+
+        reader = csv.reader(input_file.read().decode('utf-8').splitlines(), dialect, delimiter=',')
+        i=1
+        blank_rows=0
+        for y_index, row in enumerate(reader):
+            if i > MAX_SITES_PER_FILE:
+                data['error'] = "The limit of sites per request is "+ str(MAX_SITES_PER_FILE)+". Please split the file in smaller chunks."
+                return render(request, 'modis/multiple.html', context=data)
+            if not ''.join(str(x) for x in row):
+                blank_rows+=1
+                if blank_rows>= MAX_BLANK_ROWS:
+                    data['error'] = 'Too many blank rows in file. Please delete them'
+                    return render(request, 'modis/multiple.html', context=data)
+                continue
+            if len(row) != 3:
+                data['error'] = "Format error at line " + str(i) + ": More/less than three columns detected. " + str(row)
+                return render(request, 'modis/multiple.html', context=data)
+            try:
+                a = float(row[1])
+                a = float(row[2])
+            except Exception:
+                data['error'] = "Format error at line " + str(i) + ": latitude and longitude must be in number format eg: 12.1234. " + str(row)
+                return render(request, 'modis/multiple.html', context=data)
+            i+=1
+        #File verified
+
+        full_input_dir = os.path.join(settings.MEDIA_ROOT, MULTIPLE_TIMESERIES_INPUT_LOCATION)
+        if not os.path.exists(full_input_dir):
+            os.makedirs(full_input_dir)
+
+        filename = 'MODIS_Input_uid' + str(request.user.id) + "_" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + ".csv"
+        rel_input_file_location = os.path.join(MULTIPLE_TIMESERIES_INPUT_LOCATION, filename)
+
+        with open(os.path.join(settings.MEDIA_ROOT, rel_input_file_location), 'wb+') as destination:
+            for chunk in input_file.chunks():
+                destination.write(chunk)
+
+
+        task_id = str(uuid.uuid4())
+        
+        obj = MODISMultipleTimeSeriesJob.objects.create(task_id=task_id, dataset=ds, years=requested_years, user=request.user)
+        obj.points.name = rel_input_file_location
+        obj.save()
+
+        process_MODIS_multiple_site(task_id, settings.MEDIA_ROOT, MULTIPLE_TIMESERIES_OUTPUT_LOCATION, ds.name, ds.location, ds.xdim, rel_input_file_location, requested_years)   
+        
+        return redirect('/modis/timeseries/multiple/t=' + task_id + '/')
+
+    options = {}
+    datasets = Dataset.objects.filter(is_global=False).order_by('name')
+
+    for ds in datasets:
+        years = glob.glob(os.path.join(ds.location, '[0-9][0-9][0-9][0-9]/'))
+        years = sorted([int(y[-5:-1]) for y in years])
+        options[str(ds.name)] = {
+            'npix': 1200 / (ds.grid_size / 1000),
+            'years': years
+        }
+
+    return render(request, 'modis/multiple.html', context={
+        "options": json.dumps(options)
+    })
+
+
+@login_required
+def multiple_del(request, task_id):
+    if request.method != 'POST':
+        return HttpResponse()
+
+    redir = '/modis/timeseries/multiple/'
+    if request.POST['redirect']:
+        redir = request.POST['redirect']
+
+    try:
+        task = MODISMultipleTimeSeriesJob.objects.get(task_id=task_id)
+    except MODISMultipleTimeSeriesJob.DoesNotExist as e:
+        print(e)
+        print("Attempted MODIS multiple-site task delete but task not found")
+        return redirect(redir)
+
+    if request.user != task.user and not request.user.is_superuser:
+        return redirect(redir)
+    
+    if task.result and task.result.name:
+        os.remove(os.path.join(settings.MEDIA_ROOT, task.result.name))
+    
+    if task.working:
+        app.control.revoke(task.task_id, terminate=True)
+
+    task.delete()
+
+    return redirect(redir)
+
+
+@login_required
+def multiple_status(request, task_id):
+    data = {}
+    data['job'] = MODISMultipleTimeSeriesJob.objects.get(task_id=task_id)
+    data['year_string'] = ", ".join(data['job'].years)
+    
+    data['input_path'] = data['job'].points.url if data['job'].points else ""
+    data['result_path'] = data['job'].result.url if data['job'].result else ""
+    
+    return render(request, 'modis/multiple_status.html', context=data)
+
+
+@login_required
+def multiple_get_progress(request, task_id):
+    job = MODISMultipleTimeSeriesJob.objects.get(task_id=task_id)
+
+    res = job.result.url if job.result else ""
+
+    return JsonResponse({'working':job.working, 'completed':job.completed, 'errored':job.errored, 'percent_complete':job.percent_complete, 'result':res})
+
+
+def multiple_history(request):
+    return None
+
+
+
+
+
+
+
+
+
+
+
 
 

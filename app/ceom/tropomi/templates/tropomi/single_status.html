@@ -33,6 +33,7 @@
     </dl>
     
     <hr>
+    
     {% if not job.completed %}
     <div id="progress-panel">
         <p id='infoMessage' class="text-center text-info">Contacting server...</p>
@@ -60,9 +61,7 @@
             <input type="hidden" name="redirect" value="/tropomi/timeseries/single/">
             <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</input>
         </form>
-    </div>
-    
-        
+    </div>   
 </div>
 
 <script type="text/javascript">

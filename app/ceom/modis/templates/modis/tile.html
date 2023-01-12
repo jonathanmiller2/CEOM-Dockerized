@@ -42,12 +42,8 @@ table.mystyle
 <table border="0" cellspacing="3">
   <tr>
     <td width="100"><b>{% trans "Tile Code" %}</b></td>
-    <td><!-- <a href="http://remotesensing.ou.edu/modis_v5/tile_details.cgi?map.x={{coords.x}}&map.y={{coords.y}}" target="details"> -->{{tile}}<!-- </a> --></td>
+    <td>{{tile_name}}</td>
   </tr>
-  <!--<tr>
-    <td width="100"><b>Region</b></td>
-    <td><a href="cont_inventory_wait.cgi?cont=_REGION-DIR_" target="cont_inventory">{{region}}</a></td>
-  </tr>-->
 </table>
 <br>
 
@@ -60,24 +56,20 @@ table.mystyle
     <th>{% trans "Total" %}</th>
   </tr>
   
-{% for product, years in files %}
-    {% for year, tiles in years %}
+{% for year, days in file_data %}
     <tr align="center">
     {% if forloop.first %}
-    <td rowspan="{{years|length}}">{{product|upper}}</td>
+    <td rowspan="{{years|length}}">{{dataset.name|upper}}</td>
     {% endif %}
     <td>{{year}}</td>
-        {% for tile, days in tiles %}
-        <td>{{days.ranges}}</td>
-        <td>{{days.missing}}</td>
+        <td>{{days.present}}</td>
+        <td>{{days.absent}}</td>
         <td><b>{{days.total}}</b></td>
-        {% endfor %}
     </tr>
     {% endfor %}
-{% endfor %}
   <tr>
     <th colspan="4">{% trans "Files Total" %}</th>
-    <th>{{total}}</th>
+    <th>{{file_total}}</th>
   </tr>
 
 </table>
