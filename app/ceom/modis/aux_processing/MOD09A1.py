@@ -1,4 +1,41 @@
 
+MOD09A1_COLUMN_ORDER = [
+    'Band 1 - Red (620-670 nm)',
+    'Band 2 - NIR1 (841-876 nm)',
+    'Band 3 - Blue (459-479 nm)',
+    'Band 4 - Green (545-565 nm)',
+    'Band 5 - NIR2 (1230-1250 nm)',
+    'Band 6 - SWIR1 (1628-1652 nm)',
+    'Band 7 - SWIR2 (2105-2155 nm)',
+    'Solar Zenith Angle',
+    'View Zenith Angle',
+    'Relative Azimuth Angle',
+    'Day of Year',
+    'MODLAND QA',
+    'Band 1 Data Quality',
+    'Band 2 Data Quality',
+    'Band 3 Data Quality',
+    'Band 4 Data Quality',
+    'Band 5 Data Quality',
+    'Band 6 Data Quality',
+    'Band 7 Data Quality',
+    'Atmospheric Correction Performed',
+    'Adjacency Correction Performed',
+    'Cloud State',
+    'Cloud Shadow',
+    'Land/Water Flag',
+    'Aerosol Quantity',
+    'Cirrus Detected',
+    'Internal Cloud Algorithm Flag',
+    'Internal Fire Algorithm Flag',
+    'MOD35 Snow/Ice Flag',
+    'Pixel is Adjacent to Cloud',
+    'Salt Pan',
+    'Internal Snow Mask',
+]
+
+
+
 def process_MOD09A1(input_df):
     QC_COLUMNS = ['MODLAND QA', 'Band 1 Data Quality', 'Band 2 Data Quality', 'Band 3 Data Quality', 
                     'Band 4 Data Quality', 'Band 5 Data Quality', 'Band 6 Data Quality', 'Band 7 Data Quality', 

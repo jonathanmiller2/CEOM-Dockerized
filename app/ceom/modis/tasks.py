@@ -6,8 +6,8 @@ import pandas as pd
 
 from ceom.celery import app
 from ceom.modis.models import *
-from ceom.modis.aux_processing.MOD09A1 import process_MOD09A1
-from ceom.modis.aux_processing.MYD11A2 import process_MYD11A2
+from ceom.modis.aux_processing.MOD09A1 import process_MOD09A1, MOD09A1_COLUMN_ORDER
+from ceom.modis.aux_processing.MYD11A2 import process_MYD11A2, MYD11A2_COLUMN_ORDER
 
 # This funcion isn't a celery task, but rather is an intermediary between the view and the celery tasks.
 def process_MODIS_single_site(task_id, media_root, csv_folder, dataset_name, dataset_loc, h, v, x, y, years):
@@ -114,10 +114,13 @@ def finish_MODIS_single_site(self, records, task_id, dataset_name, full_file, re
             records = [item for sublist in records for item in sublist]
 
         final_df = pd.DataFrame.from_records(records, index='Date')
-        final_df = final_df[sort_columns(dataset_name, list(final_df.columns))]
 
         if dataset_name.upper() == "MOD09A1":
             final_df = process_MOD09A1(final_df)
+        elif dataset_name.upper() == "MYD11A2":
+            final_df = process_MYD11A2(final_df)
+
+        final_df = final_df[sort_columns(dataset_name, list(final_df.columns))]
 
         with open(full_file, 'w+') as csvfile:
             final_df.to_csv(csvfile)
@@ -160,7 +163,7 @@ def process_MODIS_multiple_site(task_id, media_root, csv_folder, dataset_name, d
     job_obj.save()
 
     try:
-        filename = 'MODIS_Output_uid' + str(job_obj.user) + "_" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + ".csv"
+        filename = 'MODIS_Output_uid_' + str(job_obj.user) + "_" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + ".csv"
         rel_file = os.path.join(csv_folder, filename)
         full_file = os.path.join(media_root, rel_file)
 
@@ -268,10 +271,13 @@ def finish_MODIS_multiple_site(self, records, task_id, dataset_name, full_file, 
             records = [item for sublist in records for item in sublist]
 
         final_df = pd.DataFrame.from_records(records, index='Date')
-        final_df = final_df[sort_columns(dataset_name, list(final_df.columns))]
 
         if dataset_name.upper() == "MOD09A1":
             final_df = process_MOD09A1(final_df)
+        elif dataset_name.upper() == "MYD11A2":
+            final_df = process_MYD11A2(final_df)
+
+        final_df = final_df[sort_columns(dataset_name, list(final_df.columns))]
 
         with open(full_file, 'w+') as csvfile:
             final_df.to_csv(csvfile)
@@ -311,24 +317,11 @@ def sort_columns(dataset_name, column_list):
         column_list.remove('Site') 
 
     DESIRED_ORDER = { 
-        'MOD09A1': [
-                'sur_refl_b01',
-                'sur_refl_b02',
-                'sur_refl_b03',
-                'sur_refl_b04',
-                'sur_refl_b05',
-                'sur_refl_b06',
-                'sur_refl_b07',
-                'sur_refl_qc_500m',
-                'sur_refl_szen',
-                'sur_refl_vzen',
-                'sur_refl_raz',
-                'sur_refl_state_500m',
-                'sur_refl_day_of_year',
-            ],
+        'MOD09A1': MOD09A1_COLUMN_ORDER,
+        'MYD11A2': MYD11A2_COLUMN_ORDER,
     }
 
-    for item in DESIRED_ORDER[dataset_name]:
+    for item in DESIRED_ORDER[dataset_name.upper()]:
         if item not in column_list:
             print("Sorting columns for MODIS task failed, item: " + item + " not found in column list.")
             
