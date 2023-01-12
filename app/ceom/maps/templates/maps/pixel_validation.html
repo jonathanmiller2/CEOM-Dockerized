@@ -102,14 +102,46 @@
             position: {lat: -2, lng: -2},
             map: map,
         });
-        
-        polygon = new google.maps.Polygon({ 
+
+        polygon = new google.maps.Polygon({
             strokeColor: "#000000",                 
             strokeOpacity: 0.9,
             strokeWeight: 2,                                 
             fillOpacity: 0,
             clickable: false,                 
         });
+       
+        polyCoords = [
+            { lat: 25.774, lng: -80.19 },
+            { lat: 18.466, lng: -66.118 },
+            { lat: 32.321, lng: -64.757 },
+            { lat: 25.774, lng: -80.19 },
+        ];
+        
+        if(polyCoords)
+        {
+            polygonData = new google.maps.Polygon({ 
+            paths: polyCoords,
+            strokeColor: "#008000",                 
+            strokeOpacity: 0.9,
+            strokeWeight: 2,                                 
+            fillOpacity: .25,
+            fillColor: "#008000",
+            clickable: false,                 
+            });
+        }
+        else
+        {
+            polygonData = new google.maps.Polygon({ 
+            paths: polyCoords, 
+            strokeColor: "#000000",                 
+            strokeOpacity: 0.9,
+            strokeWeight: 2,                                 
+            fillOpacity: 0,
+            clickable: false,                  
+            });
+        }
+
         updatePolygon(lat, lon);
         google.maps.event.addListener(map, 'click', async function (evt) {
             lat = evt.latLng.lat();
@@ -125,6 +157,7 @@
         });    
         marker.setMap(map);
         polygon.setMap(map);
+        polygonData.setMap(map); 
     };
 
     $(document).on('input', function(e) {
