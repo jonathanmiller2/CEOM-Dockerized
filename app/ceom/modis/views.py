@@ -248,6 +248,7 @@ def single(request):
         
         return redirect('/modis/timeseries/single/t=' + task_id + '/')
 
+    data = {}
     options = {}
     datasets = Dataset.objects.filter(is_global=False).order_by('name')
 
@@ -259,9 +260,14 @@ def single(request):
             'years': years
         }
 
-    return render(request, 'modis/single.html', context={
-        "options": json.dumps(options)
-    })
+    data['options'] = json.dumps(options)
+
+    if request.method == 'GET' and 'lat' in request.GET and 'lon' in request.GET:
+        data['photoRedirect'] = True
+        data['latRedirect'] = request.GET['lat']
+        data['lonRedirect'] = request.GET['lon']
+
+    return render(request, 'modis/single.html', context=data)
 
 
 @login_required
