@@ -23,4 +23,6 @@ urlpatterns = [
     re_path(r'^group_photos/(?P<selYear>\d{4})', ceom.aboutus.views.group_photos),
     re_path(r'^group_photos', ceom.aboutus.views.group_photos),
     re_path(r'$', ceom.aboutus.views.news),
+    re_path(r'^stats/user/',ceom.aboutus.views.user_stats),
+    re_path(r'^stats/photo/',ceom.aboutus.views.photo_stats),
 ]

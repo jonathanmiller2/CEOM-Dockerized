@@ -67,7 +67,14 @@
 	</a>
 </li>
 <li>
-	<a href="/stats/" class="btn btn-light btn-block rounded-0 p-0">
-		<p class="leftmenu-text mx-4 m-0 text-left"> {% trans "Website Usage Statistics" %} </p>
+	<a href="/stats/" data-toggle="collapse" data-target="#Statistics" class="btn btn-light btn-block rounded-0 p-0">
+		<p class="leftmenu-text mx-4 m-0 text-left"> {% trans "Statistics" %} </p>
 	</a>
+	<ul id="Statistics" style="list-style: none;" class="collapse {% if '/aboutus/stats/' in request.path%} show{% endif %}">
+		<li><a class="leftmenu-text" href="/aboutus/stats/user/?p=new"> {% trans "New User Registration" %} </a></li>
+		<li><a class="leftmenu-text" href="/aboutus/stats/user/?p=cum">{% trans "Cumulative Users" %}</a></li>
+		<li><a class="leftmenu-text" href="/aboutus/stats/user/?p=month">{% trans "Users By Month" %}</a></li>
+		<li><a class="leftmenu-text" href="/aboutus/stats/photo/?p=cum">{% trans "Cumulative Photos" %}</a></li>
+		<li><a class="leftmenu-text" href="/aboutus/stats/photo/?p=month">{% trans "Photos By Month" %}</a></li>
+	</ul>
 </li>
