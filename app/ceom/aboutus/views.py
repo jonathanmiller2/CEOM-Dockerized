@@ -95,7 +95,7 @@ def photo_stats(request):
         year_max = int(request_list[2])  
     data['x_values'] = list(range(year_min, year_max+1))
     data['year_range'] = range(2007, date.today().year+1)
-    data['type'] = str(type)
+    data['type'] = type
     
     y_values = []
     if (type == 'cum'):
