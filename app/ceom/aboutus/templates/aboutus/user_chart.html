@@ -1,0 +1,122 @@
+{% extends "aboutus/base.html" %}
+{% block title %} CEOM: Statistics {% endblock %}
+{% block content %}
+<h2 style="color:red">CEOM Website Users Statistics</h2>
+<hr/>
+<div class="row mx-0">
+    <label class="pt-1"><strong>Select Year Range:</strong></label>
+    <select id ="YEAR_MIN" class="myDropDown form-select form-control col-sm-2 mx-2" >
+        <option selected>From...</option>
+        {% for year in year_range %}
+            <option value="{{ year }}">{{ year }}</option>
+        {% endfor %}    
+    </select>
+    <span class="pt-1"> - </span> 
+    <select id ="YEAR_MAX" class="form-select form-control col-sm-2 mx-2">
+        <option selected>...To</option>
+        {% for year in year_range %}
+            <option value="{{ year }}">{{ year }}</option>
+        {% endfor %}    
+    </select>
+    <button class="btn btn-primary mx-2" onclick="chart_limitation()">Apply</button>
+</div>
+<div id="container" class="my-3" style="min-width: 310px; max-width: 750px ; height: 500px; margin: 0 auto"></div>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script>
+    var type = "{{ type }}";
+    var url = "/aboutus/stats_user/?p=" + type;
+    var year_list = {{x_values}};
+    var data_list = {{y_values}};
+    const options = {
+        chart: {
+            zoomType: "xy",
+            scrollablePlotArea: {
+                minWidth: 750,
+                scrollPositionX: 0
+            }
+        },
+        credits: {
+            enabled : true,
+            href : "http://www.ceom.ou.edu",
+            text : "ceom.ou.edu"
+        },
+        xAxis: {
+            categories: year_list,
+            lineColor: "#665f5f",  
+        },
+        yAxis: {
+            allowDecimals: false,
+            lineColor: "#665f5f",
+            lineWidth: 1,
+            min: 0,
+        },
+        tooltip: {
+            headerFormat: '<b>{point.key}</b><br/>',
+            pointFormat: '<span>#users: {point.y}</span>',
+        },
+    }
+    if (type == "new"){
+        options.chart.type = "column";
+        options.title = {text: "<strong>New User Registrations by Year </strong>"};
+        options.yAxis.title = {text: "<b>New User Registrations</b>"};
+        options.series = [{
+            name: "New Users",
+            data: data_list,
+            maxPointWidth: 50,
+        }]
+    } else if (type == "cum"){
+        options.chart.type = "spline";
+        options.title = {text: "<b>Cumulative Users by Year</b>"};
+        options.yAxis.title = {text: "<b>Total users</b>"};
+        options.series = [{
+            name: "Total Users",
+            data: data_list,
+        }];
+    } else {
+        options.chart.type = "column";
+        if (year_list.length > 10) 
+            options.chart.scrollablePlotArea =  {minWidth: 1200} ;
+        options.title = {text: "<strong>New User Registrations by Month and Year</strong>"};
+        options.yAxis.title = {text: "<b>Number of New Users</b>"};
+        options.plotOptions = {stacking: 'normal'};
+        options.tooltip = 
+            {  
+                formatter: function() {
+                    sum = 0;
+                    for(let i = 0; i < 12; i++){
+                        sum += data_list[i][this.point.x];
+                    }
+                    return '<b>' + this.x + '</b><br/>' +
+                    this.series.name + ': ' + this.y + '<br/>' +
+                    'Total: ' + sum ;
+                },
+            };       
+        options.series = [];
+        for(let i = 0; i < 12; i++){
+            var date = new Date();
+            date.setMonth(i); 
+            options.series[i] = {
+                name: date.toLocaleString('en-us', {month: 'long'}),
+                data: data_list[i],
+            };
+        };
+    };
+   
+    $("#container").highcharts(options);
+    
+    function chart_limitation() {
+        var year_min = $("#YEAR_MIN").val()
+        var year_max = $("#YEAR_MAX").val()
+        if(isNaN(year_min) || isNaN(year_max)){
+            alert("Please select a valid year");
+            return;
+        } else if (year_min > year_max){
+            alert("End year must be greater than start year");
+            return;
+        }
+        window.location = url + "&p=" + year_min + "&p=" + year_max;
+    };
+</script> 
+{% endblock %}
