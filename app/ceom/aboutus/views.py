@@ -55,7 +55,7 @@ def user_stats(request):
     data = {}
     request_list = request.GET.getlist('p')
     type = request_list[0]
-    if (len(request_list) == 1):
+    if len(request_list) == 1:
         year_min = 2007
         year_max = date.today().year
     else: 
@@ -66,13 +66,13 @@ def user_stats(request):
     data['type'] = type
     
     y_values = []
-    if (type == 'new'):
+    if type == 'new':
         for year in range(year_min, year_max+1):
             y_values.append(User.objects.filter(date_joined__year=year).count())
-    elif (type == 'cum'):
+    elif type == 'cum':
         for year in range(year_min, year_max+1):
             y_values.append(User.objects.filter(date_joined__year__lte=year).count())
-    elif (type == 'month'):
+    elif type == 'month':
         for month in range(1,13):
             data_by_month = []
             for year in range(year_min, year_max+1):
@@ -87,7 +87,7 @@ def photo_stats(request):
     data = {}
     request_list = request.GET.getlist('p')
     type = request_list[0]
-    if (len(request_list) == 1):
+    if len(request_list) == 1:
         year_min = 2007
         year_max = date.today().year
     else: 
@@ -98,10 +98,10 @@ def photo_stats(request):
     data['type'] = type
     
     y_values = []
-    if (type == 'cum'):
+    if type == 'cum':
         for year in range(year_min, year_max+1):
             y_values.append(Photo.objects.filter(uploaddate__year__lte=year).count())
-    elif (type == 'month'):
+    elif type == 'month':
         for month in range(1,13):
             data_by_month = []
             for year in range(year_min, year_max+1):

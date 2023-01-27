@@ -26,7 +26,7 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script>
     var type = "{{ type }}";
-    var url = "/aboutus/stats/user/?p=" + type;
+    var url = "/aboutus/stats_user/?p=" + type;
     var year_list = {{x_values}};
     var data_list = {{y_values}};
     const options = {
@@ -92,57 +92,16 @@
                     this.series.name + ': ' + this.y + '<br/>' +
                     'Total: ' + sum ;
                 },
+            };       
+        options.series = [];
+        for(let i = 0; i < 12; i++){
+            var date = new Date();
+            date.setMonth(i); 
+            options.series[i] = {
+                name: date.toLocaleString('en-us', {month: 'long'}),
+                data: data_list[i],
             };
-        options.series = [
-            {
-                name: "January",
-                data: data_list[0],
-            },
-            {
-                name: "February",
-                data: data_list[1],
-            },
-            {
-                name: "March",
-                data: data_list[2],
-            },
-            {
-                name: "April",
-                data: data_list[3],
-            },
-            {
-                name: "May",
-                data: data_list[4],
-                stack: "May",
-            },
-            {
-                name: "June",
-                data: data_list[5],
-            },
-            {
-                name: "July",
-                data: data_list[6],
-            },
-            {
-                name: "August",
-                data: data_list[7],
-            },
-            {
-                name: "September",
-                data: data_list[8],
-            },
-            {
-                name: "October",
-                data: data_list[9],
-            },
-            {
-                name: "November",
-                data: data_list[10],
-            },
-            {
-                name: "December",
-                data: data_list[11],
-            }]
+        };
     };
    
     $("#container").highcharts(options);
