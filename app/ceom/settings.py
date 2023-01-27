@@ -176,7 +176,6 @@ INSTALLED_APPS = [
     'ceom.outreach.gisday',
     'ceom.outreach.workshops',
     'ceom.aboutus',
-    'ceom.stats',
     'ceom.towers',
     'ceom.maps',
     'ceom.water',
