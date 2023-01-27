@@ -9,7 +9,6 @@ urlpatterns = [
     re_path(r'news/$', ceom.aboutus.views.news),
     re_path(r'people', ceom.aboutus.views.people),
     re_path(r'research/projects/', TemplateView.as_view(template_name="aboutus/research/projects.html")),
-    re_path(r'research/themes/', TemplateView.as_view(template_name="aboutus/research/themes.html")),
     re_path(r'research/$', TemplateView.as_view(template_name="aboutus/research/overview.html")),
     re_path(r'education/courses', TemplateView.as_view(template_name="aboutus/education/courses.html")),
     re_path(r'education/student_awards', TemplateView.as_view(template_name="aboutus/education/student_awards.html")),

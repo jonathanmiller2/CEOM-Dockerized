@@ -1,7 +1,5 @@
-from django.core.files import File
-
 from osgeo import gdal
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 import itertools, csv, os, math
 import pandas as pd
 
@@ -23,8 +21,7 @@ def process_TROPOMI_single_site(self, media_root, csv_folder, x, y, years):
         full_file = os.path.join(media_root, rel_file)
         nineteen_seventy = datetime.fromisoformat('1970-01-01')
 
-        if not os.path.exists(os.path.join(media_root, csv_folder)):
-            os.makedirs(os.path.join(media_root, csv_folder))
+        os.makedirs(os.path.join(media_root, csv_folder, exist_ok=True))
         
         columns = []
         data = []
