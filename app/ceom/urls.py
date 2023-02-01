@@ -26,7 +26,6 @@ urlpatterns = [
     re_path(r'^aboutus/',include('ceom.aboutus.urls')),
     re_path(r'^outreach/workshops/', include('ceom.outreach.workshops.urls')),
     re_path(r'^outreach/gisday/', include('ceom.outreach.gisday.urls')),
-    re_path(r'^stats/', include('ceom.stats.urls')),
     re_path(r'^towers/', include('ceom.towers.urls')),
     re_path(r'^maps/', include('ceom.maps.urls')),
     re_path(r'^water/', include('ceom.water.urls')),

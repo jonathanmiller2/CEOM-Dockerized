@@ -74,7 +74,7 @@ def home(request):
     return render(request, 'photos/overview.html')
 
 def leaderboard(request):
-    points = User.objects.annotate(user_points=Count('categoryvote')).order_by("-user_points")
+    points = User.objects.annotate(user_points=Count('categoryvote')).order_by("-user_points").filter(user_points__gt=0)
 
     #Paginator 
     page_num = request.GET.get('page')

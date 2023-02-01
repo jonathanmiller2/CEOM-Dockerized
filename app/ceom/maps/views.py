@@ -95,7 +95,7 @@ def point_validation_csv(request):
 
 def leaderboard(request):
     data = {}
-    ranks = User.objects.annotate(points=Count('geocatterpoint')).order_by("-points")
+    ranks = User.objects.annotate(points=Count('geocatterpoint')).order_by("-points").filter(points__gt=0)
     paginator = Paginator(ranks, 25) 
     page_number = request.GET.get('page')
     data['page_obj'] = paginator.get_page(page_number)
