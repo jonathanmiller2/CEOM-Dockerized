@@ -82,6 +82,7 @@
 <script>
     let map;
     let polygon;
+    let polygonData;
     var size = 5;
     let lat = 0;
     let lon = 0;
@@ -89,7 +90,7 @@
         lat: lat,
         lng: lon
     };
-   
+    
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 3,
@@ -97,50 +98,50 @@
           gestureHandling: 'cooperative',
           mapTypeId: 'satellite',
         });
-    
+
         marker = new google.maps.Marker({
             position: {lat: -2, lng: -2},
             map: map,
         });
-
-        polygon = new google.maps.Polygon({
+        
+        polygon = new google.maps.Polygon({ 
             strokeColor: "#000000",                 
             strokeOpacity: 0.9,
             strokeWeight: 2,                                 
             fillOpacity: 0,
             clickable: false,                 
         });
-       
-        polyCoords = [
-            { lat: 25.774, lng: -80.19 },
-            { lat: 18.466, lng: -66.118 },
-            { lat: 32.321, lng: -64.757 },
-            { lat: 25.774, lng: -80.19 },
-        ];
         
-        if(polyCoords)
-        {
-            polygonData = new google.maps.Polygon({ 
-            paths: polyCoords,
-            strokeColor: "#008000",                 
-            strokeOpacity: 0.9,
-            strokeWeight: 2,                                 
-            fillOpacity: .25,
-            fillColor: "#008000",
-            clickable: false,                 
-            });
-        }
-        else
-        {
-            polygonData = new google.maps.Polygon({ 
-            paths: polyCoords, 
-            strokeColor: "#000000",                 
-            strokeOpacity: 0.9,
-            strokeWeight: 2,                                 
-            fillOpacity: 0,
-            clickable: false,                  
-            });
-        }
+        fetch("/maps/pixel_centers/")
+        .then(response => response.json())
+        .then(data => {
+            centers = data.centers;
+            polygonData = [];
+            
+            for (var i = 0; i < centers.length; i++) {
+                var center = centers[i];
+                var polyLon = center[0];
+                var polyLat = center[1];
+                var coordinates = [
+                    new google.maps.LatLng(polyLat - 2.5, polyLon - 2.5),
+                    new google.maps.LatLng(polyLat + 2.5, polyLon - 2.5),
+                    new google.maps.LatLng(polyLat + 2.5, polyLon + 2.5),
+                    new google.maps.LatLng(polyLat - 2.5, polyLon + 2.5),
+                ];
+
+                polygonData.push(new google.maps.Polygon({
+                    paths: coordinates,
+                    strokeColor: "red",
+                    strokeOpacity: 0.9,
+                    strokeWeight: 1,
+                    fillOpacity: 0.25,
+                    fillColor: 'red',
+                    clickable: false,
+                }));
+                polygonData[i].setMap(map);
+            }
+
+        });  
 
         updatePolygon(lat, lon);
         google.maps.event.addListener(map, 'click', async function (evt) {
@@ -157,7 +158,6 @@
         });    
         marker.setMap(map);
         polygon.setMap(map);
-        polygonData.setMap(map); 
     };
 
     $(document).on('input', function(e) {

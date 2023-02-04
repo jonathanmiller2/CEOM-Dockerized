@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.geos import Polygon, Point
 
@@ -100,6 +100,13 @@ def leaderboard(request):
     page_number = request.GET.get('page')
     data['page_obj'] = paginator.get_page(page_number)
     return render(request, 'maps/leaderboard.html', context=data)
+
+def pixel_centers(request):
+    data = {}
+    centers = GeocatterPoint.objects.values('center')
+    centers_list = [Point(center['center'][0], center['center'][1]).coords for center in centers]
+    data = {'centers': centers_list}
+    return JsonResponse(data)
 
 def pixel_validation(request):
     return render(request, 'maps/pixel_validation.html')
