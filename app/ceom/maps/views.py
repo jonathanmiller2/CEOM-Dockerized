@@ -103,8 +103,8 @@ def leaderboard(request):
 
 def pixel_centers(request):
     data = {}
-    centers = GeocatterPoint.objects.values('center')
-    centers_list = [Point(center['center'][0], center['center'][1]).coords for center in centers]
+    centers = GeocatterPoint.objects.values('center', 'grid_npix')
+    centers_list = [(Point(center['center'][0], center['center'][1]).coords, center['grid_npix']) for center in centers]
     data = {'centers': centers_list}
     return JsonResponse(data)
 
