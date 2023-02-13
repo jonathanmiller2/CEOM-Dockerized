@@ -442,7 +442,7 @@
             str += "<div class='row'><dt>Product:</dt><dd class='pl-2'>TROPOMI</dd></div>";
             str += "<div class='row'><dt>Years:</dt><dd class='pl-2'>" + yearsArray + "</dd></div>";
             
-            str += '<form action="." method="post">{% csrf_token %}"';
+            str += '<form action="." method="post">{% csrf_token %}';
             str += "<input type='hidden' name='x' value='" + pixel.x +"'>";
             str += "<input type='hidden' name='y' value='" + pixel.y +"'>";
             
