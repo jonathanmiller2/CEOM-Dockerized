@@ -21,7 +21,7 @@ def process_TROPOMI_single_site(self, media_root, csv_folder, x, y, years):
         full_file = os.path.join(media_root, rel_file)
         nineteen_seventy = datetime.fromisoformat('1970-01-01')
 
-        os.makedirs(os.path.join(media_root, csv_folder, exist_ok=True))
+        os.makedirs(os.path.join(media_root, csv_folder), exist_ok=True)
         
         columns = []
         data = []
