@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.geos import Polygon, Point
 
 import csv
+import json
 
 from ceom.photos.models import Photo, Category
 from ceom.maps.models import GeocatterPoint
@@ -101,15 +102,13 @@ def leaderboard(request):
     data['page_obj'] = paginator.get_page(page_number)
     return render(request, 'maps/leaderboard.html', context=data)
 
-def pixel_centers(request):
+def pixel_validation(request):
     data = {}
     centers = GeocatterPoint.objects.values('center', 'grid_npix')
-    centers_list = [(Point(center['center'][0], center['center'][1]).coords, center['grid_npix']) for center in centers]
-    data = {'centers': centers_list}
-    return JsonResponse(data)
+    centers_list = [(center['center'].x, center['center'].y, center['grid_npix']) for center in centers]
+    data = {'centers_list': json.dumps(centers_list)}
+    return render(request, 'maps/pixel_validation.html', context=data)
 
-def pixel_validation(request):
-    return render(request, 'maps/pixel_validation.html')
 
 def pixel_validation_csv(request):
     poly = Polygon.from_bbox((request.GET['xmin'], request.GET['ymin'], request.GET['xmax'], request.GET['ymax']))
