@@ -49,6 +49,11 @@ def process_MOD09A1(input_df):
     input_df[STATE_COLUMNS] = input_df.apply(process_state, axis=1, result_type='expand')
     input_df = input_df.drop('sur_refl_state_500m', axis=1)
 
+    VI_COLUMNS = ['NDVI', 'EVI', 'LSWI1605', 'NDSI', 'NDWI1200']
+    input_df[VI_COLUMNS] = input_df.apply(vegetation_indices, axis=1, result_type='expand')
+
+    # GAP FILL GOD JESUS
+
     COLUMN_RENAMES = {
         'sur_refl_b01':'Band 1 - Red (620-670 nm)',
         'sur_refl_b02':'Band 2 - NIR1 (841-876 nm)',
@@ -186,3 +191,33 @@ def process_state(row):
     snow_mask_dat = SNOW_MASK_DICT[bin_state[0]]
 
     return cloud_states_dat, cloud_shadow_dat, land_water_dat, aerosol_dat, cirrus_dat, cloud_flag_dat, fire_flag_dat, snow_flag_dat, pixel_cloud_adjacent_dat, salt_pan_dat, snow_mask_dat
+
+
+def vegetation_indices(row):
+    # 'sur_refl_b01':'Band 1 - Red (620-670 nm)',
+    # 'sur_refl_b02':'Band 2 - NIR1 (841-876 nm)',
+    # 'sur_refl_b03':'Band 3 - Blue (459-479 nm)',
+    # 'sur_refl_b04':'Band 4 - Green (545-565 nm)',
+    # 'sur_refl_b05':'Band 5 - NIR2 (1230-1250 nm)', NOT THIS ONE
+    # 'sur_refl_b06':'Band 6 - SWIR1 (1628-1652 nm)',
+    # 'sur_refl_b07':'Band 7 - SWIR2 (2105-2155 nm)',
+    # 'sur_refl_szen':'Solar Zenith Angle',
+    # 'sur_refl_vzen':'View Zenith Angle',
+    # 'sur_refl_raz':'Relative Azimuth Angle',
+    # 'sur_refl_day_of_year':'Day of Year',
+
+    red = float(row['sur_refl_b01']) / 10000
+    nir1 = float(row['sur_refl_b02']) / 10000
+    blue = float(row['sur_refl_b03']) / 10000
+    green = float(row['sur_refl_b04']) / 10000
+    nir2 = float(row['sur_refl_b05']) / 10000
+    swir1 = float(row['sur_refl_b06']) / 10000
+    swir2 = float(row['sur_refl_b07']) / 10000
+
+    ndvi = (nir1 - red) / (nir + red)
+    evi = (2.5 * (nir1 - red)) / (nir + 6 * red - 7.5 * blue + 1)
+    lswi1605 = (nir1 - swir1) / (nir1 + swir1)
+    ndsi = (green - swir1) / (green + swir1)
+    ndwi1200 = (green - nir1) / (green + nir1)
+
+    return ndvi, evi, lswi1605, ndsi, ndwi1200
