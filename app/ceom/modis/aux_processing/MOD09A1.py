@@ -1,4 +1,6 @@
-
+# Column sorting happens in the tasks.py file. 
+# This is because the sort depends on whether or not there is a "site" column,
+# which depends on whether or not it's a single/multiple request.
 MOD09A1_COLUMN_ORDER = [
     'Band 1 - Red (620-670 nm)',
     'Band 2 - NIR1 (841-876 nm)',
@@ -32,6 +34,18 @@ MOD09A1_COLUMN_ORDER = [
     'Pixel is Adjacent to Cloud',
     'Salt Pan',
     'Internal Snow Mask',
+    'Band 1 Float - Red (620-670 nm)', 
+    'Band 2 Float - NIR1 (841-876 nm)', 
+    'Band 3 Float - Blue (459-479 nm)', 
+    'Band 4 Float - Green (545-565 nm)', 
+    'Band 5 Float - NIR2 (1230-1250 nm)', 
+    'Band 6 Float - SWIR1 (1628-1652 nm)', 
+    'Band 7 Float - SWIR2 (2105-2155 nm)',
+    'NDVI',
+    'EVI',
+    'LSWI1605',
+    'NDSI',
+    'NDWI1200',
 ]
 
 
@@ -51,6 +65,14 @@ def process_MOD09A1(input_df):
 
     VI_COLUMNS = ['NDVI', 'EVI', 'LSWI1605', 'NDSI', 'NDWI1200']
     input_df[VI_COLUMNS] = input_df.apply(vegetation_indices, axis=1, result_type='expand')
+
+    FLOAT_COLUMNS = ['Band 1 Float - Red (620-670 nm)', 'Band 2 Float - NIR1 (841-876 nm)', 
+                    'Band 3 Float - Blue (459-479 nm)', 'Band 4 Float - Green (545-565 nm)', 
+                    'Band 5 Float - NIR2 (1230-1250 nm)', 'Band 6 Float - SWIR1 (1628-1652 nm)', 
+                    'Band 7 Float - SWIR2 (2105-2155 nm)',]
+    input_df[FLOAT_COLUMNS] = input_df.apply(float_bands, axis=1, result_type='expand')
+
+
 
     # GAP FILL GOD JESUS
 
@@ -214,10 +236,22 @@ def vegetation_indices(row):
     swir1 = float(row['sur_refl_b06']) / 10000
     swir2 = float(row['sur_refl_b07']) / 10000
 
-    ndvi = (nir1 - red) / (nir + red)
-    evi = (2.5 * (nir1 - red)) / (nir + 6 * red - 7.5 * blue + 1)
-    lswi1605 = (nir1 - swir1) / (nir1 + swir1)
-    ndsi = (green - swir1) / (green + swir1)
-    ndwi1200 = (green - nir1) / (green + nir1)
+    ndvi = round((nir1 - red) / (nir1 + red), 3)
+    evi = round((2.5 * (nir1 - red)) / (nir1 + 6 * red - 7.5 * blue + 1), 3)
+    lswi1605 = round((nir1 - swir1) / (nir1 + swir1), 3)
+    ndsi = round((green - swir1) / (green + swir1), 3)
+    ndwi1200 = round((green - nir1) / (green + nir1), 3)
 
     return ndvi, evi, lswi1605, ndsi, ndwi1200
+
+
+def float_bands(row):
+    red = round(float(row['sur_refl_b01']) / 10000, 3)
+    nir1 = round(float(row['sur_refl_b02']) / 10000, 3)
+    blue = round(float(row['sur_refl_b03']) / 10000, 3)
+    green = round(float(row['sur_refl_b04']) / 10000, 3)
+    nir2 = round(float(row['sur_refl_b05']) / 10000, 3)
+    swir1 = round(float(row['sur_refl_b06']) / 10000, 3)
+    swir2 = round(float(row['sur_refl_b07']) / 10000, 3)
+
+    return red, nir1, blue, green, nir2, swir1, swir2
