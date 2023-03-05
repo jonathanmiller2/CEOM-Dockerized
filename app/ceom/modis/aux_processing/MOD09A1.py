@@ -1,3 +1,6 @@
+import numpy as np
+import pandas as pd
+
 # Column sorting happens in the tasks.py file. 
 # This is because the sort depends on whether or not there is a "site" column,
 # which depends on whether or not it's a single/multiple request.
@@ -46,9 +49,16 @@ MOD09A1_COLUMN_ORDER = [
     'LSWI1605',
     'NDSI',
     'NDWI1200',
+    'NDVI Gap-Filled',
+    'EVI Gap-Filled',
+    'LSWI1605 Gap-Filled',
+    'NDSI Gap-Filled',
+    'NDWI1200 Gap-Filled',
 ]
 
-
+# Note: Each one of these function calls depends on the previous ones by referecing the names of specific generated columns.
+# If you change a column name in one of the column lists, that name change will need to be cascaded through the rest of the functions.
+# In particular, the gap fill code requires the Cloud State / Cloud Shadow / Aerosol Quantity values to be present with the correct names.
 
 def process_MOD09A1(input_df):
     QC_COLUMNS = ['MODLAND QA', 'Band 1 Data Quality', 'Band 2 Data Quality', 'Band 3 Data Quality', 
@@ -72,9 +82,16 @@ def process_MOD09A1(input_df):
                     'Band 7 Float - SWIR2 (2105-2155 nm)',]
     input_df[FLOAT_COLUMNS] = input_df.apply(float_bands, axis=1, result_type='expand')
 
+    GAP_FILL_COLUMNS = ['NDVI Gap-Filled', 'EVI Gap-Filled', 'LSWI1605 Gap-Filled', 'NDSI Gap-Filled', 'NDWI1200 Gap-Filled']
+    input_df[GAP_FILL_COLUMNS] = input_df.apply(start_gap_columns, axis=1, result_type='expand')
 
+    input_df.index = pd.to_datetime(input_df.index)
 
-    # GAP FILL GOD JESUS
+    input_df['NDVI Gap-Filled'] = gap_fill_column(input_df['NDVI Gap-Filled'])
+    input_df['EVI Gap-Filled'] = gap_fill_column(input_df['EVI Gap-Filled'])
+    input_df['LSWI1605 Gap-Filled'] = gap_fill_column(input_df['LSWI1605 Gap-Filled'])
+    input_df['NDSI Gap-Filled'] = gap_fill_column(input_df['NDSI Gap-Filled'])
+    input_df['NDWI1200 Gap-Filled'] = gap_fill_column(input_df['NDWI1200 Gap-Filled'])
 
     COLUMN_RENAMES = {
         'sur_refl_b01':'Band 1 - Red (620-670 nm)',
@@ -255,3 +272,62 @@ def float_bands(row):
     swir2 = round(float(row['sur_refl_b07']) / 10000, 3)
 
     return red, nir1, blue, green, nir2, swir1, swir2
+
+
+def start_gap_columns(row):
+    if 'Cloud State' not in row:
+        raise Exception('Error: Cloud State not found in MOD09A1 row dict. Was the Cloud State column renamed?')
+    if 'Cloud Shadow' not in row:
+        raise Exception('Error: Cloud Shadow not found in MOD09A1 row dict. Was the Cloud Shadow column renamed?')
+    if 'Aerosol Quantity' not in row:
+        raise Exception('Error: Aerosol Quantity not found in MOD09A1 row dict. Was the Aerosol Quantity column renamed?')
+
+
+    if row['Cloud State'] != 'clear' or row['Cloud Shadow'] != 'no' or row['Aerosol Quantity'] == 'high':
+        # Bad row - Set to NaN to prep for gap-fill
+        return np.nan, np.nan, np.nan, np.nan, np.nan
+
+    else:
+        # Good row
+        return row['NDVI'], row['EVI'], row['LSWI1605'], row['NDSI'], row['NDWI1200']
+
+
+def gap_fill_column(col):
+    new_col = col.copy(deep=True)
+
+    in_gap = False
+    gap_start_value = None # Most recent good value
+    gap_start_index = None # Index of the first NaN 
+    gap_end_index = None # Most recent NaN
+    gap_length = None
+
+    MAX_GAP_LENGTH = 3
+
+    for d, v in new_col.loc[new_col.first_valid_index():new_col.last_valid_index()].items():
+        if np.isnan(v):
+            if in_gap:
+                gap_length += 1
+                gap_end_index = d
+            else:
+                gap_start_index = d
+                gap_end_index = d
+                gap_length = 1
+                in_gap = True
+        else:
+            if in_gap:
+                in_gap = False
+                
+                if gap_length < MAX_GAP_LENGTH:
+                    # v is our gap_end_value
+                
+                    # Interpolation
+                    increment = (v - gap_start_value) / (gap_length + 1)
+                    new_values = [round(increment * (x + 1) + gap_start_value, 3) for x in range(gap_length)]
+
+                    new_col.loc[gap_start_index:gap_end_index] = new_values
+                    
+            else:
+                # As long as we aren't in a gap, we will keep track of the most recent good value
+                gap_start_value = v
+
+    return new_col
