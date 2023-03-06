@@ -1,4 +1,6 @@
-
+# Column sorting happens in the tasks.py file. 
+# This is because the sort depends on whether or not there is a "site" column,
+# which depends on whether or not it's a single/multiple request.
 MYD11A2_COLUMN_ORDER = [
     'Day 1km Grid Land Surface Temperature',
     'Daytime View Zenith Angle of Observation',

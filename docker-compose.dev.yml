@@ -45,6 +45,7 @@ services:
     volumes:
       - ./app:/code/app/
       - dev_media:/code/app/ceom/media/
+      - /data/satellite/:/data/satellite/
     expose:
       - 8000
     env_file:
