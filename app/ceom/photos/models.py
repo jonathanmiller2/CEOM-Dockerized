@@ -186,8 +186,6 @@ class Photo(models.Model):
     )
     user = models.ForeignKey(User, null=True, blank=True, db_column='userid', on_delete=models.DO_NOTHING)
     notes = models.TextField(null=True, db_column='description')
-    _lon = models.FloatField(null=True, blank=True, db_column='long')
-    _lat = models.FloatField(null=True, blank=True, db_column='lat')
     regionid = models.IntegerField(null=True, blank=True)
     takendate = models.DateField(null=True, blank=True)
     time = models.DateTimeField(null=True, blank=True)
@@ -326,12 +324,12 @@ class Photo(models.Model):
 
     #def fieldPopulate(self, lat, lon, alt, dir_deg, taken_time):
     def fieldPopulate(self, lat, lon, alt, dir_deg, taken_time):
-    	self.point = Point(lon, lat)
-    	self.alt = alt
-    	self.dir_deg = dir_deg
-    	self.dir_card = degCard(dir_deg)
-    	self.time = taken_time
-    	self.takendate = taken_time.date()
+        self.point = Point(lon, lat)
+        self.alt = alt
+        self.dir_deg = dir_deg
+        self.dir_card = degCard(dir_deg)
+        self.time = taken_time
+        self.takendate = taken_time.date()
 
 
     def basename(self):

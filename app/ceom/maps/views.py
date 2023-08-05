@@ -1,15 +1,15 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.geos import Polygon, Point
 
 import csv
 import json
 
-from ceom.photos.models import Photo, Category
+from ceom.photos.models import Photo, Category, CategoryVote
 from ceom.maps.models import GeocatterPoint
 from django.contrib.auth.models import User
-from django.db.models import Count
+from django.db.models import Count, Sum, When, Case, Q 
 from django.core.paginator import Paginator
 
 
@@ -70,9 +70,115 @@ def geocatter(request):
             primary_category = Category.objects.get(name=request.POST['l-cat1-select']),
             secondary_category = Category.objects.get(name=request.POST['l-cat2-select']) if 'l-multicat' in request.POST else None,
         )
-        
         return HttpResponse()
     return render(request, 'maps/geocatter.html', context=data)
+
+@login_required
+def geocatterphoto(request, photo_id=None):
+    unclassified_category = Category.objects.get(name__iexact='Unclassified')
+    users_voted_photos = CategoryVote.objects.filter(user=request.user).values_list('photo')
+    photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=True) | Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')[:1]
+    photoid = photo_set[0].id
+
+    if photo_id is None or photo_id == '':
+        photo_id = str(photoid)
+        return redirect(f'/maps/geocatterphoto/{photo_id}/')
+    
+    if photo_id != str(photoid):
+        photo_id = photoid
+        photo_url = f'/maps/geocatterphoto/{photo_id}/'
+
+        # Check if the current URL already contains the correct photo_id
+        current_url = request.get_full_path()
+        if f'/maps/geocatterphoto/{photo_id}/' in current_url:
+            print("Already redirected to the correct photo_id. Skipping redirection.")
+        else:
+            if 'redirected' not in request.session:
+                print("redirected")
+                request.session['redirected'] = True
+                return redirect(photo_url)
+    
+    data = {}
+
+    user_vote_count = len(users_voted_photos)
+    lat_list = [photo.point.y for photo in photo_set]
+    lon_list = [photo.point.x for photo in photo_set]
+    dates = [photo.takendate for photo in photo_set]
+
+    #If there are no photos that are geolocated, unclassified, and public
+    if photo_set.count() <= 0:
+        #Then just show a photo that is geolocated, classified, and public
+        photo_set = Photo.objects.filter(point__isnull=False).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')[:1]
+    #If there are still no photos
+    if photo_set.count() <= 0:
+        print("No photos")
+        return render(request, 'maps/geocatterphoto.html')
+
+    data['lat'] = lat_list[0]
+    data['lon'] = lon_list[0]
+    data['score'] = user_vote_count
+    data['photo'] = photo_set[0]
+    data['photo_url'] = f'/maps/geocatterphoto/{photo_id}/'
+    data['date'] = dates[0]
+    data['landcover_categories'] = Category.objects.all()
+    data['category_list'] = Category.objects.all()
+
+    if request.method == 'POST':
+        print(request.POST)
+
+        # Small pixel
+        GeocatterPoint.objects.create(
+            user = request.user,
+            date_taken = request.POST['date'],
+            grid_npix = request.POST['s-npix'],
+            tile_h = request.POST['s-tileh'],
+            tile_v = request.POST['s-tilev'],
+            pixel_x = request.POST['s-pixelx'],
+            pixel_y = request.POST['s-pixely'],
+            center = Point(float(request.POST['s-centerx']), float(request.POST['s-centery'])),
+            is_multi_cat = 's-multicat' in request.POST,
+            primary_category = Category.objects.get(name=request.POST['s-cat1-select']),
+            secondary_category = Category.objects.get(name=request.POST['s-cat2-select']) if 's-multicat' in request.POST else None,
+        )
+
+        # Medium pixel
+        GeocatterPoint.objects.create(
+            user = request.user,
+            date_taken = request.POST['date'],
+            grid_npix = request.POST['m-npix'],
+            tile_h = request.POST['m-tileh'],
+            tile_v = request.POST['m-tilev'],
+            pixel_x = request.POST['m-pixelx'],
+            pixel_y = request.POST['m-pixely'],
+            center = Point(float(request.POST['m-centerx']), float(request.POST['m-centery'])),
+            is_multi_cat = 'm-multicat' in request.POST,
+            primary_category = Category.objects.get(name=request.POST['m-cat1-select']),
+            secondary_category = Category.objects.get(name=request.POST['m-cat2-select']) if 'm-multicat' in request.POST else None,
+        )
+
+        # Large pixel
+        GeocatterPoint.objects.create(
+            user = request.user,
+            date_taken = request.POST['date'],
+            grid_npix = request.POST['l-npix'],
+            tile_h = request.POST['l-tileh'],
+            tile_v = request.POST['l-tilev'],
+            pixel_x = request.POST['l-pixelx'],
+            pixel_y = request.POST['l-pixely'],
+            center = Point(float(request.POST['l-centerx']), float(request.POST['l-centery'])),
+            is_multi_cat = 'l-multicat' in request.POST,
+            primary_category = Category.objects.get(name=request.POST['l-cat1-select']),
+            secondary_category = Category.objects.get(name=request.POST['l-cat2-select']) if 'l-multicat' in request.POST else None,
+        )
+        new_photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=True) | Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')[:1]
+        new_photo_id = new_photo_set[0].id
+        data['photo_url'] = f'/maps/geocatterphoto/{new_photo_id}/'
+        print(new_photo_id)
+        print(f'/maps/geocatterphoto/{new_photo_id}/')
+        response_data = {'new_photo_id': new_photo_id}
+        return JsonResponse(response_data)
+    
+    return render(request, 'maps/geocatterphoto.html', context=data)
 
 def point_validation(request):
     return render(request, 'maps/point_validation.html')
