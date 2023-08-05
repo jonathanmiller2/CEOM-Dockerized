@@ -88,7 +88,6 @@ def geocatterphoto(request, photo_id=None):
         photo_id = photoid
         photo_url = f'/maps/geocatterphoto/{photo_id}/'
 
-        # Check if the current URL already contains the correct photo_id
         current_url = request.get_full_path()
         if f'/maps/geocatterphoto/{photo_id}/' in current_url:
             print("Already redirected to the correct photo_id. Skipping redirection.")
@@ -107,7 +106,7 @@ def geocatterphoto(request, photo_id=None):
 
     #If there are no photos that are geolocated, unclassified, and public
     if photo_set.count() <= 0:
-        #Then just show a photo that is geolocated, classified, and public
+        #Photo that is geolocated, classified, and public
         photo_set = Photo.objects.filter(point__isnull=False).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')[:1]
     #If there are still no photos
     if photo_set.count() <= 0:
@@ -173,8 +172,6 @@ def geocatterphoto(request, photo_id=None):
         new_photo_set = Photo.objects.filter(point__isnull=False).filter(Q(category__isnull=True) | Q(category=unclassified_category)).filter(status=1).exclude(id__in=users_voted_photos).order_by('?')[:1]
         new_photo_id = new_photo_set[0].id
         data['photo_url'] = f'/maps/geocatterphoto/{new_photo_id}/'
-        print(new_photo_id)
-        print(f'/maps/geocatterphoto/{new_photo_id}/')
         response_data = {'new_photo_id': new_photo_id}
         return JsonResponse(response_data)
     

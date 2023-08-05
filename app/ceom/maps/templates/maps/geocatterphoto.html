@@ -304,32 +304,22 @@
     };
 
     function diffPoint(photoId) {
-        // Reset the form
         document.getElementById('cat-form').reset();
         
-        // Get the current URL
         var currentUrl = window.location.href;
-        
-        // Split the URL by '/'
         var urlParts = currentUrl.split('/');
-        
-        // Find the index of 'geocatterphoto'
         var index = urlParts.indexOf('geocatterphoto');
         
         if (index !== -1) {
-            // Update the URL with the new photo ID
             urlParts[index + 1] = photoId.toString();
-            
-            // Join the URL parts back together
             var newUrl = urlParts.join('/');
-            
-            // Reload the page with the new URL
+ 
             window.location.href = newUrl;
         }
     }
 
     document.getElementById('try-different-point-btn').addEventListener('click', function() {
-        var photoId = '{{ new_photo_id }}'; // Replace with the actual variable containing the new photo ID
+        var photoId = '{{ new_photo_id }}'; 
         diffPoint(photoId);
     });
 
@@ -352,7 +342,7 @@
         spoly.setPath(sbox);
         mpoly.setPath(mbox);
         lpoly.setPath(lbox);
-        console.log("newPoint done")
+
     }
 
     $('#cat-form').submit(function(eventObj) {
@@ -442,13 +432,11 @@
         $('#l-centery-field').attr("value", lCenter.y); 
 
         $.post('.', $(this).serialize(), function(response) {
-            // Assuming the response contains the new_photo_id
             const newPhotoId = response.new_photo_id;
             const newPhotoUrl = `/maps/geocatterphoto/${newPhotoId}/`;
             window.location.href = newPhotoUrl;
         });
 
-        console.log("Submission complete")
     });
 </script>
 
