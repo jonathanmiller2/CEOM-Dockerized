@@ -183,6 +183,7 @@ INSTALLED_APPS = [
     'ceom.poi',
     'ceom.celeryq',
     'ceom.tropomi',
+    'ceom.flux',
 
     'raster',
     

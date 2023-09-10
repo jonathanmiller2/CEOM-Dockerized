@@ -61,6 +61,11 @@
 		font-weight:bold;
 		transition:all 0.2s;
 	}
+	#menu-flux > a:hover {
+		color: #065e1c;
+		font-weight:bold;
+		transition:all 0.2s;
+	}
 	
 
 	.navbar {
@@ -167,6 +172,12 @@
 				{% trans "Water" %}
 			</a>
 		</li>
+		<li id="menu-flux" class="nav-item{% if '/flux/' in request.path %} active{% endif %}">
+			<a class="nav-link main-menu-link" href="/flux/">
+				<span class="fa fa-line-chart"></span>
+				{% trans "Flux" %}
+			</a>
+		</li>
 		<li id="menu-account" class="nav-item{% if '/accounts/' in request.path %} active{% endif %}">
 			<a class="nav-link main-menu-link" href="/accounts/">
 				<span class="fa fa-user"></span> 
@@ -233,6 +244,12 @@
 			<a class="nav-link main-menu-link" href="/water/">
 				<span class="fa fa-tint"></span>
 				{% trans "Water" %}
+			</a>
+		</li>
+		<li id="menu-flux" class="nav-item{% if '/flux/' in request.path %} active{% endif %}">
+			<a class="nav-link main-menu-link" href="/flux/">
+				<span class="fa fa-line-chart"></span>
+				{% trans "Flux" %}
 			</a>
 		</li>
 		<li id="menu-account" class="nav-item{% if '/accounts/' in request.path %} active{% endif %}">
