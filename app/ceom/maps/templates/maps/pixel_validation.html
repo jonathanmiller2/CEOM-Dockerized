@@ -82,14 +82,22 @@
 <script>
     let map;
     let polygon;
+    let polygonData;
     var size = 5;
     let lat = 0;
     let lon = 0;
+    var radians = function(x){
+        return x * Math.PI / 180.0; 
+    };
+
+    var degrees = function(x){
+        return x * 180.0 / Math.PI;
+    };
     let centerLocation = {
         lat: lat,
         lng: lon
     };
-   
+    
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 3,
@@ -97,7 +105,7 @@
           gestureHandling: 'cooperative',
           mapTypeId: 'satellite',
         });
-    
+
         marker = new google.maps.Marker({
             position: {lat: -2, lng: -2},
             map: map,
@@ -110,6 +118,95 @@
             fillOpacity: 0,
             clickable: false,                 
         });
+        
+        let centers = JSON.parse('{{ centers_list|safe }}');
+        polygonData = [];
+        centers.forEach(center => {
+            let coords = [center[0], center[1]];
+            let grid_npix = center[2];
+
+            let sin2latlon = function(ih, iv, xi, yi, npix) {
+                let cons =(36.0 * npix)/(2.0 * Math.PI);
+                let yg = iv * npix + yi;
+                let xg = ih * npix + xi;
+
+                let lat = degrees((9.0 * npix) - yg) / cons; 
+                let lon = degrees(xg - 18.0 * npix) / (cons * Math.cos(radians(lat)));
+                
+                return {lat:lat, lon:lon};
+            };
+
+            let latlon2sin = function(lat, lon, npix) {
+                let cons =(36.0 * npix)/(2.0 * Math.PI);
+                let yg = 9.0 * npix - radians(cons * lat);
+                let xg = radians(cons*lon*Math.cos(radians(lat))) + 18.0 * npix;
+
+                let ih = Math.floor(xg/npix);
+                let iv = Math.floor(yg/npix);
+
+                let x = xg-ih*npix;
+                let y = yg-iv*npix;
+
+                let xi = Math.floor(x);
+                let yi = Math.floor(y);
+
+                return {h: ih, v: iv, x: xi, y: yi};
+            };
+
+            let latlon2pixel = function(lat, lon, npix){
+                let sin = latlon2sin(lat, lon, npix);
+                let ih = sin.h, iv = sin.v, xi = sin.x, yi = sin.y;
+                let bbox = [];
+                let p;
+            
+                p = sin2latlon(ih, iv, xi + 0, yi + 0, npix);
+                bbox.push({lat: p.lat, lng: p.lon});
+                p = sin2latlon(ih, iv, xi + 0, yi + 1, npix);
+                bbox.push({lat: p.lat, lng: p.lon});
+                p = sin2latlon(ih, iv, xi + 1, yi + 1, npix);
+                bbox.push({lat: p.lat, lng: p.lon});
+                p = sin2latlon(ih, iv, xi + 1, yi + 0, npix);
+                bbox.push({lat: p.lat, lng: p.lon});
+                return bbox;
+            };
+
+            function updatePixelDisplay(lat, lng) {
+                let box = latlon2pixel(lat, lng, grid_npix);
+                polygonData[polygonData.length - 1].setPath(box);
+            }
+            var polygonOptions = {};
+            for (var i = 0; i < coords.length; i++) {
+                var polyLon = coords[0]
+                var polyLat = coords[1];
+
+                polygonData.push(new google.maps.Polygon({
+                    strokeColor: "",
+                    strokeOpacity: 0.9,
+                    strokeWeight: 1,
+                    fillColor: "",
+                    fillOpacity: 0.25,
+                    clickable: false,
+                }));
+
+                if (grid_npix == 1200) {
+                    polygonOptions.strokeColor = "#ffd700";
+                    polygonOptions.fillColor = "#ffd700";
+                } 
+                else if (grid_npix == 2400) {
+                    polygonOptions.strokeColor = "#ff8c00";
+                    polygonOptions.fillColor = "#ff8c00";
+                } 
+                else if (grid_npix == 4800) {
+                    polygonOptions.strokeColor = "#800000";
+                    polygonOptions.fillColor = "#800000";
+                }
+
+                polygonData[polygonData.length - 1].setOptions(polygonOptions);
+                polygonData[polygonData.length - 1].setMap(map);
+                updatePixelDisplay(polyLat, polyLon);
+            }
+        })
+
         updatePolygon(lat, lon);
         google.maps.event.addListener(map, 'click', async function (evt) {
             lat = evt.latLng.lat();
