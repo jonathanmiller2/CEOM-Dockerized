@@ -4,17 +4,17 @@
         <li class='leftmenu-category nav-header'>{% trans "Content" %}</li>
              <li {% if  '/workshops/content/' in request.path  %} class='active' {% endif %}> 
                 <a href="/outreach/workshops/content/{{workshop.id}}" class="btn btn-light btn-block rounded-0 p-0"><i class="icon-list"></i> 
-                    <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Description" %}</p>
+                    <p class="leftmenu-text mx-4 m-0 text-left">Description</p>
                 </a>
              </li>
             <li {% if  '/workshops/registration/' in request.path  %}class='active' {%endif%}> 
                 {% if workshop.registration_open %}
                     <a class="btn btn-light btn-block rounded-0 p-0" style="text-align:left" href="/outreach/workshops/register/{{workshop.id}}"><i class="icon-pencil"></i> 
-                        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Register now here" %} </p>
+                        <p class="leftmenu-text mx-4 m-0 text-left">Registration Open</p>
                     </a>
                 {% else %}
                     <a class="disabled btn btn-light btn-block rounded-0 p-0"><i class="icon-pencil"></i> 
-                        <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Registration closed" %} </p>
+                        <p class="leftmenu-text mx-4 m-0 text-left">Registration Closed</p>
                     </a>
                 {% endif %}    
             </li>
@@ -42,7 +42,7 @@
             {% if user.is_staff %}
             <li>
                 <a class="btn btn-light btn-block rounded-0 p-0" style="text-align:left" href="/outreach/workshops/registration_list/{{workshop.id}}"><i class="icon-pencil"></i> 
-                    <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Get Registrations as CSV" %} </p>
+                    <p class="leftmenu-text mx-4 m-0 text-left">{% trans "Download Registration List " %} </p>
                 </a>
             </li>
             {% endif %}
