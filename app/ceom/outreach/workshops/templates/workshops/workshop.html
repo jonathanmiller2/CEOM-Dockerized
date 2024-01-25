@@ -20,27 +20,5 @@
 </style>
 	<div class="well pr-4">
  	{{content|render}}
-    {% if validated_registrations %}
-    </div>
-    <h2 class="text-center"> {% trans "Registered participants" %}: 
-    {% if validated_registrations %}<span class="badge badge-info">{{validated_registrations|length}} </span>{% endif %}
-    {% if awaiting_validation_registrations %}<small> {% trans "Awaiting validation" %}:</small><span class="badge badge-error">{{awaiting_validation_registrations|length}} </span>{% endif %}
-    </h2>
-    <br>
-    <div>
-        <table class="table table-striped">
-            <tr>
-                <th>{% trans "Name" %}</th>
-                <th>{% trans "Institution" %}</th>
-            </tr>
-            {% for registration in validated_registrations %}
-            <tr>
-                <td>{{registration.last_name}}, {{registration.first_name}}</td>
-                <td>{{registration.institution}}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-    {% endif %}
 </div>
 {% endblock %}
