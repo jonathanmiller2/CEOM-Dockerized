@@ -9,6 +9,7 @@ from ceom.outreach.workshops.models import Workshop,WorkshopRegistration
 from django.db import IntegrityError
 from django.core.mail import send_mail
 import json, csv
+from django.core.paginator import Paginator
 
 
 def overview(request):
@@ -123,20 +124,35 @@ def workshop_registration(request, workshop_id):
 
     if not workshop.registration_open:
         return render(request, 'workshops/not_found.html')
+    
+    sort_by = request.GET.get('sortBy', 'last_name')
+    sort_order = request.GET.get('sortOrder', 'ascending')
+    per_page_select = int(request.GET.get('perPageSelect', 25))
+    
+    validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by(sort_by)
 
-    #TODO: If we're passing the whole workshop, why do we need to pass the individual parts of the workshop?
+    if sort_order == 'descending':
+        validated_registrations = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by(sort_by).reverse()
+    
+    data['id'] = workshop_id
     data['available_years'] = available_years
     data['workshop'] = workshop
     data['title'] = workshop.name
     data['content'] = workshop.content
     data['workshop_reg'] = workshop
-    data['validated_registrations'] = WorkshopRegistration.objects.filter(workshop=workshop,validated=True).order_by('created')
+    data['validated_registrations'] = validated_registrations
     data['awaiting_validation_registrations'] =  WorkshopRegistration.objects.filter(workshop=workshop,validated=False)
     data['sponsors'] = SponsorInWorkshop.objects.filter(workshop=workshop)
     data['num_presentations'] = len(Presentation.objects.filter(workshop=workshop))
     data['num_photos'] = len(WorkshopPhoto.objects.filter(workshop=workshop))
     data['show_registration'] = False
+    data['sort_selection'] = sort_by + '-' +sort_order
+    data['per_page_select'] = per_page_select
 
+    paginator = Paginator(validated_registrations, per_page_select) 
+    page_number = request.GET.get('page')
+    data['page_obj'] = paginator.get_page(page_number)
+    
     if request.method == 'POST':
         if request.POST['email'] != request.POST['verify_email']:
             data['error'] = 'email-mismatch'
