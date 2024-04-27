@@ -177,12 +177,14 @@
             <tr>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Institution" %}</th>
+                <th>{% trans "Email" %}</th>
             </tr>
             {% for registration in page_obj %}
                 {% with count=forloop.counter0 %}
                     <tr>
                         <td>{{registration.last_name}}, {{registration.first_name}}</td>
                         <td>{{registration.institution}}</td>
+                        <td>{{registration.email}}</td>
                     </tr>
                 {% endwith %}
             {% endfor %}
